@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root{
+    --highlight: #9147F2;
+    --primary-color: #7B5CAD;
+    --secondary-color: #EEE3FF;
+    --dark-grey: #666666;
+    --light-grey: #f0f0f0;
+    --white: #FFFFFF;
+
+    --text-color: #383838;
+    --lighted-text-color: #999999;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins";
+}
+
+.container-3 {
+    padding: 40px 15%;
+}
+
+.banner{
+    background-color: #e4e4e4;
+    margin-bottom: 50px;
+    border-radius: 8px;
+    height: 350px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+
+    padding: 40px;
+}.banner h1{
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.header nav{
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+}
+.header nav a {
+    text-decoration: none;
+    color: var(--lighted-text-color);
+    font-size: 20px;
+    font-weight: 600;
+}
+.header nav a.active {
+    font-size: 25px;
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+.header-actions{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}.header-actions a{
+    cursor: pointer;
+}
+.header-actions i{
+    padding: 10px;
+    font-size: 20px;
+    color: var(--text-color);
+}
+
+.shops {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    margin-bottom: 50px;
+}
+
+.shop {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: calc(25% - 20px);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.shop-image {
+    height: 280px;
+    background-color: var(--lighted-text-color);
+}
+
+.shop-details {
+    padding: 25px 20px;
+}
+
+.shop-name{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+    color: var(--primary-color);
+
+    margin-bottom: 15px;
+}
+
+.shop-location p{
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-color);
+
+    margin-bottom: 10px;
+}
+
+.shop-schedule{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #666;
+    font-size: 14px;
+    
+    margin-bottom: 20px;
+}
+
+.shop-details ul {
+    list-style: none;
+
+}
+.shop-details ul li {
+    font-size: 14px;
+    line-height: 30px;
+    color: #666;
+}
+.shop-details ul li i{
+    font-size: 15px;
+    font-weight: bold;
+    margin-right: 5px;
+    color: var(--highlight);
+}
+
+.shop-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+
+    border-top: solid;
+    border-width: 3px;
+    border-color: var(--light-grey);
+}
+
+.shop-footer .rating span {
+    font-size: 18px;
+    color: #f5a623;
+}.shop-footer .rating p {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+}
+
+.shop-footer .actions button {
+    border: solid 2px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 4px 13px;
+    border-radius: 7px;
+}
+
+.shop-footer .actions .favorite{
+    border-color: #e4e4e4;
+    background-color: white;
+    color: var(--highlight);
+}
+.shop-footer .actions .view{
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.pagination{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+.pagination a{
+    color: var(--primary-color);
+    background-color: var(--secondary-color);
+    font-size: 14px;
+    font-weight: 600;
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    
+    border-radius: 7px;
+}.pagination a.active{
+    color: var(--white);
+    background-color: var(--primary-color);
+}

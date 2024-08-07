@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root{
+    --highlight: #9147F2;
+    --primary-color: #7B5CAD;
+    --secondary-color: #EEE3FF;
+    --dark-grey: #666666;
+    --light-grey: #f0f0f0;
+    --white: #FFFFFF;
+
+    --text-color: #383838;
+    --lighted-text-color: #999999;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins";
+}
+
+.container-shop {
+    padding: 20px 15%;
+}
+    
+.breadcrumbs {
+    font-size: 15px;
+    font-weight: 500;
+
+    color: var(--text-color);
+
+    margin-bottom: 30px;
+    display: flex;
+    gap: 10px;
+}.breadcrumbs a {
+    color: var(--primary-color);
+    text-decoration: none;
+    margin-right: 5px;
+}
+    
+.service-details {
+    display: flex;
+    gap: 50px;
+}
+
+.service-details .left{
+    display: flex;  
+    flex-direction: column;
+    gap: 40px;
+    width: 45%;
+}
+
+.service-details .image-gallery {
+    display: flex;  
+    height: 80%;
+    gap: 20px;
+}
+.service-details .image-gallery img {
+    width: 100%;
+    border-radius: 5px;
+    background-color: var(--lighted-text-color);
+}
+
+.service-details .image-gallery .thumbnails {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 15%;
+}
+.service-details .image-gallery .thumbnails img {
+    background-color: var(--lighted-text-color);
+    height: 18%;
+    object-fit: cover;
+    cursor: pointer;
+}
+.service-details .image-gallery .thumbnails i {
+    font-size: 20px;
+    padding: 5px;
+    cursor: pointer;
+}
+    
+    /* .service-details .image-gallery .thumbnails img:hover,
+    .service-details .image-gallery .thumbnails img.active {
+        border-color: var(--primary-color);
+    } */
+    
+.service-details .details {
+    flex: 1;
+}.service-details .details p {
+    font-size: 17px;
+}.service-details .details h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+    
+.service-details .details .header{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}.service-details .details .header p{
+    font-size: 16px;
+}.rating {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}.repaired{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}.views{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+    
+.service-details .details .rating .stars {
+    color: #FFD700;
+    font-size: 15px;
+
+}.service-details .details .rating .reviews {
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+.service-details .details .mastery{
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    gap: 15px;
+    font-size: 35px;
+    color: var(--primary-color);
+
+    border-bottom: solid;
+    border-width: 2px;
+    border-color: #eeeeee;
+}   
+    .details-info{
+        margin-top: 15px;
+    }
+    .details-info p {
+        margin-bottom: 6px;
+        font-weight: 700;
+    }
+    
+    .details-info ul {
+        list-style: none;
+        padding: 0 10px;
+        margin-bottom: 10px;
+    }
+    .details-info ul li{
+        line-height: 30px;
+    }
+    .details-info ul li:before {
+        content: "•";
+        color: var(--primary-color);
+        font-size: 25px;
+        padding-right: 10px;
+    }
+    
+    .service-details .details .buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: end;
+        gap: 10px;
+    }
+    
+    .service-details .details .buttons button {
+        background-color: transparent;
+        color: var(--primary-color);
+        border: solid 2px;
+        padding: 10px 25px;
+        cursor: pointer;
+        border-radius: 7px;
+        font-size: 16px;
+        font-weight: 500;
+    }.service-details .details .buttons button.highlight {
+        color: #fff;
+        border: none;
+        background-color: var(--primary-color);
+    }
+
+
+/* -------------------------------------------------------------------------------------------------------------------------------------------*/
+
+.container-description {
+    padding: 40px 15%;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+}
+
+.review-summary {
+    display: flex;
+    flex: 1.1;
+    flex-direction: column;
+    gap: 20px;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    padding: 40px;
+    color: var(--white);
+
+}
+
+.review-summary .rating {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.review-summary .rating-score {
+    display: flex;
+    align-items: center;
+    font-size: 68px;
+    font-weight: 600;
+}.review-summary .rating-score p{
+    margin-top: 25px;
+    font-weight: 400;
+    font-size: 15px;
+    color: #dedede;
+}
+
+.review-summary .rating-stars {
+    color: #fff847;
+    font-size: 25px;
+    display: flex;
+    gap: 10px;
+}.review-summary .rating-reviews {
+    font-size: 14px;
+    font-weight: 400;
+    color: #dedede;
+}
+
+.rating-bar {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}.rating-bar .upper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.rating-bar .upper .star-scale {
+    color: var(--white);
+    font-size: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+
+.rating-bar .bar {
+    height: 5px;
+    background-color: #a38dc6;
+    border-radius: 5px;
+    position: relative;
+}
+.rating-bar .bar .filled {
+    background-color: var(--white);
+    height: 100%;
+    border-radius: 5px;
+}
+.rating-bar .rating-count {
+    font-size: 14px;
+    color: var(--light-grey)
+}
+
+.description{
+    flex: 5;
+}
+.tabs {
+    display: flex;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    background-color: #f9f9f9;
+    color: var(--lighted-text-color);
+    border-radius: 7px;
+    margin-bottom: 15px;
+}
+.tabs .tab {
+    padding: 20px 30px;
+    border: 1px solid var(--border-color);
+
+    cursor: pointer;
+}
+
+.tabs .tab.active {
+    color: var(--primary-color);
+    margin: 0 20px;
+    font-size: 20px;
+    font-weight: 700;
+    border-bottom: solid;
+    border-width: 4px;
+}
+
+.content {
+    padding: 20px;
+    border-radius: 10px;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.content h2 {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
+.content p {
+    margin-bottom: 20px;
+}
+
+/* .content img {
+    display: flex;
+    border-radius: 5px;
+    height: 220px;
+    background-color: var(--lighted-text-color);
+} */

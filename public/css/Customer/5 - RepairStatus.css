@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root{
+    --highlight: #9147F2;
+    --primary-color: #7B5CAD;
+    --secondary-color: #EEE3FF;
+    --dark-grey: #666666;
+    --light-grey: #f0f0f0;
+    --white: #FFFFFF;
+
+    --text-color: #383838;
+    --lighted-text-color: #999999;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins";
+}
+
+/* .container-repair-status{
+    background-color: #666666;
+} */
+
+.upper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px 15% 75px;
+
+    background-color: #515151;
+
+}
+
+/* Header */
+.upper .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+    padding: 40px;
+    margin-bottom: 20px;
+}
+
+.upper .header h1 {
+    color: var(--white);
+    font-size: 40px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.upper .header p {
+    color: var(--lighted-text-color);
+    width: 55%;
+}
+
+/* Search Box */
+.upper .search-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 20px;
+
+    width: 55%;
+    background-color: white;
+    border-radius: 10px;
+    padding: 50px 70px;
+
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}.upper .search-box input{
+    flex: 3;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+    width: 100%;
+}.upper .search-box button{
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    color: var(--white);
+    background-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.lower{
+    display: flex;
+    justify-content: flex-start;
+    gap: 50px;
+    padding: 160px 18% 100px;
+}
+
+.lower .repair-info{
+    width: 40%;
+}
+.lower .repair-info ul{
+    margin-top: 20px;
+    line-height: 50px;
+}
+.lower .repair-info li{
+    list-style-type: none;
+}
+
+
+
+.lower .timeline{
+    width: 100%;
+}
+.lower .timeline-item{
+    position:relative;
+    padding: 45px;
+    padding-bottom: 50px;
+    padding-top: 0;
+}
+
+
+.timeline-item .timeline-indicator{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    left: -8px;
+    top: 6px;
+
+    height: 100%;
+
+}.timeline-item .timeline-indicator i{
+    color: var(--primary-color);
+}
+.timeline-item .timeline-indicator span{
+    background-color: var(--primary-color);
+    width: 4px;
+    height: 100%;
+}
+.timeline-item .timeline-indicator.first span{
+    background-color: var(--primary-color);
+    width: 4px;
+    height: 100%;
+}
+
+
+.timeline-item .timeline-status{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
