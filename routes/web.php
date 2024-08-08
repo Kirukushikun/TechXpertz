@@ -35,3 +35,26 @@ Route::get('/5', function () {
 });
 
 // TECHNICIAN ---------------------------------------------------------------
+Route::get('/6', function () {
+    return view('Technician.1 - Dashboard');
+});
+
+Route::get('/7', function () {
+    return view('Technician.2 - Appointment');
+});
+
+Route::get('/8', function () {
+    return view('Technician.3 - RepairStatus');
+});
+
+Route::get('/9', function () {
+    return view('Technician.4 - Messages');
+});
+
+Route::get('/10', function () {
+    return view('Technician.5 - ShopReviews');
+});
+
+Route::get('/11', function () {
+    return view('Technician.6 - ManageProfile');
+});
