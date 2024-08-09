@@ -13,7 +13,7 @@
             <form action="" method="post">
                 @csrf
                 <div class="input-group">
-                    <input type="text" name="name" id="name" placeholder="First Name" required>
+                    <input type="text" name="firstname" id="firstname" placeholder="First Name" required>
                     <input type="text" name="lastname" id="lastname" placeholder="Last Name" required>
                 </div>
                 <input type="email" name="email" id="email" placeholder="Email Address" required />
@@ -22,7 +22,7 @@
                 <button type="submit" id="submit">Sign Up</button>
             </form>
             <div class="signup-link">
-                <p>Already have an account? <a href="#">Sign In</a></p>
+                <p>Already have an account? <a href="/login">Sign In</a></p>
             </div>
         </div>
 

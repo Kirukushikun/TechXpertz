@@ -9,7 +9,14 @@
         <i class="fa fa-desktop" onclick="btnClick2()"></i>
         <i class="fa fa-cog"></i>
     </div>
-    <button class="account-button"><i class="fa fa-user"></i> MY ACCOUNT</button>
+
+    @if(Auth::check())
+    <button class="account-button"><i class="fa fa-user"></i>My Account</button>
+    @else
+    <button class="account-button"><i class="fa fa-user"></i>Login</button>
+    @endif
+
+ 
 </nav>
 
 <div class="categories">

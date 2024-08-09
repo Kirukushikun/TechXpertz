@@ -9,7 +9,7 @@
     <body>
         <div class="container">
             <div class="left">
-                <img src="background-image.jpg" alt="Background Image" />
+                <img src="{{asset('images/login-background.png')}}" alt="" />
             </div>
 
             <div class="right">
@@ -32,13 +32,13 @@
                         <button type="submit" id="submit">Sign in</button>
                     </form>
                     <div class="social-login">
-                        <button class="google-login">
-                            <img src="google-logo.png" alt="Image" />
+                        <button class="google-login" id="google-login">
+                            <img src="{{asset('images/google-icon.png')}}" alt="" />
                             Or sign in with Google
                         </button>
                     </div>
                     <div class="signup-link">
-                        <p>Don't have an account? <a href="#">Sign up</a></p>
+                        <p>Don't have an account? <a href="/registration">Sign up</a></p>
                     </div>
                 </div>
             </div>
