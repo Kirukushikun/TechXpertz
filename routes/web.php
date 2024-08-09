@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 // CUSTOMER ---------------------------------------------------------------
+
+Route::get('/registration', function () {
+    return view('Customer.0 - Registration');
+});
+
+Route::get('/login', function () {
+    return view('Customer.0 - Login');
+});
+
 Route::get('/', function () {
     return view('Customer.1 - Homepage');
 });
