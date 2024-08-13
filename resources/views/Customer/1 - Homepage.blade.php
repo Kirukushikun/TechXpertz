@@ -289,13 +289,5 @@
 
         @yield('footer')
 
-        <script>
-            // function btnClick(){
-            //     window.location.href = ("3 - ViewCategory.html");
-            // }
-            // function btnClick2(){
-            //     window.location.href = ("6 - RepairStatus.html");
-            // }
-        </script>
     </body>
 </html>

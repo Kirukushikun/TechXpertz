@@ -956,16 +956,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.59.0",
+            "version": "v1.59.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "56d31be2663780a7ed0736bee60d01f047bf15c0"
+                "reference": "35aae23dc4d0b860b6c3733e5cf381a510b506d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/56d31be2663780a7ed0736bee60d01f047bf15c0",
-                "reference": "56d31be2663780a7ed0736bee60d01f047bf15c0",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/35aae23dc4d0b860b6c3733e5cf381a510b506d9",
+                "reference": "35aae23dc4d0b860b6c3733e5cf381a510b506d9",
                 "shasum": ""
             },
             "require": {
@@ -1016,9 +1016,9 @@
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.59.0"
+                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.59.1"
             },
-            "time": "2024-06-07T22:33:41+00:00"
+            "time": "2024-08-10T02:24:23+00:00"
         },
         {
             "name": "google/cloud-storage",
@@ -2085,16 +2085,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v10.48.19",
+            "version": "v10.48.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "d816681a99a8fe2ea42fdf793b401dd3b34775a7"
+                "reference": "be2be342d4c74db6a8d2bd18469cd6d488ab9c98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/d816681a99a8fe2ea42fdf793b401dd3b34775a7",
-                "reference": "d816681a99a8fe2ea42fdf793b401dd3b34775a7",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/be2be342d4c74db6a8d2bd18469cd6d488ab9c98",
+                "reference": "be2be342d4c74db6a8d2bd18469cd6d488ab9c98",
                 "shasum": ""
             },
             "require": {
@@ -2288,7 +2288,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-08-06T14:06:43+00:00"
+            "time": "2024-08-09T07:55:45+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -3332,12 +3332,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "6d70929398e4414cc52055242990cd609f54a29b"
+                "reference": "736c567e257dbe0fcf6ce81b4d6dbe05c6899f96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/6d70929398e4414cc52055242990cd609f54a29b",
-                "reference": "6d70929398e4414cc52055242990cd609f54a29b",
+                "url": "https://api.github.com/repos/nette/utils/zipball/736c567e257dbe0fcf6ce81b4d6dbe05c6899f96",
+                "reference": "736c567e257dbe0fcf6ce81b4d6dbe05c6899f96",
                 "shasum": ""
             },
             "require": {
@@ -3410,7 +3410,7 @@
                 "issues": "https://github.com/nette/utils/issues",
                 "source": "https://github.com/nette/utils/tree/v4.0.5"
             },
-            "time": "2024-08-07T12:47:39+00:00"
+            "time": "2024-08-07T15:39:19+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -8473,16 +8473,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "5.0.1",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "2db5010a484d53ebf536087a70b4a5423c102372"
+                "reference": "2d3e04c3b4c1e84a5e7382221ad8883c8fbc4f53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/2db5010a484d53ebf536087a70b4a5423c102372",
-                "reference": "2db5010a484d53ebf536087a70b4a5423c102372",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/2d3e04c3b4c1e84a5e7382221ad8883c8fbc4f53",
+                "reference": "2d3e04c3b4c1e84a5e7382221ad8883c8fbc4f53",
                 "shasum": ""
             },
             "require": {
@@ -8493,7 +8493,7 @@
                 "sebastian/exporter": "^5.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.3"
+                "phpunit/phpunit": "^10.4"
             },
             "type": "library",
             "extra": {
@@ -8538,7 +8538,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
                 "security": "https://github.com/sebastianbergmann/comparator/security/policy",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/5.0.1"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/5.0.2"
             },
             "funding": [
                 {
@@ -8546,7 +8546,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-14T13:18:12+00:00"
+            "time": "2024-08-12T06:03:08+00:00"
         },
         {
             "name": "sebastian/complexity",

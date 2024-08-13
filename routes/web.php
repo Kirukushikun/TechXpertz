@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\CustomerController;
+
+use App\Http\Controllers\TechnicianAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,19 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// CUSTOMER ---------------------------------------------------------------
+// CUSTOMER AUTH---------------------------------------------------------------
 
-Route::get('/registration', function () {
-    return view('Customer.0 - Registration');
-});
+Route::get('/customer/login', [CustomerAuthController::class, 'login'])->name('customer.login');
+Route::post('/customer/login', [CustomerAuthController::class, 'loginCustomer'])->name('customer.loginCustomer');
 
-Route::get('/login', function () {
-    return view('Customer.0 - Login');
-});
+Route::get('/customer/signup', [CustomerAuthController::class, 'signup'])->name('customer.signup');
+Route::post('/customer/signup', [CustomerAuthController::class, 'signupCustomer'])->name('customer.signupCustomer');
 
-Route::get('/', function () {
-    return view('Customer.1 - Homepage');
-});
+// ----------------------------------------------------------------------------
+
+Route::get('/', [CustomerController::class, 'welcome'])->name('welcome');
 
 Route::get('/2', function () {
     return view('Customer.2 - ViewCategory');
@@ -43,7 +45,16 @@ Route::get('/5', function () {
     return view('Customer.5 - RepairStatus');
 });
 
-// TECHNICIAN ---------------------------------------------------------------
+// TECHNICIAN AUTH---------------------------------------------------------------
+
+Route::get('/technician/login', [TechnicianAuthController::class, 'login'])->name('technician.login');
+Route::post('/technician/login', [TechnicianAuthController::class, 'loginTechnician'])->name('technician.loginTechnician');
+
+Route::get('/technician/signup', [TechnicianAuthController::class, 'signup'])->name('technician.signup');
+Route::post('/technician/signup', [TechnicianAuthController::class, 'signupTechnician'])->name('technician.signupTechnician');
+
+// -----------------------------------------------------------------------------
+
 Route::get('/6', function () {
     return view('Technician.1 - Dashboard');
 });

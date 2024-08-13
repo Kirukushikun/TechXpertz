@@ -10,13 +10,11 @@
         <i class="fa fa-cog"></i>
     </div>
 
-    @if(Auth::check())
-    <button class="account-button"><i class="fa fa-user"></i>My Account</button>
+    @auth
+        <button class="account-button"><i class="fa fa-user"></i>My Account</button>
     @else
-    <button class="account-button"><i class="fa fa-user"></i>Login</button>
-    @endif
-
- 
+        <button class="account-button" onclick="window.location.href='/customer/login'"><i class="fa fa-user"></i>Login</button>
+    @endauth
 </nav>
 
 <div class="categories">

@@ -15,7 +15,7 @@
             <div class="right">
                 <div class="form-container">
                     <h1>Tech<span>X</span>pertz</h1>
-                    <form action="" method="post">
+                    <form action="{{route('customer.loginCustomer')}}" method="post">
                         @csrf
                         <input type="email" name="email" id="email" placeholder="email" required />
                         <input type="password" name="password" id="password" placeholder="Password" required />
@@ -38,13 +38,13 @@
                         </button>
                     </div>
                     <div class="signup-link">
-                        <p>Don't have an account? <a href="/registration">Sign up</a></p>
+                        <p>Don't have an account? <a href="/customer/signup">Sign up</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </body>
 
-    <script src="{{ asset('js/Customer/0 - Login.js') }}" type="module"></script>
+    <!-- <script src="{{ asset('js/Customer/0 - Login.js') }}" type="module"></script> -->
 
 </html>
