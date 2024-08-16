@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('repairshops', function (Blueprint $table) {
+        Schema::create('repairshop_credentials', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('technician_id');
-            $table->foreign('technician_id')->references('id')->on('technicians');
+            $table->foreign('technician_id')->references('id')->on('technicians')->onDelete('cascade');
+
             $table->string('shop_name');
             $table->string('shop_email')->unique();
             $table->timestamp('shop_email_verified_at')->nullable();
+            
             $table->string('shop_contact');
             $table->string('shop_address');
+
             $table->string('shop_province');
             $table->string('shop_city');
             $table->string('shop_barangay');
@@ -33,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('repairshops');
+        Schema::dropIfExists('repairshop_credentials');
     }
 };

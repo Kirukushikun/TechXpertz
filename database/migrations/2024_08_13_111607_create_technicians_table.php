@@ -13,20 +13,28 @@ return new class extends Migration
     {
         Schema::create('technicians', function (Blueprint $table) {
             $table->id();
+            $table->enum('profile_status', ['incomplete', 'pending', 'complete', 'restricted'])->default('pending');
+
             $table->string('firstname');
             $table->string('middlename');
             $table->string('lastname');
+
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+
             $table->string('contact_no');
             $table->string('educational_background');
+
             $table->string('province');
             $table->string('city');
             $table->string('barangay');
             $table->string('zip_code');
+
             $table->date('date_of_birth');
+
             $table->string('username')->unique();
             $table->string('password');
+
             $table->rememberToken();
             $table->timestamps();
         });

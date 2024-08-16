@@ -24,17 +24,24 @@ class Technician extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'profile_status',
+
         'firstname',
         'middlename',
         'lastname',
+
         'email',
+
         'contact_no',
         'educational_background',
+        
         'province',
         'city',
         'barangay',
         'zip_code',
+
         'date_of_birth',
+
         'username',
         'password',
     ];
@@ -56,5 +63,49 @@ class Technician extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'date_of_birth' => 'date',
     ];
+
+    // Relationship with Repairshop Credentials
+    public function RepairShop_Credentials()
+    {
+        return $this->hasOne(RepairShop_Credentials::class);
+    }
+
+    // Relationship with Repairshop Services
+    public function repairshopServices()
+    {
+        return $this->hasMany(RepairShop_Services::class);
+    }
+
+    // Relationship with Repairshop Schedules
+    public function repairshopSchedules()
+    {
+        return $this->hasMany(RepairShop_Schedules::class);
+    }
+
+    // Relationship with Repairshop Profile
+    public function repairshopProfile()
+    {
+        return $this->hasOne(RepairShop_Profiles::class);
+    }
+
+    // Relationship with Repairshop Reviews
+    public function repairshopReviews()
+    {
+        return $this->hasMany(RepairShop_Reviews::class);
+    }
+
+    // Relationship with Repairshop Socials
+    public function repairshopSocials()
+    {
+        return $this->hasOne(RepairShop_Socials::class);
+    }
+
+    // Relationship with Repairshop Mastery
+    public function repairshopMastery()
+    {
+        return $this->hasOne(RepairShop_Mastery::class);
+    }
+
 }

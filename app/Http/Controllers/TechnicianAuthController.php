@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Technician;
-use App\Models\RepairShop;
+use App\Models\RepairShop_Credentials;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -70,7 +70,7 @@ class TechnicianAuthController extends Controller
                 'username' => $validatedData['username'],
                 'password' => Hash::make($validatedData['password']),
             ]);
-            $repairshop = RepairShop::create([
+            $repairshop = RepairShop_Credentials::create([
                 'technician_id' => $technician->id,
                 'shop_name' => $validatedData['shop_name'],
                 'shop_email' => $validatedData['shop_email'],
