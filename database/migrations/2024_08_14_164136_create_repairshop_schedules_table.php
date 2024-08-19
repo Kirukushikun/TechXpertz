@@ -16,7 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('technician_id');
             $table->foreign('technician_id')->references('id')->on('technicians')->onDelete('cascade');
 
-            $table->enum('day', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+            $table->enum('status', ['open', 'close'])->default('open');
+            $table->unsignedTinyInteger('day');
             $table->time('opening_time')->nullable(); // Time the shop opens
             $table->time('closing_time')->nullable(); // Time the shop closes
             $table->timestamps();

@@ -67,7 +67,7 @@ class Technician extends Authenticatable
     ];
 
     // Relationship with Repairshop Credentials
-    public function RepairShop_Credentials()
+    public function repairshopCredentials()
     {
         return $this->hasOne(RepairShop_Credentials::class);
     }
@@ -106,6 +106,12 @@ class Technician extends Authenticatable
     public function repairshopMastery()
     {
         return $this->hasOne(RepairShop_Mastery::class);
+    }
+
+    // Relationship with Repairshop Badges
+    public function repairshopBadges()
+    {
+        return $this->hasOne(RepairShop_Badges::class);
     }
 
 }

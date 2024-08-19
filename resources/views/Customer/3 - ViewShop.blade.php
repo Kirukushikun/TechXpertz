@@ -15,7 +15,7 @@
         
         <div class="container-shop">
             <nav class="breadcrumbs">
-                <a href="#">Home</a> / <a href="#">Speakers</a> / <a href="#">JBL Service Center</a>
+                <a href="#">Home</a> / <a href="#">{{$repairshop->repairshopMastery->main_mastery}}</a> / <a href="#">{{$repairshop->repairshopCredentials->shop_name}}</a>
             </nav>
             <div class="service-details">
                 <div class="left">
@@ -41,19 +41,26 @@
                 </div>
 
                 <div class="details">
-                    <p>789 Tech Street, Barangay Cristo Rey, Capas, Tarlac</p>
-                    <h2>JBL SERVICE CENTER</h2>
+                    <p>{{$repairshop->repairshopCredentials->shop_address}}, Barangay {{$repairshop->repairshopCredentials->shop_barangay}}, {{$repairshop->repairshopCredentials->shop_city}}, {{$repairshop->repairshopCredentials->shop_city}}</p>
+                    <h2>{{$repairshop->repairshopCredentials->shop_name}}</h2>
                     <div class="header">
                         <div class="rating">
-                            <div class="average">4.0</div>
+                            <div class="average">{{ $reviewData['averageRating'] }}</div>
                             <div class="stars">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-regular fa-star"></i>
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= floor($reviewData['averageRating']))
+                                        <!-- Solid star for whole numbers -->
+                                        <i class="fas fa-star"></i>
+                                    @elseif ($i == ceil($reviewData['averageRating']) && fmod($reviewData['averageRating'], 1) != 0)
+                                        <!-- Half star for decimals -->
+                                        <i class="fa-solid fa-star-half-stroke"></i>
+                                    @else
+                                        <!-- Empty star -->
+                                        <i class="fa-regular fa-star"></i>
+                                    @endif
+                                @endfor
                             </div>
-                            <div class="reviews" style="color: #bebebe;">(223)</div>
+                            <div class="reviews" style="color: #bebebe;">({{$reviewData['totalReviews']}})</div>
                         </div>
                         |
                         <div class="repaired">
@@ -76,22 +83,20 @@
                     <div class="details-info">
                         <p>Contact</p>
                         <ul class="contact">
-                            <li>+63 987 654 3210</li>
-                            <li>jblservicecenter.audiofix@gmail.com</li>
+                            <li>+63 {{$repairshop->repairshopCredentials->shop_contact}}</li>
+                            <li>{{$repairshop->repairshopCredentials->shop_email}}</li>
                         </ul>
 
                         <p>Services</p>
                         <ul>
-                            <li>Speaker Repair (Speaker cone replacement, Amplifier repair)</li>
-                            <li>Subwoofer Repair (Voice coil replacement, Port cleaning)</li>
-                            <li>Speaker Enclosure Repair (Cabinet refinishing, Grill replacement)</li>
+                            @foreach($services as $service)
+                                <li>{{$service->service}}</li>
+                            @endforeach
                         </ul>
                         
                         <p>Opening Hours</p>
                         <ul>
-                            <li>Monday to Friday: 9:00 AM - 6:00 PM</li>
-                            <li>Saturday: 10:00 AM - 4:00 PM</li>
-                            <li>Closed on Sundays</li>
+                            <li>{!! $detailedSchedule !!}</li>
                         </ul>
                     </div>
 
@@ -105,23 +110,52 @@
         </div>
 
         <div class="container-description">
+
             <div class="review-summary">
                 
-                <div class="rating">
-                    <div class="rating-score">4.0<p>/5</p></div>
-                    <div class="rating-stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </div>
-                    <div class="rating-reviews">223 Reviews</div>
+            <div class="rating">
+                <div class="rating-score">{{ $reviewData['averageRating'] }}<p>/5</p></div>
+                <div class="rating-stars">
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if ($i <= floor($reviewData['averageRating']))
+                            <!-- Solid star for whole numbers -->
+                            <i class="fas fa-star"></i>
+                        @elseif ($i == ceil($reviewData['averageRating']) && fmod($reviewData['averageRating'], 1) != 0)
+                            <!-- Half star for decimals -->
+                            <i class="fa-solid fa-star-half-stroke"></i>
+                        @else
+                            <!-- Empty star -->
+                            <i class="fa-regular fa-star"></i>
+                        @endif
+                    @endfor
                 </div>
+                <div class="rating-reviews">{{ $reviewData['totalReviews'] }} Reviews</div>
+            </div>
+
+
+                <!-- <i class="fa-regular fa-star"></i> -->
+                <!-- <i class="fa-solid fa-star-half-stroke"></i> -->
+
 
                 <div class="rating-breakdown">
-            
-                    <div class="rating-bar">
+                    @for ($i = 5; $i >= 1; $i--)
+                        <div class="rating-bar">
+                            <div class="upper">
+                                <div class="star-scale">
+                                    @for ($j = 1; $j <= $i; $j++)
+                                        <i class="fas fa-star"></i>
+                                    @endfor
+                                </div>
+                                <div class="rating-count">{{ $reviewData['ratingCounts'][$i] }}</div>
+                            </div>
+
+                            <div class="bar">
+                                <div class="filled" style="width: {{ $reviewData['ratingPercentages'][$i] }}%;"></div>
+                            </div>
+                        </div>
+                    @endfor
+
+                    <!-- <div class="rating-bar">
                         <div class="upper">
                             <div class="star-scale">
                                 <i class="fas fa-star"></i>
@@ -195,32 +229,26 @@
                         <div class="bar">
                             <div class="filled" style="width: 20%;"></div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
+
             <div class="description">
                 <div class="tabs">
                     <div class="tab active">Description</div>
                     <div class="tab">Specialization</div>
                     <div class="tab">Certificates</div>
-                    <div class="tab">Reviews (223)</div>
+                    <div class="tab">Reviews ({{$reviewData['totalReviews']}})</div>
                 </div>
+
                 <div class="content">
-                    <h2>See the best picture no matter where you sit</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsum ea accusantium consequatur! Numquam cum odio, rerum in nihil consequatur, tenetur voluptas nulla dignissimos minima, esse a vel temporibus? Asperiores.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur nesciunt recusandae eum odio itaque, et ea consectetur eos tempora sapiente non, voluptates sit unde? Quae quia accusantium suscipit ipsa accusamus maxime, neque nam illo est eveniet sint. Similique nemo voluptatem nostrum rerum? Tempore temporibus nesciunt suscipit qui repellendus quaerat inventore.</p>
-                    <!-- <img src="main-image.jpg" alt="Image"> -->
+                    <h2>{{$repairshop->repairshopProfile->header}}</h2>   
+                    <p>{{$repairshop->repairshopProfile->description}}</p>
                 </div>                
             </div>
         </div>
 
         @yield('footer')
 
-        <script>
-            // function btnClick(){
-            //     window.location.href = ("5 - BookAppointment.html");
-            // }
-        </script>
     </body>
 </html>

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class RepairShop_Schedules extends Authenticatable
+class RepairShop_Badges extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -16,7 +16,7 @@ class RepairShop_Schedules extends Authenticatable
      *
      * @var string
      */
-    protected $table = 'repairshop_schedules'; // Ensure this matches your table name
+    protected $table = 'repairshop_badges'; // Ensure this matches your table name
 
     /**
      * The attributes that are mass assignable.
@@ -26,25 +26,15 @@ class RepairShop_Schedules extends Authenticatable
     protected $fillable = [
         'technician_id',
 
-        'status',
-        'day',
-        'opening_time',
-        'closing_time',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'day' => 'integer',
-        'opening_time' => 'datetime:H:i:s',
-        'closing_time' => 'datetime:H:i:s',
+        'badge_1',
+        'badge_2',
+        'badge_3',
+        'badge_4',
     ];
 
     public function technician()
     {
         return $this->belongsTo(Technician::class);
     }
+
 }

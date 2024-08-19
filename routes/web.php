@@ -29,13 +29,9 @@ Route::post('/customer/signup', [CustomerAuthController::class, 'signupCustomer'
 
 Route::get('/', [CustomerController::class, 'welcome'])->name('welcome');
 
-Route::get('/2', function () {
-    return view('Customer.2 - ViewCategory');
-});
+Route::get('/repairshops/{category}', [CustomerController::class, 'viewcategory'])->name('viewcategory');
 
-Route::get('/3', function () {
-    return view('Customer.3 - ViewShop');
-});
+Route::get('/repairshop/{id}', [CustomerController::class, 'viewshop'])->name('viewshop');
 
 Route::get('/4', function () {
     return view('Customer.4 - AppointmentBooking');

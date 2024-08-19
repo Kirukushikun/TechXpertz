@@ -274,9 +274,9 @@
     border-color: var(--light-grey);
 }
 
-.shop-footer .rating span {
-    font-size: 18px;
-    color: #f5a623;
+.shop-footer .rating .stars {
+    color: #FFD700;
+    font-size: 14px;
 }.shop-footer .rating p {
     font-size: 12px;
     color: #666;
@@ -302,3 +302,5 @@
     background-color: var(--primary-color);
     color: var(--white);
 }
+
+

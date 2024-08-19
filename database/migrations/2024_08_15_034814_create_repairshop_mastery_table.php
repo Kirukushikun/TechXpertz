@@ -16,18 +16,18 @@ return new class extends Migration
             $table->unsignedBigInteger('technician_id');
             $table->foreign('technician_id')->references('id')->on('technicians')->onDelete('cascade');
             
-            $table->enum('main_mastery', ['smartphones', 'tablets', 'desktops', 'laptops', 'smartwatches', 'cameras', 'printers', 'speakers', 'drones', 'all-in-one']);
+            $table->enum('main_mastery', ['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One']);
 
-            $table->boolean('smartphones')->default(false);
-            $table->boolean('tablets')->default(false);
-            $table->boolean('desktops')->default(false);
-            $table->boolean('laptops')->default(false);
-            $table->boolean('smartwatches')->default(false);
-            $table->boolean('cameras')->default(false);
-            $table->boolean('printers')->default(false);
-            $table->boolean('speakers')->default(false);
-            $table->boolean('drones')->default(false);
-            $table->boolean('all-in-one')->default(false);
+            $table->boolean('Smartphone')->default(false);
+            $table->boolean('Tablet')->default(false);
+            $table->boolean('Desktop')->default(false);
+            $table->boolean('Laptop')->default(false);
+            $table->boolean('Smartwatch')->default(false);
+            $table->boolean('Camera')->default(false);
+            $table->boolean('Printer')->default(false);
+            $table->boolean('Speaker')->default(false);
+            $table->boolean('Drone')->default(false);
+            $table->boolean('All-In-One')->default(false);
             $table->timestamps();
         });
     }

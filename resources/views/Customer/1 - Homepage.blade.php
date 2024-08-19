@@ -29,99 +29,98 @@
 
         <div class="container-2">
             <div class="text-content-2">
-                <h2>Featured Categories</h2>
-                <a href="#" class="view-more">View More <i class="fa-solid fa-arrow-right"></i></a>            
+                <h2>Featured Categories</h2>       
             </div>
 
             <div class="categories-2">
-                <div class="category">
+                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Smartphone']) }}'">
                     <div class="icon">
                         <i class="fa fa-desktop"></i>
                     </div>
                     <div class="text">
-                        <h3>Smartphones</h3>
-                        <p>24 Repair Shops</p>
+                        <h3>Smartphone</h3>
+                        <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category">
+                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Tablet']) }}'">
                     <div class="icon">
                         <i class="fa fa-desktop"></i>
                     </div>
                     <div class="text">
-                        <h3>Tablets</h3>
-                        <p>24 Repair Shops</p>
+                        <h3>Tablet</h3>
+                        <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category">
+                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Desktop']) }}'">
                     <div class="icon">
                         <i class="fa fa-desktop"></i>
                     </div>
                     <div class="text">
-                        <h3>Desktops</h3>
-                        <p>24 Repair Shops</p>
+                        <h3>Desktop</h3>
+                        <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category">
-                    <div class="icon">
-                        <i class="fa fa-desktop"></i>
-                    </div>
-                    <div class="text"  onclick="btnClick()">
-                        <h3>Laptops</h3>
-                        <p>24 Repair Shops</p>
-                    </div>
-                </div>
-                <div class="category">
+                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Laptop']) }}'">
                     <div class="icon">
                         <i class="fa fa-desktop"></i>
                     </div>
                     <div class="text">
-                        <h3>Smartwatches</h3>
-                        <p>24 Repair Shops</p>
+                        <h3>Laptop</h3>
+                        <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category">
+                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Smartwatch']) }}'">
                     <div class="icon">
                         <i class="fa fa-desktop"></i>
                     </div>
                     <div class="text">
-                        <h3>Cameras</h3>
-                        <p>24 Repair Shops</p>
+                        <h3>Smartwatche</h3>
+                        <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category">
+                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Camera']) }}'">
                     <div class="icon">
                         <i class="fa fa-desktop"></i>
                     </div>
                     <div class="text">
-                        <h3>Printers</h3>
-                        <p>24 Repair Shops</p>
+                        <h3>Camera</h3>
+                        <p>Repair Shops</p>
                     </div>
                 </div>
                 <div class="category">
+                    <div class="icon" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Printer']) }}'">
+                        <i class="fa fa-desktop"></i>
+                    </div>
+                    <div class="text">
+                        <h3>Printer</h3>
+                        <p>Repair Shops</p>
+                    </div>
+                </div>
+                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Speaker']) }}'">
                     <div class="icon">
                         <i class="fa fa-desktop"></i>
                     </div>
                     <div class="text">
-                        <h3>Speakers</h3>
-                        <p>24 Repair Shops</p>
+                        <h3>Speaker</h3>
+                        <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category">
+                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Drone']) }}'">
                     <div class="icon">
                         <i class="fa fa-desktop"></i>
                     </div>
                     <div class="text">
-                        <h3>Drones</h3>
-                        <p>24 Repair Shops</p>
+                        <h3>Drone</h3>
+                        <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category">
+                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'All-In-One']) }}'">
                     <div class="icon">
                         <i class="fa fa-desktop"></i>
                     </div>
                     <div class="text">
                         <h3>All-in-one</h3>
-                        <p>24 Repair Shops</p>
+                        <p>Repair Shops</p>
                     </div>
                 </div>
             </div>
@@ -142,113 +141,59 @@
             </div>
 
             <div class="shops">
-                <div class="shop">
-                    <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
+                @foreach($repairshops as $repairshop)
+                    <div class="shop">
+                        <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
 
-                    <div class="shop-details">
-                        <div class="shop-name">
-                            <h3>BATZ</h3>
-                            <i class="fa fa-desktop"></i>
+                        <div class="shop-details">
+                            <div class="shop-name">
+                                <h3>{{$repairshop['repairshopName']}}</h3>
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            
+                            <div class="shop-location">
+                                <p>{{$repairshop['repairshopAddress']}}, Barangay {{$repairshop['repairshopBarangay']}}, {{$repairshop['repairshopCity']}} {{$repairshop['repairshopProvince']}}</p>
+                            </div>
+                            
+                            <div class="shop-schedule">
+                                <p>+63 {{$repairshop['repairshopContact']}}</p>
+                                <h4>{{ $repairshop['formattedDays'] }}</h4>              
+                            </div>
+        
+                            <ul>
+                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge1'] }}</li>
+                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge2'] }}</li>
+                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge3'] }}</li>
+                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge4'] }}</li>
+                            </ul>
                         </div>
                         
-                        <div class="shop-location">
-                            <p>123 Tech Street, Barangay Techville, Metro Manila</p>
+                        <div class="shop-footer">
+                            <div class="rating">
+                                <div class="stars">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= floor($repairshop['averageRating']))
+                                            <!-- Solid star for whole numbers -->
+                                            <i class="fas fa-star"></i>
+                                        @elseif ($i == ceil($repairshop['averageRating']) && fmod($repairshop['averageRating'], 1) != 0)
+                                            <!-- Half star for decimals -->
+                                            <i class="fa-solid fa-star-half-stroke"></i>
+                                        @else
+                                            <!-- Empty star -->
+                                            <i class="fa-regular fa-star"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <p>{{ $repairshop['totalReviews']}} Reviews</p>
+                            </div>
+                            <div class="actions">
+                                <button class="favorite"><i class="fa-regular fa-heart"></i></button>
+                                <button class="view" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                            </div>
                         </div>
-                        
-                        <div class="shop-schedule">
-                            <p>+63 123 456 7890</p>
-                            <h4>Mon - Fri</h4>              
-                        </div>
-    
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> Expert Tech Solutions</li>
-                            <li><i class="fa-solid fa-check"></i> Fast Repairs Guaranteed</li>
-                            <li><i class="fa-solid fa-check"></i> Reliable Service Network</li>
-                            <li><i class="fa-solid fa-check"></i> Quality Workmanship Assured</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="shop-footer">
-                        <div class="rating">
-                            <span>★★★★☆</span>
-                            <p>210 Reviews</p>
-                        </div>
-                        <div class="actions">
-                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                            <button class="view"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="shop">
-                    <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
-                    <div class="shop-details">
-                        <div class="shop-name">
-                            <h3>CAMFIX</h3>
-                            <i class="fa fa-desktop"></i>
-                        </div>
-                        
-                        <div class="shop-location">
-                            <p>456 Tech Street, Barangay Techland, Cebu City, Cebu</p>
-                        </div>
-                        
-                        <div class="shop-schedule">
-                            <p>+63 123 456 7890</p>
-                            <h4>Mon - Fri</h4>              
-                        </div>
-    
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> Expert Tech Solutions</li>
-                            <li><i class="fa-solid fa-check"></i> Fast Repairs Guaranteed</li>
-                            <li><i class="fa-solid fa-check"></i> Reliable Service Network</li>
-                            <li><i class="fa-solid fa-check"></i> Quality Workmanship Assured</li>
-                        </ul>
-                    </div>
-                    <div class="shop-footer">
-                        <div class="rating">
-                            <span>★★★★☆</span>
-                            <p>210 Reviews</p>
-                        </div>
-                        <div class="actions">
-                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                            <button class="view"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="shop">
-                    <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
-                    <div class="shop-details">
-                        <div class="shop-name">
-                            <h3>JBL SERVICE CENTER</h3>
-                            <i class="fa fa-desktop"></i>
-                        </div>
-                        
-                        <div class="shop-location">
-                            <p>123 Tech Street, Barangay Techville, Metro Manila</p>
-                        </div>
-                        
-                        <div class="shop-schedule">
-                            <p>+63 123 456 7890</p>
-                            <h4>Mon - Fri</h4>              
-                        </div>
-    
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> Expert Tech Solutions</li>
-                            <li><i class="fa-solid fa-check"></i> Fast Repairs Guaranteed</li>
-                            <li><i class="fa-solid fa-check"></i> Reliable Service Network</li>
-                            <li><i class="fa-solid fa-check"></i> Quality Workmanship Assured</li>
-                        </ul>
-                    </div>
-                    <div class="shop-footer">
-                        <div class="rating">
-                            <span>★★★★☆</span>
-                            <p>210 Reviews</p>
-                        </div>
-                        <div class="actions">
-                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                            <button class="view"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
-                        </div>
-                    </div>
-                </div>
+                    </div>                    
+                @endforeach
+
                 <div class="shop">
                     <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
                     <div class="shop-details">

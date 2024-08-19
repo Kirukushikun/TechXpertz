@@ -19,15 +19,16 @@
 
 <div class="categories">
     <a href="#">All Categories</a>
-    <a href="#">Smartphones</a>
-    <a href="#">Tablets</a>
-    <a href="#">Desktops</a>
-    <a href="#">Laptops</a>
-    <a href="#">Smartwatches</a>
-    <a href="#">Cameras</a>
-    <a href="#">Printers</a>
-    <a href="#">Speakers</a>
-    <a href="#">Drones</a>
+    <a href="{{ route('viewcategory', ['category'=>'Smartphone']) }}">Smartphones</a>
+    <a href="{{ route('viewcategory', ['category'=>'Tablet']) }}">Tablets</a>
+    <a href="{{ route('viewcategory', ['category'=>'Desktop']) }}">Desktops</a>
+    <a href="{{ route('viewcategory', ['category'=>'Laptop']) }}">Laptops</a>
+    <a href="{{ route('viewcategory', ['category'=>'Smartwatch']) }}">Smartwatches</a>
+    <a href="{{ route('viewcategory', ['category'=>'Camera']) }}">Cameras</a>
+    <a href="{{ route('viewcategory', ['category'=>'Printer']) }}">Printers</a>
+    <a href="{{ route('viewcategory', ['category'=>'Speaker']) }}">Speakers</a>
+    <a href="{{ route('viewcategory', ['category'=>'Drone']) }}">Drones</a>
+    <a href="{{ route('viewcategory', ['category'=>'All-In-One']) }}">All-In-One</a>
 </div>
 @endsection
 
