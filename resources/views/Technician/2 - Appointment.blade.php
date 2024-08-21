@@ -43,97 +43,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>April 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>May 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>May 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>May 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>May 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>April 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>May 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
+                            @foreach($upcomingAppointments as $upcoming)
+                                <tr>
+                                    <td>{{$upcoming['fullname']}}</td>
+                                    <td>{{$upcoming['email']}}</td>
+                                    <td>{{$upcoming['contact']}}</td>
+                                    <td>{{$upcoming['appointment_date']}}</td>
+                                    <td>{{$upcoming['appointment_time']}}</td>
+                                    <td><button>View</button></td>
+                                    <td>
+                                        <a class="edit" href=""><i class="fas fa-edit"></i></a>
+                                        <a class="delete" href=""><i class="fas fa-trash"></i></a>
+                                        <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -151,12 +75,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($requestedAppointments as $request)
                             <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>April 30, 2024</td>
-                                <td>8AM - 9AM</td>
+                                <td>{{$request['fullname']}}</td>
+                                <td>{{$request['email']}}</td>
+                                <td>{{$request['contact']}}</td>
+                                <td>{{$request['appointment_date']}}</td>
+                                <td>{{$request['appointment_time']}}</td>
                                 <td><button>View</button></td>
                                 <td>
                                     <a class="edit" href=""><i class="fas fa-edit"></i></a>
@@ -164,32 +89,7 @@
                                     <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>May 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>May 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -207,58 +107,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>April 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>May 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>May 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Chris P. Bacon</td>
-                                <td>chrispbacon@gmail.com</td>
-                                <td>04567890231</td>
-                                <td>May 30, 2024</td>
-                                <td>8AM - 9AM</td>
-                                <td><button>View</button></td>
-                                <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
-                                    <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
-                                </td>
-                            </tr>
+                            @foreach($completedAppointments as $completed)
+                                <tr>
+                                    <td>{{$completed['fullname']}}</td>
+                                    <td>{{$completed['email']}}</td>
+                                    <td>{{$completed['contact']}}</td>
+                                    <td>{{$completed['appointment_date']}}</td>
+                                    <td>{{$completed['appointment_time']}}</td>
+                                    <td><button>View</button></td>
+                                    <td>
+                                        <a class="edit" href=""><i class="fas fa-edit"></i></a>
+                                        <a class="delete" href=""><i class="fas fa-trash"></i></a>
+                                        <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

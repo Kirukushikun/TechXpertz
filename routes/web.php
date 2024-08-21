@@ -35,8 +35,8 @@ Route::get('/repairshops/{category}', [CustomerController::class, 'viewcategory'
 
 Route::get('/repairshop/{id}', [CustomerController::class, 'viewshop'])->name('viewshop');
 
-Route::get('/bookappointment', [CustomerController::class, 'viewappointment'])->name('viewappointment');
-Route::post('/bookappointment', [CustomerController::class, 'bookappointment'])->name('bookappointment'); //Not done
+Route::get('/bookappointment/{$id}', [CustomerController::class, 'viewappointment'])->name('viewappointment');
+Route::post('/bookappointment/{$id}', [CustomerController::class, 'bookappointment'])->name('bookappointment'); //Not done
 
 Route::get('/5', function () {
     return view('Customer.5 - RepairStatus');

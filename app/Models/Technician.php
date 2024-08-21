@@ -120,4 +120,10 @@ class Technician extends Authenticatable
         return $this->hasMany(Technician_Notifications::class);
     }
 
+    // Relationship with Technician Appointments
+    public function technicianAppointments()
+    {
+        return $this->hasMany(Technician_Appointments::class);
+    }
+
 }

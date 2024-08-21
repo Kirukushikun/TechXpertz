@@ -25,141 +25,73 @@
                 <h3>Review Summary</h3>
                 <div class="review-details">
                     <div class="overall-rating">
-                        <span class="rating-number">4.7</span>
+                        <span class="rating-number">{{ number_format($reviewData['averageRating'], 1) }}</span>
+                        
                         <div class="stars">
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star-half"><i class="fa-regular fa-star"></i></span>
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= floor($reviewData['averageRating']))
+                                    <!-- Solid star for whole numbers -->
+                                    <i class="star fas fa-star"></i>
+                                @elseif ($i == ceil($reviewData['averageRating']) && fmod($reviewData['averageRating'], 1) != 0)
+                                    <!-- Half star for decimals -->
+                                    <i class="star fa-solid fa-star-half-stroke"></i>
+                                @else
+                                    <!-- Empty star -->
+                                    <i class="star fa-regular fa-star"></i>
+                                @endif
+                            @endfor
                         </div>
-                        <span class="total-reviews">(578 Reviews)</span>
+                        <span class="total-reviews">({{ $reviewData['totalReviews'] }} Reviews)</span>
                     </div>
     
                     <div class="rating-breakdown">
-                        <div class="rating-bar">
-                            <span>5 stars</span>
-                            <div class="bar">
-                                <div class="filled" style="width: 85%;"></div>
+                        @for ($i = 5; $i >= 1; $i--)
+                            <div class="rating-bar">
+                                <span>{{ $i }} {{ $i == 1 ? 'star' : 'stars' }}</span>
+                                <div class="bar">
+                                    <div class="filled" style="width: {{ $reviewData['ratingPercentages'][$i] }}%;"></div>
+                                </div>
+                                <span>{{ $reviewData['ratingCounts'][$i] }}</span>
                             </div>
-                            <span>488</span>
-                        </div>
-                        <div class="rating-bar">
-                            <span>4 stars</span>
-                            <div class="bar">
-                                <div class="filled" style="width: 13%;"></div>
-                            </div>
-                            <span>74</span>
-                        </div>
-                        <div class="rating-bar">
-                            <span>3 stars</span>
-                            <div class="bar">
-                                <div class="filled" style="width: 2%;"></div>
-                            </div>
-                            <span>14</span>
-                        </div>
-                        <div class="rating-bar">
-                            <span>2 stars</span>
-                            <div class="bar">
-                                <div class="filled" style="width: 0%;"></div>
-                            </div>
-                            <span>0</span>
-                        </div>
-                        <div class="rating-bar">
-                            <span>1 star</span>
-                            <div class="bar">
-                                <div class="filled" style="width: 0%;"></div>
-                            </div>
-                            <span>0</span>
-                        </div>
+                        @endfor
                     </div>                
                 </div>
             </div>
 
             <div class="individual-reviews">
-
-                <div class="review">
-                    <div class="review-header">
-                        <span class="review-date">Jan 20, 2024</span>
-                        <div class="stars">
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                        </div>
-                    </div>
-    
-                    <div class="review-body">
-                        <div class="reviewer-info">
-                            <span class="reviewer-avatar">AK</span>
-                            <div class="reviewer-details">
-                                <span class="reviewer-name">Alex K.</span>
-                                <span class="reviewer-title">Senior Analyst</span>
+                @foreach($reviewMessages as $reviewMessage)
+                    <div class="review">
+                        <div class="review-header">
+                            <span class="review-date">{{$reviewMessage->created_at}}</span>
+                            <div class="stars">
+                                @for ($i = 1; $i <= $reviewMessage->rating; $i++ )
+                                    <span class="star"><i class="fa-solid fa-star"></i></span>
+                                @endfor
                             </div>
                         </div>
-                        <p class="review-text">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo est modi, vitae tempore quia asperiores tenetur facilis, ipsam temporibus mollitia nihil suscipit vero necessitatibus porro nostrum error. Corrupti, nulla voluptatibus!
-                        </p>
-                    </div>
-                </div>
-                <div class="review">
-                    <div class="review-header">
-                        <span class="review-date">Nov 13, 2023</span>
-                        <div class="stars">
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                        </div>
-                    </div>
-                    <div class="review-body">
-                        <div class="reviewer-info">
-                            <span class="reviewer-avatar">ER</span>
-                            <div class="reviewer-details">
-                                <span class="reviewer-name">Emily R.</span>
-                                <span class="reviewer-title">Front-End Engineer</span>
+        
+                        <div class="review-body">
+                            <div class="reviewer-info">
+                                <span class="reviewer-avatar">AK</span>
+                                <div class="reviewer-details">
+                                    <span class="reviewer-name">Customers Name</span>
+                                </div>
                             </div>
-                        </div>
-                        <p class="review-text">
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo commodi quidem adipisci similique, deleniti consequuntur optio ipsum, quibusdam a inventore culpa esse nisi eius, ut soluta odio temporibus ad facilis magnam excepturi aut? Dolorem minima sed ut alias ipsum nemo.
-                        </p>
-                    </div>
-                </div>
-                <div class="review">
-                    <div class="review-header">
-                        <span class="review-date">Nov 7, 2023</span>
-                        <div class="stars">
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
-                            <span class="star"><i class="fa-solid fa-star"></i></span>
+                            <p class="review-text">
+                                {{$reviewMessage->review_comment}}
+                            </p>
                         </div>
                     </div>
-                    <div class="review-body">
-                        <div class="reviewer-info">
-                            <span class="reviewer-avatar">MT</span>
-                            <div class="reviewer-details">
-                                <span class="reviewer-name">Michael T.</span>
-                                <span class="reviewer-title">Marketing Director</span>
-                            </div>
-                        </div>
-                        <p class="review-text">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime placeat ullam magni? Laboriosam, maiores iusto distinctio consequatur omnis molestias eum corrupti accusamus illo sunt facilis quidem maxime, amet perspiciatis eius dicta dolorem nulla tempora ducimus cum velit. Eligendi, voluptate libero dolore amet voluptatibus laboriosam sint molestias corporis explicabo vitae officiis ducimus delectus maiores deleniti est suscipit ullam facilis debitis qui?
-                    </div>
-                </div>
-
-                
+                @endforeach
             </div>
 
-            <div class="pagination">
+
+            <!-- <div class="pagination">
                 <a href="#" class="active">1</a>
                 <a href="#">2</a>
                 <a href="#">3</i></a>
                 <a href="#">...</a>
-            </div>
+            </div> -->
 
         </main>
 

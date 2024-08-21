@@ -25,15 +25,6 @@ class CustomerController extends Controller
 
         $repairshopData = $this->getRepairShopSummary();
 
-        if(Auth::check()){
-            $customerNotifications = Customer_Notifications::forCustomer(Auth::user()->id)->get();
-
-            return view('Customer.1 - Homepage', [
-                'repairshops' => $repairshopData,
-                'customerNotifications' => $customerNotifications,
-            ]);
-        }
-
         return view('Customer.1 - Homepage', [
             'repairshops' => $repairshopData,
         ]);
@@ -70,17 +61,19 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function viewAppointment()
+    public function viewappointment($id)
     {
         $customerDetails = Auth::check() ? Customer::find(Auth::id()) : null;
+        $repairshopID = $id;
     
         return view('Customer.4 - AppointmentBooking', [
             'customerDetails' => $customerDetails,
+            'repairshopID' => $repairshopID,
         ]);
 
     }
 
-    public function bookappointment(Request $request){
+    public function bookappointment(Request $request, $id){
         
         $validatedData = $request->validate([
             //Customer Details
@@ -108,8 +101,40 @@ class CustomerController extends Controller
             'appointment_urgency' => 'nullable|string|max:255',
         ]);
 
+        // Concatenate the first name and last name to create the fullname
+        $fullname = $validatedData['firstname'] . " " . $validatedData['lastname'];
 
+        // Create a new appointment request
+        $appointmentRequest = RepairShop_Appointments::create([
+            'technician_id' => $id,
+            'customer_id' => Auth::user()->id,
+            'status' => 'request',
 
+            // Customer Details
+            'fullname' => $fullname,
+            'email' => $validatedData['email'],
+            'contact_no' => $validatedData['contact_no'],
+
+            // Device Information
+            'device_type' => $validatedData['device_type'],
+            'device_brand' => $validatedData['device_brand'],
+            'device_model' => $validatedData['device_model'],
+            'device_serial' => $validatedData['device_serial'],
+
+            // Device Issue
+            'issue_descriptions' => $validatedData['issue_descriptions'],
+            'error_messages' => $validatedData['error_messages'],
+            'repair_attempts' => $validatedData['repair_attempts'],
+            'recent_events' => $validatedData['recent_events'],
+            'prepared_parts' => $validatedData['prepared_parts'],   
+
+            // Appointment Schedule
+            'appointment_date' => $validatedData['appointment_date'],
+            'appointment_time' => $validatedData['appointment_time'],
+            'appointment_urgency' => $validatedData['appointment_urgency'],
+        ]);
+
+        return redirect()->route('viewshop', ['id' => $id]);
     }
     
 

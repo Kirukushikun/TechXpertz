@@ -21,6 +21,7 @@
                 <h1>Notifications</h1>
             </header>
 
+            
             <div class="notification">
                 <div class="notification-header">
                     <div class="notification-icon">
@@ -50,22 +51,22 @@
                     </div>
                 </div>
             </div>
-
+            @foreach($combinedNotifications as $notification)
             <div class="notification">
                 <div class="notification-header">
                     <div class="notification-icon">
                         <i class="fa-solid fa-bell"></i>
                     </div>
                     <div class="notification-details">
-                        <span class="notification-title">Verify Your Email Address</span>
-                        <span class="notification-date">Jan 20, 2024</span>
+                        <span class="notification-title">{{$notification->title}}</span>
+                        <span class="notification-date">{{$notification->created_at}}</span>
                     </div>
                 </div>
 
                 <div class="notification-body">
                     <div class="notification-message">
                         <p>
-                            We’ve sent a verification email to [Your Email]. Please check your inbox and verify your email to continue setting up your profile. If you didn’t receive the email, click here to resend it.
+                            {{$notification->message}}
                         </p>
                     </div>
                     <div class="notification-checklist">
@@ -73,7 +74,7 @@
                     </div>
                 </div>
             </div>
-
+            @endforeach
             <div class="notification">
                 <div class="notification-header">
                     <div class="notification-icon">

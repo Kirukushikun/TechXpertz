@@ -45,7 +45,7 @@
                     <h2>{{$repairshop->repairshopCredentials->shop_name}}</h2>
                     <div class="header">
                         <div class="rating">
-                            <div class="average">{{ $reviewData['averageRating'] }}</div>
+                            <div class="average">{{ number_format($reviewData['averageRating'], 1) }}</div>
                             <div class="stars">
                                 @for ($i = 1; $i <= 5; $i++)
                                     @if ($i <= floor($reviewData['averageRating']))
@@ -103,7 +103,7 @@
                     <div class="buttons">
                         <button class="favorite"><i class="fa-regular fa-heart"></i></button>
                         <button class="chat">CHAT</button>
-                        <button class="appointment highlight" onclick="btnClick()">MAKE AN APPOINTMENT</button>
+                        <button class="appointment highlight" onclick="window.location.href='{{route('viewappointment', ['id' => $repairshop->id])}}'">MAKE AN APPOINTMENT</button>
                     </div>
                 </div>
             </div>
@@ -114,7 +114,7 @@
             <div class="review-summary">
                 
             <div class="rating">
-                <div class="rating-score">{{ $reviewData['averageRating'] }}<p>/5</p></div>
+                <div class="rating-score">{{ number_format($reviewData['averageRating'], 1) }}<p>/5</p></div>
                 <div class="rating-stars">
                     @for ($i = 1; $i <= 5; $i++)
                         @if ($i <= floor($reviewData['averageRating']))
@@ -131,11 +131,6 @@
                 </div>
                 <div class="rating-reviews">{{ $reviewData['totalReviews'] }} Reviews</div>
             </div>
-
-
-                <!-- <i class="fa-regular fa-star"></i> -->
-                <!-- <i class="fa-solid fa-star-half-stroke"></i> -->
-
 
                 <div class="rating-breakdown">
                     @for ($i = 5; $i >= 1; $i--)
@@ -155,81 +150,7 @@
                         </div>
                     @endfor
 
-                    <!-- <div class="rating-bar">
-                        <div class="upper">
-                            <div class="star-scale">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="rating-count">186</div>
-                        </div>
 
-                        <div class="bar">
-                            <div class="filled" style="width: 83%;"></div>
-                        </div>
-                    </div>
-
-                    <div class="rating-bar">
-                        <div class="upper">
-                            <div class="star-scale">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="rating-count">18</div>
-                        </div>
-
-                        <div class="bar">
-                            <div class="filled" style="width: 70%;"></div>
-                        </div>
-                    </div>
-
-                    <div class="rating-bar">
-                        <div class="upper">
-                            <div class="star-scale">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="rating-count">12</div>
-                        </div>
-
-                        <div class="bar">
-                            <div class="filled" style="width: 20%;"></div>
-                        </div>
-                    </div>
-
-                    <div class="rating-bar">
-                        <div class="upper">
-                            <div class="star-scale">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="rating-count">12</div>
-                        </div>
-
-                        <div class="bar">
-                            <div class="filled" style="width: 20%;"></div>
-                        </div>
-                    </div>
-
-                    <div class="rating-bar">
-                        <div class="upper">
-                            <div class="star-scale">
-                                <i class="fas fa-star"></i>
-
-                            </div>
-                            <div class="rating-count">12</div>
-                        </div>
-
-                        <div class="bar">
-                            <div class="filled" style="width: 20%;"></div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
 
