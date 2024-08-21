@@ -193,42 +193,6 @@
                         </div>
                     </div>                    
                 @endforeach
-
-                <div class="shop">
-                    <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
-                    <div class="shop-details">
-                        <div class="shop-name">
-                            <h3>3JPS</h3>
-                            <i class="fa fa-desktop"></i>
-                        </div>
-                        
-                        <div class="shop-location">
-                            <p>123 Tech Street, Barangay Techville, Metro Manila</p>
-                        </div>
-                        
-                        <div class="shop-schedule">
-                            <p>+63 123 456 7890</p>
-                            <h4>Mon - Fri</h4>              
-                        </div>
-    
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> Expert Tech Solutions</li>
-                            <li><i class="fa-solid fa-check"></i> Fast Repairs Guaranteed</li>
-                            <li><i class="fa-solid fa-check"></i> Reliable Service Network</li>
-                            <li><i class="fa-solid fa-check"></i> Quality Workmanship Assured</li>
-                        </ul>
-                    </div>
-                    <div class="shop-footer">
-                        <div class="rating">
-                            <span>★★★★☆</span>
-                            <p>210 Reviews</p>
-                        </div>
-                        <div class="actions">
-                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                            <button class="view"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 

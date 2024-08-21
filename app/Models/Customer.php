@@ -48,4 +48,10 @@ class Customer extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Relationship with Customer Notifications
+    public function customerNotifications()
+    {
+        return $this->hasMany(Customer_Notifications::class);
+    }
 }

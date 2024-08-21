@@ -7,18 +7,19 @@
         </div>
 
         <ul>
-            <li><a href="/6"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="/7"><i class="fas fa-calendar-alt"></i> Appointment</a></li>
-            <li><a href="/8"><i class="fas fa-tools"></i> Repair Status</a></li>
-            <li><a href="/9"><i class="fas fa-user"></i> Messages</a></li>
-            <li><a href="/10"><i class="fas fa-star"></i> Shop Reviews</a></li>
-            <li><a href="/11"><i class="fas fa-user-cog"></i> Manage Profile</a></li>
-            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="/technician/notifications"><i class="fa-solid fa-bell"></i>Notifications</a></li>
+            <li><a href="/technician/dashboard"><i class="fa-solid fa-table-columns"></i>Dashboard</a></li>
+            <li><a href="/technician/appointment"><i class="fa-solid fa-calendar-day"></i>Appointment</a></li>
+            <li><a href="/technician/repairstatus"><i class="fas fa-tools"></i>Repair Status</a></li>
+            <li><a href="/technician/messages"><i class="fa-solid fa-message"></i>Messages</a></li>
+            <li><a href="/technician/shopreviews"><i class="fas fa-star"></i>Shop Reviews</a></li>
+            <li><a href="/technician/profile"><i class="fas fa-user-cog"></i>Manage Profile</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
         </ul>
     </nav>
 
     <div class="sidebar-footer">
-        <button class="logout">LOG OUT</button>
+        <button class="logout" onclick="window.location.href='{{route('technician.logoutTechnician')}}'">LOG OUT</button>
         
         <div class="dark-mode">
             <span>Dark mode</span>

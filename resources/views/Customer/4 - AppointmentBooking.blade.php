@@ -14,20 +14,21 @@
         @yield('header')
         
         <form class="appointment-form">
+            @csrf
             <div class="left">
                 <div class="form-section">
                     <h2>Customer Details</h2>
                     <div class="form-group">
                         <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" name="first-name">
+                        <input type="text" id="first-name" name="first-name" value="{{ $customerDetails->firstname ?? '' }}">
                     </div>
                     <div class="form-group">
                         <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="last-name">
+                        <input type="text" id="last-name" name="last-name" value="{{ $customerDetails->lastname ?? '' }}">
                     </div>
                     <div class="form-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email">
+                        <input type="email" id="email" name="email" value="{{ $customerDetails->email ?? '' }}">
                     </div>
                     <div class="form-group">
                         <label for="phone">Mobile Phone Number</label>
@@ -193,8 +194,13 @@
                     </div>
                     
                     <div class="action">
-                        <button type="submit" class="submit-button">REQUEST APPOINTMENT</button>
-                        <p><b>Reminder :</b> Please review your information before submitting. Changes cannot be made after submission.</p>
+                        @if(Auth::check())
+                            <button type="submit" class="submit-button">REQUEST APPOINTMENT</button>
+                            <p><b>Reminder :</b> Please review your information before submitting. Changes cannot be made after submission.</p>                            
+                        @else
+                            <button type="button" class="submit-button" onclick="window.location.href='{{route('login')}}'">LOGIN</button>
+                            <p><b>Reminder :</b> You need to log in to request an appointment.</p>
+                        @endif
                     </div>
 
                 </div>            

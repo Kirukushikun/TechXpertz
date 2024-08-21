@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Technician;
+use App\Models\Customer;
 use App\Models\RepairShop_Credentials;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -17,11 +18,18 @@ class TechnicianAuthController extends Controller
 
     public function loginTechnician(Request $request){
         $credentials = $request->only('email', 'password');
-        if(Auth::attempt($credentials)){
-            return redirect()->route('welcome');
+
+        if(Auth::guard('technician')->attempt($credentials)){
+            return redirect()->route('technician.dashboard');
         } else {
             return redirect()->route('technician.login')->with("error", "Invalid email or password. Please re-enter.");
         }
+    }
+
+    function logoutTechnician(){
+        Session::flush();
+        Auth::logout();
+        return redirect()->intended(route('technician.login'));
     }
 
     public function signup(){
@@ -36,11 +44,13 @@ class TechnicianAuthController extends Controller
             'email' => 'required|string|email|max:255|unique:technicians',
             'contact_no' => 'required|string|max:255',
             'educational_background' => 'required|string|max:255',
+            'date_of_birth' => 'required|date',
+
             'province' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'barangay' => 'required|string|max:255',
             'zip_code' => 'required|string|max:255',
-            'date_of_birth' => 'required|date',
+            
             'username' => 'required|string|max:255|unique:technicians',
             'password' => 'required|string|min:8|confirmed',
 
@@ -53,6 +63,21 @@ class TechnicianAuthController extends Controller
             'shop_barangay' => 'required|string|max:255',
             'shop_zip_code' => 'required|string|max:255',
         ]);
+
+        $email = $validatedData['email'];
+        $rehashed = Hash::make($validatedData['password']);
+
+        // Check if the email exists in any of the user tables
+        $existsInCustomer = Customer::where('email', $email)->exists();
+        $existsInTechnician = Technician::where('email', $email)->exists();
+        // $existsInAdmin = Admin::where('email', $email)->exists();
+
+        // If email is found in any table, return with an error
+        // ($existsInCustomer || $existsInTechnician || $existsInAdmin)
+        
+        if ($existsInCustomer || $existsInTechnician) {
+            return redirect()->back()->withErrors(['email' => 'This email is already registered.']);
+        }
 
         try {
             $technician = Technician::create([
@@ -68,7 +93,7 @@ class TechnicianAuthController extends Controller
                 'zip_code' => $validatedData['zip_code'],
                 'date_of_birth' => $validatedData['date_of_birth'],
                 'username' => $validatedData['username'],
-                'password' => Hash::make($validatedData['password']),
+                'password' => $rehashed,
             ]);
             $repairshop = RepairShop_Credentials::create([
                 'technician_id' => $technician->id,

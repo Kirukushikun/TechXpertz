@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
+use App\Models\Customer_Notifications;
+
 use App\Models\Technician;
 use App\Models\RepairShop_Credentials;
 use App\Models\RepairShop_Mastery;
@@ -10,15 +13,26 @@ use App\Models\RepairShop_Reviews;
 use App\Models\RepairShop_Schedules;
 use App\Models\RepairShop_Services;
 use App\Models\RepairShop_Socials;
+
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
     public function welcome(){
 
         $repairshopData = $this->getRepairShopSummary();
+
+        if(Auth::check()){
+            $customerNotifications = Customer_Notifications::forCustomer(Auth::user()->id)->get();
+
+            return view('Customer.1 - Homepage', [
+                'repairshops' => $repairshopData,
+                'customerNotifications' => $customerNotifications,
+            ]);
+        }
 
         return view('Customer.1 - Homepage', [
             'repairshops' => $repairshopData,
@@ -55,6 +69,49 @@ class CustomerController extends Controller
             'detailedSchedule' => $detailedSchedule
         ]);
     }
+
+    public function viewAppointment()
+    {
+        $customerDetails = Auth::check() ? Customer::find(Auth::id()) : null;
+    
+        return view('Customer.4 - AppointmentBooking', [
+            'customerDetails' => $customerDetails,
+        ]);
+
+    }
+
+    public function bookappointment(Request $request){
+        
+        $validatedData = $request->validate([
+            //Customer Details
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:customers',
+            'contact_no' => 'required|string|max:255',
+
+            //Device Information
+            'device_type' => 'required|string|max:255',
+            'device_brand' => 'required|string|max:255',
+            'device_model' => 'required|string|max:255',
+            'device_serial' => 'nullable|string|max:255',
+
+            //Device Issue
+            'issue_descriptions' => 'nullable|string|max:255',
+            'error_messages' => 'nullable|string|max:255',
+            'repair_attempts' => 'nullable|string|max:255',
+            'recent_events' => 'nullable|string|max:255',
+            'prepared_parts' => 'nullable|string|max:255',   
+            
+            //Appointment Schedule
+            'appointment_date' => 'required|date',
+            'appointment_time' => 'required|date_format:H:i',
+            'appointment_urgency' => 'nullable|string|max:255',
+        ]);
+
+
+
+    }
+    
 
 
     // PRIVATE FUNCTIONS ---------
@@ -145,6 +202,8 @@ class CustomerController extends Controller
 
     }
 
+    // FORMATED SCHEDULE FUNCTIONS ---------
+
     private function getFormattedSchedule($technicianID){
 
         // Retrieve the open days for the repair shop where status is 'open'
@@ -177,7 +236,88 @@ class CustomerController extends Controller
 
         return $formattedDays;
     }
+    
+    private function formatDays($days) {
+        $result = [];
+        $rangeStart = null;
+    
+        foreach ($days as $index => $day) {
+            // If it's the start of a new range
+            if ($rangeStart === null) {
+                $rangeStart = $day;
+            }
+    
+            // Check if the next day is consecutive
+            if (isset($days[$index + 1]) && $this->isNextDay($day, $days[$index + 1])) {
+                continue;
+            }
+    
+            // If not consecutive, close the range
+            if ($rangeStart !== $day) {
+                $result[] = $rangeStart . ' - ' . $day;
+            } else {
+                $result[] = $day;
+            }
+    
+            // Reset the range start
+            $rangeStart = null;
+        }
+    
+        return implode(', ', $result);
+    }
+    
+    private function isNextDay($currentDay, $nextDay) {
+        $dayOrder = [
+            'Mon' => 1,
+            'Tue' => 2,
+            'Wed' => 3,
+            'Thu' => 4,
+            'Fri' => 5,
+            'Sat' => 6,
+            'Sun' => 7,
+        ];
+    
+        return $dayOrder[$nextDay] === $dayOrder[$currentDay] + 1;
+    }
 
+    // REVIEW SYSTEM FUNCTIONS ---------
+
+    private function reviewSystem($id){
+        $ratings = RepairShop_Reviews::where('technician_id', $id)->where('approved', 1)->pluck('rating')->toArray();
+
+        // Calculate total number of reviews
+        $totalReviews = count($ratings);
+
+        // Calculate the average rating
+        $averageRating = $totalReviews > 0 ? round(array_sum($ratings) / $totalReviews, 1) : 0;
+
+        // Count the number of each rating (1-5 stars)
+        $ratingCounts = array_count_values($ratings);
+
+        // Ensure all star levels (1 to 5) are accounted for, even if they have 0 ratings
+        for ($i = 1; $i <= 5; $i++) {
+            if (!isset($ratingCounts[$i])) {
+                $ratingCounts[$i] = 0;
+            }
+        }
+
+        // Calculate the percentage for each rating
+        $ratingPercentages = [];
+        foreach ($ratingCounts as $stars => $count) {
+            $ratingPercentages[$stars] = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
+        }
+
+        // Return the calculated data as an associative array
+        return [
+            'totalReviews' => $totalReviews,
+            'averageRating' => $averageRating,
+            'ratingCounts' => $ratingCounts,
+            'ratingPercentages' => $ratingPercentages,
+        ];
+
+    }
+
+    // DETAILED SCHEDULE FUNCTIONS ---------
 
     private function getDetailedSchedule($technicianID) {
         // Retrieve the schedules from the database
@@ -279,86 +419,5 @@ class CustomerController extends Controller
         }
     
         return $result;
-    }
-    
-    
-    
-    
-    private function formatDays($days) {
-        $result = [];
-        $rangeStart = null;
-    
-        foreach ($days as $index => $day) {
-            // If it's the start of a new range
-            if ($rangeStart === null) {
-                $rangeStart = $day;
-            }
-    
-            // Check if the next day is consecutive
-            if (isset($days[$index + 1]) && $this->isNextDay($day, $days[$index + 1])) {
-                continue;
-            }
-    
-            // If not consecutive, close the range
-            if ($rangeStart !== $day) {
-                $result[] = $rangeStart . ' - ' . $day;
-            } else {
-                $result[] = $day;
-            }
-    
-            // Reset the range start
-            $rangeStart = null;
-        }
-    
-        return implode(', ', $result);
-    }
-    
-    private function isNextDay($currentDay, $nextDay) {
-        $dayOrder = [
-            'Mon' => 1,
-            'Tue' => 2,
-            'Wed' => 3,
-            'Thu' => 4,
-            'Fri' => 5,
-            'Sat' => 6,
-            'Sun' => 7,
-        ];
-    
-        return $dayOrder[$nextDay] === $dayOrder[$currentDay] + 1;
-    }
-
-    private function reviewSystem($id){
-        $ratings = RepairShop_Reviews::where('technician_id', $id)->where('approved', 1)->pluck('rating')->toArray();
-
-        // Calculate total number of reviews
-        $totalReviews = count($ratings);
-
-        // Calculate the average rating
-        $averageRating = $totalReviews > 0 ? round(array_sum($ratings) / $totalReviews, 1) : 0;
-
-        // Count the number of each rating (1-5 stars)
-        $ratingCounts = array_count_values($ratings);
-
-        // Ensure all star levels (1 to 5) are accounted for, even if they have 0 ratings
-        for ($i = 1; $i <= 5; $i++) {
-            if (!isset($ratingCounts[$i])) {
-                $ratingCounts[$i] = 0;
-            }
-        }
-
-        // Calculate the percentage for each rating
-        $ratingPercentages = [];
-        foreach ($ratingCounts as $stars => $count) {
-            $ratingPercentages[$stars] = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
-        }
-
-        // Return the calculated data as an associative array
-        return [
-            'totalReviews' => $totalReviews,
-            'averageRating' => $averageRating,
-            'ratingCounts' => $ratingCounts,
-            'ratingPercentages' => $ratingPercentages,
-        ];
-
     }
 }

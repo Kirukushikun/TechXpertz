@@ -114,4 +114,10 @@ class Technician extends Authenticatable
         return $this->hasOne(RepairShop_Badges::class);
     }
 
+    // Relationship with Technician Notifications
+    public function technicianNotifications()
+    {
+        return $this->hasMany(Technician_Notifications::class);
+    }
+
 }

@@ -235,7 +235,7 @@
 
             <div class="description">
                 <div class="tabs">
-                    <div class="tab active">Description</div>
+                    <div class="tab active">About</div>
                     <div class="tab">Specialization</div>
                     <div class="tab">Certificates</div>
                     <div class="tab">Reviews ({{$reviewData['totalReviews']}})</div>

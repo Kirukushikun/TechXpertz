@@ -65,6 +65,36 @@
                     </div>
                 </section>
 
+                <section class="form-section fs-1">
+                    <h3><span>3</span>Shop Badges</h3>
+                    <div class="form-details">
+                        <div class="form-group">
+                            <label for="badge_1">Badge 1</label>
+                            <select name="badge_1" id="badge_1">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                        <label for="badge_2">Badge 2</label>
+                            <select name="badge_2" id="badge_2">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                        <label for="badge_3">Badge 3</label>
+                            <select name="badge_3" id="badge_3">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                        <label for="badge_4">Badge 4</label>
+                            <select name="badge_4" id="badge_4">
+                                <option value=""></option>
+                            </select>
+                        </div>                        
+                    </div>
+                </section>
+
                 <section class="form-section fs-3">
                     <h3><span>3</span> Specialization</h3>
                     <div class="form-group">
@@ -251,11 +281,15 @@
                 </section>
 
                 <section class="form-section fs-6">
-                    <h3><span>6</span>Additional Info</h3>
+                    <h3><span>6</span>About</h3>
 
                     <div class="form-group">
-                        <label for="additional-info">About</label>
-                        <textarea id="additional-info" name="additional-info"></textarea>
+                        <label for="about-header">Header</label>
+                        <textarea id="about-header" name="about-header"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="about-description">Description</label>
+                        <textarea id="about-description" name="about-description"></textarea>
                     </div>
                 </section>
 
@@ -272,5 +306,73 @@
     
     <script src="{{asset('js/Technician/6 - ManageProfile.js')}}"></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
+    <script>
+        // Function to populate select inputs with options
+        function populateSelectInputs() {
+            const badges = [
+                "24/7 Customer Support",
+                "Advanced Diagnostic Tools",
+                "Authorized Repair Center",
+                "Certified Technicians On-Site",
+                "Emergency Repair Service",
+                "Exclusive Offers Available",
+                "Experienced Staff",
+                "Expert Troubleshooting",
+                "Fastest Repair Times",
+                "Free Diagnostic Service",
+                "Loyalty Rewards Program",
+                "No Hidden Charges",
+                "Original Parts Used",
+                "Pickup and Delivery Service",
+                "Proven Repair Methods",
+                "Same-Day Service",
+                "Seamless Repair Process",
+                "Secure Data Handling",
+                "Specialized in All Brands",
+                "Warranty on All Repairs"
+            ];
+
+            const selectIds = ["badge_1", "badge_2", "badge_3", "badge_4"];
+
+            selectIds.forEach(id => {
+                const select = document.getElementById(id);
+
+                // Preserve the existing selected value
+                const savedValue = select.value;
+
+                // Clear existing options
+                select.innerHTML = '';
+
+                // Add an empty option at the top
+                const emptyOption = document.createElement("option");
+                emptyOption.value = '';
+                emptyOption.textContent = '';
+                select.appendChild(emptyOption);
+
+                // Add each badge as an option
+                badges.forEach(badge => {
+                    const option = document.createElement("option");
+                    option.value = badge;
+                    option.textContent = badge;
+
+                    // Set the saved value as selected if it matches
+                    if (badge === savedValue) {
+                        option.selected = true;
+                    }
+
+                    select.appendChild(option);
+                });
+
+                // If there's no pre-selected value and one exists in the original HTML, select it
+                if (savedValue === "" && select.querySelector('option[selected]')) {
+                    select.value = select.querySelector('option[selected]').value;
+                }
+            });
+        }
+
+        // Call the function to populate the select inputs when the page loads
+        populateSelectInputs();
+
+    </script>
 </body>
 </html>
