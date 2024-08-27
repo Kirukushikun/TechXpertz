@@ -14,6 +14,8 @@ use App\Models\RepairShop_Schedules;
 use App\Models\RepairShop_Services;
 use App\Models\RepairShop_Socials;
 use App\Models\RepairShop_Appointments;
+use App\Models\RepairShop_RepairStatus;
+use App\Models\RepairShop_Badges;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -47,11 +49,12 @@ class TechnicianController extends Controller
             ->get();
     
         // Group appointments by status
-        $upcomingAppointments = $appointments->where('status', 'upcoming');
-        $requestedAppointments = $appointments->where('status', 'request');
+        $confirmedAppointments = $appointments->where('status', 'confirmed');
+        $requestedAppointments = $appointments->where('status', 'requested');
         $completedAppointments = $appointments->where('status', 'completed');
+        $rejectedAppointments = $appointments->where('status', 'rejected');
     
-        // Prepare data for requested, pending, and completed appointments
+        // Prepare data for requested, pending, rejected and completed appointments
         $requestedAppointmentsData = $requestedAppointments->map(function ($appointment) {
             return [
                 'fullname' => $appointment->fullname,
@@ -62,7 +65,7 @@ class TechnicianController extends Controller
             ];
         })->toArray();
     
-        $upcomingAppointmentsData = $upcomingAppointments->map(function ($appointment) {
+        $confirmedAppointmentsData = $confirmedAppointments->map(function ($appointment) {
             return [
                 'fullname' => $appointment->fullname,
                 'email' => $appointment->email,
@@ -81,17 +84,65 @@ class TechnicianController extends Controller
                 'appointment_time' => $appointment->appointment_time,
             ];
         })->toArray();
+
+        $rejectedAppointmentsData = $rejectedAppointments->map(function ($appointment) {
+            return [
+                'fullname' => $appointment->fullname,
+                'email' => $appointment->email,
+                'contact' => $appointment->contact_no,
+                'appointment_date' => $appointment->appointment_date,
+                'appointment_time' => $appointment->appointment_time,
+            ];
+        })->toArray();
     
-        // Return view with requested, upcoming, and completed appointments data
+        // Return view with requested, confirmed, and completed appointments data
         return view('Technician.2 - Appointment', [
             'requestedAppointments' => $requestedAppointmentsData,
-            'upcomingAppointments' => $upcomingAppointmentsData,
+            'confirmedAppointments' => $confirmedAppointmentsData,
             'completedAppointments' => $completedAppointmentsData,
+            'rejectedAppointments' => $completedAppointmentsData,
         ]);
     }
 
     public function repairstatus(){
-        return view('Technician.3 - RepairStatus');
+        $technician = Auth::guard('technician')->user();
+        $repairStatus = RepairShop_RepairStatus::where('technician_id', $technician->id)->get();
+
+        $repairStatusPending = $repairStatus->where('status', 'pending');
+        $repairStatusCompleted = $repairStatus->where('status', 'completed');
+
+        // Prepare data for requested, pending, and completed appointments
+        $repairStatusPendingData = $repairStatusPending->map(function ($repairdata) {
+            return [
+                'repairID' => $repairdata->id,
+                'customer_name' => $repairdata->customer_fullname,
+                'revenue' => $repairdata->revenue,
+                'expenses' => $repairdata->expenses,
+                'paid_status' => $repairdata->paid_status,
+                'repairstatus' => $repairdata->repairstatus,
+                'repairstatus_conditional' => $repairdata->repairstatus_conditional,
+                'repairstatus_message' => $repairdata->repairstatus_message,
+            ];
+        })->toArray();
+
+        // Prepare data for requested, pending, and completed appointments
+        $repairStatusCompletedData = $repairStatusCompleted->map(function ($repairdata) {
+            return [
+                'repairID' => $repairdata->id,
+                'customer_name' => $repairdata->customer_fullname,
+                'revenue' => $repairdata->revenue,
+                'expenses' => $repairdata->expenses,
+                'paid_status' => $repairdata->paid_status,
+                'repairstatus' => $repairdata->repairstatus,
+                'repairstatus_conditional' => $repairdata->repairstatus_conditional,
+                'repairstatus_message' => $repairdata->repairstatus_message,
+            ];
+        })->toArray();
+
+        return view('Technician.3 - RepairStatus', [
+            'repairStatusPendingData' => $repairStatusPendingData,
+            'repairStatusCompletedData' => $repairStatusCompletedData,
+        ]);
     }
 
     public function messages(){
@@ -118,10 +169,22 @@ class TechnicianController extends Controller
     }
 
     public function profile(){
-        return view('Technician.6 - ManageProfile');
+        $technician = Auth::guard('technician')->user();
+
+        $technicianInfo = Technician::find($technician->id);
+        $repairshopInfo = RepairShop_Credentials::find($technician->id);
+        $technicianServices = RepairShop_Services::where('technician_id', $technician->id);
+        $technicianBadges = RepairShop_Badges::find($technician->id);
+        $technicianAbout = RepairShop_Profiles::find($technician->id);
+
+        return view('Technician.6 - ManageProfile', [
+            'technicianInfo' => $technicianInfo,
+            'repairshopInfo' => $repairshopInfo,
+            'technicianServices' => $technicianServices,
+            'technicianBadges' => $technicianBadges,
+            'technicianAbout' => $technicianAbout,
+        ]);
     }
-
-
 
     // REVIEW SYSTEM FUNCTIONS ---------
 

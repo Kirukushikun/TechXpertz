@@ -11,7 +11,7 @@
     </div>
 
     @auth
-        <button class="account-button" onclick="window.location.href='{{route('customer.logoutCustomer')}}'"><i class="fa fa-user"></i>My Account</button>
+        <button class="account-button" onclick="window.location.href='/myaccount'"><i class="fa fa-user"></i>My Account</button>
     @else
         <button class="account-button" onclick="window.location.href='/customer/login'"><i class="fa fa-user"></i>Login</button>
     @endauth

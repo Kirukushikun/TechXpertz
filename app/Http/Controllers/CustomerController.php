@@ -136,6 +136,15 @@ class CustomerController extends Controller
 
         return redirect()->route('viewshop', ['id' => $id]);
     }
+
+    public function myaccount(){
+
+        if(Auth::check()){
+            return view('Customer.6 - Account');
+        }
+        return redirect()->route('customer.loginCustomer');
+
+    }
     
 
 

@@ -19,7 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
 
-            $table->enum('status', ['upcoming', 'request', 'completed'])->default('request');
+            $table->enum('status', ['confirmed', 'requested', 'completed', 'rejected'])->default('request');
+            //Confirmed Appointments , Rejected Appointments
+
             $table->string('fullname'); // Full name of the customer
             $table->string('email'); // Email of the customer
             $table->string('contact_no'); // Contact number of the customer

@@ -38,6 +38,8 @@ Route::get('/repairshop/{id}', [CustomerController::class, 'viewshop'])->name('v
 Route::get('/bookappointment/{$id}', [CustomerController::class, 'viewappointment'])->name('viewappointment');
 Route::post('/bookappointment/{$id}', [CustomerController::class, 'bookappointment'])->name('bookappointment'); //Not done
 
+Route::get('/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
+
 Route::get('/5', function () {
     return view('Customer.5 - RepairStatus');
 });

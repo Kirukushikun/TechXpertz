@@ -26,19 +26,19 @@
                     <div class="form-details">
                         <div class="form-group">
                             <label for="shop-name">Shop Name</label>
-                            <input type="text" id="shop-name" name="shop-name">
+                            <input type="text" id="shop-name" name="shop-name" value="{{$repairshopInfo->shop_name}}">
                         </div>
                         <div class="form-group">
                             <label for="owner-name">Owner's Name</label>
-                            <input type="text" id="owner-name" name="owner-name">
+                            <input type="text" id="owner-name" name="owner-name" value="{{$technicianInfo->firstname}}">
                         </div>
                         <div class="form-group">
                             <label for="contact-no">Contact No.</label>
-                            <input type="text" id="contact-no" name="contact-no">
+                            <input type="text" id="contact-no" name="contact-no" value="{{$repairshopInfo->shop_contact}}">
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email">
+                            <input type="email" id="email" name="email" value="{{$repairshopInfo->shop_email}}">
                         </div>                        
                     </div>
                 </section>
@@ -48,19 +48,19 @@
                     <div class="form-details">
                         <div class="form-group">
                             <label for="province">Province</label>
-                            <input type="text" id="province" name="province">
+                            <input type="text" id="province" name="province" value="{{$repairshopInfo->shop_province}}">
                         </div>
                         <div class="form-group">
                             <label for="city">City</label>
-                            <input type="text" id="city" name="city">
+                            <input type="text" id="city" name="city" value="{{$repairshopInfo->shop_city}}">
                         </div>
                         <div class="form-group">
                             <label for="barangay">Barangay</label>
-                            <input type="text" id="barangay" name="barangay">
+                            <input type="text" id="barangay" name="barangay" value="{{$repairshopInfo->shop_barangay}}">
                         </div>
                         <div class="form-group">
-                            <label for="street">Street</label>
-                            <input type="text" id="street" name="street">
+                            <label for="address">address</label>
+                            <input type="text" id="address" name="address" value="{{$repairshopInfo->shop_address}}">
                         </div>                        
                     </div>
                 </section>
@@ -71,25 +71,25 @@
                         <div class="form-group">
                             <label for="badge_1">Badge 1</label>
                             <select name="badge_1" id="badge_1">
-                                <option value=""></option>
+                                <option value="{{$technicianBadges->badge_1 ?? '' }}">{{$technicianBadges->badge_1 ?? ''}}</option>
                             </select>
                         </div>
                         <div class="form-group">
                         <label for="badge_2">Badge 2</label>
                             <select name="badge_2" id="badge_2">
-                                <option value=""></option>
+                                <option value="{{$technicianBadges->badge_2 ?? '' }}">{{$technicianBadges->badge_2 ?? ''}}</option>
                             </select>
                         </div>
                         <div class="form-group">
                         <label for="badge_3">Badge 3</label>
                             <select name="badge_3" id="badge_3">
-                                <option value=""></option>
+                                <option value="{{$technicianBadges->badge_3 ?? ''}}">{{$technicianBadges->badge_3 ?? '' }}</option>
                             </select>
                         </div>
                         <div class="form-group">
                         <label for="badge_4">Badge 4</label>
                             <select name="badge_4" id="badge_4">
-                                <option value=""></option>
+                                <option value="{{$technicianBadges->badge_4 ?? '' }}">{{$technicianBadges->badge_4 ?? '' }}</option>
                             </select>
                         </div>                        
                     </div>
@@ -121,18 +121,13 @@
                 <section class="form-section fs-4">
                     <h3><span>4</span>Services</h3>
                     <div class="form-details">
+                        @foreach($technicianServices as $service)
                         <div class="form-group">
-                            <label for="province">Service 1</label>
-                            <textarea type="text" id="province" name="province"></textarea>
+                            <label for="service">Service 1</label>
+                            <textarea type="text" id="service" name="service">{{$service->service}}</textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="city">Service 2</label>
-                            <textarea type="text" id="city" name="city"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="barangay">Service 3</label>
-                            <textarea type="text" id="barangay" name="barangay"></textarea>
-                        </div>
+                        @endforeach
+                        
                         <button type="button" class="add-btn"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </section>
@@ -285,11 +280,11 @@
 
                     <div class="form-group">
                         <label for="about-header">Header</label>
-                        <textarea id="about-header" name="about-header"></textarea>
+                        <textarea id="about-header" name="about-header">{{$technicianAbout->header ?? '' }}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="about-description">Description</label>
-                        <textarea id="about-description" name="about-description"></textarea>
+                        <textarea id="about-description" name="about-description">{{$technicianAbout->description ?? '' }}</textarea>
                     </div>
                 </section>
 
@@ -372,7 +367,6 @@
 
         // Call the function to populate the select inputs when the page loads
         populateSelectInputs();
-
     </script>
 </body>
 </html>

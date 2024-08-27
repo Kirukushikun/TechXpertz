@@ -84,6 +84,15 @@
     margin-bottom: 50px;
 }
 
+.shops p{
+    width: 100%;
+    color: var(--lighted-text-color);
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    text-align: center;
+    padding: 250px 0;
+}
+
 .shop {
     display: flex;
     flex-direction: column;

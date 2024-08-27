@@ -141,58 +141,62 @@
             </div>
 
             <div class="shops">
-                @foreach($repairshops as $repairshop)
-                    <div class="shop">
-                        <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
+                @if(count($repairshops) === 0)
+                    <p>No Shops Available</p>
+                @else
+                    @foreach($repairshops as $repairshop)
+                        <div class="shop">
+                            <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
 
-                        <div class="shop-details">
-                            <div class="shop-name">
-                                <h3>{{$repairshop['repairshopName']}}</h3>
-                                <i class="fa fa-desktop"></i>
-                            </div>
-                            
-                            <div class="shop-location">
-                                <p>{{$repairshop['repairshopAddress']}}, Barangay {{$repairshop['repairshopBarangay']}}, {{$repairshop['repairshopCity']}} {{$repairshop['repairshopProvince']}}</p>
-                            </div>
-                            
-                            <div class="shop-schedule">
-                                <p>+63 {{$repairshop['repairshopContact']}}</p>
-                                <h4>{{ $repairshop['formattedDays'] }}</h4>              
-                            </div>
-        
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge1'] }}</li>
-                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge2'] }}</li>
-                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge3'] }}</li>
-                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge4'] }}</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="shop-footer">
-                            <div class="rating">
-                                <div class="stars">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= floor($repairshop['averageRating']))
-                                            <!-- Solid star for whole numbers -->
-                                            <i class="fas fa-star"></i>
-                                        @elseif ($i == ceil($repairshop['averageRating']) && fmod($repairshop['averageRating'], 1) != 0)
-                                            <!-- Half star for decimals -->
-                                            <i class="fa-solid fa-star-half-stroke"></i>
-                                        @else
-                                            <!-- Empty star -->
-                                            <i class="fa-regular fa-star"></i>
-                                        @endif
-                                    @endfor
+                            <div class="shop-details">
+                                <div class="shop-name">
+                                    <h3>{{$repairshop['repairshopName']}}</h3>
+                                    <i class="fa fa-desktop"></i>
                                 </div>
-                                <p>{{ $repairshop['totalReviews']}} Reviews</p>
+                                
+                                <div class="shop-location">
+                                    <p>{{$repairshop['repairshopAddress']}}, Barangay {{$repairshop['repairshopBarangay']}}, {{$repairshop['repairshopCity']}} {{$repairshop['repairshopProvince']}}</p>
+                                </div>
+                                
+                                <div class="shop-schedule">
+                                    <p>+63 {{$repairshop['repairshopContact']}}</p>
+                                    <h4>{{ $repairshop['formattedDays'] }}</h4>              
+                                </div>
+            
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge1'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge2'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge3'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge4'] }}</li>
+                                </ul>
                             </div>
-                            <div class="actions">
-                                <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                                <button class="view" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                            
+                            <div class="shop-footer">
+                                <div class="rating">
+                                    <div class="stars">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= floor($repairshop['averageRating']))
+                                                <!-- Solid star for whole numbers -->
+                                                <i class="fas fa-star"></i>
+                                            @elseif ($i == ceil($repairshop['averageRating']) && fmod($repairshop['averageRating'], 1) != 0)
+                                                <!-- Half star for decimals -->
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                            @else
+                                                <!-- Empty star -->
+                                                <i class="fa-regular fa-star"></i>
+                                            @endif
+                                        @endfor
+                                    </div>
+                                    <p>{{ $repairshop['totalReviews']}} Reviews</p>
+                                </div>
+                                <div class="actions">
+                                    <button class="favorite"><i class="fa-regular fa-heart"></i></button>
+                                    <button class="view" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                                </div>
                             </div>
-                        </div>
-                    </div>                    
-                @endforeach
+                        </div>                    
+                    @endforeach                
+                @endif
             </div>
         </div>
 

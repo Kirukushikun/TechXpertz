@@ -22,8 +22,8 @@
 
             <div class="repair-navigation">
                 <ul class="tabs">
-                    <li class="tab-link active" data-tab="pending-repair">Pending Repair</li>
-                    <li class="tab-link" data-tab="completed-repair">Completed Repair</li>
+                    <li class="tab-link active" data-tab="pending-repair">In Progress<i class="fa-solid fa-spinner"></i></li>
+                    <li class="tab-link" data-tab="completed-repair">Completed<i class="fa-solid fa-check-double"></i></li>
                 </ul>
             </div>
 
@@ -44,33 +44,27 @@
                         </thead>
                         <tbody>
                             <!-- Pending Repair Records will be populated here -->
-                            <tr>
-                                <td>#32000200</td>
-                                <td>Chris P. Bacon</td>
-                                <td>P 1.5K</td>
-                                <td>P 500 <i class="fa-regular fa-pen-to-square"></i></td>
-                                <td>
-                                    <select class="paid-status">
-                                        <option value="fully-paid" selected>Fully Paid</option>
-                                        <option value="initially-paid">Initially Paid</option>
-                                        <option value="unpaid">Unpaid</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <select class="repair-status">
-                                        <option value="device-dropped" selected>Device Dropped Off</option>
-                                        <option value="diagnosis">Diagnosis in Progress</option>
-                                        <option value="repair">Repair in Progress</option>
-                                        <option value="waiting-parts">Waiting for Parts</option>
-                                        <option value="repair-complete">Repair Completed</option>
-                                        <option value="ready-pickup">Ready for Pickup</option>
-                                        <option value="collected">Device Collected</option>
-                                    </select>
-                                </td>
-                                <td><button>View</button></td>
-                                <td><a href="" class="terminate-btn">Terminate</a></td>
-                                <td><i class="fas fa-check"></i></td>
-                            </tr>
+                             @foreach($repairStatusPendingData as $pending)
+                                <tr>
+                                    <td>#{{$pending['repairID']}}</td>
+                                    <td>{{$pending['customer_name']}}</td>
+                                    <td>P {{$pending['revenue']}}</td>
+                                    <td>P {{$pending['expenses']}} <i class="fa-regular fa-pen-to-square"></i></td>
+                                    <td>
+                                        <select class="paid-status">
+                                            <option value="{{$pending['paid_status']}}">{{$pending['paid_status']}}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="repair-status">
+                                            <option value="{{$pending['repairstatus']}}">{{$pending['repairstatus']}}</option>
+                                        </select>
+                                    </td>
+                                    <td><button>View</button></td>
+                                    <td><a href="" class="terminate-btn">Terminate</a></td>
+                                    <td><i class="fas fa-check"></i></td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -89,15 +83,94 @@
                         </thead>
                         <tbody>
                             <!-- Completed Repair Records will be populated here -->
+                            @foreach($repairStatusCompletedData as $completed)
+                                <tr>
+                                    <td>#{{$completed['repairID']}}</td>
+                                    <td>{{$completed['customer_name']}}</td>
+                                    <td>P {{$completed['revenue']}}</td>
+                                    <td>P {{$completed['expenses']}} <i class="fa-regular fa-pen-to-square"></i></td>
+                                    <td>
+                                        {{$completed['paid_status']}}
+                                    </td>
+                                    <td>
+                                        {{$completed['repairstatus']}}
+                                    </td>
+                                    <td><button>View</button></td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            
         </main>
     </div>
     
     <script src="{{asset('js/Technician/3 - RepairStatus.js')}}"></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
+    <script>
+        // Function to populate select inputs with options
+        function populateSelectInputs() {
+            const paidStatusOptions = [
+            "Fully Paid",
+            "Initially Paid",
+            "Unpaid"
+            ];
+
+            const repairStatusOptions = [
+            "Device Dropped Off",
+            "Diagnosis In Progress",
+            "Diagnosis Completed",
+            "Repair In Progress",
+            "Waiting For Parts",
+            "Repair Completed",
+            "Ready For Pickup",
+            "Device Collected"
+            ];
+
+            const selectClasses = ["paid-status", "repair-status"];
+
+            selectClasses.forEach(className => {
+            const selects = document.querySelectorAll(`.${className}`);
+
+            selects.forEach(select => {
+                // Get the corresponding options array based on the class name
+                const optionsArray = className === "paid-status" ? paidStatusOptions : repairStatusOptions;
+
+                // Preserve the existing selected value
+                const savedValue = select.value;
+
+                // Clear existing options
+                select.innerHTML = '';
+
+                // Add an empty option at the top
+                const emptyOption = document.createElement("option");
+                emptyOption.value = '';
+                emptyOption.textContent = '';
+                select.appendChild(emptyOption);   
+
+
+                // Add each option from the array
+                optionsArray.forEach(option => {
+                const newOption = document.createElement("option");
+                newOption.value = option;
+                newOption.textContent = option;
+
+                // Set the saved value as selected if it matches
+                if (option === savedValue) {
+                    newOption.selected = true;
+                }
+
+                select.appendChild(newOption);
+                });
+            });
+            });
+        }
+
+        // Call the function to populate the select inputs when the page loads
+        populateSelectInputs();
+        </script>
 
 </body>
 </html>

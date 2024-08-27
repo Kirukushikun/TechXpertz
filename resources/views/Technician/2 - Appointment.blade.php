@@ -22,9 +22,11 @@
 
             <div class="appointment-navigation">
                 <ul class="tabs">
-                    <li class="tab-link active" data-tab="upcoming">Upcoming</li>
-                    <li class="tab-link" data-tab="request">Appointment Request <span class="badge">3</span></li>
-                    <li class="tab-link" data-tab="completed">Completed Appointments</li>
+                    <li class="tab-link active" data-tab="upcoming">Confirmed <i class="fa-solid fa-check"></i></li>
+                    <li class="tab-link" data-tab="request">Requested <i class="fa-solid fa-spinner"></i></li>
+                    <!-- <li class="tab-link" data-tab="request">Requested<span class="badge">3</span></li> -->
+                    <li class="tab-link" data-tab="completed">Completed <i class="fa-solid fa-check-double"></i></li>
+                    <li class="tab-link" data-tab="completed">Rejected <i class="fa-solid fa-xmark"></i></li>
                 </ul>
             </div>
 
@@ -43,13 +45,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($upcomingAppointments as $upcoming)
+                            @foreach($confirmedAppointments as $confirmed)
                                 <tr>
-                                    <td>{{$upcoming['fullname']}}</td>
-                                    <td>{{$upcoming['email']}}</td>
-                                    <td>{{$upcoming['contact']}}</td>
-                                    <td>{{$upcoming['appointment_date']}}</td>
-                                    <td>{{$upcoming['appointment_time']}}</td>
+                                    <td>{{$confirmed['fullname']}}</td>
+                                    <td>{{$confirmed['email']}}</td>
+                                    <td>{{$confirmed['contact']}}</td>
+                                    <td>{{$confirmed['appointment_date']}}</td>
+                                    <td>{{$confirmed['appointment_time']}}</td>
                                     <td><button>View</button></td>
                                     <td>
                                         <a class="edit" href=""><i class="fas fa-edit"></i></a>
@@ -125,6 +127,40 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div id="rejected" class="tab-content-item card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Contact</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Details</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($completedAppointments as $completed)
+                                <tr>
+                                    <td>{{$completed['fullname']}}</td>
+                                    <td>{{$completed['email']}}</td>
+                                    <td>{{$completed['contact']}}</td>
+                                    <td>{{$completed['appointment_date']}}</td>
+                                    <td>{{$completed['appointment_time']}}</td>
+                                    <td><button>View</button></td>
+                                    <td>
+                                        <a class="edit" href=""><i class="fas fa-edit"></i></a>
+                                        <a class="delete" href=""><i class="fas fa-trash"></i></a>
+                                        <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </main>
     </div>
