@@ -24,13 +24,13 @@
                 <ul class="tabs">
                     <li class="tab-link active" data-tab="upcoming">Confirmed <i class="fa-solid fa-check"></i></li>
                     <li class="tab-link" data-tab="request">Requested <i class="fa-solid fa-spinner"></i></li>
-                    <!-- <li class="tab-link" data-tab="request">Requested<span class="badge">3</span></li> -->
                     <li class="tab-link" data-tab="completed">Completed <i class="fa-solid fa-check-double"></i></li>
                     <li class="tab-link" data-tab="completed">Rejected <i class="fa-solid fa-xmark"></i></li>
                 </ul>
             </div>
 
             <div class="tab-content">
+
                 <div id="upcoming" class="tab-content-item card active">
                     <table>
                         <thead>
@@ -127,7 +127,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 <div id="rejected" class="tab-content-item card">
                     <table>
                         <thead>

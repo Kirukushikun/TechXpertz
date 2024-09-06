@@ -8,26 +8,28 @@
 </head>
 <body>
 
-@if($errors->any())
-    {{ implode('', $errors->all('<div>:message</div>')) }}
-@endif
+
 
 <div class="form-container">
     <h1>Sign <span>Up</span></h1>
     <form action="{{ route('customer.signupCustomer') }}" method="POST">
+        @if(session()->has('error'))
+            <p class="error-message">{{session('error')}}</p>
+        @endif
         @csrf
         <div class="input-group">
             <input type="text" name="firstname" id="firstname" placeholder="First Name" required>
             <input type="text" name="lastname" id="lastname" placeholder="Last Name" required>
         </div>
         <input type="email" name="email" id="email" placeholder="Email Address" required />
-        <input type="password" name="password" id="password" placeholder="Password" required />
-        <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <input type="password" name="cpassword" placeholder="Confirm Password" required />
         <button type="submit" id="submit">Sign Up</button>
     </form>
     <div class="signup-link">
         <p>Already have an account? <a href="{{route('customer.login')}}">Sign In</a></p>
     </div>
+
 </div>
 
 </body>

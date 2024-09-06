@@ -49,24 +49,24 @@
                             <div class="input-container">
                                 <div class="input-group">
                                     <label for="firstname">First Name</label>
-                                    <input type="text" id="firstname" name="firstname">
+                                    <input type="text" id="firstname" name="firstname" required>
                                 </div>
 
                                 <div class="input-group">
                                     <label for="middlename">Middle Name</label>
-                                    <input type="text" id="middlename" name="middlename">
+                                    <input type="text" id="middlename" name="middlename" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="lastname">Last Name</label>
-                                    <input type="text" id="lastname" name="lastname">
+                                    <input type="text" id="lastname" name="lastname" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="email">Email Address</label>
-                                    <input type="email" id="email" name="email">
+                                    <input type="email" id="email" name="email" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="contact_no">Contact No.</label>
-                                    <input type="tel" id="contact_no" name="contact_no">
+                                    <input type="tel" id="contact_no" name="contact_no" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="educational_background">Educational Background</label>
@@ -74,23 +74,23 @@
                                 </div>
                                 <div class="input-group">
                                     <label for="province">Province</label>
-                                    <input type="text" id="province" name="province">
+                                    <input type="text" id="province" name="province" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="city">City</label>
-                                    <input type="text" id="city" name="city">
+                                    <input type="text" id="city" name="city" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="barangay">Barangay</label>
-                                    <input type="text" id="barangay" name="barangay">
+                                    <input type="text" id="barangay" name="barangay" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="zip_code">ZIP Code</label>
-                                    <input type="text" id="zip_code" name="zip_code">
+                                    <input type="text" id="zip_code" name="zip_code" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="date_of_birth">Date of Birth</label>
-                                    <input type="date" id="date_of_birth" name="date_of_birth">
+                                    <input type="date" id="date_of_birth" name="date_of_birth" required>
                                 </div>                       
                             </div>                            
                         </div>
@@ -106,35 +106,35 @@
                             <div class="input-container">
                                 <div class="input-group">
                                     <label for="shop_name">Shop Name</label>
-                                    <input type="text" id="shop_name" name="shop_name">
+                                    <input type="text" id="shop_name" name="shop_name" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="shop_email">Shop Email Address</label>
-                                    <input type="email" id="shop_email" name="shop_email">
+                                    <input type="email" id="shop_email" name="shop_email" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="shop_contact">Business Contact No.</label>
-                                    <input type="tel" id="shop_contact" name="shop_contact">
+                                    <input type="tel" id="shop_contact" name="shop_contact" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="shop_address">Shop Address</label>
-                                    <input type="tel" id="shop_address" name="shop_address">
+                                    <input type="tel" id="shop_address" name="shop_address" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="shop_province">Province</label>
-                                    <input type="text" id="shop_province" name="shop_province">
+                                    <input type="text" id="shop_province" name="shop_province" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="shop_city">City</label>
-                                    <input type="text" id="shop_city" name="shop_city">
+                                    <input type="text" id="shop_city" name="shop_city" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="shop_barangay">Barangay</label>
-                                    <input type="text" id="shop_barangay" name="shop_barangay">
+                                    <input type="text" id="shop_barangay" name="shop_barangay" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="shop_zip_code">ZIP Code</label>
-                                    <input type="text" id="shop_zip_code" name="shop_zip_code">
+                                    <input type="text" id="shop_zip_code" name="shop_zip_code" required>
                                 </div>
                             </div>
                         </div>
@@ -508,16 +508,16 @@
                         <div class="security">
                             <div class="input-group">
                                 <label for="username">Username</label>
-                                <input type="text" id="username" name="username">
+                                <input type="text" id="username" name="username" required>
                             </div>
                             <div class="group-container">
                                 <div class="input-group">
                                     <label for="password">Password</label>
-                                    <input type="password" id="password" name="password">
+                                    <input type="password" id="password" name="password" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="password_confirmation">Confirm Password</label>
-                                    <input type="password" id="password_confirmation" name="password_confirmation">
+                                    <input type="password" id="password_confirmation" name="password_confirmation" required>
                                 </div>                                
                             </div>
                             <p>By creating an account, you agree to the <a href="">Terms of Service</a> and <a href="">Privacy Policy</a></p>

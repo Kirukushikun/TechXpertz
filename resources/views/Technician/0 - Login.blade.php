@@ -14,6 +14,9 @@
                         <h1>Tech<span>X</span>pertz</h1>
                         <p>Technician</p>
                     </div>
+                    @if(session()->has('error'))
+                        <p class="error-message">{{session('error')}}</p>
+                    @endif
                     <form action="{{route('technician.loginTechnician')}}" method="POST">
                         @csrf
                         <input type="email" name="email" placeholder="Email" required />

@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('repairshop_profiles', function (Blueprint $table) {
+        Schema::create('repairshop_schedules', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('technician_id');
             $table->foreign('technician_id')->references('id')->on('technicians')->onDelete('cascade');
-            
-            $table->string('header');
-            $table->string('description');
+
+            $table->enum('status', ['open', 'closed'])->default('closed');
+            $table->unsignedTinyInteger('day');
+            $table->time('opening_time')->nullable(); // Time the shop opens
+            $table->time('closing_time')->nullable(); // Time the shop closes
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('repairshop_profiles');
+        Schema::dropIfExists('repairshop_schedules');
     }
 };

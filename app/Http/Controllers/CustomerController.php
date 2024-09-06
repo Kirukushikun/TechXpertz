@@ -64,11 +64,11 @@ class CustomerController extends Controller
     public function viewappointment($id)
     {
         $customerDetails = Auth::check() ? Customer::find(Auth::id()) : null;
-        $repairshopID = $id;
+        $technicianID = $id;
     
         return view('Customer.4 - AppointmentBooking', [
             'customerDetails' => $customerDetails,
-            'repairshopID' => $repairshopID,
+            'technicianID' => $technicianID,
         ]);
 
     }
@@ -140,7 +140,10 @@ class CustomerController extends Controller
     public function myaccount(){
 
         if(Auth::check()){
-            return view('Customer.6 - Account');
+            $customerData = Customer::find(Auth::user()->id);
+            return view('Customer.6 - Account', [
+                'customerData' => $customerData,
+            ]);
         }
         return redirect()->route('customer.loginCustomer');
 

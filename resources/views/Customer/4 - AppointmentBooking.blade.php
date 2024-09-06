@@ -18,7 +18,7 @@
 
         @yield('header')
         
-        <form class="appointment-form">
+        <form class="appointment-form" action="{{ route('bookappointment', ['id' => $technicianID]) }}" method="POST">
             @csrf
             <div class="left">
                 <div class="form-section">
@@ -201,7 +201,7 @@
                     
                     <div class="action">
                         @if(Auth::check())
-                            <button type="submit" class="submit-button" onclick="window.location.href='{{route('bookappointment', ['id' => $repairshopID])}}'">>REQUEST APPOINTMENT</button>
+                            <button type="submit" class="submit-button">REQUEST APPOINTMENT</button>
                             <p><b>Reminder :</b> Please review your information before submitting. Changes cannot be made after submission.</p>                            
                         @else
                             <button type="button" class="submit-button" onclick="window.location.href='{{route('customer.loginCustomer')}}'">LOGIN</button>

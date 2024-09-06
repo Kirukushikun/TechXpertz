@@ -20,8 +20,8 @@
                     <div class="profile-container">
                         <div class="form-group">
                             <div class="image"></div>
-                            <h3>Chris P. Bacon</h3>
-                            <p>chrispbbacon@gmail.com</p>
+                            <h3>{{$customerData->firstname}} {{$customerData->lastname}}</h3>
+                            <p>{{$customerData->email}}</p>
                         </div>                 
                     </div>
                     <div class="profile-navigation">
@@ -30,7 +30,6 @@
                             <li><a href="#">Account Settings</a></li>
                             <li><a href="#">Notifications</a></li>
                             <li><a href="#">Privacy</a></li>
-                            <li><a href="#">Billing</a></li>
                         </ul>
                     </div>                                        
                 </div>

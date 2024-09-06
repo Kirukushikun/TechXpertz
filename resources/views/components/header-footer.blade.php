@@ -1,6 +1,6 @@
 @section('header')
 <nav class="navbar">
-    <div class="logo">Tech<span>X</span>pertz</div>
+    <div class="logo" onclick="window.location.href='{{route('welcome')}}'">Tech<span>X</span>pertz</div>
     <div class="search-bar">
         <input type="text" placeholder="Search here..." />
         <button><i class="fa fa-search"></i></button>
@@ -11,7 +11,7 @@
     </div>
 
     @auth
-        <button class="account-button" onclick="window.location.href='/myaccount'"><i class="fa fa-user"></i>My Account</button>
+        <button class="account-button" onclick="window.location.href='/customer/myaccount'"><i class="fa fa-user"></i>My Account</button>
     @else
         <button class="account-button" onclick="window.location.href='/customer/login'"><i class="fa fa-user"></i>Login</button>
     @endauth
@@ -37,7 +37,7 @@
     <div class="footer-container">
         
         <div class="footer-logo">
-            <div class="logo">Tech<span>X</span>pertz</div>
+            <div class="logo" onclick="window.location.href='{{route('welcome')}}'">Tech<span>X</span>pertz</div>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut</p>
             <div class="contact-info">
                 <i class="fa-solid fa-headset"></i>

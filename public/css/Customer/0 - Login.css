@@ -198,3 +198,19 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(14px);
 }
+.error-message{
+    color: #f24747;
+    padding: 10px;
+    border: solid 2px #f24747;
+    border-radius: 7px;
+    margin-bottom: 15px;
+    background-color: #fde7e7;
+}
+.success-message{
+    color: #3dce3d;
+    padding: 10px;
+    border: solid 2px #3dce3d;
+    border-radius: 7px;
+    margin-bottom: 15px;
+    background-color: #ebfde7;
+}

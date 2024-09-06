@@ -77,6 +77,8 @@ form {
 
 .fs-3 .form-group{
     display: flex;
+    flex-wrap: wrap;
+    width: 70%;
     gap: 20px;
 }.fs-3 .form-group .form-details{
     display: flex;
@@ -89,17 +91,25 @@ form {
     border: solid #D9D9D9 2px;
 
     font-weight: 600;
-
+    cursor: pointer;
 }.fs-3 .form-group .form-details i{
     color: var(--primary-color);
     font-size: 18px;
 }
 .fs-3 .form-group button{
     background-color: transparent;
-    border: none;
-    font-size: 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 7px;
+
     color: var(--primary-color);
     cursor: pointer;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: 500;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .fs-4 .form-details .form-group{
@@ -123,11 +133,18 @@ form {
 
 }.fs-4 .form-details button{
     background-color: transparent;
-    border: none;
-    font-size: 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 7px;
+
     color: var(--primary-color);
     cursor: pointer;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: 500;
 
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .fs-5 table td{
@@ -194,4 +211,27 @@ form {
     border-color: var(--primary-color);
     background-color: var(--primary-color);
     color: white;
+}
+
+.modal{
+    display: none;
+}
+.modal.active{
+    position: fixed;
+    right: 0;
+    width: calc(100% - 270px);
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.452);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-details.active{
+    background-color: var(--primary-color);
+    color: white;
+}.form-details.active i{
+    color: white !important;
 }

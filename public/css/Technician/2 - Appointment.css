@@ -30,6 +30,11 @@ header {
     margin: 0;
 }
 
+.tabs i{
+    color: var(--primary-color);
+    margin-left: 10px;
+}
+
 .tab-link {
     padding: 10px 20px;
     cursor: pointer;

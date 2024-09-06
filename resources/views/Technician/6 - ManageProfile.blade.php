@@ -15,30 +15,42 @@
 
         @yield('sidebar')
 
+        <!-- Modal Structure -->
+        <div class="modal">
+            <div class="modal-content promt">
+                <span class="close-btn">&times;</span>
+                <p>Are you sure you want to delete this item?</p>
+                <button id="confirm-delete">Yes, Delete</button>
+                <button id="cancel-delete" onclick="popDOWN()">Cancel</button>
+            </div>
+        </div>
+
         <main class="main-content">
+
             <header>
                 <h1>Manage Profile</h1>
             </header>
 
-            <form>
+            <form action="{{route('technician.updateProfile')}}" method="POST">
+                @csrf
                 <section class="form-section fs-1">
                     <h3><span>1</span>Basic Information</h3>
                     <div class="form-details">
                         <div class="form-group">
-                            <label for="shop-name">Shop Name</label>
-                            <input type="text" id="shop-name" name="shop-name" value="{{$repairshopInfo->shop_name}}">
+                            <label for="shop_name">Shop Name</label>
+                            <input type="text" id="shop_name" name="shop_name" value="{{$repairshopInfo->shop_name}}" required>
                         </div>
                         <div class="form-group">
-                            <label for="owner-name">Owner's Name</label>
-                            <input type="text" id="owner-name" name="owner-name" value="{{$technicianInfo->firstname}}">
+                            <label for="owner_name">Owner's Name</label>
+                            <input type="text" id="owner_name" name="owner_name" value="{{$technicianInfo->firstname}}" required>
                         </div>
                         <div class="form-group">
-                            <label for="contact-no">Contact No.</label>
-                            <input type="text" id="contact-no" name="contact-no" value="{{$repairshopInfo->shop_contact}}">
+                            <label for="shop_contact">Contact No.</label>
+                            <input type="text" id="shop_contact" name="shop_contact" value="{{$repairshopInfo->shop_contact}}" required>
                         </div>
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" value="{{$repairshopInfo->shop_email}}">
+                            <label for="shop_email">Email</label>
+                            <input type="email" id="shop_email" name="shop_email" value="{{$repairshopInfo->shop_email}}" required>
                         </div>                        
                     </div>
                 </section>
@@ -47,20 +59,20 @@
                     <h3><span>2</span>Shop Location</h3>
                     <div class="form-details">
                         <div class="form-group">
-                            <label for="province">Province</label>
-                            <input type="text" id="province" name="province" value="{{$repairshopInfo->shop_province}}">
+                            <label for="shop_province">Province</label>
+                            <input type="text" id="shop_province" name="shop_province" value="{{$repairshopInfo->shop_province}}">
                         </div>
                         <div class="form-group">
-                            <label for="city">City</label>
-                            <input type="text" id="city" name="city" value="{{$repairshopInfo->shop_city}}">
+                            <label for="shop_city">City</label>
+                            <input type="text" id="shop_city" name="shop_city" value="{{$repairshopInfo->shop_city}}">
                         </div>
                         <div class="form-group">
-                            <label for="barangay">Barangay</label>
-                            <input type="text" id="barangay" name="barangay" value="{{$repairshopInfo->shop_barangay}}">
+                            <label for="shop_barangay">Barangay</label>
+                            <input type="text" id="shop_barangay" name="shop_barangay" value="{{$repairshopInfo->shop_barangay}}">
                         </div>
                         <div class="form-group">
-                            <label for="address">address</label>
-                            <input type="text" id="address" name="address" value="{{$repairshopInfo->shop_address}}">
+                            <label for="shop_address">Address</label>
+                            <input type="text" id="shop_address" name="shop_address" value="{{$repairshopInfo->shop_address}}">
                         </div>                        
                     </div>
                 </section>
@@ -70,65 +82,54 @@
                     <div class="form-details">
                         <div class="form-group">
                             <label for="badge_1">Badge 1</label>
-                            <select name="badge_1" id="badge_1">
-                                <option value="{{$technicianBadges->badge_1 ?? '' }}">{{$technicianBadges->badge_1 ?? ''}}</option>
+                            <select name="badge_1" id="badge_1" data-saved-value="{{ $technicianBadges->badge_1 ?? '' }}">
+                                <option value=""></option>
                             </select>
                         </div>
                         <div class="form-group">
-                        <label for="badge_2">Badge 2</label>
-                            <select name="badge_2" id="badge_2">
-                                <option value="{{$technicianBadges->badge_2 ?? '' }}">{{$technicianBadges->badge_2 ?? ''}}</option>
+                            <label for="badge_2">Badge 2</label>
+                            <select name="badge_2" id="badge_2" data-saved-value="{{ $technicianBadges->badge_2 ?? '' }}">
+                                <option value=""></option>
                             </select>
                         </div>
                         <div class="form-group">
-                        <label for="badge_3">Badge 3</label>
-                            <select name="badge_3" id="badge_3">
-                                <option value="{{$technicianBadges->badge_3 ?? ''}}">{{$technicianBadges->badge_3 ?? '' }}</option>
+                            <label for="badge_3">Badge 3</label>
+                            <select name="badge_3" id="badge_3" data-saved-value="{{ $technicianBadges->badge_3 ?? '' }}">
+                                <option value=""></option>
                             </select>
                         </div>
                         <div class="form-group">
-                        <label for="badge_4">Badge 4</label>
-                            <select name="badge_4" id="badge_4">
-                                <option value="{{$technicianBadges->badge_4 ?? '' }}">{{$technicianBadges->badge_4 ?? '' }}</option>
+                            <label for="badge_4">Badge 4</label>
+                            <select name="badge_4" id="badge_4" data-saved-value="{{ $technicianBadges->badge_4 ?? '' }}">
+                                <option value=""></option>
                             </select>
-                        </div>                        
+                        </div>
                     </div>
                 </section>
 
                 <section class="form-section fs-3">
                     <h3><span>3</span> Specialization</h3>
                     <div class="form-group">
-                        <div class="form-details">
-                            <i class="fa-solid fa-desktop"></i>
-                            <p>Speakers</p>
-                        </div>
-                        <div class="form-details">
-                            <i class="fa-solid fa-desktop"></i>
-                            <p>Smartphones</p>
-                        </div>
-                        <div class="form-details">
-                            <i class="fa-solid fa-desktop"></i>
-                            <p>Laptop</p>
-                        </div>
-                        <div class="form-details">
-                            <i class="fa-solid fa-desktop"></i>
-                            <p>Desktop</p>
-                        </div>
-                        <button type="button" class="add-btn"><i class="fa-solid fa-plus"></i></button>
+                        @foreach(['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One'] as $item)
+                            <div class="form-details {{ $technicianMastery && $technicianMastery->$item ? 'active' : '' }}">
+                                <input type="checkbox" class="checkbox-input" name="{{ $item }}" id="{{ $item }}" hidden {{ $technicianMastery && $technicianMastery->$item ? 'checked' : '' }}>
+                                <i class="fa-solid fa-desktop"></i>
+                                <p>{{ $item }}</p>
+                            </div>
+                        @endforeach
                     </div>
                 </section>
 
-                <section class="form-section fs-4">
+                <section class="form-section fs-4 services-section">
                     <h3><span>4</span>Services</h3>
                     <div class="form-details">
                         @foreach($technicianServices as $service)
-                        <div class="form-group">
-                            <label for="service">Service 1</label>
-                            <textarea type="text" id="service" name="service">{{$service->service}}</textarea>
-                        </div>
+                            <div class="form-group">
+                                <label for="service">Service {{ $loop->iteration }}</label>
+                                <textarea type="text" id="service" name="service[]">{{$service->service}}</textarea>
+                            </div>
                         @endforeach
-                        
-                        <button type="button" class="add-btn"><i class="fa-solid fa-plus"></i></button>
+                        <button type="button" class="add-service"><i class="fa-solid fa-plus"></i>Add Service</button>
                     </div>
                 </section>
 
@@ -137,139 +138,47 @@
 
                     <table class="opening-hours-input">
                         <tbody>
-                            <tr>
-                                <td>Sunday</td>
-                                <td>
-                                    <div class="status">
-                                        <label class="switch">
-                                            <input type="checkbox" id="sunday-open">
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <p>Closed</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="time">
-                                        <input type="time" id="sunday-open-time" name="sunday-open" value="09:00">
-                                        <label for="sunday-close">TO</label>
-                                        <input type="time" id="sunday-close" name="sunday-close" value="17:00">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Monday</td>
-                                <td>
-                                    <div class="status">
-                                        <label class="switch">
-                                            <input type="checkbox" id="monday-open">
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <p>Closed</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="time">
-                                        <input type="time" id="monday-open-time" name="monday-open" value="09:00">
-                                        <label for="monday-close">TO</label>
-                                        <input type="time" id="monday-close" name="monday-close" value="17:00">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Tuesday</td>
-                                <td>
-                                    <div class="status">
-                                        <label class="switch">
-                                            <input type="checkbox" id="tuesday-open">
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <p>Closed</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="time">
-                                        <input type="time" id="tuesday-open-time" name="tuesday-open" value="09:00">
-                                        <label for="tuesday-close">TO</label>
-                                        <input type="time" id="tuesday-close" name="tuesday-close" value="17:00">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Wednesday</td>
-                                <td>
-                                    <div class="status">
-                                        <label class="switch">
-                                            <input type="checkbox" id="wednesday-open">
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <p>Closed</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="time">
-                                        <input type="time" id="wednesday-open-time" name="wednesday-open" value="09:00">
-                                        <label for="wednesday-close">TO</label>
-                                        <input type="time" id="wednesday-close" name="wednesday-close" value="17:00">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Thursday</td>
-                                <td>
-                                    <div class="status">
-                                        <label class="switch">
-                                            <input type="checkbox" id="thursday-open">
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <p>Closed</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="time">
-                                        <input type="time" id="thursday-open-time" name="thursday-open" value="09:00">
-                                        <label for="thursday-close">TO</label>
-                                        <input type="time" id="thursday-close" name="thursday-close" value="17:00">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Friday</td>
-                                <td>
-                                    <div class="status">
-                                        <label class="switch">
-                                            <input type="checkbox" id="friday-open">
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <p>Closed</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="time">
-                                        <input type="time" id="friday-open-time" name="friday-open" value="09:00">
-                                        <label for="friday-close">TO</label>
-                                        <input type="time" id="friday-close" name="friday-close" value="17:00">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Saturday</td>
-                                <td>
-                                    <div class="status">
-                                        <label class="switch">
-                                            <input type="checkbox" id="saturday-open">
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <p>Closed</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="time">
-                                        <input type="time" id="saturday-open-time" name="saturday-open" value="09:00">
-                                        <label for="saturday-close">TO</label>
-                                        <input type="time" id="saturday-close" name="saturday-close" value="17:00">
-                                    </div>
-                                </td>
-                            </tr>
+                            @php
+                                $daysOfWeek = [
+                                    7 => 'sunday',
+                                    1 => 'monday',
+                                    2 => 'tuesday',
+                                    3 => 'wednesday',
+                                    4 => 'thursday',
+                                    5 => 'friday',
+                                    6 => 'saturday',
+                                ];
+                            @endphp
+
+                            @foreach($technicianSchedules as $schedule)
+                                @php
+                                    $dayName = $daysOfWeek[$schedule->day];
+                                    $isChecked = $schedule->status === 'open' ? 'checked' : '';
+
+                                    // Retrieve formatted times from the array
+                                    $openingTime = $formattedTimes[$dayName]['open'] ?? '';
+                                    $closingTime = $formattedTimes[$dayName]['close'] ?? '';
+                                @endphp
+                                <tr>
+                                    <td>{{ ucfirst($dayName) }}</td>
+                                    <td>
+                                        <div class="status">
+                                            <label class="switch">
+                                                <input type="checkbox" id="{{ $dayName }}-status" name="{{ $dayName }}-status" {{ $isChecked }}>
+                                                <span class="slider round"></span>
+                                            </label>
+                                            <p>{{ $schedule->status === 'open' ? 'Open' : 'Closed' }}</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="time">
+                                            <input type="time" id="{{ $dayName }}-open-time" name="{{ $dayName }}-open-time" value="{{ $openingTime }}">
+                                            <label>TO</label>
+                                            <input type="time" id="{{ $dayName }}-close-time" name="{{ $dayName }}-close-time" value="{{ $closingTime }}">
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                     
@@ -279,12 +188,12 @@
                     <h3><span>6</span>About</h3>
 
                     <div class="form-group">
-                        <label for="about-header">Header</label>
-                        <textarea id="about-header" name="about-header">{{$technicianAbout->header ?? '' }}</textarea>
+                        <label for="header">Header</label>
+                        <textarea id="header" name="header">{{$technicianProfile->header ?? '' }}</textarea>
                     </div>
                     <div class="form-group">
-                        <label for="about-description">Description</label>
-                        <textarea id="about-description" name="about-description">{{$technicianAbout->description ?? '' }}</textarea>
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description">{{$technicianProfile->description ?? '' }}</textarea>
                     </div>
                 </section>
 
@@ -302,71 +211,91 @@
     <script src="{{asset('js/Technician/6 - ManageProfile.js')}}"></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
     <script>
-        // Function to populate select inputs with options
-        function populateSelectInputs() {
-            const badges = [
-                "24/7 Customer Support",
-                "Advanced Diagnostic Tools",
-                "Authorized Repair Center",
-                "Certified Technicians On-Site",
-                "Emergency Repair Service",
-                "Exclusive Offers Available",
-                "Experienced Staff",
-                "Expert Troubleshooting",
-                "Fastest Repair Times",
-                "Free Diagnostic Service",
-                "Loyalty Rewards Program",
-                "No Hidden Charges",
-                "Original Parts Used",
-                "Pickup and Delivery Service",
-                "Proven Repair Methods",
-                "Same-Day Service",
-                "Seamless Repair Process",
-                "Secure Data Handling",
-                "Specialized in All Brands",
-                "Warranty on All Repairs"
-            ];
-
-            const selectIds = ["badge_1", "badge_2", "badge_3", "badge_4"];
-
-            selectIds.forEach(id => {
-                const select = document.getElementById(id);
-
-                // Preserve the existing selected value
-                const savedValue = select.value;
-
-                // Clear existing options
-                select.innerHTML = '';
-
-                // Add an empty option at the top
-                const emptyOption = document.createElement("option");
-                emptyOption.value = '';
-                emptyOption.textContent = '';
-                select.appendChild(emptyOption);
-
-                // Add each badge as an option
-                badges.forEach(badge => {
-                    const option = document.createElement("option");
-                    option.value = badge;
-                    option.textContent = badge;
-
-                    // Set the saved value as selected if it matches
-                    if (badge === savedValue) {
-                        option.selected = true;
-                    }
-
-                    select.appendChild(option);
-                });
-
-                // If there's no pre-selected value and one exists in the original HTML, select it
-                if (savedValue === "" && select.querySelector('option[selected]')) {
-                    select.value = select.querySelector('option[selected]').value;
-                }
-            });
+        function popUP(){
+            document.querySelector(".modal").classList.add("active")
+        }
+        function popDOWN(){
+            document.querySelector(".modal").classList.remove("active")
         }
 
-        // Call the function to populate the select inputs when the page loads
-        populateSelectInputs();
+        const formDetails = document.querySelectorAll('.form-details');
+
+        formDetails.forEach(detail => {
+            detail.addEventListener('click', () => {
+                const checkbox = detail.querySelector('.checkbox-input');
+                checkbox.checked = !checkbox.checked;
+
+                // Toggle the 'active' class based on the checkbox state
+                if (checkbox.checked) {
+                    detail.classList.add('active');
+                } else {
+                    detail.classList.remove('active');
+                }
+            });
+        });
+
+        //-----------------------------------------------------------------
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select the specific Services section
+            const servicesSection = document.querySelector('.services-section');
+            const addServiceButton = servicesSection.querySelector('.add-service');
+            const formDetails = servicesSection.querySelector('.form-details');
+
+            addServiceButton.addEventListener('click', function() {
+                // Get the current number of service groups within this section
+                const currentServiceCount = formDetails.querySelectorAll('.form-group').length;
+                const newServiceCount = currentServiceCount + 1;
+                
+                if (currentServiceCount <= 4) {
+                    // Create a new form group
+                    const newFormGroup = document.createElement('div');
+                    newFormGroup.classList.add('form-group');
+
+                    // Create and append the label
+                    const newLabel = document.createElement('label');
+                    newLabel.setAttribute('for', `service${newServiceCount}`);
+                    newLabel.textContent = `Service ${newServiceCount}`;
+                    newFormGroup.appendChild(newLabel);
+
+                    // Create and append the textarea
+                    const newTextarea = document.createElement('textarea');
+                    newTextarea.type = 'text';
+                    newTextarea.id = `service${newServiceCount}`;
+                    newTextarea.name = `service[]`; // Use an array name to handle multiple inputs in backend
+                    newFormGroup.appendChild(newTextarea);
+
+                    // Append the new form group to the form details
+                    formDetails.insertBefore(newFormGroup, addServiceButton);                    
+                }
+
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all checkbox inputs
+            const checkboxes = document.querySelectorAll('.opening-hours-input input[type="checkbox"]');
+
+            // Loop through each checkbox and add an event listener
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    // Find the corresponding <p> tag in the same row
+                    const statusText = this.closest('td').querySelector('.status p');
+                    
+                    // Update the text based on the checkbox state
+                    if (this.checked) {
+                        statusText.textContent = 'Open';
+                    } else {
+                        statusText.textContent = 'Closed';
+                    }
+                });
+            });
+        });
+        //-----------------------------------------------------------------
+        var toggle = document.getElementById("sunday-status");
+        if(toggle.checked){
+            console.log('toggled');
+        }
     </script>
 </body>
 </html>

@@ -14,37 +14,34 @@ return new class extends Migration
         Schema::create('repairshop_appointments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('technician_id');
-            $table->foreign('technician_id')->references('id')->on('technicians')->onDelete('cascade');
-
             $table->unsignedBigInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
 
-            $table->enum('status', ['confirmed', 'requested', 'completed', 'rejected'])->default('request');
-            //Confirmed Appointments , Rejected Appointments
+            $table->enum('status', ['confirmed', 'requested', 'completed', 'rejected'])->default('requested');
 
-            $table->string('fullname'); // Full name of the customer
-            $table->string('email'); // Email of the customer
-            $table->string('contact_no'); // Contact number of the customer
+            $table->string('fullname');
+            $table->string('email');
+            $table->string('contact_no');
             
-            // Device Information
             $table->string('device_type');
             $table->string('device_brand');
             $table->string('device_model');
-            $table->string('device_serial')->nullable(); // Nullable field
+            $table->string('device_serial')->nullable();
             
-            // Device Issue
-            $table->text('issue_descriptions')->nullable(); // Using text for potentially longer descriptions
-            $table->string('error_messages')->nullable();
+            $table->text('issue_descriptions')->nullable();
+            $table->string('error_message')->nullable();
             $table->string('repair_attempts')->nullable();
             $table->string('recent_events')->nullable();
             $table->string('prepared_parts')->nullable();
 
-            // Appointment Schedule
             $table->date('appointment_date');
             $table->time('appointment_time');
-            $table->string('appointment_urgency')->nullable(); // Urgency level of the appointment
+            $table->string('appointment_urgency')->nullable();
 
-            $table->timestamps(); // Created at and Updated at
+            $table->timestamps();
+
+            // Foreign keys
+            $table->foreign('technician_id')->references('id')->on('technicians')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

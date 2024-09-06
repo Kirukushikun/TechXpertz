@@ -15,6 +15,11 @@
             <div class="right">
                 <div class="form-container">
                     <h1>Tech<span>X</span>pertz</h1>
+                    @if(session()->has('error'))
+                        <p class="error-message">{{session('error')}}</p>
+                    @elseif(session()->has('success'))
+                        <p class="success-message">{{session('success')}}</p>
+                    @endif
                     <form action="{{route('customer.loginCustomer')}}" method="post">
                         @csrf
                         <input type="email" name="email" id="email" placeholder="email" required />
@@ -22,7 +27,7 @@
                         <div class="remember-me">
                             <label>
                                 <label class="switch">
-                                    <input type="checkbox" id="dark-mode-toggle">
+                                    <input type="checkbox" name="remember_me" id="dark-mode-toggle">
                                     <span class="slider round"></span>
                                 </label>         
                                 Remember Me

@@ -35,10 +35,10 @@ Route::get('/repairshops/{category}', [CustomerController::class, 'viewcategory'
 
 Route::get('/repairshop/{id}', [CustomerController::class, 'viewshop'])->name('viewshop');
 
-Route::get('/bookappointment/{$id}', [CustomerController::class, 'viewappointment'])->name('viewappointment');
-Route::post('/bookappointment/{$id}', [CustomerController::class, 'bookappointment'])->name('bookappointment'); //Not done
+Route::get('/bookappointment/{id}', [CustomerController::class, 'viewappointment'])->name('viewappointment');
+Route::post('/bookappointment/{id}', [CustomerController::class, 'bookappointment'])->name('bookappointment');
 
-Route::get('/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
+Route::get('customer/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
 
 Route::get('/5', function () {
     return view('Customer.5 - RepairStatus');
@@ -72,6 +72,7 @@ Route::middleware('technician.auth')->group(function(){
     Route::get('/technician/shopreviews', [TechnicianController::class, 'shopreviews'])->name('technician.shopreviews');
 
     Route::get('/technician/profile', [TechnicianController::class, 'profile'])->name('technician.profile');
+    Route::post('/technician/profile', [TechnicianController::class, 'updateProfile'])->name('technician.updateProfile');
 });
 
 

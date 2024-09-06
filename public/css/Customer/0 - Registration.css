@@ -109,3 +109,13 @@ button[type="submit"]:hover {
     color: var(--primary-color);
     text-decoration: none;
 }
+
+.error-message{
+    width: 100%;
+    color: #f24747;
+    padding: 10px;
+    border: solid 2px #f24747;
+    border-radius: 7px;
+    margin-bottom: 15px;
+    background-color: #fde7e7;
+}

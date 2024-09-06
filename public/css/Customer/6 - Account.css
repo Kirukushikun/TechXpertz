@@ -71,16 +71,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #f0f0f0;
     justify-content: space-between;
-    background-color: var(--dark-grey);
     border-radius: 10px;
     padding: 40px 20px;
 }
 
 .right .image {
     background-color: var(--primary-color);
-    height: 130px;
-    width: 130px;
+    height: 110px;
+    width: 110px;
     border-radius: 50%;
     margin-bottom: 10px;
 }
@@ -97,6 +97,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 20px;
+
+    margin-bottom: 40px;
 }
 
 .right .profile-navigation {
@@ -112,12 +115,12 @@
     background-color: var(--light-grey);
     cursor: pointer;
     border-radius: 5px;
-    text-align: center;
+    text-align: start;
     transition: background-color 0.3s;
 }
 
 .right .profile-navigation li:hover {
-    background-color: var(--highlight);
+    background-color: var(--primary-color);
     color: var(--white);
 }
 
@@ -136,20 +139,16 @@
 
 .logout-button {
     width: 100%;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
     letter-spacing: 1px;
     padding: 10px;
-    border: none;
     border-radius: 5px;
-    color: var(--white);
-    background-color: var(--primary-color);
+    color: var(--primary-color);
+    border: 3px solid var(--primary-color);
     cursor: pointer;
 }
 
-.logout-button:hover {
-    background-color: var(--highlight);
-}
 
 .action p {
     font-size: 15px;

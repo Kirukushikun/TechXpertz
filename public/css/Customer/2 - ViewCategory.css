@@ -84,7 +84,7 @@
     margin-bottom: 50px;
 }
 
-.shops p{
+.shops .no-shop{
     width: 100%;
     color: var(--lighted-text-color);
     background-color: #f0f0f0;

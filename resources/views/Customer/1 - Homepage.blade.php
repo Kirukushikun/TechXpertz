@@ -142,7 +142,7 @@
 
             <div class="shops">
                 @if(count($repairshops) === 0)
-                    <p>No Shops Available</p>
+                    <p class="no-shop">No Shops Available</p>
                 @else
                     @foreach($repairshops as $repairshop)
                         <div class="shop">

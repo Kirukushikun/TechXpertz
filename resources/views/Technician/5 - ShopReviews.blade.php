@@ -59,6 +59,7 @@
             </div>
 
             <div class="individual-reviews">
+
                 @foreach($reviewMessages as $reviewMessage)
                     <div class="review">
                         <div class="review-header">
