@@ -24,12 +24,14 @@
             
             <div class="notification">
                 <div class="notification-header">
-                    <div class="notification-icon">
-                        <i class="fa-solid fa-bell"></i>
-                    </div>
-                    <div class="notification-details">
-                        <span class="notification-title">Welcome to TechXpertz!</span>
-                        <span class="notification-date">Jan 20, 2024</span>
+                    <div class="left">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
+                        <div class="notification-details">
+                            <span class="notification-title">Welcome to TechXpertz!</span>
+                            <span class="notification-date">Jan 20, 2024</span>
+                        </div>                        
                     </div>
                 </div>
 
@@ -41,25 +43,44 @@
                     </div>
                     <div class="notification-checklist">
                         <ul>
-                            <li><i class="fa-solid fa-circle-check"></i> Basic Information: Completed</li>
-                            <li><i class="fa-solid fa-circle"></i> Repair Shop Badges: Incomplete</li>
-                            <li><i class="fa-solid fa-circle"></i> Specializations: Incomplete</li>
-                            <li><i class="fa-solid fa-circle"></i> Operating Hours: Incomplete</li>
-                            <li><i class="fa-solid fa-circle"></i> Services Offered: Incomplete</li>
-                            <li><i class="fa-solid fa-circle"></i> Profile Verification: Incomplete</li>
+                            <li><i class="fa-solid fa-circle"></i> Basic Information</li>
+                            <li><i class="fa-solid fa-circle"></i> Repair Shop Badges</li>
+                            <li><i class="fa-solid fa-circle"></i> Specializations</li>
+                            <li><i class="fa-solid fa-circle"></i> Operating Hours</li>
+                            <li><i class="fa-solid fa-circle"></i> Services Offered</li>
+                            <li><i class="fa-solid fa-circle"></i> Profile Verification</li>
                         </ul>
                     </div>
                 </div>
             </div>
+
             @foreach($combinedNotifications as $notification)
             <div class="notification">
                 <div class="notification-header">
-                    <div class="notification-icon">
-                        <i class="fa-solid fa-bell"></i>
+                    <div class="left">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
+                        <div class="notification-details">
+                            <span class="notification-title">{{$notification->title}}</span>
+                            <span class="notification-date">{{$notification->formatted_date}}</span>
+                        </div>                        
                     </div>
-                    <div class="notification-details">
-                        <span class="notification-title">{{$notification->title}}</span>
-                        <span class="notification-date">{{$notification->created_at}}</span>
+                    <div class="right">
+                        <form action="{{ route('notifications.isread', ['id' => $notification->id]) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            
+                            @if($notification->is_read)
+                                <button style="color: #999" disabled>
+                                    <i class="fa-solid fa-envelope-open-text"></i>Mark as Read
+                                </button>
+                            @else
+                                <button type="submit" style="cursor:pointer;">
+                                    <i class="fa-solid fa-envelope"></i>Mark as Read
+                                </button>
+                            @endif
+                        </form>
                     </div>
                 </div>
 
@@ -75,7 +96,8 @@
                 </div>
             </div>
             @endforeach
-            <div class="notification">
+
+            <!-- <div class="notification">
                 <div class="notification-header">
                     <div class="notification-icon">
                         <i class="fa-solid fa-bell"></i>
@@ -93,7 +115,7 @@
                         </p>
                     </div>
                     <div class="notification-checklist">
-                        <!-- OPTIONAL CONTAINER -->
+                        
                     </div>
                 </div>
             </div>
@@ -116,35 +138,12 @@
                         </p>
                     </div>
                     <div class="notification-checklist">
-                        <!-- OPTIONAL CONTAINER -->
+                        
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="notification">
-                <div class="notification-header">
-                    <div class="notification-icon">
-                        <i class="fa-solid fa-bell"></i>
-                    </div>
-                    <div class="notification-details">
-                        <span class="notification-title">Complete Your Profile</span>
-                        <span class="notification-date">Jan 20, 2024</span>
-                    </div>
-                </div>
-
-                <div class="notification-body">
-                    <div class="notification-message">
-                        <p>
-                        You’re just a few steps away from completing your profile. Adding your badges, specialization, working hours, and services can significantly boost your visibility. Let’s finish setting up!
-                        </p>
-                    </div>
-                    <div class="notification-checklist">
-                        <!-- OPTIONAL CONTAINER -->
-                    </div>
-                </div>
-            </div>
-
-            <div class="notification">
+            <!-- <div class="notification">
                 <div class="notification-header">
                     <div class="notification-icon">
                         <i class="fa-solid fa-bell"></i>
@@ -162,12 +161,12 @@
                         </p>
                     </div>
                     <div class="notification-checklist">
-                        <!-- OPTIONAL CONTAINER -->
+                        
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="notification">
+            <!-- <div class="notification">
                 <div class="notification-header">
                     <div class="notification-icon">
                         <i class="fa-solid fa-bell"></i>
@@ -185,12 +184,12 @@
                         </p>
                     </div>
                     <div class="notification-checklist">
-                        <!-- OPTIONAL CONTAINER -->
+                        
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="notification">
+            <!-- <div class="notification">
                 <div class="notification-header">
                     <div class="notification-icon">
                         <i class="fa-solid fa-bell"></i>
@@ -208,19 +207,10 @@
                         </p>
                     </div>
                     <div class="notification-checklist">
-                        <!-- OPTIONAL CONTAINER -->
                     </div>
                 </div>
-            </div>
-            
-
-
-            <!-- <div class="pagination">
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</i></a>
-                <a href="#">...</a>
             </div> -->
+            
 
         </main>
 

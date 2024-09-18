@@ -13,6 +13,22 @@
 <body>
     <div class="dashboard">
 
+        <div class="modal active" id="modal">
+            <form action="">
+                <div class="modal-verification">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div class="verification-message">
+                        <h2>Terminate Appointment</h2>
+                        <p>Are you sure you want to terminate appointment?</p>                        
+                    </div>
+                    <div class="verification-action">
+                        <button type="submit" class="">Terminate</button>
+                        <button class="cancel">Cancel</button>
+                    </div>
+                </div>                
+            </form>
+        </div>
+
         @yield('sidebar')
 
         <main class="main-content">
@@ -77,7 +93,6 @@
                                 <th>Device Type</th>
                                 <th>Date</th>
                                 <th>Time</th>
-                                <th>More</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,9 +100,8 @@
                                 <tr>
                                     <td class="profile-cell">{{$request->fullname}}</td>
                                     <td>{{$request->device_type}}</td>
-                                    <td>{{$request->appointment_date}}</td>
-                                    <td>{{$request->appointment_time}}</td>
-                                    <td><button>View</button></td>
+                                    <td>{{$request->formatted_date}}</td>
+                                    <td>{{$request->formatted_time}}</td>
                                 </tr>                            
                             @endforeach
                         </tbody>
@@ -154,13 +168,12 @@
                                 <td>{{$upcoming->fullname}}</td>
                                 <td>{{$upcoming->email}}</td>
                                 <td>{{$upcoming->contact_no}}</td>
-                                <td>{{$upcoming->appointment_date}}</td>
-                                <td>{{$upcoming->appointment_time}}<</td>
-                                <td><button>View</button></td>
+                                <td>{{$upcoming->formatted_date}}</td>
+                                <td>{{$upcoming->formatted_time}}</td>
+                                <td><button class="view-upcoming" data-upcoming-id="{{$upcoming->id}}">View</button></td>
                                 <td>
-                                    <a class="edit" href=""><i class="fas fa-edit"></i></a>
                                     <a class="delete" href=""><i class="fas fa-trash"></i></a>
-                                    <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a>
+                                    <!-- <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a> -->
                                 </td>
                             </tr>                            
                         @endforeach
@@ -172,5 +185,145 @@
     </div>
     
     <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const viewUpcoming = document.querySelectorAll('button.view-upcoming');
+
+            viewUpcoming.forEach(button => {
+                button.addEventListener('click', function (){
+                    const upcomingID = this.getAttribute('data-upcoming-id');
+                    fetchUpcomingDetails(upcomingID);
+                    console.log('button is working', upcomingID);
+                });
+            });
+
+            function fetchUpcomingDetails(upcomingID) {
+                // Insert repairID dynamically into the URL
+                fetch(`/technician/appointment/details/${upcomingID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayModal(data);
+                    })
+            }
+
+            function displayModal(data){
+                const modal = document.getElementById('modal');
+
+                modal.innerHTML = `
+                <div class="modal-content" id="modal-content">
+                    <div class="modal-body">
+                        <div class="left">
+                            <div class="form-section">
+                                <h2>Customer Details</h2>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="first-name">ID</label>
+                                        <input type="text" id="first-name" name="first-name" value="${data.ID}" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="last-name">Full Name</label>
+                                        <input type="text" id="last-name" name="last-name" value="${data.fullname}" disabled>
+                                    </div>                                
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="email" id="email" name="email" value="${data.email}" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Mobile Phone Number</label>
+                                        <input type="tel" id="phone" name="phone" value="${data.contact}" disabled> 
+                                    </div>                                
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h2>Device Information</h2>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="device-type">Device Type</label>
+                                        <input type="text" id="device-type" name="device-type" value="${data.device_type}" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="brand">Brand</label>
+                                        <input type="text" id="brand" name="brand" value="${data.device_brand}" disabled>
+                                    </div>                                
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="device-model">Device Model</label>
+                                        <input type="text" id="device-model" name="device-model" value="${data.device_model}" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="serial-number">Serial Number</label>
+                                        <input type="text" id="serial-number" name="serial-number" value="${data.device_serial}" disabled>
+                                    </div>                                
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h2>Appointment Schedule</h2>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="appointment-date">Select Date</label>
+                                        <input type="text" id="appointment-date" name="appointment-date" value="${data.formatted_date}" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="appointment-time">Select Time</label>
+                                        <input type="text" id="appointment-time" name="appointment-time" value="${data.formatted_time}" disabled>
+                                    </div>                                
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="urgency-level">Urgency Level</label>
+                                    <input type="text" id="urgency-level" name="urgency-level" value="${data.appointment_urgency}" disabled>
+                                </div>
+                            </div>   
+                        </div>
+
+                        <div class="right">
+                            <div class="form-section excluded">
+                                <h2>Device Issue</h2>
+                                <div class="form-group-excluded">
+                                    <label for="issue-description">Description of Issue</label>
+                                    <textarea id="issue-description" name="issue-description" disabled>${data.issue_description}</textarea>
+                                </div>
+                                <div class="form-group-excluded">
+                                    <label for="error-message">Error Messages</label>
+                                    <textarea id="error-message" name="error-message" disabled>${data.error_message}</textarea>
+                                </div>
+                                <div class="form-group-excluded">
+                                    <label for="previous-steps">Previous Repair Attempts</label>
+                                    <textarea id="previous-steps" name="previous-steps" disabled>${data.repair_attempts}</textarea>
+                                </div>
+                                <div class="form-group-excluded">
+                                    <label for="issue-duration">Recent Changes or Events</label>
+                                    <textarea id="issue-duration" name="issue-duration" disabled>${data.recent_events}</textarea>
+                                </div>
+                                <div class="form-group-excluded">
+                                    <label for="additional-info">Parts Prepared for Repair</label>
+                                    <textarea id="additional-info" name="additional-info" disabled>${data.prepared_parts}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-action">
+                        <button class="close">Close</button>
+                    </div>
+                </div>
+                `;
+
+                // Show the modal
+                modal.classList.add("active");
+
+                // Close modal when 'X' is clicked
+                document.querySelector('.close').onclick = function () {
+                    modal.classList.remove("active");
+                };
+            }
+            
+        });
+    </script>
 </body>
 </html>

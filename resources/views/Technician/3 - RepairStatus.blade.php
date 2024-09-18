@@ -9,11 +9,50 @@
     <link rel="stylesheet" href="{{asset('css/Technician/technician-sidebar.css')}}">
 
     <link rel="stylesheet" href="{{asset('css/Technician/3 - RepairStatus.css')}}">
+
+    <style>
+
+        .modal{
+            display: none;
+        }
+        .modal.active{
+            position: fixed;
+            right: 0;
+            width: calc(100% - 270px);
+            height: 100%;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.452);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-details.active{
+            background-color: var(--primary-color);
+            color: white;
+        }.form-details.active i{
+            color: white !important;
+        }
+
+
+    </style>
 </head>
 <body>
     <div class="dashboard">
 
         @yield('sidebar')
+
+        <!-- Hidden Modal -->
+        <div id="repairDetailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Repair Details</h2>
+                <div id="repair-details-content">
+                    <!-- Repair details will be dynamically injected here -->
+                </div>
+            </div>
+        </div>
 
         <main class="main-content">
             <header>
@@ -60,7 +99,7 @@
                                             <option value="{{$pending['repairstatus']}}">{{$pending['repairstatus']}}</option>
                                         </select>
                                     </td>
-                                    <td><button>View</button></td>
+                                    <td><button class="view-repair" data-repair-id="{{$pending['repairID']}}">View</button></td>
                                     <td><a href="" class="terminate-btn">Terminate</a></td>
                                     <td><i class="fas fa-check"></i></td>
                                 </tr>
@@ -170,7 +209,50 @@
 
         // Call the function to populate the select inputs when the page loads
         populateSelectInputs();
-        </script>
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const viewButtons = document.querySelectorAll('button.view-repair');
+
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function (){
+                    const repairID = this.getAttribute('data-repair-id');
+                    fetchRepairDetails(repairID);
+                    console.log('button is working', repairID);
+                });
+            });
+
+            function fetchRepairDetails(repairID) {
+                // Insert repairID dynamically into the URL
+                fetch(`/technician/repairstatus/details/${repairID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayModal(data);
+                    })
+            }
+
+            function displayModal(data){
+                const modal = document.getElementById('repairDetailsModal');
+                const modalContent = document.getElementById('repair-details-content');
+
+                modalContent.innerHTML = `
+                    <p>Repair ID: ${data.ID}</p>
+                    <p>Customer Name: ${data.customer_name}</p>
+                    <p>Contact No: ${data.contact_no}</p>
+                `;
+
+                // Show the modal
+                modal.classList.add("active");
+
+                // Close modal when 'X' is clicked
+                document.querySelector('.close').onclick = function () {
+                    modal.classList.remove("active");
+                };
+            }
+            
+        });
+    </script>
 
 </body>
 </html>

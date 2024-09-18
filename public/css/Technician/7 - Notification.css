@@ -36,7 +36,23 @@ header {
 .notification-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 10px;
+}
+.notification-header .left{
+    display: flex;
+    align-items: center;
+}
+.notification-header .right button{
+    font-size: 18px;
+    color: var(--primary-color);
+    text-decoration: none;
+    margin-right: 15px;
+
+    background-color: transparent;
+    border: none;
+}.notification-header .right i{
+    margin-right: 7px;
 }
 
 .notification-icon {

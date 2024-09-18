@@ -32,10 +32,24 @@ class TechnicianController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        // Format the date for each notification
+        foreach ($combinedNotifications as $notification) {
+            $notification->formatted_date = Carbon::parse($notification->created_at)->format('M d, Y');
+        }
+
         return view('Technician.7 - Notification', [
             'combinedNotifications' => $combinedNotifications,
         ]);
     }
+        public function isRead($id){
+            $notification = Technician_Notifications::find($id);
+
+            if($notification){
+                $notification->markAsRead();
+            }
+
+            return redirect()->route('technician.notifications');
+        }
 
     public function dashboard(){
         $technician = Auth::guard('technician')->user();
@@ -44,6 +58,12 @@ class TechnicianController extends Controller
         $appointments = Repairshop_Appointments::where('technician_id', $technician->id)->get();
         $upcomingAppointments = $appointments->where('status', 'confirmed');
         $requestedAppointments = $appointments->where('status', 'requested');
+
+        // Format the date for each appointments
+        foreach ($appointments as $appointment) {
+            $appointment->formatted_date = Carbon::parse($appointment->appointment_date)->format('M d, Y');
+            $appointment->formatted_time = Carbon::parse($appointment->appointment_time)->format('g:i A');
+        }
 
         $repairstatus = Repairshop_RepairStatus::where('technician_id', $technician->id)->get();
         $pendingStatus = $repairstatus->where('status', 'pending');
@@ -131,6 +151,43 @@ class TechnicianController extends Controller
         ]);
     }
 
+    public function appointmentDetails($appointmentID){
+        $technician = Auth::guard('technician')->user();
+        if (!$technician) {
+            return response()->json(['error' => 'Unauthorized access'], 403);
+        }
+
+        $appointmentDetails = Repairshop_Appointments::find($appointmentID);
+        if (!$appointmentDetails) {
+            return response()->json(['error' => 'Repair not found'], 404);
+        }
+
+            $appointmentDetails->formatted_date = Carbon::parse($appointmentDetails->appointment_date)->format('M d, Y');
+            $appointmentDetails->formatted_time = Carbon::parse($appointmentDetails->appointment_time)->format('g:i A');
+
+        return response()->json([
+            'ID' => $appointmentDetails->id,
+            'fullname' => $appointmentDetails->fullname,
+            'email' => $appointmentDetails->email,
+            'contact' => $appointmentDetails->contact_no,
+
+            'device_type' => $appointmentDetails->device_type,
+            'device_brand' => $appointmentDetails->device_brand,
+            'device_model' => $appointmentDetails->device_model,
+            'device_serial' => $appointmentDetails->device_serial,
+
+            'issue_description' => $appointmentDetails->issue_descriptions,
+            'error_message' => $appointmentDetails->error_message,
+            'repair_attempts' => $appointmentDetails->repair_attempts,
+            'recent_events' => $appointmentDetails->recent_events,
+            'prepared_parts' => $appointmentDetails->prepared_parts,
+
+            'formatted_date' => $appointmentDetails->formatted_date,
+            'formatted_time' => $appointmentDetails->formatted_time,
+            'appointment_urgency' => $appointmentDetails->appointment_urgency,
+        ]);
+    }
+
     public function repairstatus(){
         $technician = Auth::guard('technician')->user();
         $repairStatus = RepairShop_RepairStatus::where('technician_id', $technician->id)->get();
@@ -170,6 +227,32 @@ class TechnicianController extends Controller
             'repairStatusPendingData' => $repairStatusPendingData,
             'repairStatusCompletedData' => $repairStatusCompletedData,
         ]);
+    }
+
+    public function repairstatusDetails($id){
+        $technician = Auth::guard('technician')->user();
+
+        if (!$technician) {
+            return response()->json(['error' => 'Unauthorized access'], 403);
+        }
+
+        // Retrieve the repair details
+        $repairstatusDetails = RepairShop_Appointments::find($id);
+
+        if (!$repairstatusDetails) {
+            return response()->json(['error' => 'Repair not found'], 404);
+        }
+        
+        return response()->json([
+            'ID' => $repairstatusDetails->id,
+            'customer_name' => $repairstatusDetails->fullname,
+            'contact_no' => $repairstatusDetails->contact_no,
+        ]);
+    }
+    public function repairstatusDelete($id){
+        $repairstatusDelete = RepairShop_Appointments::find($id);
+        $repairstatusDelete->delet();
+        return redirect()->route('technician.repairstatus');
     }
 
     public function messages(){
