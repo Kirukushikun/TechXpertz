@@ -26,9 +26,11 @@ class RepairShop_RepairStatus extends Authenticatable
     protected $fillable = [
         'technician_id',
         'customer_id',
-        'status',
-        'customer_fullname',
+        'appointment_id',
 
+        'customer_fullname',
+        
+        'status',
         'paid_status',
         'revenue',
         'expenses',

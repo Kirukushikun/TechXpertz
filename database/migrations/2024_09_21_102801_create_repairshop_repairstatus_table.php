@@ -19,16 +19,20 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
 
+            $table->string('customer_fullname');           
+
+            $table->unsignedBigInteger('appointment_id');
+            $table->foreign('appointment_id')->references('id')->on('repairshop_appointments')->onDelete('cascade');
+
             $table->enum('status', ['pending', 'completed'])->default('pending');
 
-            $table->string('customer_fullname');
-            $table->enum('paid_status', ['Fully Paid', 'Initially Paid', 'Unpaid']);
-            $table->integer('revenue');
-            $table->integer('expenses');
+            $table->enum('paid_status', ['Fully Paid', 'Initially Paid', 'Unpaid'])->default('Unpaid');
+            $table->integer('revenue')->default(0);
+            $table->integer('expenses')->default(0);
             
-            $table->enum('repairstatus', ['Device Dropped Off', 'Diagnosis In Progress', 'Diagnosis Completed', 'Repair In Progress', 'Waiting For Parts', 'Repair Completed', 'Ready For Pickup', 'Device Collected']);
+            $table->enum('repairstatus', ['Device Dropped Off', 'Diagnosis In Progress', 'Diagnosis Completed', 'Repair In Progress', 'Waiting For Parts', 'Repair Completed', 'Ready For Pickup', 'Device Collected'])->default('Device Dropped Off');
             $table->string('repairstatus_conditional')->nullable();
-            $table->text('repairstatus_message'); 
+            $table->text('repairstatus_message')->nullable(); 
             $table->timestamps();
         });
     }

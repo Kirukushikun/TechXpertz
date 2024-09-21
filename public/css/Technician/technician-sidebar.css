@@ -10,6 +10,10 @@
 
     --text-color: #383838;
     --lighted-text-color: #999999;
+
+
+    --danger: #EB4335;
+    --success: #34A853;
 }
 * {
     margin: 0;

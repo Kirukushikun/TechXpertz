@@ -94,6 +94,12 @@ class TechnicianController extends Controller
         // Fetch appointments by status using eager loading for performance
         $appointments = Repairshop_Appointments::where('technician_id', $technician->id)
             ->get();
+
+        // Format the date for each appointments
+        foreach ($appointments as $appointment) {
+            $appointment->formatted_date = Carbon::parse($appointment->appointment_date)->format('M d, Y');
+            $appointment->formatted_time = Carbon::parse($appointment->appointment_time)->format('g:i A');
+        }
     
         // Group appointments by status
         $confirmedAppointments = $appointments->where('status', 'confirmed');
@@ -104,41 +110,48 @@ class TechnicianController extends Controller
         // Prepare data for requested, pending, rejected and completed appointments
         $requestedAppointmentsData = $requestedAppointments->map(function ($appointment) {
             return [
+                'ID' => $appointment->id,
+                'customer_id' => $appointment->customer_id,
                 'fullname' => $appointment->fullname,
                 'email' => $appointment->email,
                 'contact' => $appointment->contact_no,
-                'appointment_date' => $appointment->appointment_date,
-                'appointment_time' => $appointment->appointment_time,
+                'formatted_date' => $appointment->formatted_date,
+                'formatted_time' => $appointment->formatted_time,
             ];
         })->toArray();
     
         $confirmedAppointmentsData = $confirmedAppointments->map(function ($appointment) {
             return [
+                'ID' => $appointment->id,
+                'customer_id' => $appointment->customer_id,
                 'fullname' => $appointment->fullname,
                 'email' => $appointment->email,
                 'contact' => $appointment->contact_no,
-                'appointment_date' => $appointment->appointment_date,
-                'appointment_time' => $appointment->appointment_time,
+                'formatted_date' => $appointment->formatted_date,
+                'formatted_time' => $appointment->formatted_time,
             ];
         })->toArray();
     
         $completedAppointmentsData = $completedAppointments->map(function ($appointment) {
             return [
+                'ID' => $appointment->id,
+                'customer_id' => $appointment->customer_id,
                 'fullname' => $appointment->fullname,
                 'email' => $appointment->email,
                 'contact' => $appointment->contact_no,
-                'appointment_date' => $appointment->appointment_date,
-                'appointment_time' => $appointment->appointment_time,
+                'formatted_date' => $appointment->formatted_date,
+                'formatted_time' => $appointment->formatted_time,
             ];
         })->toArray();
 
         $rejectedAppointmentsData = $rejectedAppointments->map(function ($appointment) {
             return [
+                'ID' => $appointment->id,
                 'fullname' => $appointment->fullname,
                 'email' => $appointment->email,
                 'contact' => $appointment->contact_no,
-                'appointment_date' => $appointment->appointment_date,
-                'appointment_time' => $appointment->appointment_time,
+                'formatted_date' => $appointment->formatted_date,
+                'formatted_time' => $appointment->formatted_time,
             ];
         })->toArray();
     
@@ -147,46 +160,62 @@ class TechnicianController extends Controller
             'requestedAppointments' => $requestedAppointmentsData,
             'confirmedAppointments' => $confirmedAppointmentsData,
             'completedAppointments' => $completedAppointmentsData,
-            'rejectedAppointments' => $completedAppointmentsData,
+            'rejectedAppointments' => $rejectedAppointmentsData,
         ]);
     }
 
-    public function appointmentDetails($appointmentID){
-        $technician = Auth::guard('technician')->user();
-        if (!$technician) {
-            return response()->json(['error' => 'Unauthorized access'], 403);
+        public function appointmentDetails($appointmentID){
+            $technician = Auth::guard('technician')->user();
+            if (!$technician) {
+                return response()->json(['error' => 'Unauthorized access'], 403);
+            }
+
+            $appointmentDetails = Repairshop_Appointments::find($appointmentID);
+            if (!$appointmentDetails) {
+                return response()->json(['error' => 'Repair not found'], 404);
+            }
+
+                $appointmentDetails->formatted_date = Carbon::parse($appointmentDetails->appointment_date)->format('M d, Y');
+                $appointmentDetails->formatted_time = Carbon::parse($appointmentDetails->appointment_time)->format('g:i A');
+
+            return response()->json([
+                'ID' => $appointmentDetails->id,
+                'fullname' => $appointmentDetails->fullname,
+                'email' => $appointmentDetails->email,
+                'contact' => $appointmentDetails->contact_no,
+
+                'device_type' => $appointmentDetails->device_type,
+                'device_brand' => $appointmentDetails->device_brand,
+                'device_model' => $appointmentDetails->device_model,
+                'device_serial' => $appointmentDetails->device_serial,
+
+                'issue_description' => $appointmentDetails->issue_descriptions,
+                'error_message' => $appointmentDetails->error_message,
+                'repair_attempts' => $appointmentDetails->repair_attempts,
+                'recent_events' => $appointmentDetails->recent_events,
+                'prepared_parts' => $appointmentDetails->prepared_parts,
+
+                'formatted_date' => $appointmentDetails->formatted_date,
+                'formatted_time' => $appointmentDetails->formatted_time,
+                'appointment_urgency' => $appointmentDetails->appointment_urgency,
+            ]);
         }
 
-        $appointmentDetails = Repairshop_Appointments::find($appointmentID);
-        if (!$appointmentDetails) {
-            return response()->json(['error' => 'Repair not found'], 404);
+        public function appointmentUpdate($appointmentSTATUS, $appointmentID){
+            $appointment = RepairShop_Appointments::find($appointmentID);
+            
+            if($appointmentSTATUS === "confirm"){
+                $appointment->update([
+                    'status' => 'confirmed'
+                ]);
+            } elseif($appointmentSTATUS === "cancel" || $appointmentSTATUS === "reject"){
+                $appointment->update([
+                    'status' => 'rejected'
+                ]);
+            }
+
+            return back()->with('success', 'Appointment Updated');
         }
-
-            $appointmentDetails->formatted_date = Carbon::parse($appointmentDetails->appointment_date)->format('M d, Y');
-            $appointmentDetails->formatted_time = Carbon::parse($appointmentDetails->appointment_time)->format('g:i A');
-
-        return response()->json([
-            'ID' => $appointmentDetails->id,
-            'fullname' => $appointmentDetails->fullname,
-            'email' => $appointmentDetails->email,
-            'contact' => $appointmentDetails->contact_no,
-
-            'device_type' => $appointmentDetails->device_type,
-            'device_brand' => $appointmentDetails->device_brand,
-            'device_model' => $appointmentDetails->device_model,
-            'device_serial' => $appointmentDetails->device_serial,
-
-            'issue_description' => $appointmentDetails->issue_descriptions,
-            'error_message' => $appointmentDetails->error_message,
-            'repair_attempts' => $appointmentDetails->repair_attempts,
-            'recent_events' => $appointmentDetails->recent_events,
-            'prepared_parts' => $appointmentDetails->prepared_parts,
-
-            'formatted_date' => $appointmentDetails->formatted_date,
-            'formatted_time' => $appointmentDetails->formatted_time,
-            'appointment_urgency' => $appointmentDetails->appointment_urgency,
-        ]);
-    }
 
     public function repairstatus(){
         $technician = Auth::guard('technician')->user();
@@ -228,32 +257,36 @@ class TechnicianController extends Controller
             'repairStatusCompletedData' => $repairStatusCompletedData,
         ]);
     }
-
-    public function repairstatusDetails($id){
-        $technician = Auth::guard('technician')->user();
-
-        if (!$technician) {
-            return response()->json(['error' => 'Unauthorized access'], 403);
+        public function repairstatusDelete($id){
+            $repairstatusDelete = RepairShop_Appointments::find($id);
+            $repairstatusDelete->delete();
+            return redirect()->route('technician.repairstatus');
         }
+        public function repairstatusCreate(Request $request, $appointmentID, $customerID){
+            $technician = Auth::guard('technician')->user();
+            $appointment = RepairShop_Appointments::find($appointmentID);
+            $additionalDetails = $request->validate([
+                'paid_status' => 'required|string|max:255',
+                'revenue' => 'nullable|integer',
+                'expenses' => 'nullable|integer',
+            ]);
+    
+            RepairShop_RepairStatus::create([
+                'technician_id' => $technician->id,
+                'customer_id' => $customerID,
+                'appointment_id' => $appointmentID,
+                'customer_fullname' => $appointment->fullname,
+                'paid_status' => $additionalDetails['paid_status'],
+                'revenue' => $additionalDetails['revenue'] ?? 0,
+                'expenses' => $additionalDetails['expenses'] ?? 0,
+            ]);
 
-        // Retrieve the repair details
-        $repairstatusDetails = RepairShop_Appointments::find($id);
-
-        if (!$repairstatusDetails) {
-            return response()->json(['error' => 'Repair not found'], 404);
+            $appointment->update([
+                'status' => 'completed',
+            ]);
+    
+            return back()->with('success', 'Pending repair added successfully');
         }
-        
-        return response()->json([
-            'ID' => $repairstatusDetails->id,
-            'customer_name' => $repairstatusDetails->fullname,
-            'contact_no' => $repairstatusDetails->contact_no,
-        ]);
-    }
-    public function repairstatusDelete($id){
-        $repairstatusDelete = RepairShop_Appointments::find($id);
-        $repairstatusDelete->delet();
-        return redirect()->route('technician.repairstatus');
-    }
 
     public function messages(){
         return view('Technician.4 - Messages');

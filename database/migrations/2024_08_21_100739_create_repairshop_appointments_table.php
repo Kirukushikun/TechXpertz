@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('technician_id');
             $table->unsignedBigInteger('customer_id');
 
-            $table->enum('status', ['confirmed', 'requested', 'completed', 'rejected'])->default('requested');
+            $table->enum('status', ['confirmed', 'completed', 'requested', 'cancelled', 'rejected'])->default('requested');
 
             $table->string('fullname');
             $table->string('email');
@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('repair_attempts')->nullable();
             $table->string('recent_events')->nullable();
             $table->string('prepared_parts')->nullable();
+            $table->string('additional_notes')->nullable();
 
             $table->date('appointment_date');
             $table->time('appointment_time');

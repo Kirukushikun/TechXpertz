@@ -60,7 +60,9 @@ Route::post('/technician/signup', [TechnicianAuthController::class, 'signupTechn
 Route::middleware('technician.auth')->group(function(){
 
     Route::get('/technician/dashboard', [TechnicianController::class, 'dashboard'])->name('technician.dashboard');
-        Route::get('/technician/appointment/details/{appointmentID}', [TechnicianController::class, 'appointmentDetails']);
+        //What if the authenticated technician doesnt own the data that will be accessed? the end point must not be accessed if the data doesnt bellong to the authenticated user/technician
+        Route::get('/technician/appointment/details/{appointmentID}', [TechnicianController::class, 'appointmentDetails']);        
+        Route::patch('/technician/appointment/{status}/{appointmentID}', [TechnicianController::class, 'appointmentUpdate']);
 
     Route::get('/technician/notifications', [TechnicianController::class, 'notifications'])->name('technician.notifications');
         Route::patch('/technician/notifications/update/{id}', [TechnicianController::class, 'isRead'])->name('notifications.isread');   
@@ -68,8 +70,8 @@ Route::middleware('technician.auth')->group(function(){
     Route::get('/technician/appointment', [TechnicianController::class, 'appointment'])->name('technician.appointment');
 
     Route::get('/technician/repairstatus', [TechnicianController::class, 'repairstatus'])->name('technician.repairstatus');
-        Route::get('/technician/repairstatus/details/{repairID}', [TechnicianController::class, 'repairstatusDetails']);
-        Route::delete('/technician/repairstatus/details/{repairID}', [TechnicianController::class, 'repairstatusDelete']);
+        Route::delete('/technician/repairstatus/delete/{repairID}', [TechnicianController::class, 'repairstatusDelete']);
+        Route::post('/technician/repairstatus/create/{appointmentID}/{customerID}', [TechnicianController::class, 'repairstatusCreate']);
 
     Route::get('/technician/messages', [TechnicianController::class, 'messages'])->name('technician.messages');
 
