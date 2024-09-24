@@ -112,30 +112,32 @@ header {
     font-weight: 500;
     cursor: pointer;
     background-color: var(--primary-color);
-}.card table td select{
+}.card table td input{
     font-weight: 600;
     font-size: 15px;
     padding: 5px;
+
+    border: 2px solid var(--lighted-text-color);
     border-radius: 7px;
-    border-width: 2px;
-    border-color: var(--lighted-text-color);
     color: var(--dark-grey);
-    cursor: pointer;
+
+    /* background-color: antiquewhite; */
+    text-align: center;
 }
 .card table td .terminate-btn{
-    color: #d76161;
-    font-size: 17px;
-    font-weight: 600;
-    cursor: pointer;
+    color: var(--danger);
+}.card table td .update-btn{
+    color: var(--success);
 }
 .card table td a{
     text-decoration: none;
-    color: var(--text-color);
     margin-right: 10px;
     font-size: 20px;
-}.card table td i{
-    color: var(--text-color);
-    font-size: 17px;
     cursor: pointer;
-    color: green;
+    font-weight: 600;
+    font-size: 15px;
+
+    border: 2px solid;
+    border-radius: 7px;
+    padding: 5px 10px;
 }

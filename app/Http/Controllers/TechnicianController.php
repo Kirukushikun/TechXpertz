@@ -68,10 +68,10 @@ class TechnicianController extends Controller
         $repairstatus = Repairshop_RepairStatus::where('technician_id', $technician->id)->get();
         $pendingStatus = $repairstatus->where('status', 'pending');
         $completedStatus = $repairstatus->where('repairstatus', 'Ready For Pickup');
-        $revenue = $completedStatus->sum('revenue');
 
         $reviews = Repairshop_Reviews::where('technician_id', $technician->id)->get();
         $totalRepairs = $repairstatus->where('repairstatus', 'Device Collected');
+        $revenue = $this->formatMoney($totalRepairs->sum('revenue'));
 
         return view('Technician.1 - Dashboard', [
             'repairshop' => $repairshop,
@@ -226,11 +226,16 @@ class TechnicianController extends Controller
 
         // Prepare data for requested, pending, and completed appointments
         $repairStatusPendingData = $repairStatusPending->map(function ($repairdata) {
+            $formatedRevenue = $this->formatMoney($repairdata->revenue);
+            $formatedExpense = $this->formatMoney($repairdata->expenses);
+
             return [
                 'repairID' => $repairdata->id,
+                'customerID' => $repairdata->customer_id,
+                'appointment_id' => $repairdata->appointment_id,
                 'customer_name' => $repairdata->customer_fullname,
-                'revenue' => $repairdata->revenue,
-                'expenses' => $repairdata->expenses,
+                'revenue' => $formatedRevenue,
+                'expenses' => $formatedExpense,
                 'paid_status' => $repairdata->paid_status,
                 'repairstatus' => $repairdata->repairstatus,
                 'repairstatus_conditional' => $repairdata->repairstatus_conditional,
@@ -240,15 +245,20 @@ class TechnicianController extends Controller
 
         // Prepare data for requested, pending, and completed appointments
         $repairStatusCompletedData = $repairStatusCompleted->map(function ($repairdata) {
+            $formatedRevenue = $this->formatMoney($repairdata->revenue);
+            $formatedExpense = $this->formatMoney($repairdata->expenses);
+
+            $repairdata->formatted_date = Carbon::parse($repairdata->updated_at)->format('M d, Y');
+            $repairdata->formatted_time = Carbon::parse($repairdata->updated_at)->format('g:i A');
+
             return [
                 'repairID' => $repairdata->id,
+                'appointment_id' => $repairdata->appointment_id,
                 'customer_name' => $repairdata->customer_fullname,
-                'revenue' => $repairdata->revenue,
-                'expenses' => $repairdata->expenses,
-                'paid_status' => $repairdata->paid_status,
-                'repairstatus' => $repairdata->repairstatus,
-                'repairstatus_conditional' => $repairdata->repairstatus_conditional,
-                'repairstatus_message' => $repairdata->repairstatus_message,
+                'revenue' => $formatedRevenue,
+                'expenses' => $formatedExpense,
+                'date' => $repairdata->formatted_date,
+                'time' => $repairdata->formatted_time,
             ];
         })->toArray();
 
@@ -256,7 +266,29 @@ class TechnicianController extends Controller
             'repairStatusPendingData' => $repairStatusPendingData,
             'repairStatusCompletedData' => $repairStatusCompletedData,
         ]);
-    }
+    }   
+        public function repairstatusDetails($repairID){
+            $technician = Auth::guard('technician')->user();
+            if (!$technician) {
+                return response()->json(['error' => 'Unauthorized access'], 403);
+            }
+            $repairDetails = Repairshop_RepairStatus::find($repairID);
+            if (!$repairDetails) {
+                return response()->json(['error' => 'Repair not found'], 404);
+            }
+
+            return response()->json([
+                'repairID' => $repairDetails->id,
+
+                'paid_status' => $repairDetails->paid_status,
+                'revenue' => $repairDetails->revenue,
+                'expenses' => $repairDetails->expenses,
+
+                'repairstatus' => $repairDetails->repairstatus,
+                'repairstatus_conditional' => $repairDetails->repairstatus_conditional ?? '',
+                'repairstatus_message' => $repairDetails->repairstatus_message,
+            ]);
+        }   
         public function repairstatusDelete($id){
             $repairstatusDelete = RepairShop_Appointments::find($id);
             $repairstatusDelete->delete();
@@ -286,6 +318,38 @@ class TechnicianController extends Controller
             ]);
     
             return back()->with('success', 'Pending repair added successfully');
+        }
+        public function repairstatusUpdate(Request $request, $repairID, $customerID, $action){
+            $technician = Auth::guard('technician')->user();
+            $repairstatus = Repairshop_RepairStatus::find($repairID);
+
+            if($action === 'Terminate'){
+                $repairstatus->update([
+                    'repairstatus' => 'Repair Terminated',
+                    'repairstatus_message' => $request->terminate_message,
+                ]);
+                
+            }elseif($action === 'Update'){
+                if($request->repair_status === 'Device Collected'){
+                    $repairstatus->update([
+                        'status' => 'completed',
+                        'updated_at' => now(),
+                    ]);
+                }
+                $repairstatus->update([
+                    'paid_status' => $request->paid_status,
+                    'expenses' => $request->expenses,
+                    'revenue' => $request->revenue,
+
+                    'repairstatus' => $request->repair_status,
+                    'repairstatus_conditional' => $request->repair_status_conditional,
+                    'repairstatus_message' => $request->repairstatus_message,
+                    'updated_at' => now(),
+                ]);
+                
+            }
+
+            return back()->with('success', 'Repair Status Updated');
         }
 
     public function messages(){
@@ -555,4 +619,15 @@ class TechnicianController extends Controller
         return redirect()->route('technician.profile')->with('success', 'Changes saved successfully');
     }
 
+    public function formatMoney($number){
+        if ($number >= 1000) {
+            // Convert number to K notation
+            $formatted = number_format($number / 1000, ($number % 1000 === 0 ? 0 : 1)) . 'k';
+        } else {
+            // If number is below 1000, just return the number as it is
+            $formatted = $number;
+        }
+        
+        return $formatted;
+    }
 }

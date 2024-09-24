@@ -72,6 +72,8 @@ Route::middleware('technician.auth')->group(function(){
     Route::get('/technician/repairstatus', [TechnicianController::class, 'repairstatus'])->name('technician.repairstatus');
         Route::delete('/technician/repairstatus/delete/{repairID}', [TechnicianController::class, 'repairstatusDelete']);
         Route::post('/technician/repairstatus/create/{appointmentID}/{customerID}', [TechnicianController::class, 'repairstatusCreate']);
+        Route::get('/technician/repairstatus/details/{repairID}', [TechnicianController::class, 'repairstatusDetails']);
+        Route::patch('/technician/repairstatus/update/{repairID}/{customerID}/{action}', [TechnicianController::class, 'repairstatusUpdate']);
 
     Route::get('/technician/messages', [TechnicianController::class, 'messages'])->name('technician.messages');
 

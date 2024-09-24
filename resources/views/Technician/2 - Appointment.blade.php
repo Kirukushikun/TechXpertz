@@ -40,37 +40,50 @@
             <div class="tab-content">
 
                 <div id="upcoming" class="tab-content-item card active">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Contact</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Details</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($confirmedAppointments as $confirmed)
+                    @if(count($confirmedAppointments) === 0)
+                        <div class="empty-message">
+                            <i class="fa-solid fa-user-xmark"></i>
+                            <p>No scheduled appointments yet.</p>                            
+                        </div>
+                    @else
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td>{{$confirmed['fullname']}}</td>
-                                    <td>{{$confirmed['email']}}</td>
-                                    <td>{{$confirmed['contact']}}</td>
-                                    <td>{{$confirmed['formatted_date']}}</td>
-                                    <td>{{$confirmed['formatted_time']}}</td>
-                                    <td><button class="view-details" data-appointment-id="{{$confirmed['ID']}}">View</button></td>
-                                    <td>
-                                        <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-appointment-status="cancel" style="color:red;"><i class="fa-regular fa-calendar-xmark"></i></a>
-                                        <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-customer-id="{{$confirmed['customer_id']}}" data-appointment-status="repair" style="color:blue;"><i class="fa-solid fa-screwdriver-wrench"></i></a>
-                                    </td>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Details</th>
+                                    <th>Action</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($confirmedAppointments as $confirmed)
+                                    <tr>
+                                        <td>{{$confirmed['fullname']}}</td>
+                                        <td>{{$confirmed['email']}}</td>
+                                        <td>{{$confirmed['contact']}}</td>
+                                        <td>{{$confirmed['formatted_date']}}</td>
+                                        <td>{{$confirmed['formatted_time']}}</td>
+                                        <td><button class="view-details" data-appointment-id="{{$confirmed['ID']}}">View</button></td>
+                                        <td>
+                                            <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-appointment-status="cancel" style="color:red;"><i class="fa-regular fa-calendar-xmark"></i></a>
+                                            <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-customer-id="{{$confirmed['customer_id']}}" data-appointment-status="repair" style="color:blue;"><i class="fa-solid fa-screwdriver-wrench"></i></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
                 </div>
                 <div id="request" class="tab-content-item card">
+                    @if(count($requestedAppointments) === 0)
+                    <div class="empty-message">
+                        <i class="fa-solid fa-user-xmark"></i>
+                        <p>No appointment requests at the moment.</p>                            
+                    </div>
+                    @else
                     <table>
                         <thead>
                             <tr>
@@ -100,38 +113,15 @@
                             @endforeach
                         </tbody>
                     </table>
+                    @endif
                 </div>
-                <!-- <div id="completed" class="tab-content-item card">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Contact</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Details</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($completedAppointments as $completed)
-                                <tr>
-                                    <td>{{$completed['fullname']}}</td>
-                                    <td>{{$completed['email']}}</td>
-                                    <td>{{$completed['contact']}}</td>
-                                    <td>{{$completed['formatted_date']}}</td>
-                                    <td>{{$completed['formatted_time']}}</td>
-                                    <td><button class="view-upcoming" data-upcoming-id="{{$completed['ID']}}">View</button></td>
-                                    <td>
-                                        <a class="delete-appointment" data-deleteUpcoming-id="{{$completed['ID']}}"><i class="fa-regular fa-calendar-xmark"></i></a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div> -->
                 <div id="rejected" class="tab-content-item card">
+                    @if(count($rejectedAppointments) === 0)
+                    <div class="empty-message">
+                        <i class="fa-solid fa-user-xmark"></i>
+                        <p>No cancelled/rejected appointments at the moment.</p>                            
+                    </div>
+                    @else
                     <table>
                         <thead>
                             <tr>
@@ -160,6 +150,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    @endif
                 </div>
 
             </div>
@@ -169,6 +160,7 @@
     <script src="{{asset('js/Technician/2 - Appointment.js')}}"></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
     <script src="{{asset('js/Technician/technician-modal.js')}}"></script>
+
     
 </body>
 </html>

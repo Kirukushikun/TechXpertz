@@ -5,6 +5,7 @@
 .modal.active{
     position: fixed;
     right: 0;
+
     width: calc(100% - 270px);
     height: 100%;
     z-index: 1;
@@ -150,9 +151,8 @@
     margin-top: 30px;
     width: 100%;
     background-color: white;
-}
-
-.modal-action button{
+    
+}.modal-action button{
     padding: 10px 20px;  
     border-radius: 7px;  
     font-size: 15px;
@@ -172,7 +172,6 @@
         font-size: 30px;    
         padding: 12px;
         border-radius: 10px;
-        margin-bottom: 13px;
 
     }.modal-verification #exclamation{
         color: var(--danger);
@@ -187,6 +186,25 @@
         color: var(--primary-color);
         background-color: #f3eaff;
     }
+    .modal-verification .form-group{
+        display: flex;
+        flex-direction: column;
+    }
+    .modal-verification .form-group .terminate_message{
+        margin-top: 15px;
+        text-align: start;
+        font-weight: 500;
+    }.modal-verification .form-group textarea{
+        padding: 12px;
+        font-size: 15px;
+        border-radius: 7px;
+        border: solid #D9D9D9 2px;
+        resize:none;
+        
+        width: 550px;
+        min-height: 150px;
+        max-height: 200px;
+    }
 
 .verification-message{
     display: flex;
@@ -195,12 +213,13 @@
     align-items: center;
 }
     .verification-message h2{
+        margin-top: 13px;
         font-size: 25px;
         font-weight: 700;
     }.verification-message p{
         font-size: 17px;
         color: var(--lighted-text-color);
-        width: 95%;
+        width: 100%;
     }
 
 .verification-action{
@@ -209,10 +228,9 @@
     align-items: center;
     gap: 15px;
 
-    margin-top: 30px;
+    margin-top: 25px;
     background-color: white;
-}
-.verification-action button{
+} .verification-action button{
     padding: 10px 20px;
     border-radius: 7px;
     font-size: 15px;
@@ -221,63 +239,133 @@
     width: 100%;
 }
 
+.submit{
+    background-color: var(--primary-color);
+    border: solid 2px var(--primary-color);
 
-
-.danger{
+    color: white;
+} .danger{
     background-color: var(--danger);
-    border: solid var(--danger);
+    border: solid 2px var(--danger);
 
     color: white;
-}
-
-.success{
+} .success{
     background-color: var(--success);
-    border: solid var(--success);
+    border: solid 2px var(--success);
 
     color: white;
-}
-
-.normal, .close{
+} .normal, .close{
     background-color: transparent;
     border: solid 2px var(--lighted-text-color);
     color: var(--text-color);
 }
 
-.submit{
-    background-color: var(--primary-color);
-    border: solid var(--primary-color);
 
-    color: white;
-}
 
 .verification-content{
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 20px;
     margin-top: 20px;
-}.verification-content h3{
+
+} .verification-content h3{
     width: 100%;
     margin-bottom: 20px;
     text-align: start;
     color: var(--text-color);
+
 }.verification-content .row{
     width: 100%;
     display:flex;
     gap: 40px;
-}
-.verification-content .form-group{
+
+} .verification-content .form-group{
     display: flex;
     flex-direction: column;
     width: 100%;
+
 }.verification-content .form-group label{
     font-weight: 500;
     margin-bottom: 10px;
     text-align: start;
-}.verification-content .form-group input,
+
+} .verification-content .form-group input,
 .verification-content .form-group select{
     padding: 12px;
     font-size: 15px;
     margin-bottom: 15px;
     border-radius: 7px;
     border: solid #D9D9D9 2px;
+}
+
+.update-content{
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+
+}.update-content .form-group{
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+}.update-content .form-group label{
+    font-weight: 500;
+    margin-bottom: 10px;
+}.update-content .form-group input,
+.update-content .form-group select{
+    padding: 12px;
+    font-size: 15px;
+    margin-bottom: 15px;
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+}.update-content .form-group textarea{
+    padding: 12px;
+    font-size: 15px;
+    margin-bottom: 15px;
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+    resize: vertical;
+    
+    width: 100%;
+    min-height: 150px;
+    max-height: 200px;
+}
+
+.update-content .header{
+    display: flex;
+    align-items: center;
+}.update-content .header #info{
+    color: var(--lighted-text-color);
+    font-size: 18px;
+
+}
+
+.update-content .row{
+    display: flex;
+    gap: 20px;
+}.update-content .row .form-group{
+    width: 100%;
+}
+
+.update-content .repair-information{
+    display: flex;
+    flex-direction: column;
+}
+.update-action{
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.update-action button{
+    padding: 10px 20px;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.reminder{
+    border-top: 2px solid #D9D9D9;
+    color: var(--lighted-text-color);
+    padding: 10px 0 0;
 }

@@ -117,3 +117,15 @@ header {
     margin-right: 10px;
     font-size: 20px;
 }
+
+ .empty-message{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #aaaaaa;
+} .empty-message i{
+    font-size: 40px;
+    margin-bottom: 15px;
+}

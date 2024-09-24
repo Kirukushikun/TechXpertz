@@ -10,8 +10,8 @@
             <li><a href="/technician/notifications"><i class="fa-solid fa-bell"></i>Notifications</a></li>
             <li><a href="/technician/dashboard"><i class="fa-solid fa-table-columns"></i>Dashboard</a></li>
             <li><a href="/technician/appointment"><i class="fa-solid fa-calendar-day"></i>Appointment</a></li>
-            <!-- <li><a href="/technician/repairstatus"><i class="fas fa-tools"></i>Repair Status</a></li>
-            <li><a href="/technician/messages"><i class="fa-solid fa-message"></i>Messages</a></li>
+            <li><a href="/technician/repairstatus"><i class="fas fa-tools"></i>Repair Status</a></li>
+            <!-- <li><a href="/technician/messages"><i class="fa-solid fa-message"></i>Messages</a></li>
             <li><a href="/technician/shopreviews"><i class="fas fa-star"></i>Shop Reviews</a></li>
             <li><a href="/technician/profile"><i class="fas fa-user-cog"></i>Manage Profile</a></li>
             <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li> -->
