@@ -58,34 +58,39 @@
                 </div>
             </div>
 
-            <div class="individual-reviews">
-
-                @foreach($reviewMessages as $reviewMessage)
-                    <div class="review">
-                        <div class="review-header">
-                            <span class="review-date">{{$reviewMessage->created_at}}</span>
-                            <div class="stars">
-                                @for ($i = 1; $i <= $reviewMessage->rating; $i++ )
-                                    <span class="star"><i class="fa-solid fa-star"></i></span>
-                                @endfor
-                            </div>
-                        </div>
-        
-                        <div class="review-body">
-                            <div class="reviewer-info">
-                                <span class="reviewer-avatar">AK</span>
-                                <div class="reviewer-details">
-                                    <span class="reviewer-name">Customers Name</span>
+            @if(count($reviewMessages) === 0)
+                <div class="empty-message">
+                    <i class="fa-solid fa-user-xmark"></i>
+                    <p>No reviews at the moment.</p>                            
+                </div>
+            @else
+                <div class="individual-reviews">
+                    @foreach($reviewMessages as $reviewMessage)
+                        <div class="review">
+                            <div class="review-header">
+                                <span class="review-date">{{$reviewMessage->formatted_date}}</span>
+                                <div class="stars">
+                                    @for ($i = 1; $i <= $reviewMessage->rating; $i++ )
+                                        <span class="star"><i class="fa-solid fa-star"></i></span>
+                                    @endfor
                                 </div>
                             </div>
-                            <p class="review-text">
-                                {{$reviewMessage->review_comment}}
-                            </p>
+            
+                            <div class="review-body">
+                                <div class="reviewer-info">
+                                    <span class="reviewer-avatar">AK</span>
+                                    <div class="reviewer-details">
+                                        <span class="reviewer-name">{{$reviewMessage->customer_fullname}}</span>
+                                    </div>
+                                </div>
+                                <p class="review-text">
+                                    {{$reviewMessage->review_comment}}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
-
+                    @endforeach
+                </div>
+            @endif
 
             <!-- <div class="pagination">
                 <a href="#" class="active">1</a>
@@ -93,7 +98,7 @@
                 <a href="#">3</i></a>
                 <a href="#">...</a>
             </div> -->
-
+    
         </main>
 
     </div>

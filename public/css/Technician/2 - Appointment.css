@@ -25,12 +25,18 @@ header {
 .tabs {
     list-style: none;
     padding: 0;
+    margin: 0; 
+
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     border-bottom: 2px solid #eeeeee;
-    margin: 0;
+}.tabs .tab-navigation{
+    display: flex;
 }
 
-.tabs i{
+.tabs .tab-navigation i{
     color: var(--primary-color);
     margin-left: 10px;
 }
@@ -64,6 +70,49 @@ header {
 
 .tab-content-item.active {
     display: block;
+}
+
+.tabs .tab-filters{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}.tab-filters li{
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tab-filters i{
+    color: var(--lighted-text-color);
+}
+.tab-filters li button{
+    padding: 5px 15px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+.tab-filters li #search{
+    padding-left: 15px;
+}.tab-filters li input{
+    padding: 5px 8px;
+    background-color: transparent;
+    border: none;
+}.tab-filters li input:focus{
+    outline-width: 0;
+}
+.tab-filters a{
+    display: flex;
+    align-items: center;
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+    text-decoration: none;
+    margin-right: 10px;
+}
+.tab-filters #add-appointment{
+    padding: 7px 10px;
+    font-size: 15px;
 }
 
 /* TABLE STYLING */
@@ -118,13 +167,14 @@ header {
     font-size: 20px;
 }
 
- .empty-message{
+.empty-message{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
     color: #aaaaaa;
+    user-select: none;
 } .empty-message i{
     font-size: 40px;
     margin-bottom: 15px;

@@ -54,4 +54,9 @@ class Customer extends Authenticatable
     {
         return $this->hasMany(Customer_Notifications::class);
     }
+
+    public function customerRepairStatus()
+    {
+        return $this->hasMany(Customer_RepairStatus::class);
+    }
 }

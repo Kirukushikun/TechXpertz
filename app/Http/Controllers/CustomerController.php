@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Customer_Notifications;
+use App\Models\Customer_RepairStatus;
 
 use App\Models\Technician;
 use App\Models\RepairShop_Credentials;
@@ -13,6 +14,9 @@ use App\Models\RepairShop_Reviews;
 use App\Models\RepairShop_Schedules;
 use App\Models\RepairShop_Services;
 use App\Models\RepairShop_Socials;
+
+use App\Models\RepairShop_RepairStatus;
+use App\Models\RepairShop_Appointments;
 
 use Carbon\Carbon;
 
@@ -137,6 +141,45 @@ class CustomerController extends Controller
         return redirect()->route('viewshop', ['id' => $id]);
     }
 
+    public function viewrepairlist(){
+        if(Auth::check()){
+            // Fetch repair and appointment details for the logged-in customer
+            $repairDetails = RepairShop_RepairStatus::where('customer_id', Auth::user()->id)
+                                ->with(['technician.repairshopCredentials']) // Eager load technician and repair shop details
+                                ->with(['technician.repairshopBadges'])
+                                ->get();
+            
+            $appointmentDetails = RepairShop_Appointments::where('customer_id', Auth::user()->id)->get();
+    
+            return view('Customer.7 - Repairlist', [
+                'repairDetails' => $repairDetails,
+                'appointmentDetails' => $appointmentDetails
+            ]);
+        }
+        return redirect()->route('customer.loginCustomer');
+    }
+
+    public function viewrepairstatus($id){
+        $repairstatusData = RepairShop_RepairStatus::find($id);
+
+        if($repairstatusData){
+            $repairstatusDetails = Customer_RepairStatus::where('repair_id', $id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            foreach ($repairstatusDetails as $repairstatusDetail) {
+                $repairstatusDetail->formatted_date = Carbon::parse($repairstatusDetail->created_at)->format('l, d M Y');
+                $repairstatusDetail->formatted_time = Carbon::parse($repairstatusDetail->created_at)->format('g:i A');
+            }
+
+            return view('Customer.5 - RepairStatus', [
+                'repairstatusData' => $repairstatusData,
+                'repairstatusDetails' => $repairstatusDetails,
+            ]);            
+        }
+        return back()->with('error', 'The Repair ID you entered does not exist. Please double-check and try again.');
+    }
+
     public function myaccount(){
 
         if(Auth::check()){
@@ -149,8 +192,6 @@ class CustomerController extends Controller
 
     }
     
-
-
     // PRIVATE FUNCTIONS ---------
 
     private function getRepairShopSummary($category = null){

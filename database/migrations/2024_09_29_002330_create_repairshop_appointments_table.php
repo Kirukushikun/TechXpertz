@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('repairshop_appointments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('technician_id');
-            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('customer_id')->nullable();
 
             $table->enum('status', ['confirmed', 'completed', 'requested', 'cancelled', 'rejected'])->default('requested');
 
@@ -34,15 +34,15 @@ return new class extends Migration
             $table->string('prepared_parts')->nullable();
             $table->string('additional_notes')->nullable();
 
-            $table->date('appointment_date');
-            $table->time('appointment_time');
+            $table->date('appointment_date')->nullable();
+            $table->time('appointment_time')->nullable();
             $table->string('appointment_urgency')->nullable();
 
             $table->timestamps();
 
             // Foreign keys
             $table->foreign('technician_id')->references('id')->on('technicians')->onDelete('cascade');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('set null');
         });
     }
 

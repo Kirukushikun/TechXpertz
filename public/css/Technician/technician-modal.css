@@ -30,7 +30,7 @@
     justify-content:center;
     padding:40px;
 }
-.modal-content form{
+.modal-content form, .modal-content .form{
     border-radius: 10px;
     background-color: white;
     width: 100%;
@@ -179,9 +179,6 @@
     }.modal-verification #check{
         color: var(--success);
         background-color: #cffdda;
-    }.modal-verification #exclamation{
-        color: var(--danger);
-        background-color: #ffdcd8;
     }.modal-verification #repair{
         color: var(--primary-color);
         background-color: #f3eaff;

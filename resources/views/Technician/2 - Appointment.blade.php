@@ -30,10 +30,19 @@
 
             <div class="appointment-navigation">
                 <ul class="tabs">
-                    <li class="tab-link active" data-tab="upcoming">Confirmed <i class="fa-solid fa-check"></i></li>
-                    <li class="tab-link" data-tab="request">Requests <i class="fa-solid fa-spinner"></i></li>
-                    <!-- <li class="tab-link" data-tab="completed">Completed <i class="fa-solid fa-check-double"></i></li> -->
-                    <li class="tab-link" data-tab="rejected">Cancelled/Rejected <i class="fa-solid fa-xmark"></i></li>
+                    <div class="tab-navigation">
+                        <li class="tab-link active" data-tab="upcoming">Confirmed <i class="fa-solid fa-check"></i></li>
+                        <li class="tab-link" data-tab="request">Requests <i class="fa-solid fa-spinner"></i></li>
+                        <!-- <li class="tab-link" data-tab="completed">Completed <i class="fa-solid fa-check-double"></i></li> -->
+                        <li class="tab-link" data-tab="rejected">Cancelled/Rejected <i class="fa-solid fa-xmark"></i></li>                        
+                    </div>
+
+                    <div class="tab-filters">
+                        <li><button><i class="fa-solid fa-filter"></i> Filter</button></li>
+                        <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
+
+                        <a href=""><i class="fa-solid fa-plus" id="add-appointment"></i></a>
+                    </div>
                 </ul>
             </div>
 

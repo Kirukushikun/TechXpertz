@@ -15,14 +15,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('technician_id');
             $table->foreign('technician_id')->references('id')->on('technicians')->onDelete('cascade');
-
-            $table->unsignedBigInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
-
+            
+            // Make customer_id nullable for walk-in repairs
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('set null');
+            
             $table->string('customer_fullname');           
 
-            $table->unsignedBigInteger('appointment_id');
-            $table->foreign('appointment_id')->references('id')->on('repairshop_appointments')->onDelete('cascade');
+            // Make appointment_id nullable for manual repairs
+            $table->unsignedBigInteger('appointment_id')->nullable();
 
             $table->enum('status', ['pending', 'completed'])->default('pending');
 

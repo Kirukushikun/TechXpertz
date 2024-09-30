@@ -9,21 +9,16 @@
     <link rel="stylesheet" href="{{asset('css/Technician/technician-sidebar.css')}}">
 
     <link rel="stylesheet" href="{{asset('css/Technician/6 - ManageProfile.css')}}">
+    <link rel="stylesheet" href="{{asset('css/Technician/technician-modal.css')}}">
 </head>
 <body>
     <div class="dashboard">
 
-        @yield('sidebar')
+    <div class="modal" id="modal">
 
-        <!-- Modal Structure -->
-        <div class="modal">
-            <div class="modal-content promt">
-                <span class="close-btn">&times;</span>
-                <p>Are you sure you want to delete this item?</p>
-                <button id="confirm-delete">Yes, Delete</button>
-                <button id="cancel-delete" onclick="popDOWN()">Cancel</button>
-            </div>
-        </div>
+    </div>
+
+        @yield('sidebar')
 
         <main class="main-content">
 
@@ -31,7 +26,7 @@
                 <h1>Manage Profile</h1>
             </header>
 
-            <form action="{{route('technician.updateProfile')}}" method="POST">
+            <form class="manage-profile" action="{{route('technician.updateProfile')}}" method="POST">
                 @csrf
                 <section class="form-section fs-1">
                     <h3><span>1</span>Basic Information</h3>
@@ -210,14 +205,8 @@
     
     <script src="{{asset('js/Technician/6 - ManageProfile.js')}}"></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
+    <script src="{{asset('js/Technician/technician-modal.js')}}"></script>
     <script>
-        function popUP(){
-            document.querySelector(".modal").classList.add("active")
-        }
-        function popDOWN(){
-            document.querySelector(".modal").classList.remove("active")
-        }
-
         const formDetails = document.querySelectorAll('.form-details');
 
         formDetails.forEach(detail => {
@@ -296,6 +285,49 @@
         if(toggle.checked){
             console.log('toggled');
         }
+        
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const saveprofileBtn = document.querySelector('button.save-btn');
+        
+            saveprofileBtn.addEventListener('click', function (e){
+                e.preventDefault();
+                verifySaveChanges();
+            });
+
+            function verifySaveChanges(){
+                const modal = document.getElementById('modal');
+
+                modal.innerHTML = `
+                <div class="form">
+                    <div class="modal-verification">
+                        <i class="fa-solid fa-circle-check" id="repair"></i>
+                        <div class="verification-message">
+                            <h2>Confirm Save Changes</h2>
+                            <p>Are you sure you want to save these changes?</p>
+                        </div>
+                        <div class="verification-action">
+                            <button type="submit" class="submit" id="save-changes">Save Changes</button>
+                            <button type="button" class="normal"><b>Dismiss</b></button>
+                        </div>
+                    </div>                
+                </div>
+                `;
+
+                document.getElementById('save-changes').addEventListener('click', function(){
+                    document.querySelector('form.manage-profile').submit();
+                });
+
+                // Show the modal
+                modal.classList.add("active");
+
+                // Close modal when 'X' is clicked
+                document.querySelector('.normal').onclick = function () {
+                    modal.classList.remove("active");
+                };
+            }
+        });
     </script>
 </body>
 </html>

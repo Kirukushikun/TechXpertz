@@ -187,17 +187,17 @@ class TechnicianController extends Controller
                 'device_type' => $appointmentDetails->device_type,
                 'device_brand' => $appointmentDetails->device_brand,
                 'device_model' => $appointmentDetails->device_model,
-                'device_serial' => $appointmentDetails->device_serial,
+                'device_serial' => $appointmentDetails->device_serial ?? '',
 
-                'issue_description' => $appointmentDetails->issue_descriptions,
-                'error_message' => $appointmentDetails->error_message,
-                'repair_attempts' => $appointmentDetails->repair_attempts,
-                'recent_events' => $appointmentDetails->recent_events,
-                'prepared_parts' => $appointmentDetails->prepared_parts,
+                'issue_description' => $appointmentDetails->issue_descriptions ?? '',
+                'error_message' => $appointmentDetails->error_message ?? '',
+                'repair_attempts' => $appointmentDetails->repair_attempts ?? '',
+                'recent_events' => $appointmentDetails->recent_events ?? '',
+                'prepared_parts' => $appointmentDetails->prepared_parts ?? '',
 
                 'formatted_date' => $appointmentDetails->formatted_date,
                 'formatted_time' => $appointmentDetails->formatted_time,
-                'appointment_urgency' => $appointmentDetails->appointment_urgency,
+                'appointment_urgency' => $appointmentDetails->appointment_urgency ?? '',
             ]);
         }
 
@@ -289,11 +289,13 @@ class TechnicianController extends Controller
                 'repairstatus_message' => $repairDetails->repairstatus_message,
             ]);
         }   
+
         public function repairstatusDelete($id){
             $repairstatusDelete = RepairShop_Appointments::find($id);
             $repairstatusDelete->delete();
             return redirect()->route('technician.repairstatus');
         }
+
         public function repairstatusCreate(Request $request, $appointmentID, $customerID){
             $technician = Auth::guard('technician')->user();
             $appointment = RepairShop_Appointments::find($appointmentID);
@@ -319,6 +321,7 @@ class TechnicianController extends Controller
     
             return back()->with('success', 'Pending repair added successfully');
         }
+
         public function repairstatusUpdate(Request $request, $repairID, $customerID, $action){
             $technician = Auth::guard('technician')->user();
             $repairstatus = Repairshop_RepairStatus::find($repairID);
@@ -352,6 +355,68 @@ class TechnicianController extends Controller
             return back()->with('success', 'Repair Status Updated');
         }
 
+        public function repairstatusCreateWalkIn(Request $request){
+            $technician = Auth::guard('technician')->user();
+
+            $validatedData = $request->validate([
+                'fullname' => 'required|string|max:255',
+                'email' => 'required|string|max:255',
+                'contact' => 'required|string|max:255',
+
+                'device-type' => 'string|max:255',
+                'device-brand' => 'string|max:255',
+                'device-model' => 'string|max:255',
+                'serial-number' => 'nullable|string|max:255',
+
+                'revenue' => 'nullable|integer',
+                'expenses' => 'nullable|integer',
+                'payment-status' => 'string|max:255',
+
+                'issue-description' => 'nullable|string|max:255',
+                'error-message' => 'nullable|string|max:255',
+                'previous-steps' => 'nullable|string|max:255',
+                'recent-events' => 'nullable|string|max:255',
+                'prepared-parts' => 'nullable|string|max:255',
+            ]);
+
+            $appointment = Repairshop_Appointments::create([
+                'technician_id' => $technician->id,
+                'status' => 'completed',
+
+                'fullname' => $validatedData['fullname'],
+                'email' => $validatedData['email'],
+                'contact_no' => $validatedData['contact'],
+
+                'device_type' => $validatedData['device-type'],
+                'device_brand' => $validatedData['device-brand'],
+                'device_model' => $validatedData['device-model'],
+                'device_serial' => $validatedData['serial-number'],
+
+                'issue_descriptions' => $validatedData['issue-description'],
+                'error_message' => $validatedData['error-message'],
+                'repair_attempts' => $validatedData['previous-steps'],
+                'recent_events' => $validatedData['recent-events'],
+                'prepared_parts' => $validatedData['prepared-parts'],
+
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            Repairshop_RepairStatus::create([
+                'technician_id' => $technician->id,
+                'customer_fullname' => $validatedData['fullname'],
+                'appointment_id' => $appointment->id,
+                'status' => 'pending',
+
+                'paid_status' => $validatedData['payment-status'],
+                'revenue' => $validatedData['revenue'],
+                'expenses' => $validatedData['expenses'],
+
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            return back()->with('success', 'Repair added successfully');
+        }
+
     public function messages(){
         return view('Technician.4 - Messages');
     }
@@ -368,6 +433,12 @@ class TechnicianController extends Controller
 
         // Exporting ratings calculation
         $reviewData = $this->reviewSystem($technician->id);
+
+        // Format the date for each appointments
+        foreach ($reviewMessages as $reviews) {
+            $reviews->formatted_date = Carbon::parse($reviews->created_at)->format('M d, Y');
+            $reviews->formatted_time = Carbon::parse($reviews->created_at)->format('g:i A');
+        }
 
         return view('Technician.5 - ShopReviews', [
             'reviewData' => $reviewData,
@@ -434,8 +505,153 @@ class TechnicianController extends Controller
             'technicianProfile' => $technicianProfile,
         ]);
     }
+        public function updateProfile(Request $request){
+            $technician = Auth::guard('technician')->user();
+            $technicianInfo = Technician::find($technician->id);
 
-    // REVIEW SYSTEM FUNCTIONS ---------
+            //Shop Mastery
+            $repairshopMastery = RepairShop_Mastery::firstOrNew(['technician_id' => $technician->id]);
+
+            // Set the main mastery
+            $repairshopMastery->main_mastery = 'Smartphone'; //Just default value for now
+
+            // List of specializations
+            $specializations = ['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One'];
+
+            // Loop through each specialization and set the boolean values
+            foreach ($specializations as $specialization) {
+                // If the checkbox is present in the request, set it to true, otherwise false
+                $repairshopMastery->{$specialization} = $request->has($specialization);
+            }
+
+            // Save the record to the database
+            $repairshopMastery->save();
+
+            //--------------------------------------------------------------------------
+
+            //RepairShop Credentials
+            $validatedCredentials = $request->validate([
+                'shop_name' => 'required|string|max:255',
+                'shop_contact' => 'required|string|max:255',
+                'shop_email' => 'required|string|max:255',
+
+                'shop_province' => 'required|string|max:255',
+                'shop_city' => 'required|string|max:255',
+                'shop_barangay' => 'required|string|max:255',
+                'shop_address' => 'required|string|max:255',
+            ]);
+            $technician->repairshopCredentials()->update([
+                'shop_name' => $validatedCredentials['shop_name'],
+                'shop_contact' => $validatedCredentials['shop_contact'],
+                'shop_email' => $validatedCredentials['shop_email'],
+
+                'shop_province' => $validatedCredentials['shop_province'],
+                'shop_city' => $validatedCredentials['shop_city'],
+                'shop_barangay' => $validatedCredentials['shop_barangay'],
+                'shop_address' => $validatedCredentials['shop_address'],
+            ]);
+
+            //Shop Badges // Update or create the repairshopBadges record for the technician
+            $validatedBadges = $request->validate([
+                'badge_1' => 'required|string|max:255',
+                'badge_2' => 'required|string|max:255',
+                'badge_3' => 'required|string|max:255',
+                'badge_4' => 'required|string|max:255',
+            ]);
+            $technician->repairshopBadges()->updateOrCreate(
+                ['technician_id' => $technician->id], // The condition to match (ensure only one record per technician)
+                $validatedBadges // The fields to update
+            );
+
+            //--------------------------------------------------------------------------
+
+            // Validate the request to ensure 'service' is an array of strings
+            $request->validate([
+                'service' => 'array',
+                'service.*' => 'string|max:255',
+            ]);
+
+            // Get all existing services for the technician
+            $existingServices = RepairShop_Services::where('technician_id', $technician->id)->get();
+            
+            // Iterate over the provided services
+            foreach ($request->input('service') as $index => $service) {
+                if (!empty($service)) {
+                    // Check if the service already exists (based on ID or any other unique attribute)
+                    $existingService = $existingServices->get($index);
+
+                    // Update the existing service or create a new one
+                    RepairShop_Services::updateOrCreate(
+                        [
+                            'id' => $existingService->id ?? null, // Use the existing ID if available
+                            'technician_id' => $technician->id,
+                        ],
+                        [
+                            'service' => $service,
+                        ]
+                    );
+                }
+            }
+
+            // If there are fewer services in the request than in the database, remove the extra ones
+            if ($existingServices->count() > count($request->input('service'))) {
+                $excessServices = $existingServices->skip(count($request->input('service')));
+                foreach ($excessServices as $excessService) {
+                    $excessService->delete();
+                }
+            }
+
+            //--------------------------------------------------------------------------
+
+            // Define the days of the week in numeric form
+            $daysOfWeek = [
+                'monday' => 1,
+                'tuesday' => 2,
+                'wednesday' => 3,
+                'thursday' => 4,
+                'friday' => 5,
+                'saturday' => 6,
+                'sunday' => 7,
+            ];
+
+            // Loop through each day and save or update the schedule
+            foreach ($daysOfWeek as $day => $dayNumber) {
+                // Get the status (open or closed) for the day
+                $status = $request->input("{$day}-status") === 'on' ? 'open' : 'closed';
+
+                // Get the opening and closing times if the day is open
+                $openingTime = $status === 'open' ? $request->input("{$day}-open-time") : null;
+                $closingTime = $status === 'open' ? $request->input("{$day}-close-time") : null;
+
+                // Update or create the schedule for this day
+                RepairShop_Schedules::updateOrCreate(
+                    [
+                        'technician_id' => $technician->id,
+                        'day' => $dayNumber,
+                    ],
+                    [
+                        'status' => $status,
+                        'opening_time' => $openingTime,
+                        'closing_time' => $closingTime,
+                    ]
+                );
+            }
+
+            //--------------------------------------------------------------------------
+
+            $validatedAbout = $request->validate([
+                'header' => 'nullable|string|max:255',
+                'description' => 'nullable|string|max:255',
+            ]);
+
+            $technician->repairshopProfile()->updateOrCreate([
+                'header' => $validatedAbout['header'],
+                'description' => $validatedAbout['description'],            
+            ]);
+
+            return redirect()->route('technician.profile')->with('success', 'Changes saved successfully');
+        }
+
     private function reviewSystem($id){
         $ratings = RepairShop_Reviews::where('technician_id', $id)->where('approved', 1)->pluck('rating')->toArray();
 
@@ -469,154 +685,6 @@ class TechnicianController extends Controller
             'ratingPercentages' => $ratingPercentages,
         ];
 
-    }
-
-    // POSTS AND UPDATE FUNCTIONS ---------------------------------------------------------------------------------------------------
-    public function updateProfile(Request $request){
-        $technician = Auth::guard('technician')->user();
-        $technicianInfo = Technician::find($technician->id);
-
-        //Shop Mastery
-        $repairshopMastery = RepairShop_Mastery::firstOrNew(['technician_id' => $technician->id]);
-
-        // Set the main mastery
-        $repairshopMastery->main_mastery = 'Smartphone'; //Just default value for now
-
-        // List of specializations
-        $specializations = ['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One'];
-
-        // Loop through each specialization and set the boolean values
-        foreach ($specializations as $specialization) {
-            // If the checkbox is present in the request, set it to true, otherwise false
-            $repairshopMastery->{$specialization} = $request->has($specialization);
-        }
-
-        // Save the record to the database
-        $repairshopMastery->save();
-
-        //--------------------------------------------------------------------------
-
-        //RepairShop Credentials
-        $validatedCredentials = $request->validate([
-            'shop_name' => 'required|string|max:255',
-            'shop_contact' => 'required|string|max:255',
-            'shop_email' => 'required|string|max:255',
-
-            'shop_province' => 'required|string|max:255',
-            'shop_city' => 'required|string|max:255',
-            'shop_barangay' => 'required|string|max:255',
-            'shop_address' => 'required|string|max:255',
-        ]);
-        $technician->repairshopCredentials()->update([
-            'shop_name' => $validatedCredentials['shop_name'],
-            'shop_contact' => $validatedCredentials['shop_contact'],
-            'shop_email' => $validatedCredentials['shop_email'],
-
-            'shop_province' => $validatedCredentials['shop_province'],
-            'shop_city' => $validatedCredentials['shop_city'],
-            'shop_barangay' => $validatedCredentials['shop_barangay'],
-            'shop_address' => $validatedCredentials['shop_address'],
-        ]);
-
-        //Shop Badges // Update or create the repairshopBadges record for the technician
-        $validatedBadges = $request->validate([
-            'badge_1' => 'required|string|max:255',
-            'badge_2' => 'required|string|max:255',
-            'badge_3' => 'required|string|max:255',
-            'badge_4' => 'required|string|max:255',
-        ]);
-        $technician->repairshopBadges()->updateOrCreate(
-            ['technician_id' => $technician->id], // The condition to match (ensure only one record per technician)
-            $validatedBadges // The fields to update
-        );
-
-        //--------------------------------------------------------------------------
-
-        // Validate the request to ensure 'service' is an array of strings
-        $request->validate([
-            'service' => 'array',
-            'service.*' => 'string|max:255',
-        ]);
-
-        // Get all existing services for the technician
-        $existingServices = RepairShop_Services::where('technician_id', $technician->id)->get();
-        
-        // Iterate over the provided services
-        foreach ($request->input('service') as $index => $service) {
-            if (!empty($service)) {
-                // Check if the service already exists (based on ID or any other unique attribute)
-                $existingService = $existingServices->get($index);
-
-                // Update the existing service or create a new one
-                RepairShop_Services::updateOrCreate(
-                    [
-                        'id' => $existingService->id ?? null, // Use the existing ID if available
-                        'technician_id' => $technician->id,
-                    ],
-                    [
-                        'service' => $service,
-                    ]
-                );
-            }
-        }
-
-        // If there are fewer services in the request than in the database, remove the extra ones
-        if ($existingServices->count() > count($request->input('service'))) {
-            $excessServices = $existingServices->skip(count($request->input('service')));
-            foreach ($excessServices as $excessService) {
-                $excessService->delete();
-            }
-        }
-
-        //--------------------------------------------------------------------------
-
-        // Define the days of the week in numeric form
-        $daysOfWeek = [
-            'monday' => 1,
-            'tuesday' => 2,
-            'wednesday' => 3,
-            'thursday' => 4,
-            'friday' => 5,
-            'saturday' => 6,
-            'sunday' => 7,
-        ];
-
-        // Loop through each day and save or update the schedule
-        foreach ($daysOfWeek as $day => $dayNumber) {
-            // Get the status (open or closed) for the day
-            $status = $request->input("{$day}-status") === 'on' ? 'open' : 'closed';
-
-            // Get the opening and closing times if the day is open
-            $openingTime = $status === 'open' ? $request->input("{$day}-open-time") : null;
-            $closingTime = $status === 'open' ? $request->input("{$day}-close-time") : null;
-
-            // Update or create the schedule for this day
-            RepairShop_Schedules::updateOrCreate(
-                [
-                    'technician_id' => $technician->id,
-                    'day' => $dayNumber,
-                ],
-                [
-                    'status' => $status,
-                    'opening_time' => $openingTime,
-                    'closing_time' => $closingTime,
-                ]
-            );
-        }
-
-        //--------------------------------------------------------------------------
-
-        $validatedAbout = $request->validate([
-            'header' => 'nullable|string|max:255',
-            'description' => 'nullable|string|max:255',
-        ]);
-
-        $technician->repairshopProfile()->updateOrCreate([
-            'header' => $validatedAbout['header'],
-            'description' => $validatedAbout['description'],            
-        ]);
-
-        return redirect()->route('technician.profile')->with('success', 'Changes saved successfully');
     }
 
     public function formatMoney($number){

@@ -40,9 +40,9 @@ Route::post('/bookappointment/{id}', [CustomerController::class, 'bookappointmen
 
 Route::get('customer/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
 
-Route::get('/5', function () {
-    return view('Customer.5 - RepairStatus');
-});
+Route::get('/repairlist', [CustomerController::class, 'viewrepairlist'])->name('viewrepairlist');
+
+Route::get('/repairstatus/{id}', [CustomerController::class, 'viewrepairstatus'])->name('viewrepairstatus');
 
 // TECHNICIAN AUTH---------------------------------------------------------------
 
@@ -74,6 +74,7 @@ Route::middleware('technician.auth')->group(function(){
         Route::post('/technician/repairstatus/create/{appointmentID}/{customerID}', [TechnicianController::class, 'repairstatusCreate']);
         Route::get('/technician/repairstatus/details/{repairID}', [TechnicianController::class, 'repairstatusDetails']);
         Route::patch('/technician/repairstatus/update/{repairID}/{customerID}/{action}', [TechnicianController::class, 'repairstatusUpdate']);
+        Route::post('/technician/repairstatus/create/walk-ins', [TechnicianController::class, 'repairstatusCreateWalkIn']);
 
     Route::get('/technician/messages', [TechnicianController::class, 'messages'])->name('technician.messages');
 
