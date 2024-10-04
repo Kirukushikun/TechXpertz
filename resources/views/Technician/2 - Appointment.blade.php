@@ -107,7 +107,7 @@
                         </thead>
                         <tbody>
                             @foreach($requestedAppointments as $request)
-                            <tr>
+                            <tr>    
                                 <td>{{$request['fullname']}}</td>
                                 <td>{{$request['email']}}</td>
                                 <td>{{$request['contact']}}</td>

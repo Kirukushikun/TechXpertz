@@ -17,6 +17,12 @@
     <body>
 
         @yield('header')
+
+        @if(session()->has('error'))
+            <p class="error-message">{{session('error')}}</p>
+        @elseif(session()->has('success'))
+            <p class="success-message">{{session('success')}}</p>
+        @endif
         
         <form class="appointment-form" action="{{ route('bookappointment', ['id' => $technicianID]) }}" method="POST">
             @csrf
@@ -24,21 +30,21 @@
                 <div class="form-section">
                     <h2>Customer Details</h2>
                     <div class="form-group">
-                        <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" name="first-name" value="{{ $customerDetails->firstname ?? '' }}">
+                        <label for="firstname">First Name</label>
+                        <input type="text" id="firstname" name="firstname" value="{{ $customerDetails->firstname ?? '' }}" required> 
                     </div>
                     <div class="form-group">
-                        <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="last-name" value="{{ $customerDetails->lastname ?? '' }}">
+                        <label for="lastname">Last Name</label>
+                        <input type="text" id="lastname" name="lastname" value="{{ $customerDetails->lastname ?? '' }}" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" value="{{ $customerDetails->email ?? '' }}">
+                        <input type="email" id="email" name="email" value="{{ $customerDetails->email ?? '' }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Mobile Phone Number</label>
+                        <label for="contact_no">Mobile Phone Number</label>
                         <!-- value="{{ $customerDetails->contact ?? '' }}" -->
-                        <input type="tel" id="phone" name="phone" > 
+                        <input type="tel" id="contact_no" name="contact_no" required> 
                     </div>
                 </div>
     
@@ -46,7 +52,7 @@
                     <h2>Device Information</h2>
                     <div class="form-group">
                         <label for="device-type">Device Type</label>
-                        <select id="device-type" name="device-type">
+                        <select id="device_type" name="device_type" required>
                             <option value="laptop">Laptop</option>
                             <option value="desktop">Desktop</option>
                             <option value="tablet">Tablet</option>
@@ -54,56 +60,56 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="brand">Brand</label>
-                        <input type="text" id="brand" name="brand">
+                        <label for="device_brand">Brand</label>
+                        <input type="text" id="device_brand" name="device_brand" required>
                     </div>
                     <div class="form-group">
-                        <label for="device-model">Device Model</label>
-                        <input type="text" id="device-model" name="device-model">
+                        <label for="device_model">Device Model</label>
+                        <input type="text" id="device_model" name="device_model" required>
                     </div>
                     <div class="form-group">
-                        <label for="serial-number">Serial Number (if applicable)</label>
-                        <input type="text" id="serial-number" name="serial-number">
+                        <label for="device_serial">Serial Number (if applicable)</label>
+                        <input type="text" id="device_serial" name="device_serial" required>
                     </div>
                 </div>
     
                 <div class="form-section excluded">
                     <h2>Device Issue</h2>
                     <div class="form-group-excluded">
-                        <label for="issue-description">Description of Issue</label>
-                        <textarea id="issue-description" name="issue-description" placeholder="Please provide a detailed description of the issue you are experiencing with your device."></textarea>
+                        <label for="issue_descriptions">Description of Issue</label>
+                        <textarea id="issue_descriptions" name="issue_descriptions" placeholder="Please provide a detailed description of the issue you are experiencing with your device."></textarea>
                     </div>
                     <div class="form-group-excluded">
-                        <label for="error-message">Error Messages <span>(if applicable)</span></label>
-                        <textarea id="error-message" name="error-message" placeholder="If your device is displaying any error messages or codes, please provide them here."></textarea>
+                        <label for="error_messages">Error Messages <span>(if applicable)</span></label>
+                        <textarea id="error_messages" name="error_messages" placeholder="If your device is displaying any error messages or codes, please provide them here."></textarea>
                     </div>
                     <div class="form-group-excluded">
-                        <label for="previous-steps">Previous Repair Attempts <span>(if applicable)</span></label>
-                        <textarea id="previous-steps" name="previous-steps" placeholder="Have you attempted any repairs or troubleshooting on the device before? If yes, please describe here"></textarea>
+                        <label for="repair_attempts">Previous Repair Attempts <span>(if applicable)</span></label>
+                        <textarea id="repair_attempts" name="repair_attempts" placeholder="Have you attempted any repairs or troubleshooting on the device before? If yes, please describe here"></textarea>
                     </div>
                     <div class="form-group-excluded">
-                        <label for="issue-duration">Recent Changes or Events <span>(if applicable)</span></label>
-                        <textarea id="issue-duration" name="issue-duration" placeholder="Have there been any recent changes or events that may have contributed to the issue? Ex. Drops, spills and etc. "></textarea>
+                        <label for="recent_events">Recent Changes or Events <span>(if applicable)</span></label>
+                        <textarea id="recent_events" name="recent_events" placeholder="Have there been any recent changes or events that may have contributed to the issue? Ex. Drops, spills and etc. "></textarea>
                     </div>
                     <div class="form-group-excluded">
-                        <label for="additional-info">Parts Prepared for Repair <span>(if applicable)</span></label>
-                        <textarea id="additional-info" name="additional-info" placeholder="Are there any specific parts or components that you have already prepared for the repair?"></textarea>
+                        <label for="prepared_parts">Parts Prepared for Repair <span>(if applicable)</span></label>
+                        <textarea id="prepared_parts" name="prepared_parts" placeholder="Are there any specific parts or components that you have already prepared for the repair?"></textarea>
                     </div>
                 </div>
     
                 <div class="form-section">
                     <h2>Appointment Schedule</h2>
                     <div class="form-group">
-                        <label for="appointment-date">Select Date</label>
-                        <input type="date" id="appointment-date" name="appointment-date">
+                        <label for="appointment_date">Select Date</label>
+                        <input type="date" id="appointment_date" name="appointment_date" required>
                     </div>
                     <div class="form-group">
-                        <label for="appointment-time">Select Time</label>
-                        <input type="time" id="appointment-time" name="appointment-time">
+                        <label for="appointment_time">Select Time</label>
+                        <input type="time" id="appointment_time" name="appointment_time" required>
                     </div>
                     <div class="form-group">
-                        <label for="urgency-level">Urgency Level</label>
-                        <select id="urgency-level" name="urgency-level">
+                        <label for="appointment_urgency">Urgency Level</label>
+                        <select id="appointment_urgency" name="appointment_urgency">
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>
                             <option value="high">High</option>
@@ -118,7 +124,7 @@
                     <div class="summary contact-summary">
                         <div class="detail-group">
                             <p>Full Name</p>
-                            <h4></h4>
+                            <h4>{{ $customerDetails->firstname ?? '' }} {{ $customerDetails->lastname ?? '' }}</h4>
                         </div>
                         <div class="detail-group">
                             <p>Contact</p>
@@ -126,7 +132,7 @@
                         </div>
                         <div class="detail-group">
                             <p>Email</p>
-                            <h4></h4>
+                            <h4>{{ $customerDetails->email ?? '' }}</h4>
                         </div>
                     </div>
     
@@ -228,44 +234,44 @@
                 }
 
                 // Update Full Name
-                document.getElementById('first-name').addEventListener('input', function () {
-                    const firstName = document.getElementById('first-name').value;
-                    const lastName = document.getElementById('last-name').value;
+                document.getElementById('firstname').addEventListener('input', function () {
+                    const firstName = document.getElementById('firstname').value;
+                    const lastName = document.getElementById('lastname').value;
                     document.querySelector('.contact-summary .detail-group:nth-child(1) h4').textContent = `${firstName} ${lastName}`;
                 });
 
-                document.getElementById('last-name').addEventListener('input', function () {
-                    const firstName = document.getElementById('first-name').value;
-                    const lastName = document.getElementById('last-name').value;
+                document.getElementById('lastname').addEventListener('input', function () {
+                    const firstName = document.getElementById('firstname').value;
+                    const lastName = document.getElementById('lastname').value;
                     document.querySelector('.contact-summary .detail-group:nth-child(1) h4').textContent = `${firstName} ${lastName}`;
                 });
 
                 // Update Contact
-                updateSummary('phone', '.contact-summary .detail-group:nth-child(2)');
+                updateSummary('contact_no', '.contact-summary .detail-group:nth-child(2)');
 
                 // Update Email
                 updateSummary('email', '.contact-summary .detail-group:nth-child(3)');
 
                 // Update Device Type
-                updateSummary('device-type', '.device-summary .detail-group:nth-child(1)');
+                updateSummary('device_type', '.device-summary .detail-group:nth-child(1)');
 
                 // Update Brand
-                updateSummary('brand', '.device-summary .detail-group:nth-child(2)');
+                updateSummary('device_brand', '.device-summary .detail-group:nth-child(2)');
 
                 // Update Model
-                updateSummary('device-model', '.device-summary .detail-group:nth-child(3)');
+                updateSummary('device_model', '.device-summary .detail-group:nth-child(3)');
 
                 // Update Serial Number
-                updateSummary('serial-number', '.device-summary .detail-group:nth-child(4)');
+                updateSummary('device_serial', '.device-summary .detail-group:nth-child(4)');
 
                 // Update Request Date
-                updateSummary('appointment-date', '.schedule-summary .detail-group:nth-child(1)');
+                updateSummary('appointment_date', '.schedule-summary .detail-group:nth-child(1)');
 
                 // Update Request Time
-                updateSummary('appointment-time', '.schedule-summary .detail-group:nth-child(2)');
+                updateSummary('appointment_time', '.schedule-summary .detail-group:nth-child(2)');
 
                 // Update Urgency Level
-                updateSummary('urgency-level', '.schedule-summary .detail-group:nth-child(3)');
+                updateSummary('appointment_urgency', '.schedule-summary .detail-group:nth-child(3)');
 
                 // Handle dynamic checkmarks for device issues
                 const issueTextAreas = document.querySelectorAll('.form-group-excluded textarea');

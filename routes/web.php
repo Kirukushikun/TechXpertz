@@ -7,6 +7,9 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TechnicianAuthController;
 use App\Http\Controllers\TechnicianController;
 
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -54,8 +57,6 @@ Route::get('/technician/signup', [TechnicianAuthController::class, 'signup'])->n
 Route::post('/technician/signup', [TechnicianAuthController::class, 'signupTechnician'])->name('technician.signupTechnician');
 
 // -----------------------------------------------------------------------------
-    
-
 
 Route::middleware('technician.auth')->group(function(){
 
@@ -82,6 +83,27 @@ Route::middleware('technician.auth')->group(function(){
 
     Route::get('/technician/profile', [TechnicianController::class, 'profile'])->name('technician.profile');
     Route::post('/technician/profile', [TechnicianController::class, 'updateProfile'])->name('technician.updateProfile');
+});
+
+
+// ADMIN AUTH---------------------------------------------------------------
+
+Route::get('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
+Route::post('/admin/login', [AdminAuthController::class, 'loginAdmin'])->name('admin.loginAdmin');
+Route::get('/admin/logout', [AdminAuthController::class, 'logoutAdmin'])->name('admin.logoutAdmin');
+
+Route::get('/admin/signup', [AdminAuthController::class, 'signup'])->name('admin.signup');
+Route::post('/admin/signup', [AdminAuthController::class, 'signupAdmin'])->name('admin.signupAdmin');
+
+// -----------------------------------------------------------------------------
+
+Route::middleware('admin.auth')->group(function(){
+
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/usermanagement', [AdminController::class, 'usermanagement'])->name('admin.usermanagement');
+    Route::get('/admin/notificationcenter', [AdminController::class, 'notificationcenter'])->name('admin.notificationcenter');
+    Route::get('/admin/reviewsmanagement', [AdminController::class, 'reviewsmanagement'])->name('admin.reviewsmanagement');
+    
 });
 
 

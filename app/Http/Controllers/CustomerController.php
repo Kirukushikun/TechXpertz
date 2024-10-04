@@ -79,70 +79,104 @@ class CustomerController extends Controller
 
     public function bookappointment(Request $request, $id){
         
-        $validatedData = $request->validate([
-            //Customer Details
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:customers',
-            'contact_no' => 'required|string|max:255',
+        try {
+            $validatedData = $request->validate([
+                //Customer Details
+                'firstname' => 'required|string|max:255',
+                'lastname' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'contact_no' => 'required|string|max:255',
+    
+                //Device Information
+                'device_type' => 'required|string|max:255',
+                'device_brand' => 'required|string|max:255',
+                'device_model' => 'required|string|max:255',
+                'device_serial' => 'nullable|string|max:255',
+    
+                //Device Issue
+                'issue_descriptions' => 'nullable|string|max:255',
+                'error_messages' => 'nullable|string|max:255',
+                'repair_attempts' => 'nullable|string|max:255',
+                'recent_events' => 'nullable|string|max:255',
+                'prepared_parts' => 'nullable|string|max:255',   
+                
+                //Appointment Schedule
+                'appointment_date' => 'required|date',
+                'appointment_time' => 'required|date_format:H:i',
+                'appointment_urgency' => 'nullable|string|max:255',
+            ]);
+    
+            // Concatenate the first name and last name to create the fullname
+            $fullname = $validatedData['firstname'] . " " . $validatedData['lastname'];
+    
+            // Create a new appointment request
+            $repairshopAppointments = RepairShop_Appointments::create([
+                'technician_id' => $id,
+                'customer_id' => Auth::user()->id,
+                'status' => 'Appointment Requested',
+    
+                // Customer Details
+                'fullname' => $fullname,
+                'email' => $validatedData['email'],
+                'contact_no' => $validatedData['contact_no'],
+    
+                // Device Information
+                'device_type' => $validatedData['device_type'],
+                'device_brand' => $validatedData['device_brand'],
+                'device_model' => $validatedData['device_model'],
+                'device_serial' => $validatedData['device_serial'],
+    
+                // Device Issue
+                'issue_descriptions' => $validatedData['issue_descriptions'],
+                'error_message' => $validatedData['error_messages'],
+                'repair_attempts' => $validatedData['repair_attempts'],
+                'recent_events' => $validatedData['recent_events'],
+                'prepared_parts' => $validatedData['prepared_parts'],   
+    
+                // Appointment Schedule
+                'appointment_date' => $validatedData['appointment_date'],
+                'appointment_time' => $validatedData['appointment_time'],
+                'appointment_urgency' => $validatedData['appointment_urgency'],
+            ]);
 
-            //Device Information
-            'device_type' => 'required|string|max:255',
-            'device_brand' => 'required|string|max:255',
-            'device_model' => 'required|string|max:255',
-            'device_serial' => 'nullable|string|max:255',
+            $repairshopRepairstatus = RepairShop_RepairStatus::create([
+                'technician_id' => $id,
+                'customer_id' => Auth::user()->id,
+                'appointment_id' => $repairshopAppointments->id,
+                'customer_fullname' => $fullname,
 
-            //Device Issue
-            'issue_descriptions' => 'nullable|string|max:255',
-            'error_messages' => 'nullable|string|max:255',
-            'repair_attempts' => 'nullable|string|max:255',
-            'recent_events' => 'nullable|string|max:255',
-            'prepared_parts' => 'nullable|string|max:255',   
-            
-            //Appointment Schedule
-            'appointment_date' => 'required|date',
-            'appointment_time' => 'required|date_format:H:i',
-            'appointment_urgency' => 'nullable|string|max:255',
-        ]);
+                'status' => 'pending',
+                'repairstatus' => 'Appointment Requested',
 
-        // Concatenate the first name and last name to create the fullname
-        $fullname = $validatedData['firstname'] . " " . $validatedData['lastname'];
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
-        // Create a new appointment request
-        $appointmentRequest = RepairShop_Appointments::create([
-            'technician_id' => $id,
-            'customer_id' => Auth::user()->id,
-            'status' => 'request',
 
-            // Customer Details
-            'fullname' => $fullname,
-            'email' => $validatedData['email'],
-            'contact_no' => $validatedData['contact_no'],
+            Customer_RepairStatus::create([
+                'technician_id' => $id,
+                'customer_id' => Auth::user()->id,
+                'repair_id' => $repairshopRepairstatus->id,
 
-            // Device Information
-            'device_type' => $validatedData['device_type'],
-            'device_brand' => $validatedData['device_brand'],
-            'device_model' => $validatedData['device_model'],
-            'device_serial' => $validatedData['device_serial'],
+                'repairstatus' => 'requested',
+                'repairstatus_message' => 'Your appointment request has been successfully submitted! We’ve received all the necessary details about your device. Our team will review your request and get back to you shortly with a confirmation of your scheduled appointment. Thank you for choosing our service, and we look forward to assisting you.',
 
-            // Device Issue
-            'issue_descriptions' => $validatedData['issue_descriptions'],
-            'error_messages' => $validatedData['error_messages'],
-            'repair_attempts' => $validatedData['repair_attempts'],
-            'recent_events' => $validatedData['recent_events'],
-            'prepared_parts' => $validatedData['prepared_parts'],   
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
-            // Appointment Schedule
-            'appointment_date' => $validatedData['appointment_date'],
-            'appointment_time' => $validatedData['appointment_time'],
-            'appointment_urgency' => $validatedData['appointment_urgency'],
-        ]);
+    
+            return back()->with('success', 'Appointment Requested');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to book appointment: ' . $e->getMessage());
+        }
 
-        return redirect()->route('viewshop', ['id' => $id]);
+
     }
 
     public function viewrepairlist(){
         if(Auth::check()){
+
             // Fetch repair and appointment details for the logged-in customer
             $repairDetails = RepairShop_RepairStatus::where('customer_id', Auth::user()->id)
                                 ->with(['technician.repairshopCredentials']) // Eager load technician and repair shop details

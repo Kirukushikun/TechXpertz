@@ -70,12 +70,12 @@ class TechnicianAuthController extends Controller
         // Check if the email exists in any of the user tables
         $existsInCustomer = Customer::where('email', $email)->exists();
         $existsInTechnician = Technician::where('email', $email)->exists();
-        // $existsInAdmin = Admin::where('email', $email)->exists();
+        $existsInAdmin = Admin::where('email', $email)->exists();
 
         // If email is found in any table, return with an error
         // ($existsInCustomer || $existsInTechnician || $existsInAdmin)
         
-        if ($existsInCustomer || $existsInTechnician) {
+        if ($existsInCustomer || $existsInTechnician || $existsInAdmin) {
             return redirect()->back()->withErrors(['email' => 'This email is already registered.']);
         }
 

@@ -33,6 +33,7 @@
                     <div class="tab-navigation">
                         <li class="tab-link active" data-tab="pending-repair">In Progress<i class="fa-solid fa-spinner"></i></li>
                         <li class="tab-link" data-tab="completed-repair">Completed<i class="fa-solid fa-check-double"></i></li>
+                        <li class="tab-link" data-tab="terminated-repair">Terminated<i class="fa-solid fa-trash"></i></li>
                     </div>
                     
                     <div class="tab-filters">
@@ -109,8 +110,7 @@
                                     <th>Customer Name</th>
                                     <th>Revenue</th>
                                     <th>Expenses</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
+                                    <th>Date Completed</th>
                                     <th>Details</th>
                                 </tr>
                             </thead>
@@ -123,12 +123,45 @@
                                         <td>P {{$completed['revenue']}}</td>
                                         <td>P {{$completed['expenses']}}</td>
                                         <td>
-                                            {{$completed['date']}}
-                                        </td>
-                                        <td>
-                                            {{$completed['time']}}
+                                            {{$completed['date']}}, {{$completed['time']}}
                                         </td>
                                         <td><button class="view-details" data-appointment-id="{{$completed['appointment_id']}}">View</button></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+                <div id="terminated-repair" class="tab-content-item card">
+                    @if(count($repairStatusTerminatedData) === 0)
+                        <div class="empty-message">
+                            <i class="fa-solid fa-user-xmark"></i>
+                            <p>No terminated repairs at the moment</p>                            
+                        </div>
+                    @else
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Repair ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Revenue</th>
+                                    <th>Expenses</th>
+                                    <th>Date Terminated</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Completed Repair Records will be populated here -->
+                                @foreach($repairStatusTerminatedData as $terminated)
+                                    <tr>
+                                        <td>#{{$terminated['repairID']}}</td>
+                                        <td>{{$terminated['customer_name']}}</td>
+                                        <td>P {{$terminated['revenue']}}</td>
+                                        <td>P {{$terminated['expenses']}}</td>
+                                        <td>
+                                            {{$terminated['date']}}, {{$terminated['time']}}
+                                        </td>
+                                        <td><button class="view-details" data-appointment-id="{{$terminated['appointment_id']}}">View</button></td>
                                     </tr>
                                 @endforeach
                             </tbody>

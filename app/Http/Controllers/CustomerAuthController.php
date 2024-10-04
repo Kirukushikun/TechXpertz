@@ -47,11 +47,13 @@ class CustomerAuthController extends Controller
         $password = $request->password;
         $confirm = $request->cpassword;
 
-        $customerExists = Technician::where('email', $email)->exists();
+        $existsInCustomer = Customer::where('email', $email)->exists();
+        $existsInTechnician = Technician::where('email', $email)->exists();
+        $existsInAdmin = Admin::where('email', $email)->exists();
     
         if($password === $confirm){
 
-            if($customerExists){
+            if($existsInCustomer || $existsInTechnician || $existsInAdmin){
                 return redirect(route('customer.signup'))->with("error", "Email already exists. Please use a different email address.");
             }else{
                 $data['firstname'] = $request->firstname;

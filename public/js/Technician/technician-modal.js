@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function(){
                             <i class="fa-solid fa-screwdriver-wrench" id="repair"></i>
                             <div class="verification-message">
                                 <h2>Start Repair</h2>
-                                <p>Are you sure you want to start the repair for this appointment?</p>                        
+                                <p>Are you sure you want to start the repair for this appointment?</p>             
                             </div>
                             <div class="verification-content">
                                 <h3>Additional Details</h3>
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function(){
                                 <!-- Only accept number -->
                                 <div class="row">
                                     <div class="form-group">
-                                        <label for="revenue">Revenue (Optional)</label>
+                                        <label for="revenue">Repair Cost (Optional)</label>
                                         <input type="text" id="revenue" name="revenue">
                                     </div>
                                     <div class="form-group">
@@ -252,6 +252,8 @@ document.addEventListener('DOMContentLoaded', function(){
                                 <button type="submit" class="submit">Confirm Start</button>
                                 <button type="button" class="normal"><b>Dismiss</b></button>
                             </div>
+
+                            <p class="note"><b>Note: </b>Do not start the repair unless the device has been dropped off.<br>Starting the repair will automatically notify the customer that the device has been received.</p>   
                         </div>                 
                     </form>
                 `;   
@@ -349,7 +351,10 @@ document.addEventListener('DOMContentLoaded', function(){
                         <button type="submit" class="submit">Confirm Repair Update</button>
                         <button type="button" class="normal"><b>Dismiss</b></button>
                     </div>
-                    <p class="reminder">Reminder: Updating the repair information will notify the customer of the progress. Make sure the information is accurate before proceeding.</p>
+
+                    <div class="reminder">
+                        <p><b>Reminder: </b> Updating the repair status will notify the customer of the progress. Ensure the information is accurate before proceeding,<br> as this action cannot be undone or reverted to a previous step.</p>
+                    </div>
                 </div>                 
             </form>
             `;

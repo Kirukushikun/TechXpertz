@@ -25,13 +25,13 @@ return new class extends Migration
             // Make appointment_id nullable for manual repairs
             $table->unsignedBigInteger('appointment_id')->nullable();
 
-            $table->enum('status', ['pending', 'completed'])->default('pending');
+            $table->enum('status', ['pending','in progress', 'completed', 'terminated'])->default('pending');
 
             $table->enum('paid_status', ['Fully Paid', 'Initially Paid', 'Unpaid'])->default('Unpaid');
             $table->integer('revenue')->default(0);
             $table->integer('expenses')->default(0);
             
-            $table->enum('repairstatus', ['Device Dropped Off', 'Diagnosis In Progress', 'Diagnosis Completed', 'Repair In Progress', 'Waiting For Parts', 'Repair Completed', 'Ready For Pickup', 'Device Collected', 'Repair Terminated'])->default('Device Dropped Off');
+            $table->enum('repairstatus', ['Appointment Requested','Appointment Confirmed' ,'Device Dropped Off', 'Diagnosis In Progress', 'Diagnosis Completed', 'Repair In Progress', 'Waiting For Parts', 'Repair Completed', 'Ready For Pickup', 'Device Collected', 'Repair Terminated']);
             $table->string('repairstatus_conditional')->nullable();
             $table->text('repairstatus_message')->nullable(); 
             $table->timestamps();

@@ -18,10 +18,10 @@
                 <h1>Track Your Repair Status</h1>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
             </div>
-            <div class="search-box">
-                <input type="number" id="repairId" name="repairId" placeholder="Please enter your repair ID here">
-                <button type="button" id="repairBtn">Track Repair Status</button>
-            </div>
+            <form class="search-box">
+                <input type="number" id="repairId" name="repairId" placeholder="Please enter your repair ID here" required>
+                <button type="submit" id="repairBtn">Track Repair Status</button>
+            </form>
         </div>
 
         <div class="repair-list-container">
@@ -83,10 +83,12 @@
         <script>
             document.getElementById('repairBtn').addEventListener('click', function(){
                 var repairID = document.getElementById('repairId').value;
-                fetch(`/repairstatus/${repairID}`)
-                .then(response => {
-                    window.location.href = `/repairstatus/${repairID}`;
-                });
+                if(repairID){
+                    fetch(`/repairstatus/${repairID}`)
+                    .then(response => {
+                        window.location.href = `/repairstatus/${repairID}`;
+                    });                    
+                }
             });
         </script>
     </body>

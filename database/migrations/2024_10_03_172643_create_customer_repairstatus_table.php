@@ -14,20 +14,17 @@ return new class extends Migration
         Schema::create('customer_repairstatus', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('technician_id');
-            $table->unsignedBigInteger('repair_id');
+            $table->unsignedBigInteger('repair_id')->nullable();
             $table->unsignedBigInteger('customer_id')->nullable();
             
 
             $table->string('repairstatus');
             $table->text('repairstatus_message');
 
-            $table->string('repairstatus_conditional')->nullable();
-            $table->string('conditional_message')->nullable();
-
             $table->timestamps();
             
             $table->foreign('technician_id')->references('id')->on('technicians')->onDelete('cascade');
-            $table->foreign('repair_id')->references('id')->on('repairshop_repairstatus')->onDelete('cascade');
+            $table->foreign('repair_id')->references('id')->on('repairshop_repairstatus')->onDelete('set null');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('set null');
             
         });

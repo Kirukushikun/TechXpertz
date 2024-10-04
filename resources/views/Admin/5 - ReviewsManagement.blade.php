@@ -1,0 +1,130 @@
+@include('components.admin-sidebar')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link rel="stylesheet" href="{{ asset('css/Admin/5 - ReviewsManagement.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/admin-sidebar.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="dashboard">
+
+        @yield('sidebar')
+
+        <main class="main-content">
+            <div class="head">
+                <div class="logo">
+                    <h2>Tech<span>X</span>pertz</h2>
+                </div>
+
+                <nav>
+                    <ul>
+                        <li>Dashboard</li>
+                        <li>User Management</li>
+                        <li>Notification Center</li>
+                        <li>Messages Center</li>
+                        <li class="active">Reviews Management</li>
+                        <li>System Settings</li>
+                        <li>Reports & Analytics</li>
+                    </ul>                    
+                </nav>
+
+            </div>
+            <div class="body">
+                <div class="header">
+                    <h1>Reviews Management</h1>
+                    
+                    <div class="tab-filters">
+                        <li><button><i class="fa-solid fa-filter"></i>Filter</button></li>
+                        <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
+
+                        <a class="add-repair"><i class="fa-solid fa-plus" id="add-appointment"></i></a>
+                    </div>
+                </div>
+
+                <div class="content">
+
+                    <div class="review-item">
+                        <div class="left">
+                            <div class="review-header">
+                                <div class="title">
+                                    Customer: <a href="">Iverson Craig Guno</a>
+                                </div>
+                                <div class="sub-title">
+                                    Repairshop: 
+                                    <span><a href="">TechXpertz</a></span> |
+                                    Technician:
+                                    <span><a href="">Iverson Guno</a></span> |
+                                    Wed, 04 Oct 2024, 09:30 AM
+                                </div> 
+                            </div>
+                            <div class="review-content">
+                                <div class="header">
+                                    <div class="ratings">Rating: 
+                                        <span>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    </div>
+                                                                    
+                                </div>
+                                "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam eaque non dicta fugiat sapiente perferendis aliquam expedita excepturi delectus unde. Quod tenetur sapiente recusandae nostrum non quibusdam provident rerum praesentium."
+                            </div>                            
+                        </div>
+
+                        <div class="right">
+                            <button class="check"><i class="fa-solid fa-check"></i></button>
+                            <button class="exclamation"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="review-item">
+                        <div class="left">
+                            <div class="review-header">
+                                <div class="title">
+                                    Customer: <a href="">Iverson Craig Guno</a>
+                                </div>
+                                <div class="sub-title">
+                                    Repairshop: 
+                                    <span><a href="">TechXpertz</a></span> |
+                                    Technician:
+                                    <span><a href="">Iverson Guno</a></span> |
+                                    Wed, 04 Oct 2024, 09:30 AM
+                                </div> 
+                            </div>
+                            <div class="review-content">
+                                <div class="header">
+                                    <div class="ratings">Rating: 
+                                        <span>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    </div>
+                                                                    
+                                </div>
+                                "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam eaque non dicta fugiat sapiente perferendis aliquam expedita excepturi delectus unde. Quod tenetur sapiente recusandae nostrum non quibusdam provident rerum praesentium."
+                            </div>                            
+                        </div>
+
+                        <div class="right">
+                            <button class="check"><i class="fa-solid fa-check"></i></button>
+                            <button class="exclamation"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

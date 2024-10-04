@@ -1,0 +1,30 @@
+.metrics-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.metric-card{
+    padding: 40px 50px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: aliceblue;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+}
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    background-color: aliceblue;
+}

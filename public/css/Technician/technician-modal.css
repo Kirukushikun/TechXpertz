@@ -227,6 +227,7 @@
 
     margin-top: 25px;
     background-color: white;
+
 } .verification-action button{
     padding: 10px 20px;
     border-radius: 7px;
@@ -262,7 +263,6 @@
 .verification-content{
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 20px;
     margin-top: 20px;
 
 } .verification-content h3{
@@ -333,7 +333,6 @@
 }.update-content .header #info{
     color: var(--lighted-text-color);
     font-size: 18px;
-
 }
 
 .update-content .row{

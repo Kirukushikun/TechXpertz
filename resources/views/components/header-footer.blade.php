@@ -6,7 +6,7 @@
         <button><i class="fa fa-search"></i></button>
     </div>
     <div class="icons">
-        <i class="fa fa-desktop" onclick="btnClick2()"></i>
+        <i class="fa-solid fa-screwdriver-wrench" onclick="window.location.href='/repairlist'"></i>
         <i class="fa fa-cog"></i>
     </div>
 

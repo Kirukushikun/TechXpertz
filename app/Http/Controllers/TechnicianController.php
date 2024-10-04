@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Customer_RepairStatus;
 use App\Models\Technician;
 use App\Models\Technician_Notifications;
 
@@ -202,12 +203,30 @@ class TechnicianController extends Controller
         }
 
         public function appointmentUpdate($appointmentSTATUS, $appointmentID){
+            $technician = Auth::guard('technician')->user();
             $appointment = RepairShop_Appointments::find($appointmentID);
+            $repairstatus = RepairShop_RepairStatus::where('appointment_id', $appointmentID)->first();
             
             if($appointmentSTATUS === "confirm"){
                 $appointment->update([
                     'status' => 'confirmed'
                 ]);
+
+                Customer_RepairStatus::create([
+                    'technician_id' => $technician->id,
+                    'repair_id' => $repairstatus->id,
+                    'customer_id' => $appointment->customer_id,
+                    'repairstatus' => 'Appointment Confirmed',
+                    'repairstatus_message' => 'Your appointment has been confirmed! Please drop off your device at the scheduled time.',
+
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                $repairstatus->update([
+                    'repairstatus' => 'Appointment Confirmed',
+                ]);
+
             } elseif($appointmentSTATUS === "cancel" || $appointmentSTATUS === "reject"){
                 $appointment->update([
                     'status' => 'rejected'
@@ -221,8 +240,11 @@ class TechnicianController extends Controller
         $technician = Auth::guard('technician')->user();
         $repairStatus = RepairShop_RepairStatus::where('technician_id', $technician->id)->get();
 
-        $repairStatusPending = $repairStatus->where('status', 'pending');
+        $repairStatusPending = $repairStatus->where('status', 'in progress');
+        
         $repairStatusCompleted = $repairStatus->where('status', 'completed');
+
+        $repairstatusTerminated = $repairStatus->where('status', 'terminated');
 
         // Prepare data for requested, pending, and completed appointments
         $repairStatusPendingData = $repairStatusPending->map(function ($repairdata) {
@@ -262,9 +284,29 @@ class TechnicianController extends Controller
             ];
         })->toArray();
 
+        // Prepare data for requested, pending, and completed appointments
+        $repairStatusTerminatedData = $repairstatusTerminated->map(function ($repairdata) {
+            $formatedRevenue = $this->formatMoney($repairdata->revenue);
+            $formatedExpense = $this->formatMoney($repairdata->expenses);
+
+            $repairdata->formatted_date = Carbon::parse($repairdata->updated_at)->format('M d, Y');
+            $repairdata->formatted_time = Carbon::parse($repairdata->updated_at)->format('g:i A');
+
+            return [
+                'repairID' => $repairdata->id,
+                'appointment_id' => $repairdata->appointment_id,
+                'customer_name' => $repairdata->customer_fullname,
+                'revenue' => $formatedRevenue,
+                'expenses' => $formatedExpense,
+                'date' => $repairdata->formatted_date,
+                'time' => $repairdata->formatted_time,
+            ];
+        })->toArray();
+
         return view('Technician.3 - RepairStatus', [
             'repairStatusPendingData' => $repairStatusPendingData,
             'repairStatusCompletedData' => $repairStatusCompletedData,
+            'repairStatusTerminatedData' => $repairStatusTerminatedData,
         ]);
     }   
         public function repairstatusDetails($repairID){
@@ -290,26 +332,20 @@ class TechnicianController extends Controller
             ]);
         }   
 
-        public function repairstatusDelete($id){
-            $repairstatusDelete = RepairShop_Appointments::find($id);
-            $repairstatusDelete->delete();
-            return redirect()->route('technician.repairstatus');
-        }
-
         public function repairstatusCreate(Request $request, $appointmentID, $customerID){
             $technician = Auth::guard('technician')->user();
             $appointment = RepairShop_Appointments::find($appointmentID);
+            $repairstatus = RepairShop_RepairStatus::where('appointment_id', $appointmentID)->first();
+
             $additionalDetails = $request->validate([
                 'paid_status' => 'required|string|max:255',
                 'revenue' => 'nullable|integer',
                 'expenses' => 'nullable|integer',
             ]);
     
-            RepairShop_RepairStatus::create([
-                'technician_id' => $technician->id,
-                'customer_id' => $customerID,
-                'appointment_id' => $appointmentID,
-                'customer_fullname' => $appointment->fullname,
+            $repairstatus->update([
+                'status' => 'in progress',
+                'repairstatus' => 'Device Dropped Off',
                 'paid_status' => $additionalDetails['paid_status'],
                 'revenue' => $additionalDetails['revenue'] ?? 0,
                 'expenses' => $additionalDetails['expenses'] ?? 0,
@@ -317,6 +353,17 @@ class TechnicianController extends Controller
 
             $appointment->update([
                 'status' => 'completed',
+            ]);
+
+            Customer_RepairStatus::create([
+                'technician_id' => $technician->id,
+                'repair_id' => $repairstatus->id,
+                'customer_id' => $repairstatus->customer_id,
+                'repairstatus' => 'Device Dropped Off',
+                'repairstatus_message' => 'We’ve received your device at our repair shop. We are now preparing to begin the diagnostic process to determine the necessary repairs.',
+
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
     
             return back()->with('success', 'Pending repair added successfully');
@@ -330,6 +377,19 @@ class TechnicianController extends Controller
                 $repairstatus->update([
                     'repairstatus' => 'Repair Terminated',
                     'repairstatus_message' => $request->terminate_message,
+                    'status' => 'completed'
+                ]);
+
+                Customer_RepairStatus::create([
+                    'technician_id' => $technician->id,
+                    'repair_id' => $repairID,
+                    'customer_id' => $customerID,
+
+                    'repairstatus' => 'Repair Terminated',
+                    'repairstatus_message' => $request->terminate_message,    
+
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
                 
             }elseif($action === 'Update'){
@@ -347,6 +407,22 @@ class TechnicianController extends Controller
                     'repairstatus' => $request->repair_status,
                     'repairstatus_conditional' => $request->repair_status_conditional,
                     'repairstatus_message' => $request->repairstatus_message,
+                    'updated_at' => now(),
+                ]);
+
+
+                //If repairstatus conditional has value, it will be the one stored else the main repairstatus
+                $repairStatus = $request->repair_status_conditional ?? $request->repair_status;
+
+                Customer_RepairStatus::create([
+                    'technician_id' => $technician->id,
+                    'repair_id' => $repairID,
+                    'customer_id' => $customerID,
+
+                    'repairstatus' => $repairStatus,
+                    'repairstatus_message' => $request->repairstatus_message,    
+
+                    'created_at' => now(),
                     'updated_at' => now(),
                 ]);
                 

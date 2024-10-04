@@ -113,24 +113,24 @@
 
             <div class="review-summary">
                 
-            <div class="rating">
-                <div class="rating-score">{{ number_format($reviewData['averageRating'], 1) }}<p>/5</p></div>
-                <div class="rating-stars">
-                    @for ($i = 1; $i <= 5; $i++)
-                        @if ($i <= floor($reviewData['averageRating']))
-                            <!-- Solid star for whole numbers -->
-                            <i class="fas fa-star"></i>
-                        @elseif ($i == ceil($reviewData['averageRating']) && fmod($reviewData['averageRating'], 1) != 0)
-                            <!-- Half star for decimals -->
-                            <i class="fa-solid fa-star-half-stroke"></i>
-                        @else
-                            <!-- Empty star -->
-                            <i class="fa-regular fa-star"></i>
-                        @endif
-                    @endfor
+                <div class="rating">
+                    <div class="rating-score">{{ number_format($reviewData['averageRating'], 1) }}<p>/5</p></div>
+                    <div class="rating-stars">
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if ($i <= floor($reviewData['averageRating']))
+                                <!-- Solid star for whole numbers -->
+                                <i class="fas fa-star"></i>
+                            @elseif ($i == ceil($reviewData['averageRating']) && fmod($reviewData['averageRating'], 1) != 0)
+                                <!-- Half star for decimals -->
+                                <i class="fa-solid fa-star-half-stroke"></i>
+                            @else
+                                <!-- Empty star -->
+                                <i class="fa-regular fa-star"></i>
+                            @endif
+                        @endfor
+                    </div>
+                    <div class="rating-reviews">{{ $reviewData['totalReviews'] }} Reviews</div>
                 </div>
-                <div class="rating-reviews">{{ $reviewData['totalReviews'] }} Reviews</div>
-            </div>
 
                 <div class="rating-breakdown">
                     @for ($i = 5; $i >= 1; $i--)
