@@ -16,13 +16,27 @@
     </head>
     <body>
 
-        @yield('header')
-
         @if(session()->has('error'))
-            <p class="error-message">{{session('error')}}</p>
+            <div class="push-notification danger active">
+                <i class="fa-solid fa-bell danger"></i>
+                <div class="notification-message">
+                    <h4>Appointment Booked</h4>
+                    <p>{{session('error')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
         @elseif(session()->has('success'))
-            <p class="success-message">{{session('success')}}</p>
+            <div class="push-notification success active">
+                <i class="fa-solid fa-bell success"></i>
+                <div class="notification-message">
+                    <h4>Appointment Booked</h4>
+                    <p>{{session('success')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
         @endif
+
+        @yield('header')
         
         <form class="appointment-form" action="{{ route('bookappointment', ['id' => $technicianID]) }}" method="POST">
             @csrf
@@ -69,7 +83,7 @@
                     </div>
                     <div class="form-group">
                         <label for="device_serial">Serial Number (if applicable)</label>
-                        <input type="text" id="device_serial" name="device_serial" required>
+                        <input type="text" id="device_serial" name="device_serial">
                     </div>
                 </div>
     
@@ -222,6 +236,20 @@
         @yield('footer')
 
         <script>
+            // Get the close icon element
+            const closeNotification = document.getElementById('close-notification');
+
+            // Add a click event listener to the close icon
+            closeNotification.addEventListener('click', function() {
+                // Get the push notification container
+                const notification = document.querySelector('.push-notification');
+                
+                // Remove the 'active' class to hide the notification
+                notification.classList.remove('active');
+            });
+        </script>
+
+        <script>
             document.addEventListener('DOMContentLoaded', function () {
                 // Function to update the summary
                 function updateSummary(inputId, summaryClass) {
@@ -294,6 +322,7 @@
                         checkMark.style.display = 'none';
                     }
                 });
+
             });
         </script>
     </body>

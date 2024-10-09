@@ -159,3 +159,20 @@
     justify-content: space-between;
     margin-bottom: 20px;
 }
+
+.timeline-description button{
+    padding: 5px 20px;
+    border-radius: 7px;
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    font-weight: 600;
+    font-size: 16px;
+    background-color: transparent;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+}.timeline-description button:hover{
+    border: 2px solid white;
+    color: white;
+    background-color: #FFD700 ;
+}

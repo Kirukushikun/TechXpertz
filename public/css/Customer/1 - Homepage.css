@@ -138,6 +138,8 @@
 
     height: 50px;
     width: 50px;
+}.icon img {
+    width: 30px;
 }
 
 .text h3 {
@@ -235,6 +237,8 @@
     color: var(--primary-color);
 
     margin-bottom: 15px;
+}.shop-name img{
+    width: 25px;
 }
 
 .shop-location p{

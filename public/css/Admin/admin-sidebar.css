@@ -32,6 +32,8 @@
     height: 100vh;
     padding: 25px;
     position:fixed;
+
+    z-index: 2;
 }
 .sidebar .content{
     height: 100%;
@@ -181,12 +183,13 @@ input:checked + .slider:before {
     gap: 35px;
 
     text-transform: uppercase;
-}.head nav ul li{
+}.head nav ul li a{
     font-size: 15px;
     font-weight: 500;
     color: var(--dark-grey);
     cursor: pointer;
-}.head nav ul li.active{
+    text-decoration: none;
+}.head nav ul li.active a{
     font-weight: 700;
     color: var(--text-color);
 }

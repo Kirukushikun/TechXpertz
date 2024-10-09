@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Customer_RepairStatus;
+use App\Models\Customer_Notifications;
 use App\Models\Technician;
 use App\Models\Technician_Notifications;
 
@@ -67,7 +68,7 @@ class TechnicianController extends Controller
         }
 
         $repairstatus = Repairshop_RepairStatus::where('technician_id', $technician->id)->get();
-        $pendingStatus = $repairstatus->where('status', 'pending');
+        $pendingStatus = $repairstatus->where('status', 'in progress');
         $completedStatus = $repairstatus->where('repairstatus', 'Ready For Pickup');
 
         $reviews = Repairshop_Reviews::where('technician_id', $technician->id)->get();
@@ -100,6 +101,9 @@ class TechnicianController extends Controller
         foreach ($appointments as $appointment) {
             $appointment->formatted_date = Carbon::parse($appointment->appointment_date)->format('M d, Y');
             $appointment->formatted_time = Carbon::parse($appointment->appointment_time)->format('g:i A');
+
+            $appointment->updated_date = Carbon::parse($appointment->updated_at)->format('M d, Y');
+            $appointment->updated_time = Carbon::parse($appointment->updated_at)->format('g:i A');
         }
     
         // Group appointments by status
@@ -151,8 +155,8 @@ class TechnicianController extends Controller
                 'fullname' => $appointment->fullname,
                 'email' => $appointment->email,
                 'contact' => $appointment->contact_no,
-                'formatted_date' => $appointment->formatted_date,
-                'formatted_time' => $appointment->formatted_time,
+                'formatted_date' => $appointment->updated_date,
+                'formatted_time' => $appointment->updated_time,
             ];
         })->toArray();
     
@@ -227,13 +231,24 @@ class TechnicianController extends Controller
                     'repairstatus' => 'Appointment Confirmed',
                 ]);
 
-            } elseif($appointmentSTATUS === "cancel" || $appointmentSTATUS === "reject"){
+                return back()->with('success', 'Appointment Confirmed')->with('success_message', 'Appointment confirmed successfully. The customer has been notified.');
+
+            } elseif( $appointmentSTATUS === "reject"){
                 $appointment->update([
                     'status' => 'rejected'
                 ]);
+
+                return back()->with('success', 'Appointment Rejected')->with('success_message', 'Appointment request rejected. The customer has been informed.');
+            } elseif($appointmentSTATUS === "cancel"){
+                $appointment->update([
+                    'status' => 'rejected'
+                ]);
+
+                return back()->with('success', 'Appointment Canceled')->with('success_message', 'Appointment canceled. The customer will be notified.');
             }
 
-            return back()->with('success', 'Appointment Updated');
+
+
         }
 
     public function repairstatus(){
@@ -366,7 +381,7 @@ class TechnicianController extends Controller
                 'updated_at' => now(),
             ]);
     
-            return back()->with('success', 'Pending repair added successfully');
+            return back()->with('success', 'Repair Started')->with('success_message', 'Repair process started. The customer has been notified that the device is being repaired.');
         }
 
         public function repairstatusUpdate(Request $request, $repairID, $customerID, $action){
@@ -377,7 +392,7 @@ class TechnicianController extends Controller
                 $repairstatus->update([
                     'repairstatus' => 'Repair Terminated',
                     'repairstatus_message' => $request->terminate_message,
-                    'status' => 'completed'
+                    'status' => 'terminated'
                 ]);
 
                 Customer_RepairStatus::create([
@@ -391,6 +406,8 @@ class TechnicianController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
+
+                return back()->with('success', 'Repair Terminated')->with('success_message', 'Repair terminated successfully. The customer has been notified of the termination.');
                 
             }elseif($action === 'Update'){
                 if($request->repair_status === 'Device Collected'){
@@ -410,7 +427,6 @@ class TechnicianController extends Controller
                     'updated_at' => now(),
                 ]);
 
-
                 //If repairstatus conditional has value, it will be the one stored else the main repairstatus
                 $repairStatus = $request->repair_status_conditional ?? $request->repair_status;
 
@@ -425,10 +441,21 @@ class TechnicianController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
+
+                Customer_Notifications::create([
+                    'target_type' => 'customer',
+                    'target_id' => $customerID,
+                    'title' => 'Repair Status Updated',
+                    'message' => 'Your device repair status has been updated. Please check your device repair status section for the latest details on the progress of your repair.',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                return back()->with('success', 'Repair Status Updated')->with('success_message', 'Repair status updated successfully. The customer has been notified of the progress.');
                 
             }
 
-            return back()->with('success', 'Repair Status Updated');
+            
         }
 
         public function repairstatusCreateWalkIn(Request $request){
@@ -589,7 +616,7 @@ class TechnicianController extends Controller
             $repairshopMastery = RepairShop_Mastery::firstOrNew(['technician_id' => $technician->id]);
 
             // Set the main mastery
-            $repairshopMastery->main_mastery = 'Smartphone'; //Just default value for now
+            $repairshopMastery->main_mastery = $request->mastery; //Just default value for now
 
             // List of specializations
             $specializations = ['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One'];
@@ -718,14 +745,21 @@ class TechnicianController extends Controller
             $validatedAbout = $request->validate([
                 'header' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:255',
-            ]);
+            ]);            
 
-            $technician->repairshopProfile()->updateOrCreate([
-                'header' => $validatedAbout['header'],
-                'description' => $validatedAbout['description'],            
-            ]);
+            $technician->repairshopProfile()->updateOrCreate(
+                // The "search" array - this is where you define how to find an existing record
+                [
+                    'technician_id' => $technician->id, // You may not need this if the relationship is defined correctly
+                ],
+                // The "update" array - this is where you define what to update or insert
+                [
+                    'header' => $validatedAbout['header'],
+                    'description' => $validatedAbout['description'],
+                ]
+            );
 
-            return redirect()->route('technician.profile')->with('success', 'Changes saved successfully');
+            return back()->with('success', 'Saved successfully')->with('success_message', 'Changes to the profile has been saved successfully.');
         }
 
     private function reviewSystem($id){

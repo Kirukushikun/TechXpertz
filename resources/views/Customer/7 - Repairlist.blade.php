@@ -80,17 +80,6 @@
 
         @yield('footer')
 
-        <script>
-            document.getElementById('repairBtn').addEventListener('click', function(){
-                var repairID = document.getElementById('repairId').value;
-                if(repairID){
-                    fetch(`/repairstatus/${repairID}`)
-                    .then(response => {
-                        window.location.href = `/repairstatus/${repairID}`;
-                    });                    
-                }
-            });
-        </script>
     </body>
 
 

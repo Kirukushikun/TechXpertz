@@ -11,7 +11,7 @@
                     <a href="/admin/customers"><i class="fas fa-users"></i></a>
                 </li>
 
-                <li>
+                <!-- <li>
                     <a href="/admin/technicians"><i class="fas fa-users"></i></a>
                 </li>
 
@@ -21,7 +21,7 @@
 
                 <li>
                     <a href="/admin/repairshops"><i class="fas fa-store"></i></a>
-                </li>
+                </li> -->
 
                 <li>
                     <a href="/admin/notifications"><i class="fa-solid fa-bell"></i></a>
@@ -56,4 +56,18 @@
     </div>
 
 </aside>
+@endsection
+
+
+@section('navbar')
+<nav class="admin-navbar">
+    <ul>
+        <li><a href="/admin/dashboard">Dashboard</a></li>
+        <li><a href="/admin/usermanagement">User Management</a></li>
+        <li><a href="/admin/notificationcenter">Notification Center</a></li>
+        <li><a href="/admin/reportmanagement">Report Management</a></li>
+        <li><a href="/admin/reviewsmanagement">Reviews Management</a></li>
+        <li><a href="">System Settings</a></li>
+    </ul>                    
+</nav>
 @endsection

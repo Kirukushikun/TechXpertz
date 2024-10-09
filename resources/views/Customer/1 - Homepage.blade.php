@@ -35,7 +35,7 @@
             <div class="categories-2">
                 <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Smartphone']) }}'">
                     <div class="icon">
-                        <i class="fa fa-desktop"></i>
+                        <img src="{{asset('images/Smartphone.png')}}">
                     </div>
                     <div class="text">
                         <h3>Smartphone</h3>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Tablet']) }}'">
                     <div class="icon">
-                        <i class="fa fa-desktop"></i>
+                        <img src="{{asset('images/Tablet.png')}}">
                     </div>
                     <div class="text">
                         <h3>Tablet</h3>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Desktop']) }}'">
                     <div class="icon">
-                        <i class="fa fa-desktop"></i>
+                        <img src="{{asset('images/Desktop.png')}}">
                     </div>
                     <div class="text">
                         <h3>Desktop</h3>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Laptop']) }}'">
                     <div class="icon">
-                        <i class="fa fa-desktop"></i>
+                        <img src="{{asset('images/Laptop.png')}}">
                     </div>
                     <div class="text">
                         <h3>Laptop</h3>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Smartwatch']) }}'">
                     <div class="icon">
-                        <i class="fa fa-desktop"></i>
+                        <img src="{{asset('images/Smartwatch.png')}}">
                     </div>
                     <div class="text">
                         <h3>Smartwatche</h3>
@@ -80,7 +80,7 @@
                 </div>
                 <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Camera']) }}'">
                     <div class="icon">
-                        <i class="fa fa-desktop"></i>
+                        <img src="{{asset('images/Camera.png')}}">
                     </div>
                     <div class="text">
                         <h3>Camera</h3>
@@ -89,7 +89,7 @@
                 </div>
                 <div class="category">
                     <div class="icon" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Printer']) }}'">
-                        <i class="fa fa-desktop"></i>
+                        <img src="{{asset('images/Printer.png')}}">
                     </div>
                     <div class="text">
                         <h3>Printer</h3>
@@ -98,7 +98,7 @@
                 </div>
                 <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Speaker']) }}'">
                     <div class="icon">
-                        <i class="fa fa-desktop"></i>
+                        <img src="{{asset('images/Speaker.png')}}">
                     </div>
                     <div class="text">
                         <h3>Speaker</h3>
@@ -107,7 +107,7 @@
                 </div>
                 <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Drone']) }}'">
                     <div class="icon">
-                        <i class="fa fa-desktop"></i>
+                        <img src="{{asset('images/Drone.png')}}">
                     </div>
                     <div class="text">
                         <h3>Drone</h3>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'All-In-One']) }}'">
                     <div class="icon">
-                        <i class="fa fa-desktop"></i>
+                        <img src="{{asset('images/All-In-One.png')}}">
                     </div>
                     <div class="text">
                         <h3>All-in-one</h3>
@@ -151,7 +151,7 @@
                             <div class="shop-details">
                                 <div class="shop-name">
                                     <h3>{{$repairshop['repairshopName']}}</h3>
-                                    <i class="fa fa-desktop"></i>
+                                    <img src="{{ asset('images/' . $repairshop['repairshopMastery'] . '.png') }}">
                                 </div>
                                 
                                 <div class="shop-location">

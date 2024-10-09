@@ -113,7 +113,7 @@ class CustomerController extends Controller
             $repairshopAppointments = RepairShop_Appointments::create([
                 'technician_id' => $id,
                 'customer_id' => Auth::user()->id,
-                'status' => 'Appointment Requested',
+                'status' => 'requested',
     
                 // Customer Details
                 'fullname' => $fullname,
@@ -158,7 +158,7 @@ class CustomerController extends Controller
                 'customer_id' => Auth::user()->id,
                 'repair_id' => $repairshopRepairstatus->id,
 
-                'repairstatus' => 'requested',
+                'repairstatus' => 'Appointment Requested',
                 'repairstatus_message' => 'Your appointment request has been successfully submitted! We’ve received all the necessary details about your device. Our team will review your request and get back to you shortly with a confirmation of your scheduled appointment. Thank you for choosing our service, and we look forward to assisting you.',
 
                 'created_at' => now(),
@@ -166,9 +166,10 @@ class CustomerController extends Controller
             ]);
 
     
-            return back()->with('success', 'Appointment Requested');
+            return back()->with('success', 'Success! Your appointment has been successfully booked.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to book appointment: ' . $e->getMessage());
+            // return back()->with('error', 'Failed to book appointment: ' . $e->getMessage());
+            return back()->with('error', 'Failed to book appointment. Please try again.');
         }
 
 
@@ -218,8 +219,11 @@ class CustomerController extends Controller
 
         if(Auth::check()){
             $customerData = Customer::find(Auth::user()->id);
+            $notifications = Customer_Notifications::where('target_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+
             return view('Customer.6 - Account', [
                 'customerData' => $customerData,
+                'notifications' => $notifications,
             ]);
         }
         return redirect()->route('customer.loginCustomer');
@@ -259,6 +263,8 @@ class CustomerController extends Controller
                     'repairshopBadge2' => $repairshop->repairshopBadges->badge_2,
                     'repairshopBadge3' => $repairshop->repairshopBadges->badge_3,
                     'repairshopBadge4' => $repairshop->repairshopBadges->badge_4,
+
+                    'repairshopMastery' => $repairshop->repairshopMastery->main_mastery,
 
                     'formattedDays' => $formattedDays,
                     'totalReviews' => $totalReviews,
@@ -302,6 +308,8 @@ class CustomerController extends Controller
                     'repairshopBadge2' => $repairshop->repairshopBadges->badge_2,
                     'repairshopBadge3' => $repairshop->repairshopBadges->badge_3,
                     'repairshopBadge4' => $repairshop->repairshopBadges->badge_4,
+
+                    'repairshopMastery' => $repairshop->repairshopMastery->main_mastery,
 
                     'formattedDays' => $formattedDays,
                     'totalReviews' => $totalReviews,

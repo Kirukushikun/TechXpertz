@@ -20,17 +20,7 @@
                     <h2>Tech<span>X</span>pertz</h2>
                 </div>
 
-                <nav>
-                    <ul>
-                        <li>Dashboard</li>
-                        <li>User Management</li>
-                        <li>Notification Center</li>
-                        <li>Messages Center</li>
-                        <li class="active">Reviews Management</li>
-                        <li>System Settings</li>
-                        <li>Reports & Analytics</li>
-                    </ul>                    
-                </nav>
+                @yield('navbar')
 
             </div>
             <div class="body">
@@ -126,5 +116,6 @@
         </main>
     </div>
 
+    <script src="{{ asset('js/Admin/admin-navbars.js') }}"></script>
 </body>
 </html>

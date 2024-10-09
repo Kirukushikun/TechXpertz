@@ -10,13 +10,35 @@
 
     <link rel="stylesheet" href="{{asset('css/Technician/6 - ManageProfile.css')}}">
     <link rel="stylesheet" href="{{asset('css/Technician/technician-modal.css')}}">
+    <link rel="stylesheet" href="{{asset('css/Technician/technician-notification.css')}}">
 </head>
 <body>
     <div class="dashboard">
 
-    <div class="modal" id="modal">
+        <!-- PUSH NOTIFICATION -->
+        @if(session()->has('error'))
+            <div class="push-notification danger active">
+                <i class="fa-solid fa-bell danger"></i>
+                <div class="notification-message">
+                    <h4>Appointment Booked</h4>
+                    <p>{{session('error')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @elseif(session()->has('success'))
+            <div class="push-notification success active">
+                <i class="fa-solid fa-bell success"></i>
+                <div class="notification-message">
+                    <h4>{{session('success')}}</h4>
+                    <p>{{session('success_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @endif
 
-    </div>
+        <div class="modal" id="modal">
+
+        </div>
 
         @yield('sidebar')
 
@@ -104,6 +126,26 @@
 
                 <section class="form-section fs-3">
                     <h3><span>3</span> Specialization</h3>
+                    <div class="form-group">
+                        <label for="mastery">Main Mastery</label>
+                        @php
+                            $savedValue = $technicianMastery->main_mastery;
+                        @endphp
+                        <select name="mastery" id="mastery" required>
+                            <option value="" @if(empty($savedValue)) selected @endif></option>
+                            <option value="Smartphone" @if($savedValue === 'Smartphone') selected @endif>Smartphone</option>
+                            <option value="Tablet" @if($savedValue === 'Tablet') selected @endif>Tablet</option>
+                            <option value="Desktop" @if($savedValue === 'Desktop') selected @endif>Desktop</option>
+                            <option value="Laptop" @if($savedValue === 'Laptop') selected @endif>Laptop</option>
+                            <option value="Smartwatch" @if($savedValue === 'Smartwatch') selected @endif>Smartwatch</option>
+                            <option value="Camera" @if($savedValue === 'Camera') selected @endif>Camera</option>
+                            <option value="Printer" @if($savedValue === 'Printer') selected @endif>Printer</option>
+                            <option value="Speaker" @if($savedValue === 'Speaker') selected @endif>Speaker</option>
+                            <option value="Drone" @if($savedValue === 'Drone') selected @endif>Drone</option>
+                            <option value="All-In-One" @if($savedValue === 'All-In-One') selected @endif>All-In-One</option>
+                        </select>
+                        <br>
+                    </div>
                     <div class="form-group">
                         @foreach(['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One'] as $item)
                             <div class="form-details {{ $technicianMastery && $technicianMastery->$item ? 'active' : '' }}">
@@ -205,129 +247,7 @@
     
     <script src="{{asset('js/Technician/6 - ManageProfile.js')}}"></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
-    <script src="{{asset('js/Technician/technician-modal.js')}}"></script>
-    <script>
-        const formDetails = document.querySelectorAll('.form-details');
+    <script src="{{asset('js/Technician/technician-notification.js')}}"></script>
 
-        formDetails.forEach(detail => {
-            detail.addEventListener('click', () => {
-                const checkbox = detail.querySelector('.checkbox-input');
-                checkbox.checked = !checkbox.checked;
-
-                // Toggle the 'active' class based on the checkbox state
-                if (checkbox.checked) {
-                    detail.classList.add('active');
-                } else {
-                    detail.classList.remove('active');
-                }
-            });
-        });
-
-        //-----------------------------------------------------------------
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Select the specific Services section
-            const servicesSection = document.querySelector('.services-section');
-            const addServiceButton = servicesSection.querySelector('.add-service');
-            const formDetails = servicesSection.querySelector('.form-details');
-
-            addServiceButton.addEventListener('click', function() {
-                // Get the current number of service groups within this section
-                const currentServiceCount = formDetails.querySelectorAll('.form-group').length;
-                const newServiceCount = currentServiceCount + 1;
-                
-                if (currentServiceCount <= 4) {
-                    // Create a new form group
-                    const newFormGroup = document.createElement('div');
-                    newFormGroup.classList.add('form-group');
-
-                    // Create and append the label
-                    const newLabel = document.createElement('label');
-                    newLabel.setAttribute('for', `service${newServiceCount}`);
-                    newLabel.textContent = `Service ${newServiceCount}`;
-                    newFormGroup.appendChild(newLabel);
-
-                    // Create and append the textarea
-                    const newTextarea = document.createElement('textarea');
-                    newTextarea.type = 'text';
-                    newTextarea.id = `service${newServiceCount}`;
-                    newTextarea.name = `service[]`; // Use an array name to handle multiple inputs in backend
-                    newFormGroup.appendChild(newTextarea);
-
-                    // Append the new form group to the form details
-                    formDetails.insertBefore(newFormGroup, addServiceButton);                    
-                }
-
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get all checkbox inputs
-            const checkboxes = document.querySelectorAll('.opening-hours-input input[type="checkbox"]');
-
-            // Loop through each checkbox and add an event listener
-            checkboxes.forEach(function(checkbox) {
-                checkbox.addEventListener('change', function() {
-                    // Find the corresponding <p> tag in the same row
-                    const statusText = this.closest('td').querySelector('.status p');
-                    
-                    // Update the text based on the checkbox state
-                    if (this.checked) {
-                        statusText.textContent = 'Open';
-                    } else {
-                        statusText.textContent = 'Closed';
-                    }
-                });
-            });
-        });
-        //-----------------------------------------------------------------
-        var toggle = document.getElementById("sunday-status");
-        if(toggle.checked){
-            console.log('toggled');
-        }
-        
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const saveprofileBtn = document.querySelector('button.save-btn');
-        
-            saveprofileBtn.addEventListener('click', function (e){
-                e.preventDefault();
-                verifySaveChanges();
-            });
-
-            function verifySaveChanges(){
-                const modal = document.getElementById('modal');
-
-                modal.innerHTML = `
-                <div class="form">
-                    <div class="modal-verification">
-                        <i class="fa-solid fa-circle-check" id="repair"></i>
-                        <div class="verification-message">
-                            <h2>Confirm Save Changes</h2>
-                            <p>Are you sure you want to save these changes?</p>
-                        </div>
-                        <div class="verification-action">
-                            <button type="submit" class="submit" id="save-changes">Save Changes</button>
-                            <button type="button" class="normal"><b>Dismiss</b></button>
-                        </div>
-                    </div>                
-                </div>
-                `;
-
-                document.getElementById('save-changes').addEventListener('click', function(){
-                    document.querySelector('form.manage-profile').submit();
-                });
-
-                // Show the modal
-                modal.classList.add("active");
-
-                // Close modal when 'X' is clicked
-                document.querySelector('.normal').onclick = function () {
-                    modal.classList.remove("active");
-                };
-            }
-        });
-    </script>
 </body>
 </html>

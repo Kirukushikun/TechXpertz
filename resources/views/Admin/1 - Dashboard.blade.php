@@ -7,10 +7,17 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="{{ asset('css/Admin/1 - Dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/admin-sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/admin-modal.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('css/Admin/admin-charts.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="dashboard">
+
+        <div class="modal">
+
+        </div>
 
         @yield('sidebar')
 
@@ -20,83 +27,197 @@
                     <h2>Tech<span>X</span>pertz</h2>
                 </div>
 
-                <nav>
-                    <ul>
-                        <li class="active">Dashboard</li>
-                        <li>User Management</li>
-                        <li>Notification Center</li>
-                        <li>Messages Center</li>
-                        <li>Reviews Management</li>
-                        <li>System Settings</li>
-                        <li>Reports & Analytics</li>
-                    </ul>                    
-                </nav>
+                @yield('navbar')
 
             </div>
             <div class="body">
                 <div class="header">
                     <h1>Dashboard</h1>
                 </div>
+
                 <div class="content">
-                    <div class="metrics-container">
-                        <div class="metric-card website-visits">
-                          <h3>213.2k</h3>
-                          <p>Website Visits</p>
-                          <p>10% Increase from Last Week</p>
-                        </div>
-                        <div class="metric-card demos-scheduled">
-                          <h3>27.2k</h3>
-                          <p>Total Users</p>
-                          <p>12% Increase from Last Week</p>
-                        </div>
-                        <div class="metric-card orders-submitted">
-                          <h3>941</h3>
-                          <p>Total Repairshops</p>
-                          <p>16% Decrease from Last Week</p>
-                        </div>                        
-                        <div class="metric-card new-signups">
-                          <h3>5.1k</h3>
-                          <p>New Signups</p>
-                          <p>3% Decrease from Last Week</p>
-                        </div>
-                        <div class="metric-card profit-taken">
-                          <h3>$54.2k</h3>
-                          <p>Active Users</p>
-                          <p>12% Decrease from Last Week</p>
-                        </div>                        
+                    <div class="container c1 metric">
+                        <h3>213.2k</h3>
+                        <h4>Website Visits</h4>
+                        <p>10% Increase from Last Week</p>
+                    </div>
+                    <div class="container c2 metric">
+                        <h3>{{$totalUsers}}</h3>
+                        <h4>Total Users</h4>
+                        <p>{{ abs($totalUsersPercentageChange) }}% {{ $totalUsersPercentageChange >= 0 ? 'Increase' : 'Decrease' }} from Last Week</p>
+                    </div>
+                    <div class="container c3 metric">
+                        <h3>941</h3>
+                        <h4>Active Users</h4>
+                        <p>16% Decrease from Last Week</p>
+                    </div>
+                    <div class="container c4 metric">
+                        <h3>{{$technicianVerified}}</h3>
+                        <h4>Verified Repairshops</h4>
+                        <p>{{ abs($verifiedChange) }}% {{ $verifiedChange >= 0 ? 'Increase' : 'Decrease' }} from Last Week</p>
+                    </div>
+                    <div class="container c5 metric">
+                        <h3>$54.2k</h3>
+                        <h4>New Signups</h4>
+                        <p>12% Decrease from Last Week</p>
                     </div>
 
-                    <div class="container">
-                        <div class="user-management card">
-                            <p>Waiting for verifications</p>
-                            <p>Restricted</p>
+                    <div class="container c6">
+                        <div class="user-card">
+                            <!-- First User Card -->
+                            <i class="fa-solid fa-user"></i>
+                            <h3>Customer</h3>
+                            <div class="user-status">
+                                <span class="status inactive">
+                                    <p>Inactive</p>
+                                    <h4>200</h4>
+                                </span>|
+                                <span class="status active">
+                                    <p>Active</p>
+                                    <h4>200</h4>
+                                </span>
+                            </div>                            
                         </div>
 
-                        <div class="notification-management card">
-                            <p>Notification History</p>
-                        </div>                        
-                    </div>
-
-                    <div class="container">
-                        <div class="messages-center card">
-                            <p>Total Messages</p>
-                            <p>Unread Messages</p>
-                            <p>Reports from Customers and Technicians</p>
+                        <div class="user-card">
+                            <!-- Second User Card -->
+                            <i class="fa-solid fa-user-nurse"></i>
+                            <h3>Technician</h3>
+                            <div class="user-status">
+                                <span class="status pending">
+                                    <p>Pending</p>
+                                    <h4>{{$technicianPending}}</h4>
+                                </span>|
+                                <span class="status restricted">
+                                    <p>Restricted</p>
+                                    <h4>{{$technicianRestricted}}</h4>
+                                </span>
+                            </div>                            
                         </div>
-
-                        <div class="reports-analytics card">
-                            <p>User statistics</p>
-                            <p>Appointment statistics</p>
-                            <p>Shop performance</p>
-                            <p>Platform Usage</p>
-                        </div>                        
                     </div>
 
-                      
+                    <div class="container c7">
+                        <!-- Reports -->
+                        <div class="card">
+                            <!-- <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <li class="dropdown-header text-start">
+                                        <h6>Filter</h6>
+                                    </li>
+
+                                    <li><a class="dropdown-item" href="#">Today</a></li>
+                                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                                </ul>
+                            </div> -->
+
+                            <div class="card-body">
+                                <h5 class="card-title">Reports</h5>
+
+                                <!-- Line Chart -->
+                                <div id="reportsChart"></div>
+
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", () => {
+                                        new ApexCharts(document.querySelector("#reportsChart"), {
+                                            series: [
+                                                    {
+                                                        name: "Sales",
+                                                        data: [31, 40, 28, 51, 42, 82, 56],
+                                                    },
+                                                    {
+                                                        name: "Revenue",
+                                                        data: [11, 32, 45, 32, 34, 52, 41],
+                                                    },
+                                                    {
+                                                        name: "Customers",
+                                                        data: [15, 11, 32, 18, 9, 24, 11],
+                                                    },
+                                            ],
+                                            chart: {
+                                                    height: 350,
+                                                    type: "area",
+                                                    toolbar: {
+                                                        show: false,
+                                                    },
+                                            },
+                                            markers: {
+                                                    size: 4,
+                                            },
+                                            colors: ["#4154f1", "#2eca6a", "#ff771d"],
+                                            fill: {
+                                                    type: "gradient",
+                                                    gradient: {
+                                                        shadeIntensity: 1,
+                                                        opacityFrom: 0.3,
+                                                        opacityTo: 0.4,
+                                                        stops: [0, 90, 100],
+                                                    },
+                                            },
+                                            dataLabels: {
+                                                    enabled: false,
+                                            },
+                                            stroke: {
+                                                    curve: "smooth",
+                                                    width: 2,
+                                            },
+                                            xaxis: {
+                                                    type: "datetime",
+                                                    categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"],
+                                            },
+                                            tooltip: {
+                                                    x: {
+                                                        format: "dd/MM/yy HH:mm",
+                                                    },
+                                            },
+                                        }).render();
+                                    });
+                                </script>
+                                <!-- End Line Chart -->
+                            </div>
+                        </div>
+                        <!-- End Reports -->
+                    </div>
+
+
+                    <div class="container c8">
+                        <div class="container-header">
+                            <h3>Recent Notification</h3>
+                            <a href=""><i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-header">
+                                <div class="left">
+                                    <div class="title">
+                                        System Maintenance
+                                    </div>
+                                    <div class="sub-title">
+                                        Sent to: 
+                                        <span>Technician</span> |
+                                        <span>Target ID: #123</span> |
+                                        <span>Wed, 04 Oct 2024, 09:30 AM</span>
+                                    </div>                                
+                                </div>
+
+                                <div class="right">
+                                    <a href=""><i class="fa-regular fa-pen-to-square"></i></a>
+                                    <a href=""><i class="fa-regular fa-trash-can"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
+    <script src="{{ asset('js/Admin/1 - Dashboard.js') }}"></script>
+    <script src="{{ asset('js/Admin/admin-navbars.js') }}"></script>
+
+    <script src="{{ asset('js/Admin/chart.umd.js') }}"></script>
+    <script src="{{ asset('js/Admin/echarts.min.js') }}"></script>
+    <script src="{{ asset('js/Admin/apexcharts.min.js') }}"></script>
 
 </body>
 </html>

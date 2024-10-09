@@ -21,17 +21,7 @@
                     <h2>Tech<span>X</span>pertz</h2>
                 </div>
 
-                <nav>
-                    <ul>
-                        <li>Dashboard</li>
-                        <li>User Management</li>
-                        <li class="active">Notification Center</li>
-                        <li>Messages Center</li>
-                        <li>Reviews Management</li>
-                        <li>System Settings</li>
-                        <li>Reports & Analytics</li>
-                    </ul>                    
-                </nav>
+                @yield('navbar')
 
             </div>
 
@@ -42,7 +32,7 @@
 
                 <div class="content">
                     
-                    <div class="form-notification card">
+                    <form class="form-notification card">
                         <div class="form-group">
                             <label for="target-type">Target Type</label>
                             <select id="target-type">
@@ -80,8 +70,8 @@
                         </div>
                 
                         <!-- Send Notification Button -->
-                        <button type="submit" class="btn">Send Notification</button>
-                    </div>
+                        <button type="submit" class="notification-btn">Send Notification</button>
+                    </form>
 
                     <div class="user-reference card">
 
@@ -147,5 +137,6 @@
         </main>
     </div>
 
+    <script src="{{ asset('js/Admin/admin-navbars.js') }}"></script>
 </body>
 </html>

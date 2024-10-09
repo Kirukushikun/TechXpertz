@@ -1,0 +1,38 @@
+/* Card */
+.c7 .card {
+    border: none;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.c7 .card-header,
+.c7 .card-footer {
+border-color: #ebeef4;
+background-color: #fff;
+color: #798eb3;
+padding: 15px;
+}
+
+.c7 .card-title {
+padding: 20px 0 15px 0;
+font-size: 18px;
+font-weight: 500;
+color: #012970;
+font-family: "Poppins", sans-serif;
+}
+
+.c7 .card-title span {
+color: #899bbd;
+font-size: 14px;
+font-weight: 400;
+}
+
+.c7 .card-body {
+padding: 0 20px 20px 20px;
+}
+
+.c7 .card-img-overlay {
+background-color: rgba(255, 255, 255, 0.6);
+}

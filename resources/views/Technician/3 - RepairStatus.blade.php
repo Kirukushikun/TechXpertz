@@ -13,10 +13,34 @@
 
     <link rel="stylesheet" href="{{asset('css/Technician/3 - RepairStatus.css')}}">
     <link rel="stylesheet" href="{{asset('css/Technician/technician-modal.css')}}">
+    <link rel="stylesheet" href="{{asset('css/Technician/technician-notification.css')}}">
 
 </head>
 <body>
     <div class="dashboard">
+
+        <!-- PUSH NOTIFICATION -->
+        @if(session()->has('error'))
+            <div class="push-notification danger active">
+                <i class="fa-solid fa-bell danger"></i>
+                <div class="notification-message">
+                    <h4>Appointment Booked</h4>
+                    <p>{{session('error')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @elseif(session()->has('success'))
+            <div class="push-notification success active">
+                <i class="fa-solid fa-bell success"></i>
+                <div class="notification-message">
+                    <h4>{{session('success')}}</h4>
+                    <p>{{session('success_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @endif
+
+        <!-- MODAL POPUP -->
         <div class="modal" id="modal">
 
         </div>
@@ -177,6 +201,6 @@
     <script src="{{asset('js/Technician/3 - RepairStatus.js')}}"></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
     <script src="{{asset('js/Technician/technician-modal.js')}}"></script>
-
+    <script src="{{asset('js/Technician/technician-notification.js')}}"></script>
 </body>
 </html>

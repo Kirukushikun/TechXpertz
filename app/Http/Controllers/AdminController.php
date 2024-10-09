@@ -26,18 +26,113 @@ class AdminController extends Controller
 {
     //
     public function dashboard(){
-        return view('Admin.1 - Dashboard');
+        $customerCount = Customer::all()->count();
+        $technicianCount = Technician::all()->count();
+        $totalUsers = $customerCount + $technicianCount;
+
+        //------------------------------------------------------------------------------------------------
+
+        // Fetch current week's counts
+        $technicianVerified = Technician::where('profile_status', 'complete')->count();
+        $technicianPending = Technician::where('profile_status', 'pending')->count();
+        $technicianRestricted = Technician::where('profile_status', 'restricted')->count();
+
+            // Fetch last week's counts for comparison (assuming you have a 'created_at' or 'updated_at' field for this)
+            $lastWeekVerified = Technician::where('profile_status', 'complete')
+            ->whereBetween('created_at', [now()->subWeeks(2), now()->subWeek()]) // Get previous week's range
+            ->count();
+
+            $lastWeekPending = Technician::where('profile_status', 'pending')
+            ->whereBetween('created_at', [now()->subWeeks(2), now()->subWeek()])
+            ->count();
+
+            $lastWeekRestricted = Technician::where('profile_status', 'restricted')
+            ->whereBetween('created_at', [now()->subWeeks(2), now()->subWeek()])
+            ->count();
+
+            // Calculate percentage changes
+            $verifiedChange = $this->calculatePercentageChange($technicianVerified, $lastWeekVerified);
+            $pendingChange = $this->calculatePercentageChange($technicianPending, $lastWeekPending);
+            $restrictedChange = $this->calculatePercentageChange($technicianRestricted, $lastWeekRestricted);
+
+            //------------------------------------------------------------------------------------------------
+
+        // Fetch customer and technician counts for the current week
+        $currentWeekCustomerCount = Customer::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
+        $currentWeekTechnicianCount = Technician::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
+
+        // Fetch customer and technician counts for the last week
+        $lastWeekCustomerCount = Customer::whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->count();
+        $lastWeekTechnicianCount = Technician::whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->count();
+
+        // Calculate total users for the current and last week
+        $currentWeekTotalUsers = $currentWeekCustomerCount + $currentWeekTechnicianCount;
+        $lastWeekTotalUsers = $lastWeekCustomerCount + $lastWeekTechnicianCount;
+
+        // Calculate the percentage change in total users
+        $totalUsersPercentageChange = $this->calculatePercentageChange($currentWeekTotalUsers, $lastWeekTotalUsers);
+
+        //------------------------------------------------------------------------------------------------
+        
+
+        return view('Admin.1 - Dashboard', [
+            'totalUsers' => $totalUsers,
+            'totalUsersPercentageChange' => $totalUsersPercentageChange,
+            
+            //Technician ----------
+            'technicianVerified' => $technicianVerified,
+            'technicianPending' => $technicianPending,
+            'technicianRestricted' => $technicianRestricted,
+
+            'verifiedChange' => $verifiedChange,
+            'pendingChange' => $pendingChange,
+            'restrictedChange' => $restrictedChange,
+            //---------------------
+
+        ]);
     }
 
     public function usermanagement(){
-        return view('Admin.2 - UserManagement');
+        $customer = Customer::all();
+        $technician = Technician::all();
+        $totalUsers = $customer->count() + $technician->count();
+
+        return view('Admin.2 - UserManagement', [
+            'customer' => $customer,
+            'technician' => $technician,
+            'totalUsers' => $totalUsers,
+        ]);
+    }
+
+    public function viewprofile(){
+        return view('Admin.6 - ViewProfile');
     }
 
     public function notificationcenter(){
         return view('Admin.3 - NotificationCenter');
     }
 
+    public function reportmanagement(){
+        return view('Admin.4 - ReportManagement');
+    }
+
     public function reviewsmanagement(){
         return view('Admin.5 - ReviewsManagement');
+    }
+
+
+    //EXTERNAL FUNCTIONS
+    public function calculatePercentageChange($currentCount, $previousCount) {
+        // Check if previous count is 0 to avoid division by zero
+        if ($previousCount == 0) {
+            // If no previous count, consider it as 100% increase if there is a current count
+            return $currentCount > 0 ? 100 : 0;
+        }
+    
+        // Calculate the percentage change
+        $percentageChange = (($currentCount - $previousCount) / $previousCount) * 100;
+    
+        // Return the formatted percentage change (rounded)
+        return round($percentageChange, 2); // e.g., "12.34"%
     }
 }

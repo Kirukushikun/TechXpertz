@@ -110,6 +110,11 @@ form {
     display: flex;
     align-items: center;
     gap: 5px;
+}.fs-3 .form-group .form-details.active{
+    background-color: var(--primary-color);
+    color: white;
+}.fs-3 .form-group .form-details.active i{
+    color: white;
 }
 
 .fs-4 .form-details .form-group{

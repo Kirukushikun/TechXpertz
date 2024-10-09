@@ -36,21 +36,58 @@
 
                 <div class="timeline">
                     @foreach($repairstatusDetails as $repairstatus)
-                    <div class="timeline-item">
-                        <div class="timeline-indicator {{$loop->last ? 'first' : '' }}">
-                            <i class="fa-solid fa-circle"></i>
-                            @if(!$loop->last)
-                            <span></span>
-                            @endif
-                        </div>
-                        <div class="timeline-status">
-                            <h3>{{$repairstatus->repairstatus}}</h3>
-                            <p>{{$repairstatus->formatted_date}}, {{$repairstatus->formatted_time}}</p>
-                        </div>
-                        <div class="timeline-description">
-                            <p>{{$repairstatus->repairstatus_message}}</p>
-                        </div>
-                    </div>
+                        @if($repairstatus->repairstatus == "Device Collected")
+                            <div class="timeline-item">
+                                <div class="timeline-indicator {{$loop->last ? 'first' : '' }}">
+                                    <i class="fa-solid fa-circle"></i>
+                                    @if(!$loop->last)
+                                    <span></span>
+                                    @endif
+                                </div>
+                                <div class="timeline-status">
+                                    <h3>Rate Your Experience</h3>
+                                </div>
+                                <div class="timeline-description">
+                                    <p>We’d love to hear your feedback! Please take a moment to rate your experience with our repair service. Your input helps us improve and provide the best possible service to our customers.</p>
+                                    <button>
+                                        Rate <i class="fa-solid fa-star"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-indicator {{$loop->last ? 'first' : '' }}">
+                                    <i class="fa-solid fa-circle"></i>
+                                    @if(!$loop->last)
+                                    <span></span>
+                                    @endif
+                                </div>
+                                <div class="timeline-status">
+                                    <h3>{{$repairstatus->repairstatus}}</h3>
+                                    <p>{{$repairstatus->formatted_date}}, {{$repairstatus->formatted_time}}</p>
+                                </div>
+                                <div class="timeline-description">
+                                    <p>{{$repairstatus->repairstatus_message}}</p>
+                                </div>
+                            </div> 
+                        @else
+                            <div class="timeline-item">
+                                <div class="timeline-indicator {{$loop->last ? 'first' : '' }}">
+                                    <i class="fa-solid fa-circle"></i>
+                                    @if(!$loop->last)
+                                    <span></span>
+                                    @endif
+                                </div>
+                                <div class="timeline-status">
+                                    <h3>{{$repairstatus->repairstatus}}</h3>
+                                    <p>{{$repairstatus->formatted_date}}, {{$repairstatus->formatted_time}}</p>
+                                </div>
+                                <div class="timeline-description">
+                                    <p>{{$repairstatus->repairstatus_message}}</p>
+                                </div>
+                            </div>                        
+                        @endif
+
                     @endforeach               
                 </div>            
             </div>

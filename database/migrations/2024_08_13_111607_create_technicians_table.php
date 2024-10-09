@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('technicians', function (Blueprint $table) {
             $table->id();
+            $table->string('role')->default('technician');
             $table->enum('profile_status', ['incomplete', 'pending', 'complete', 'restricted'])->default('pending');
 
             $table->string('firstname');

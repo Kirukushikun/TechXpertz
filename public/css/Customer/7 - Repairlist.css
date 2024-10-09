@@ -133,6 +133,18 @@
     font-weight: 500;
 }.right-details .repair-payment-cost h1{
     color: var(--primary-color);
+}.right-details .repair-payment-cost button{
+    font-size: 20px;
+    font-weight: 600;
+    border: none;
+    background-color: #f2e747;
+    color: white;
+    width: 100%;
+    border-radius: 5px;
+    padding: 8px;
+    cursor: pointer;
+}.right-details .repair-payment-cost button i{
+    color: white;
 }
 
 .repair-buttons button{

@@ -13,9 +13,30 @@
 
     <link rel="stylesheet" href="{{asset('css/Technician/2 - Appointment.css')}}">
     <link rel="stylesheet" href="{{asset('css/Technician/technician-modal.css')}}">
+    <link rel="stylesheet" href="{{asset('css/Technician/technician-notification.css')}}">
 </head>
 <body>
     <div class="dashboard">
+
+        @if(session()->has('error'))
+            <div class="push-notification danger active">
+                <i class="fa-solid fa-bell danger"></i>
+                <div class="notification-message">
+                    <h4>Appointment Booked</h4>
+                    <p>{{session('error')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @elseif(session()->has('success'))
+            <div class="push-notification success active">
+                <i class="fa-solid fa-bell success"></i>
+                <div class="notification-message">
+                    <h4>{{session('success')}}</h4>
+                    <p>{{session('success_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @endif
 
         <div class="modal" id="modal">
 
@@ -113,7 +134,7 @@
                                 <td>{{$request['contact']}}</td>
                                 <td>{{$request['formatted_date']}}</td>
                                 <td>{{$request['formatted_time']}}</td>
-                                <td><button class="view-upcoming" data-upcoming-id="{{$request['ID']}}">View</button></td>
+                                <td><button class="view-details" data-appointment-id="{{$request['ID']}}">View</button></td>
                                 <td>
                                     <a class="appointment-btn" data-appointment-id="{{$request['ID']}}" data-appointment-status="reject" style="color:red;"><i class="fa-regular fa-calendar-xmark"></i></a>
                                     <a class="appointment-btn" data-appointment-id="{{$request['ID']}}" data-appointment-status="confirm" style="color:green;"><i class="fa-regular fa-calendar-check"></i></a>
@@ -151,9 +172,9 @@
                                     <td>{{$rejected['contact']}}</td>
                                     <td>{{$rejected['formatted_date']}}</td>
                                     <td>{{$rejected['formatted_time']}}</td>
-                                    <td><button class="view-upcoming" data-upcoming-id="{{$rejected['ID']}}">View</button></td>
+                                    <td><button class="view-details" data-appointment-id="{{$rejected['ID']}}">View</button></td>
                                     <td>
-                                        <a class="delete-appointment" data-deleteUpcoming-id="{{$rejected['ID']}}"><i class="fa-regular fa-calendar-xmark"></i></a>
+                                        <a class="delete-appointment" data-deleteUpcoming-id="{{$rejected['ID']}}"><i class="fa-solid fa-message"></i></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -169,7 +190,7 @@
     <script src="{{asset('js/Technician/2 - Appointment.js')}}"></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
     <script src="{{asset('js/Technician/technician-modal.js')}}"></script>
-
+    <script src="{{asset('js/Technician/technician-notification.js')}}"></script>
     
 </body>
 </html>
