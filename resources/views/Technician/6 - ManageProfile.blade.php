@@ -150,7 +150,7 @@
                         @foreach(['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One'] as $item)
                             <div class="form-details {{ $technicianMastery && $technicianMastery->$item ? 'active' : '' }}">
                                 <input type="checkbox" class="checkbox-input" name="{{ $item }}" id="{{ $item }}" hidden {{ $technicianMastery && $technicianMastery->$item ? 'checked' : '' }}>
-                                <i class="fa-solid fa-desktop"></i>
+                                    <img src="{{asset('images/' . $item . '.png')}}">
                                 <p>{{ $item }}</p>
                             </div>
                         @endforeach

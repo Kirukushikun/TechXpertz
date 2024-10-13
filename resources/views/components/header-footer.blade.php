@@ -1,34 +1,34 @@
 @section('header')
 <nav class="navbar">
-    <div class="logo" onclick="window.location.href='{{route('welcome')}}'">Tech<span>X</span>pertz</div>
+    <div class="logo load" onclick="window.location.href='{{route('welcome')}}'">Tech<span>X</span>pertz</div>
     <div class="search-bar">
         <input type="text" placeholder="Search here..." />
         <button><i class="fa fa-search"></i></button>
     </div>
     <div class="icons">
-        <i class="fa-solid fa-screwdriver-wrench" onclick="window.location.href='/repairlist'"></i>
+        <i class="fa-solid fa-screwdriver-wrench load" onclick="window.location.href='/repairlist'"></i>
         <i class="fa-solid fa-message"></i>
     </div>
 
     @auth
-        <button class="account-button" onclick="window.location.href='/customer/myaccount'"><i class="fa fa-user"></i>My Account</button>
+        <button class="account-button load" onclick="window.location.href='/customer/myaccount'"><i class="fa fa-user"></i>My Account</button>
     @else
-        <button class="account-button" onclick="window.location.href='/customer/login'"><i class="fa fa-user"></i>Login</button>
+        <button class="account-button load" onclick="window.location.href='/customer/login'"><i class="fa fa-user"></i>Login</button>
     @endauth
 </nav>
 
 <div class="categories">
     <a href="#">All Categories</a>
-    <a href="{{ route('viewcategory', ['category'=>'Smartphone']) }}">Smartphones</a>
-    <a href="{{ route('viewcategory', ['category'=>'Tablet']) }}">Tablets</a>
-    <a href="{{ route('viewcategory', ['category'=>'Desktop']) }}">Desktops</a>
-    <a href="{{ route('viewcategory', ['category'=>'Laptop']) }}">Laptops</a>
-    <a href="{{ route('viewcategory', ['category'=>'Smartwatch']) }}">Smartwatches</a>
-    <a href="{{ route('viewcategory', ['category'=>'Camera']) }}">Cameras</a>
-    <a href="{{ route('viewcategory', ['category'=>'Printer']) }}">Printers</a>
-    <a href="{{ route('viewcategory', ['category'=>'Speaker']) }}">Speakers</a>
-    <a href="{{ route('viewcategory', ['category'=>'Drone']) }}">Drones</a>
-    <a href="{{ route('viewcategory', ['category'=>'All-In-One']) }}">All-In-One</a>
+    <a href="{{ route('viewcategory', ['category'=>'Smartphone']) }}" class="load">Smartphones</a>
+    <a href="{{ route('viewcategory', ['category'=>'Tablet']) }}" class="load">Tablets</a>
+    <a href="{{ route('viewcategory', ['category'=>'Desktop']) }}" class="load">Desktops</a>
+    <a href="{{ route('viewcategory', ['category'=>'Laptop']) }}" class="load">Laptops</a>
+    <a href="{{ route('viewcategory', ['category'=>'Smartwatch']) }}" class="load">Smartwatches</a>
+    <a href="{{ route('viewcategory', ['category'=>'Camera']) }}" class="load">Cameras</a>
+    <a href="{{ route('viewcategory', ['category'=>'Printer']) }}" class="load">Printers</a>
+    <a href="{{ route('viewcategory', ['category'=>'Speaker']) }}" class="load">Speakers</a>
+    <a href="{{ route('viewcategory', ['category'=>'Drone']) }}" class="load">Drones</a>
+    <a href="{{ route('viewcategory', ['category'=>'All-In-One']) }}" class="load">All-In-One</a>
 </div>
 @endsection
 

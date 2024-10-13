@@ -7,6 +7,8 @@
         <link rel="stylesheet" href="{{asset('css/Customer/0 - Login.css')}}" />
     </head>
     <body>
+
+    
         <div class="container">
             <div class="left">
                 <img src="{{asset('images/login-background.png')}}" alt="" />
@@ -34,7 +36,7 @@
                             </label>
                             <a href="#">Forgot password?</a>
                         </div>
-                        <button type="submit" id="submit">Sign in</button>
+                        <button type="submit" id="submit" class="load">Sign in</button>
                     </form>
                     <div class="social-login">
                         <button class="google-login" id="google-login">

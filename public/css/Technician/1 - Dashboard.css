@@ -98,18 +98,21 @@ header {
 }.appointments-requests table{
     width: 100%;
     text-align: left;
-}.appointments-requests .empty-message{
+}.empty-message{
     /* background-color: #969696; */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 250px;
-    color: #aaaaaa;
-}.appointments-requests .empty-message i{
-    font-size: 40px;
+    color: #cacaca;
+    user-select: none;
+}.empty-message img{
+    width: 60px;
     margin-bottom: 15px;
 }
+
+
 
 
 .appointment-summary{

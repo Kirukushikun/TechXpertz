@@ -58,7 +58,7 @@ header {
     gap: 7px;
 
 }.overall-rating .star, .star-half {
-    color: #ffc107;
+    color: #f7e700;
     font-size: 22px;
 
 }.overall-rating .total-reviews {
@@ -90,7 +90,7 @@ header {
 
 }.rating-bar .bar .filled {
     height: 100%;
-    background-color: #ffc107;
+    background-color: #f7e700;
 
 }
 
@@ -118,7 +118,7 @@ header {
 
 }.review-header .stars{
     font-size: 15px;
-    color: #ffc107;
+    color: #f7e700;
     user-select: none;
 }
 

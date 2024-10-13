@@ -92,9 +92,9 @@ form {
 
     font-weight: 600;
     cursor: pointer;
-}.fs-3 .form-group .form-details i{
-    color: var(--primary-color);
-    font-size: 18px;
+    user-select: none;
+}.fs-3 .form-group .form-details img{
+    width: 25px;
 }
 .fs-3 .form-group button{
     background-color: transparent;
@@ -111,10 +111,9 @@ form {
     align-items: center;
     gap: 5px;
 }.fs-3 .form-group .form-details.active{
-    background-color: var(--primary-color);
-    color: white;
-}.fs-3 .form-group .form-details.active i{
-    color: white;
+    border-color: var(--primary-color);
+    border-width: 3px;
+    font-weight: 700;
 }
 
 .fs-4 .form-details .form-group{

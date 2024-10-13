@@ -7,9 +7,14 @@
         <title>TechXpertz</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="{{ asset('css/Customer/header-footer.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-loadingscreen.css') }}">
         <link rel="stylesheet" href="{{ asset('css/Customer/1 - Homepage.css') }}">
     </head>
     <body>
+
+        <div class="loading-screen">
+            <div class="loader"></div>
+        </div>
 
         @yield('header')
         
@@ -33,7 +38,7 @@
             </div>
 
             <div class="categories-2">
-                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Smartphone']) }}'">
+                <div class="category load" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Smartphone']) }}'">
                     <div class="icon">
                         <img src="{{asset('images/Smartphone.png')}}">
                     </div>
@@ -42,7 +47,7 @@
                         <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Tablet']) }}'">
+                <div class="category load" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Tablet']) }}'">
                     <div class="icon">
                         <img src="{{asset('images/Tablet.png')}}">
                     </div>
@@ -51,7 +56,7 @@
                         <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Desktop']) }}'">
+                <div class="category load" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Desktop']) }}'">
                     <div class="icon">
                         <img src="{{asset('images/Desktop.png')}}">
                     </div>
@@ -60,7 +65,7 @@
                         <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Laptop']) }}'">
+                <div class="category load" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Laptop']) }}'">
                     <div class="icon">
                         <img src="{{asset('images/Laptop.png')}}">
                     </div>
@@ -69,7 +74,7 @@
                         <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Smartwatch']) }}'">
+                <div class="category load" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Smartwatch']) }}'">
                     <div class="icon">
                         <img src="{{asset('images/Smartwatch.png')}}">
                     </div>
@@ -78,7 +83,7 @@
                         <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Camera']) }}'">
+                <div class="category load" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Camera']) }}'">
                     <div class="icon">
                         <img src="{{asset('images/Camera.png')}}">
                     </div>
@@ -87,7 +92,7 @@
                         <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category">
+                <div class="category load">
                     <div class="icon" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Printer']) }}'">
                         <img src="{{asset('images/Printer.png')}}">
                     </div>
@@ -96,7 +101,7 @@
                         <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Speaker']) }}'">
+                <div class="category load" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Speaker']) }}'">
                     <div class="icon">
                         <img src="{{asset('images/Speaker.png')}}">
                     </div>
@@ -105,7 +110,7 @@
                         <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Drone']) }}'">
+                <div class="category load" onclick="window.location.href='{{ route('viewcategory', ['category'=>'Drone']) }}'">
                     <div class="icon">
                         <img src="{{asset('images/Drone.png')}}">
                     </div>
@@ -114,7 +119,7 @@
                         <p>Repair Shops</p>
                     </div>
                 </div>
-                <div class="category" onclick="window.location.href='{{ route('viewcategory', ['category'=>'All-In-One']) }}'">
+                <div class="category load" onclick="window.location.href='{{ route('viewcategory', ['category'=>'All-In-One']) }}'">
                     <div class="icon">
                         <img src="{{asset('images/All-In-One.png')}}">
                     </div>
@@ -190,8 +195,8 @@
                                     <p>{{ $repairshop['totalReviews']}} Reviews</p>
                                 </div>
                                 <div class="actions">
-                                    <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                                    <button class="view" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                                    <button class="favorite" ><i class="fa-regular fa-heart"></i></button>
+                                    <button class="view load" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
                                 </div>
                             </div>
                         </div>                    
@@ -201,6 +206,8 @@
         </div>
 
         @yield('footer')
+
+        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}"></script>
 
     </body>
 </html>

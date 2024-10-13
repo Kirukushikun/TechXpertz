@@ -7,9 +7,14 @@
         <title>TechXpertz</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="{{ asset('css/Customer/header-footer.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-loadingscreen.css') }}">
         <link rel="stylesheet" href="{{ asset('css/Customer/3 - ViewShop.css') }}">
     </head>
     <body>
+
+        <div class="loading-screen">
+            <div class="loader"></div>
+        </div>
 
         @yield('header')
         
@@ -20,13 +25,13 @@
             <div class="service-details">
                 <div class="left">
                     <div class="image-gallery">
-                        <img src="main-image.jpg" alt="JBL Service Center">
+                        <img src="" alt="JBL Service Center">
                         <div class="thumbnails">
                             <i class="fa-solid fa-angle-up"></i>
-                            <img src="thumbnail1.jpg" alt="Thumbnail 1" class="active">
-                            <img src="thumbnail2.jpg" alt="Thumbnail 2">
-                            <img src="thumbnail3.jpg" alt="Thumbnail 3">
-                            <img src="thumbnail4.jpg" alt="Thumbnail 4">
+                            <img src="" alt="Thumbnail 1" class="active">
+                            <img src="" alt="Thumbnail 2">
+                            <img src="" alt="Thumbnail 3">
+                            <img src="" alt="Thumbnail 4">
                             <i class="fa-solid fa-angle-down"></i>
                         </div>
                     </div>
@@ -74,10 +79,11 @@
                         </div>
                     </div>
                     <div class="mastery">
-                        <i class="fa-solid fa-desktop"></i>
-                        <i class="fa-solid fa-desktop"></i>
-                        <i class="fa-solid fa-desktop"></i>
-                        <i class="fa-solid fa-desktop"></i>
+                        @foreach(['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One'] as $item)
+                            @if($repairshopMastery->$item)
+                                <img src="{{asset('images/' . $item . '.png' )}}" alt="">
+                            @endif
+                        @endforeach
                     </div>
 
                     <div class="details-info">
@@ -103,7 +109,7 @@
                     <div class="buttons">
                         <button class="favorite"><i class="fa-regular fa-heart"></i></button>
                         <button class="chat">CHAT</button>
-                        <button class="appointment highlight" onclick="window.location.href='{{route('viewappointment', ['id' => $repairshop->id])}}'">MAKE AN APPOINTMENT</button>
+                        <button class="appointment highlight load" id="button" onclick="window.location.href='{{route('viewappointment', ['id' => $repairshop->id])}}'">MAKE AN APPOINTMENT</button>
                     </div>
                 </div>
             </div>
@@ -171,5 +177,6 @@
 
         @yield('footer')
 
+        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}"></script>
     </body>
 </html>

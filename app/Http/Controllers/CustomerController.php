@@ -57,11 +57,14 @@ class CustomerController extends Controller
         // Get the detailed schedule
         $detailedSchedule = $this->getDetailedSchedule($id);
 
+        $repairshopMastery = RepairShop_Mastery::where('technician_id', $repairshop->id)->first();
+
         return view('Customer.3 - ViewShop', [
             'repairshop' => $repairshop,
             'services' => $services,
             'reviewData' => $reviewData,
-            'detailedSchedule' => $detailedSchedule
+            'detailedSchedule' => $detailedSchedule,
+            'repairshopMastery' => $repairshopMastery
         ]);
     }
 

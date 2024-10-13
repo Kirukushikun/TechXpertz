@@ -102,7 +102,10 @@ Route::middleware('admin.auth')->group(function(){
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/usermanagement', [AdminController::class, 'usermanagement'])->name('admin.usermanagement');
     Route::get('/admin/viewprofile', [AdminController::class, 'viewprofile'])->name('admin.viewprofile');
+
     Route::get('/admin/notificationcenter', [AdminController::class, 'notificationcenter'])->name('admin.notificationcenter');
+        Route::post('/admin/notificationcenter/{targetType}', [AdminController::class, 'notificationcreate']);
+
     Route::get('/admin/reportmanagement', [AdminController::class, 'reportmanagement'])->name('admin.reportmanagement');
     Route::get('/admin/reviewsmanagement', [AdminController::class, 'reviewsmanagement'])->name('admin.reviewsmanagement');
     

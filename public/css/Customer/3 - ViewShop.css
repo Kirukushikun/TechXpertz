@@ -141,6 +141,10 @@
     border-width: 2px;
     border-color: #eeeeee;
 }   
+
+    .mastery img{
+        width: 35px;
+    }   
     .details-info{
         margin-top: 15px;
     }

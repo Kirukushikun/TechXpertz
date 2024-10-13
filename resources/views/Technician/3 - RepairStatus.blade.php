@@ -55,9 +55,9 @@
             <div class="repair-navigation">
                 <ul class="tabs">
                     <div class="tab-navigation">
-                        <li class="tab-link active" data-tab="pending-repair">In Progress<i class="fa-solid fa-spinner"></i></li>
-                        <li class="tab-link" data-tab="completed-repair">Completed<i class="fa-solid fa-check-double"></i></li>
-                        <li class="tab-link" data-tab="terminated-repair">Terminated<i class="fa-solid fa-trash"></i></li>
+                        <li class="tab-link active" data-tab="pending-repair">In Progress<img src="{{asset('images/desktop-cog.png')}}"></li>
+                        <li class="tab-link" data-tab="completed-repair">Completed<img src="{{asset('images/desktop-check.png')}}"></li>
+                        <li class="tab-link" data-tab="terminated-repair">Terminated<img src="{{asset('images/desktop-x.png')}}"></li>
                     </div>
                     
                     <div class="tab-filters">
@@ -73,7 +73,7 @@
                 <div id="pending-repair" class="tab-content-item card active">
                     @if(count($repairStatusPendingData) === 0)
                         <div class="empty-message">
-                            <i class="fa-solid fa-user-xmark"></i>
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
                             <p>No pending repairs at the moment.</p>                            
                         </div>
                     @else    
@@ -123,7 +123,7 @@
                 <div id="completed-repair" class="tab-content-item card">
                     @if(count($repairStatusCompletedData) === 0)
                         <div class="empty-message">
-                            <i class="fa-solid fa-user-xmark"></i>
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
                             <p>No completed repairs at the moment</p>                            
                         </div>
                     @else
@@ -159,7 +159,7 @@
                 <div id="terminated-repair" class="tab-content-item card">
                     @if(count($repairStatusTerminatedData) === 0)
                         <div class="empty-message">
-                            <i class="fa-solid fa-user-xmark"></i>
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
                             <p>No terminated repairs at the moment</p>                            
                         </div>
                     @else

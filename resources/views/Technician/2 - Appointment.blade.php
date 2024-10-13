@@ -52,10 +52,10 @@
             <div class="appointment-navigation">
                 <ul class="tabs">
                     <div class="tab-navigation">
-                        <li class="tab-link active" data-tab="upcoming">Confirmed <i class="fa-solid fa-check"></i></li>
-                        <li class="tab-link" data-tab="request">Requests <i class="fa-solid fa-spinner"></i></li>
+                        <li class="tab-link active" data-tab="upcoming">Confirmed <img src="{{asset('images/calendar-check.png')}}"></li>
+                        <li class="tab-link" data-tab="request">Requests <img src="{{asset('images/calendar-dot.png')}}"></li>
                         <!-- <li class="tab-link" data-tab="completed">Completed <i class="fa-solid fa-check-double"></i></li> -->
-                        <li class="tab-link" data-tab="rejected">Cancelled/Rejected <i class="fa-solid fa-xmark"></i></li>                        
+                        <li class="tab-link" data-tab="rejected">Cancelled/Rejected <img src="{{asset('images/calendar-x.png')}}"></li>                        
                     </div>
 
                     <div class="tab-filters">
@@ -72,7 +72,7 @@
                 <div id="upcoming" class="tab-content-item card active">
                     @if(count($confirmedAppointments) === 0)
                         <div class="empty-message">
-                            <i class="fa-solid fa-user-xmark"></i>
+                            <img src="{{asset('images/no-appointments.png')}}">
                             <p>No scheduled appointments yet.</p>                            
                         </div>
                     @else
@@ -110,7 +110,7 @@
                 <div id="request" class="tab-content-item card">
                     @if(count($requestedAppointments) === 0)
                     <div class="empty-message">
-                        <i class="fa-solid fa-user-xmark"></i>
+                        <img src="{{asset('images/no-appointments.png')}}">
                         <p>No appointment requests at the moment.</p>                            
                     </div>
                     @else
@@ -148,7 +148,7 @@
                 <div id="rejected" class="tab-content-item card">
                     @if(count($rejectedAppointments) === 0)
                     <div class="empty-message">
-                        <i class="fa-solid fa-user-xmark"></i>
+                        <img src="{{asset('images/no-appointments.png')}}">
                         <p>No cancelled/rejected appointments at the moment.</p>                            
                     </div>
                     @else

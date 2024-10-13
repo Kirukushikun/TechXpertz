@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Public_Notifications;
+
 use App\Models\Customer;
 use App\Models\Customer_RepairStatus;
+use App\Models\Customer_Notifications;
 use App\Models\Technician;
 use App\Models\Technician_Notifications;
 
@@ -110,6 +113,60 @@ class AdminController extends Controller
 
     public function notificationcenter(){
         return view('Admin.3 - NotificationCenter');
+    }
+
+    public function notificationcreate(Request $request, $targetType){
+
+        if($targetType == "Public"){
+            Public_Notifications::create([
+                'title' => $request->notification_title,
+                'message' => $request->notification_message,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }elseif($targetType == "Technicians"){
+            $targetUser = $request->target_user;
+            if($targetUser == "All"){
+                Technician_Notifications::create([
+                    'target_type' => 'all',
+                    'title' => $request->notification_title,
+                    'message' => $request->notification_message,
+                ]); 
+            }else{
+                $technicianExist = Technician::find($request->target_id);
+                if(!$technicianExist){
+                    return back()->with('error', 'Technician not found');
+                }
+                Technician_Notifications::create([
+                    'target_type' => 'technician',
+                    'target_id' => $request->target_id,
+                    'title' => $request->notification_title,
+                    'message' => $request->notification_message,
+                ]); 
+            }
+        }elseif($targetType == "Customers"){
+            $targetUser = $request->target_user;
+            if($targetUser == "All"){
+                Customer_Notifications::create([
+                    'target_type' => 'all',
+                    'title' => $request->notification_title,
+                    'message' => $request->notification_message,
+                ]); 
+            }else{
+                $customerExist = Customer::find($request->target_id);
+                if(!$customerExist){
+                    return back()->with('error', 'Technician not found');
+                }
+                Customer_Notifications::create([
+                    'target_type' => 'customer',
+                    'target_id' => $request->target_id,
+                    'title' => $request->notification_title,
+                    'message' => $request->notification_message,
+                ]); 
+            }
+        }
+
+        return back()->with('success', 'Notification sent successfully');
     }
 
     public function reportmanagement(){

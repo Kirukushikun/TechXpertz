@@ -7,9 +7,14 @@
         <title>TechXpertz</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="{{ asset('css/Customer/header-footer.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-loadingscreen.css') }}">
         <link rel="stylesheet" href="{{ asset('css/Customer/2 - ViewCategory.css') }}">
     </head>
     <body>
+
+        <div class="loading-screen">
+            <div class="loader"></div>
+        </div>
 
         @yield('header')
         
@@ -35,7 +40,11 @@
 
             <div class="shops">
                 @if(count($repairshops) === 0)
-                    <p class="no-shop">No Shops Available</p>
+                    
+                    <p class="no-shop">
+                        <i class="fa-solid fa-shop-slash"></i>
+                        <span>No Shops Available</span>
+                    </p>
                 @else
                     @foreach($repairshops as $repairshop)
                         <div class="shop">
@@ -44,7 +53,7 @@
                             <div class="shop-details">
                                 <div class="shop-name">
                                     <h3>{{$repairshop['repairshopName']}}</h3>
-                                    <i class="fa fa-desktop"></i>
+                                    <img src="{{ asset('images/' . $repairshop['repairshopMastery'] . '.png') }}">
                                 </div>
                                 
                                 <div class="shop-location">
@@ -84,158 +93,13 @@
                                 </div>
                                 <div class="actions">
                                     <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                                    <button class="view" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                                    <button class="view" id="button" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
                                 </div>
                             </div>
                         </div>                   
                     @endforeach
                 @endif
             </div>
-
-            <!-- <div class="shops">
-                <div class="shop">
-                    <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
-
-                    <div class="shop-details">
-                        <div class="shop-name">
-                            <h3>BATZ</h3>
-                            <i class="fa fa-desktop"></i>
-                        </div>
-                        
-                        <div class="shop-location">
-                            <p>123 Tech Street, Barangay Techville, Metro Manila</p>
-                        </div>
-                        
-                        <div class="shop-schedule">
-                            <p>+63 123 456 7890</p>
-                            <h4>Mon - Fri</h4>              
-                        </div>
-    
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> Expert Tech Solutions</li>
-                            <li><i class="fa-solid fa-check"></i> Fast Repairs Guaranteed</li>
-                            <li><i class="fa-solid fa-check"></i> Reliable Service Network</li>
-                            <li><i class="fa-solid fa-check"></i> Quality Workmanship Assured</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="shop-footer">
-                        <div class="rating">
-                            <span>★★★★☆</span>
-                            <p>210 Reviews</p>
-                        </div>
-                        <div class="actions">
-                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                            <button class="view"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="shop">
-                    <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
-                    <div class="shop-details">
-                        <div class="shop-name">
-                            <h3>CAMFIX</h3>
-                            <i class="fa fa-desktop"></i>
-                        </div>
-                        
-                        <div class="shop-location">
-                            <p>456 Tech Street, Barangay Techland, Cebu City, Cebu</p>
-                        </div>
-                        
-                        <div class="shop-schedule">
-                            <p>+63 123 456 7890</p>
-                            <h4>Mon - Fri</h4>              
-                        </div>
-    
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> Expert Tech Solutions</li>
-                            <li><i class="fa-solid fa-check"></i> Fast Repairs Guaranteed</li>
-                            <li><i class="fa-solid fa-check"></i> Reliable Service Network</li>
-                            <li><i class="fa-solid fa-check"></i> Quality Workmanship Assured</li>
-                        </ul>
-                    </div>
-                    <div class="shop-footer">
-                        <div class="rating">
-                            <span>★★★★☆</span>
-                            <p>210 Reviews</p>
-                        </div>
-                        <div class="actions">
-                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                            <button class="view"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="shop">
-                    <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
-                    <div class="shop-details">
-                        <div class="shop-name">
-                            <h3>JBL SERVICE CENTER</h3>
-                            <i class="fa fa-desktop"></i>
-                        </div>
-                        
-                        <div class="shop-location">
-                            <p>123 Tech Street, Barangay Techville, Metro Manila</p>
-                        </div>
-                        
-                        <div class="shop-schedule">
-                            <p>+63 123 456 7890</p>
-                            <h4>Mon - Fri</h4>              
-                        </div>
-    
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> Expert Tech Solutions</li>
-                            <li><i class="fa-solid fa-check"></i> Fast Repairs Guaranteed</li>
-                            <li><i class="fa-solid fa-check"></i> Reliable Service Network</li>
-                            <li><i class="fa-solid fa-check"></i> Quality Workmanship Assured</li>
-                        </ul>
-                    </div>
-                    <div class="shop-footer">
-                        <div class="rating">
-                            <span>★★★★☆</span>
-                            <p>210 Reviews</p>
-                        </div>
-                        <div class="actions">
-                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                            <button class="view"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="shop">
-                    <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
-                    <div class="shop-details">
-                        <div class="shop-name">
-                            <h3>3JPS</h3>
-                            <i class="fa fa-desktop"></i>
-                        </div>
-                        
-                        <div class="shop-location">
-                            <p>123 Tech Street, Barangay Techville, Metro Manila</p>
-                        </div>
-                        
-                        <div class="shop-schedule">
-                            <p>+63 123 456 7890</p>
-                            <h4>Mon - Fri</h4>              
-                        </div>
-    
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> Expert Tech Solutions</li>
-                            <li><i class="fa-solid fa-check"></i> Fast Repairs Guaranteed</li>
-                            <li><i class="fa-solid fa-check"></i> Reliable Service Network</li>
-                            <li><i class="fa-solid fa-check"></i> Quality Workmanship Assured</li>
-                        </ul>
-                    </div>
-                    <div class="shop-footer">
-                        <div class="rating">
-                            <span>★★★★☆</span>
-                            <p>210 Reviews</p>
-                        </div>
-                        <div class="actions">
-                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                            <button class="view"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
 
             <div class="pagination">
                 <a href="#" class="active">1</a>
@@ -246,6 +110,8 @@
         </div>
 
         @yield('footer')
+
+        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}"></script>
 
     </body>
 </html>

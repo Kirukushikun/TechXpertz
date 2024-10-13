@@ -35,10 +35,13 @@ header {
 }.tabs .tab-navigation{
     display: flex;
 }
-
-.tabs .tab-navigation i{
-    color: var(--primary-color);
-    margin-left: 10px;
+.tabs .tab-navigation li{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.tabs .tab-navigation img{
+    width: 25px;
 }
 
 .tab-link {
@@ -173,12 +176,16 @@ header {
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #aaaaaa;
+    color: #cacaca;
     user-select: none;
-} .empty-message i{
-    font-size: 40px;
+}.empty-message img{
+    width: 70px;
     margin-bottom: 15px;
+}.empty-message p{
+    font-size: 18px;
 }
+
+
 
 .note{
     margin-top: 20px;

@@ -77,7 +77,7 @@
 
                     @if(count($requestedAppointments) === 0 )
                         <div class="empty-message">
-                            <i class="fa-solid fa-user-xmark"></i>
+                            <img src="{{asset('images/no-appointments.png')}}">
                             <p>No appointment requests at the moment.</p>                            
                         </div>
                     @else
@@ -151,7 +151,7 @@
 
                 @if(count($upcomingAppointments) === 0)
                     <div class="empty-message">
-                        <i class="fa-solid fa-user-xmark"></i>
+                        <img src="{{asset('images/no-appointments.png')}}">
                         <p>No appointments scheduled yet.</p>                            
                     </div>
                 @else

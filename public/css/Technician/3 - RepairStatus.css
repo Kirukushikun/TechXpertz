@@ -36,9 +36,13 @@ header {
     border-bottom: 2px solid #eeeeee;
 }
 
-.tabs .tab-navigation i{
-    color: var(--primary-color);
-    margin-left: 10px;
+.tabs .tab-navigation li{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.tabs .tab-navigation img{
+    width: 25px;
 }
 
 .tab-link {
