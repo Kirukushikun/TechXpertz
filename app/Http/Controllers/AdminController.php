@@ -20,6 +20,10 @@ use App\Models\RepairShop_Socials;
 use App\Models\RepairShop_Appointments;
 use App\Models\RepairShop_RepairStatus;
 use App\Models\RepairShop_Badges;
+
+use App\Models\Admin_NotificationHistory;
+use App\Models\Admin_ReportManagement;
+
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -112,7 +116,10 @@ class AdminController extends Controller
     }
 
     public function notificationcenter(){
-        return view('Admin.3 - NotificationCenter');
+        $notificationHistory = Admin_NotificationHistory::orderBy('created_at', 'desc')->get();
+        return view('Admin.3 - NotificationCenter', [
+            'notificationHistory' => $notificationHistory,
+        ]);
     }
 
     public function notificationcreate(Request $request, $targetType){
@@ -166,15 +173,66 @@ class AdminController extends Controller
             }
         }
 
+        Admin_NotificationHistory::create([
+            'target_type' => $targetType,
+            'target_user' => $request->target_user ?? "all",
+            'target_id' => $request->target_id,
+            'title' => $request->notification_title,
+            'message' => $request->notification_message,
+        ]);
+
         return back()->with('success', 'Notification sent successfully');
     }
 
     public function reportmanagement(){
-        return view('Admin.4 - ReportManagement');
+        $reports = Admin_ReportManagement::orderBy('created_at', 'asc')->get();
+        $customerReports = $reports->where('user_role', 'customer');
+        $technicianReports = $reports->where('user_role', 'technician');
+
+        // $resolvedReports = $reports->where('report_status', 'resolved');
+        // $pendingReports = $reports->where('report_status', 'pending');
+        // $escalatedReports = $reports->where('report_status', 'escalated');
+
+        return view('Admin.4 - ReportManagement', [
+            'reports' => $reports,
+            'customerReports' => $customerReports,
+            'technicianReports' => $technicianReports,
+        ]);
     }
+        public function reportdetails($reportID){
+            $reportdetails = Admin_ReportManagement::find($reportID);
+            return response()->json([
+                'ID' => $reportdetails->id,
+                'user_id' => $reportdetails->user_id,
+                'user_role' => $reportdetails->user_role,
+                'user_name' => $reportdetails->user_name,
+                'user_email' => $reportdetails->user_email,
+
+                'report_status' => $reportdetails->report_status,
+                'report_issue' => $reportdetails->report_issue,
+                'report_description' => $reportdetails->report_description,
+            ]);
+        }
+        public function reportupdate(Request $request, $reportID) {
+            $report = Admin_ReportManagement::find($reportID);
+        
+            $report->update([
+                'report_status' => $request->report_status,
+            ]);
+
+            return back()->with('success', 'Report Status Updated');
+        }
 
     public function reviewsmanagement(){
-        return view('Admin.5 - ReviewsManagement');
+        $reviewData = RepairShop_Reviews::orderBy('created_at', 'desc')
+            ->with('customer')
+            ->with('technician')
+            ->get();
+
+
+        return view('Admin.5 - ReviewsManagement', [
+            'reviewData' => $reviewData
+        ]);
     }
 
 

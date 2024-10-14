@@ -47,4 +47,9 @@ class RepairShop_Reviews extends Authenticatable
         return $this->belongsTo(Technician::class);
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
 }

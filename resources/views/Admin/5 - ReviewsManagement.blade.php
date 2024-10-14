@@ -36,8 +36,48 @@
                 </div>
 
                 <div class="content">
+                    @foreach($reviewData as $review)
+                    <div class="review-item active" id="{{$review->id}}">
+                        <div class="left">
+                            <div class="review-header">
+                                <div class="title">
+                                    Customer: <a href="">{{$review->customer->firstname}} {{$review->customer->lastname}}</a>
+                                </div>
+                                <div class="sub-title">
+                                    Repairshop: 
+                                    <span><a href="">{{$review->technician->repairshopCredentials->shop_name}}</a></span> |
+                                    Technician:
+                                    <span><a href="">{{$review->technician->firstname}} {{$review->technician->middlename ?? ''}} {{$review->technician->lastname}}</a></span> |
+                                    {{$review->created_at->format('M d, Y, h:i A')}}
+                                </div> 
+                            </div>
+                            <div class="review-content">
+                                <div class="header">
+                                    <div class="ratings">Rating: 
+                                        <span>
+                                            @for ($i = 1; $i <= $review->rating; $i++ )
+                                            <span class="star"><i class="fa-solid fa-star"></i></span>
+                                            @endfor
 
-                    <div class="review-item">
+                                            <!-- Display empty stars for the remaining -->
+                                            @for ($i = $review->rating + 1; $i <= 5; $i++)
+                                                <span class="star"><i class="fa-regular fa-star"></i></span>
+                                            @endfor
+                                        </span>
+                                    </div>
+                                                                    
+                                </div>
+                                "{{$review->review_comment}}"
+                            </div>                            
+                        </div>
+
+                        <div class="right">
+                            <button class="reviewbtn check" data-review-status="approved" data-review-id="{{$review->id}}"><i class="fa-solid fa-check"></i></button>
+                            <button class="reviewbtn exclamation" data-review-status="rejected" data-review-id="{{$review->id}}"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                    @endforeach
+                    <!-- <div class="review-item">
                         <div class="left">
                             <div class="review-header">
                                 <div class="title">
@@ -72,44 +112,7 @@
                             <button class="check"><i class="fa-solid fa-check"></i></button>
                             <button class="exclamation"><i class="fa-solid fa-xmark"></i></button>
                         </div>
-                    </div>
-                    
-                    <div class="review-item">
-                        <div class="left">
-                            <div class="review-header">
-                                <div class="title">
-                                    Customer: <a href="">Iverson Craig Guno</a>
-                                </div>
-                                <div class="sub-title">
-                                    Repairshop: 
-                                    <span><a href="">TechXpertz</a></span> |
-                                    Technician:
-                                    <span><a href="">Iverson Guno</a></span> |
-                                    Wed, 04 Oct 2024, 09:30 AM
-                                </div> 
-                            </div>
-                            <div class="review-content">
-                                <div class="header">
-                                    <div class="ratings">Rating: 
-                                        <span>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </span>
-                                    </div>
-                                                                    
-                                </div>
-                                "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam eaque non dicta fugiat sapiente perferendis aliquam expedita excepturi delectus unde. Quod tenetur sapiente recusandae nostrum non quibusdam provident rerum praesentium."
-                            </div>                            
-                        </div>
-
-                        <div class="right">
-                            <button class="check"><i class="fa-solid fa-check"></i></button>
-                            <button class="exclamation"><i class="fa-solid fa-xmark"></i></button>
-                        </div>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>
@@ -117,5 +120,20 @@
     </div>
 
     <script src="{{ asset('js/Admin/admin-navbars.js') }}"></script>
+    <script>
+        let reviewButtons = document.querySelectorAll('button.reviewbtn');
+        reviewButtons.forEach(button => {
+            button.addEventListener('click', function(){
+                let reviewID = button.getAttribute('data-review-id');
+                updatereview(reviewID);
+            });
+        });
+
+        function updatereview(reviewID){
+
+            let reviewItem = document.getElementById(reviewID);
+            reviewItem.classList.remove('active');                
+        }
+    </script>
 </body>
 </html>

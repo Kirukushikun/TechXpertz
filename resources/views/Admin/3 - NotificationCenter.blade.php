@@ -116,29 +116,50 @@
                 </div>
 
                 <div class="notification-history card">
-                    <h2>Notification History</h2>
-                    <div class="notification-item">
-                        <div class="notification-header">
-                            <div class="left">
-                                <div class="title">
-                                    System Maintenance
-                                </div>
-                                <div class="sub-title">
-                                    Sent to: 
-                                    <span>Technician</span> |
-                                    <span>Target ID: #123</span> |
-                                    <span>Wed, 04 Oct 2024, 09:30 AM</span>
-                                </div>                                
-                            </div>
+                    <div class="card-header">
+                        <h2>Notification History</h2>
+                        <div class="tab-filters">
+                            <li><button><i class="fa-solid fa-filter"></i> Filter</button></li>
+                            <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
+                        </div>                        
+                    </div>
+                    <div class="notification-container">
+                        @foreach($notificationHistory as $notification)
+                        <div class="notification-item">
+                            <div class="notification-header">
+                                <div class="left">
+                                    <div class="title">
+                                        {{$notification->title}}
+                                    </div>
+                                    <div class="sub-title">
+                                        Sent to:
+                                        @if($notification->target_type == "Public")
+                                        <span class="{{$notification->target_type}}">{{$notification->target_type}}</span> |
+                                        <span>{{ $notification->created_at->format('M d, Y, h:i A') }}</span>
+                                        @else
+                                            <span>{{$notification->target_type}}</span> |
+                                            @if($notification->target_user == "All")
+                                            <span>Target User: All</span> |
+                                            <span>{{ $notification->created_at->format('M d, Y, h:i A') }}</span> 
+                                            @else
+                                            <span>Target User: #{{$notification->target_id}}</span> |
+                                            <span>{{ $notification->created_at->format('M d, Y, h:i A') }}</span> 
+                                            @endif                                   
+                                        @endif
 
-                            <div class="right">
-                                <a href=""><i class="fa-regular fa-pen-to-square"></i></a>
-                                <a href=""><i class="fa-regular fa-trash-can"></i></a>
+                                    </div>                                
+                                </div>
+
+                                <!-- <div class="right">
+                                    <a href=""><i class="fa-regular fa-pen-to-square"></i></a>
+                                    <a href=""><i class="fa-regular fa-trash-can"></i></a>
+                                </div> -->
+                            </div>
+                            <div class="notification-content">
+                                {{$notification->message}}
                             </div>
                         </div>
-                        <div class="notification-content">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam eaque non dicta fugiat sapiente perferendis aliquam expedita excepturi delectus unde. Quod tenetur sapiente recusandae nostrum non quibusdam provident rerum praesentium.
-                        </div>
+                        @endforeach                        
                     </div>
                 </div>
             </div>
@@ -286,7 +307,6 @@
                 }
 
             }
-
             modal.classList.add("active");
 
             // Close modal when 'X' is clicked
@@ -312,21 +332,24 @@
         
         //Disable on every change
         inputTargetType.addEventListener('change', function(){
-            if(this.value == "Public"){
+            if(this.value == "Public" ){
                 inputTargetUser.disabled = true;
                 inputTargetID.disabled = true;
             }else{
                 inputTargetUser.disabled = false;
+                inputTargetID.disabled = true;
             }
             inputTargetUser.value = "All";
+            inputTargetID.value = "";
         })
 
         inputTargetUser.addEventListener('change', function(){
             if(this.value == "All"){
-            inputTargetID.disabled = true;
+                inputTargetID.disabled = true;
             }else{
                 inputTargetID.disabled = false;
             }
+            inputTargetID.value = "";
         })
 
     </script>

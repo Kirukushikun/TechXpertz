@@ -46,7 +46,6 @@
 
     justify-content: space-between;
 }
-
 .form-group{
     width: 100%;
     display: flex;
@@ -120,4 +119,33 @@
 }
 .notification-content{
     margin-top: 15px;
+}
+
+.card-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notification-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    max-height: 600px;
+    overflow-y: auto;
+
+    padding-right: 20px;
+}
+
+.notification-container::-webkit-scrollbar{
+    width: 12px;
+}.notification-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the scrollbar track */
+    border-radius: 5px;
+}.notification-container::-webkit-scrollbar-thumb {
+    background: var(--lighted-text-color); /* Color of the scrollbar thumb */
+    border-radius: 5px;
+}.notification-container::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color of the scrollbar thumb when hovered */
 }
