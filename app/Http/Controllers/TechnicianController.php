@@ -530,7 +530,7 @@ class TechnicianController extends Controller
 
         // Combine both queries and sort in descending order
         $reviewMessages = RepairShop_Reviews::where('technician_id', $technician->id)
-            ->Where('approved', 1)
+            ->Where('status', 'Approved')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -763,7 +763,7 @@ class TechnicianController extends Controller
         }
 
     private function reviewSystem($id){
-        $ratings = RepairShop_Reviews::where('technician_id', $id)->where('approved', 1)->pluck('rating')->toArray();
+        $ratings = RepairShop_Reviews::where('technician_id', $id)->where('status', 'Approved')->pluck('rating')->toArray();
 
         // Calculate total number of reviews
         $totalReviews = count($ratings);

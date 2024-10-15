@@ -24,12 +24,13 @@ class RepairShop_Reviews extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'ID',
         'customer_id',
         'technician_id',
 
         'rating',
         'review_comment',
-        'approved',
+        'status',
     ];
 
         /**
@@ -39,7 +40,6 @@ class RepairShop_Reviews extends Authenticatable
      */
     protected $casts = [
         'rating' => 'integer',
-        'approved' => 'boolean',
     ];
 
     public function technician()

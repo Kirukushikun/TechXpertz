@@ -406,7 +406,7 @@ class CustomerController extends Controller
     // REVIEW SYSTEM FUNCTIONS ---------
 
     private function reviewSystem($id){
-        $ratings = RepairShop_Reviews::where('technician_id', $id)->where('approved', 1)->pluck('rating')->toArray();
+        $ratings = RepairShop_Reviews::where('technician_id', $id)->where('Status', 'Approved')->pluck('rating')->toArray();
 
         // Calculate total number of reviews
         $totalReviews = count($ratings);

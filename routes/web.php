@@ -109,7 +109,9 @@ Route::middleware('admin.auth')->group(function(){
         Route::patch('/admin/notificationcenter/update/{reportID}', [AdminController::class, 'reportupdate']);
 
     Route::get('/admin/reportmanagement', [AdminController::class, 'reportmanagement'])->name('admin.reportmanagement');
+
     Route::get('/admin/reviewsmanagement', [AdminController::class, 'reviewsmanagement'])->name('admin.reviewsmanagement');
+    Route::patch('/admin/reviewsmanagement/{reviewID}', [AdminController::class, 'reviewupdate']);
     
 });
 

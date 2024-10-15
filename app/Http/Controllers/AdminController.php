@@ -105,9 +105,9 @@ class AdminController extends Controller
         $totalUsers = $customer->count() + $technician->count();
 
         return view('Admin.2 - UserManagement', [
+            'totalUsers' => $totalUsers,
             'customer' => $customer,
             'technician' => $technician,
-            'totalUsers' => $totalUsers,
         ]);
     }
 
@@ -121,68 +121,67 @@ class AdminController extends Controller
             'notificationHistory' => $notificationHistory,
         ]);
     }
+        public function notificationcreate(Request $request, $targetType){
 
-    public function notificationcreate(Request $request, $targetType){
+            if($targetType == "Public"){
+                Public_Notifications::create([
+                    'title' => $request->notification_title,
+                    'message' => $request->notification_message,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }elseif($targetType == "Technicians"){
+                $targetUser = $request->target_user;
+                if($targetUser == "All"){
+                    Technician_Notifications::create([
+                        'target_type' => 'all',
+                        'title' => $request->notification_title,
+                        'message' => $request->notification_message,
+                    ]); 
+                }else{
+                    $technicianExist = Technician::find($request->target_id);
+                    if(!$technicianExist){
+                        return back()->with('error', 'Technician not found');
+                    }
+                    Technician_Notifications::create([
+                        'target_type' => 'technician',
+                        'target_id' => $request->target_id,
+                        'title' => $request->notification_title,
+                        'message' => $request->notification_message,
+                    ]); 
+                }
+            }elseif($targetType == "Customers"){
+                $targetUser = $request->target_user;
+                if($targetUser == "All"){
+                    Customer_Notifications::create([
+                        'target_type' => 'all',
+                        'title' => $request->notification_title,
+                        'message' => $request->notification_message,
+                    ]); 
+                }else{
+                    $customerExist = Customer::find($request->target_id);
+                    if(!$customerExist){
+                        return back()->with('error', 'Technician not found');
+                    }
+                    Customer_Notifications::create([
+                        'target_type' => 'customer',
+                        'target_id' => $request->target_id,
+                        'title' => $request->notification_title,
+                        'message' => $request->notification_message,
+                    ]); 
+                }
+            }
 
-        if($targetType == "Public"){
-            Public_Notifications::create([
+            Admin_NotificationHistory::create([
+                'target_type' => $targetType,
+                'target_user' => $request->target_user ?? "all",
+                'target_id' => $request->target_id,
                 'title' => $request->notification_title,
                 'message' => $request->notification_message,
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
-        }elseif($targetType == "Technicians"){
-            $targetUser = $request->target_user;
-            if($targetUser == "All"){
-                Technician_Notifications::create([
-                    'target_type' => 'all',
-                    'title' => $request->notification_title,
-                    'message' => $request->notification_message,
-                ]); 
-            }else{
-                $technicianExist = Technician::find($request->target_id);
-                if(!$technicianExist){
-                    return back()->with('error', 'Technician not found');
-                }
-                Technician_Notifications::create([
-                    'target_type' => 'technician',
-                    'target_id' => $request->target_id,
-                    'title' => $request->notification_title,
-                    'message' => $request->notification_message,
-                ]); 
-            }
-        }elseif($targetType == "Customers"){
-            $targetUser = $request->target_user;
-            if($targetUser == "All"){
-                Customer_Notifications::create([
-                    'target_type' => 'all',
-                    'title' => $request->notification_title,
-                    'message' => $request->notification_message,
-                ]); 
-            }else{
-                $customerExist = Customer::find($request->target_id);
-                if(!$customerExist){
-                    return back()->with('error', 'Technician not found');
-                }
-                Customer_Notifications::create([
-                    'target_type' => 'customer',
-                    'target_id' => $request->target_id,
-                    'title' => $request->notification_title,
-                    'message' => $request->notification_message,
-                ]); 
-            }
+
+            return back()->with('success', 'Notification sent successfully');
         }
-
-        Admin_NotificationHistory::create([
-            'target_type' => $targetType,
-            'target_user' => $request->target_user ?? "all",
-            'target_id' => $request->target_id,
-            'title' => $request->notification_title,
-            'message' => $request->notification_message,
-        ]);
-
-        return back()->with('success', 'Notification sent successfully');
-    }
 
     public function reportmanagement(){
         $reports = Admin_ReportManagement::orderBy('created_at', 'asc')->get();
@@ -229,11 +228,31 @@ class AdminController extends Controller
             ->with('technician')
             ->get();
 
+        $pendingReviews = $reviewData->where('status', 'Pending');
+        $approvedReviews = $reviewData->where('status', 'Approved');
+        $rejectedReviews = $reviewData->where('status', 'Rejected');
+
 
         return view('Admin.5 - ReviewsManagement', [
-            'reviewData' => $reviewData
+            'reviewData' => $reviewData,
+            'pendingReviews' => $pendingReviews,
+            'approvedReviews' => $approvedReviews,
+            'rejectedReviews' => $rejectedReviews,
         ]);
     }
+        public function reviewupdate(Request $request, $reviewID){
+            $review = RepairShop_Reviews::find($reviewID);
+
+            // if (!$review) {
+            //     return response()->json(['message' => 'Review not found'], 404);
+            // }
+
+            $review->update([
+                'status' => $request->input('status'), // Access 'status' from the request body
+            ]);
+
+            return response()->json(['message' => 'Review updated successfully'], 200);
+        }   
 
 
     //EXTERNAL FUNCTIONS

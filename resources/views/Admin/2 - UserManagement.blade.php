@@ -42,8 +42,8 @@
                 <div class="body">
                     <ul class="tabs">
                         <div class="tab-navigation">
-                            <li class="tab-link" data-tab="all-users">All Users</li>
-                            <li class="tab-link active" data-tab="user-customer">Customers</li>
+                            <li class="tab-link active" data-tab="all-users">All Users</li>
+                            <li class="tab-link" data-tab="user-customer">Customers</li>
                             <li class="tab-link" data-tab="user-technician">Technicians</li>
                         </div>
 
@@ -55,7 +55,7 @@
                     </ul>
 
                     <div class="tab-content">
-                        <div id="all-users" class="tab-content-item card">
+                        <div id="all-users" class="tab-content-item card active">
                             <table>
                                 <thead>
                                     <tr>
@@ -86,7 +86,7 @@
                             </table>
                         </div>                        
 
-                        <div id="user-customer" class="tab-content-item card active">
+                        <div id="user-customer" class="tab-content-item card">
                             <table>
                                 <thead>
                                     <tr>

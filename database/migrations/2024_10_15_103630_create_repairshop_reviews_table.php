@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('customer_fullname');
             $table->integer('rating')->unsigned(); // Rating from 1 to 5, for example
             $table->text('review_comment')->nullable(); // The text of the review
-            $table->boolean('approved')->default(false); // Admin approval status
+            $table->enum('status', ['Pending', 'Approved', 'Rejected'])->default('Pending'); // Admin approval status
             $table->timestamps();
         });
     }
