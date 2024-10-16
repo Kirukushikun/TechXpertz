@@ -121,9 +121,15 @@ class Technician extends Authenticatable
     }
 
     // Relationship with Technician Appointments
-    public function technicianAppointments()
+    public function repairshopAppointments()
     {
-        return $this->hasMany(Technician_Appointments::class);
+        return $this->hasMany(RepairShop_Appointments::class);
+    }
+
+    // Relationship with Technician Appointments
+    public function repairshopRepairStatus()
+    {
+        return $this->hasMany(RepairShop_RepairStatus::class);
     }
 
 }

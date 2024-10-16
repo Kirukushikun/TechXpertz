@@ -100,20 +100,41 @@ class AdminController extends Controller
     }
 
     public function usermanagement(){
-        $customer = Customer::all();
-        $technician = Technician::all();
+        
+        $customer = Customer::orderBy('created_at', 'desc')->get();
+        $technician = Technician::orderBy('created_at', 'desc')->get();
+        $allUsers = $customer->concat($technician);
         $totalUsers = $customer->count() + $technician->count();
 
         return view('Admin.2 - UserManagement', [
             'totalUsers' => $totalUsers,
+            'allUsers' => $allUsers,
             'customer' => $customer,
             'technician' => $technician,
         ]);
     }
 
-    public function viewprofile(){
-        return view('Admin.6 - ViewProfile');
-    }
+        public function viewprofile($userRole, $userID){
+            if($userRole == 'Technician'){
+
+                $technician = Technician::with('repairshopCredentials')
+                    ->with('repairshopBadges')
+                    ->with('repairshopMastery')
+                    ->with('repairshopServices')
+                    ->with('repairshopSchedules')
+                    ->with('repairshopProfile')
+                    ->with('repairshopRepairStatus')
+                    ->with('repairshopAppointments')
+                    ->find($userID);
+
+                return view('Admin.6 - ViewProfile', [
+                    'technician' => $technician,
+                ]);
+
+            }elseif($userRole == 'Customer'){
+                return view('Admin.7 - ViewProfile');
+            }
+        }
 
     public function notificationcenter(){
         $notificationHistory = Admin_NotificationHistory::orderBy('created_at', 'desc')->get();

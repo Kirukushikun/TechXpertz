@@ -39,7 +39,7 @@
                     <div class="left">
                         <div class="upper">
                             <div class="profile-navigation">
-                                <h2>Technician Profile</h2>
+                                <h2>Customer Profile</h2>
                                 <ul>
                                     <li><a href="#" data-target="technician-details" class="active">Technician Details</a></li>
                                     <li><a href="#" data-target="repair-shop-profile">Repair Shop Profile</a></li>
@@ -60,9 +60,9 @@
                                 <div class="profile-detail">
                                     <div class="image"></div>
                                     <div class="details">
-                                        <h3>{{$technician->firstname}} {{$technician->middlename ?? ''}} {{$technician->lastname}}</h3>
-                                        <p>{{$technician->email}}</p> 
-                                        <span>{{$technician->profile_status}}</span>                               
+                                        <h3>Bruno Mars</h3>
+                                        <p>brunomars@gmail.com</p> 
+                                        <span>Verified</span>                               
                                     </div>
                                 </div>
                                 
@@ -74,60 +74,51 @@
 
                             <div class="form-section col-3">
                                 <div class="form-group">
-                                    <label for="user_ID">ID</label>
-                                    <input type="text" id="user_ID" name="user_ID" value="{{$technician->id}}" readonly>
+                                    <label for="user-ID">ID</label>
+                                    <input type="text" id="user-ID" name="user-ID" value="" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="account_created">Account Created</label>
-                                    <input type="text" id="account_created" name="account_created" value="{{$technician->created_at->format('M d, Y - h:i A')}}" readonly>
+                                    <label for="first-name">First Name</label>
+                                    <input type="text" id="first-name" name="first-name" value="" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="first_name">First Name</label>
-                                    <input type="text" id="first_name" name="first_name" value="{{$technician->firstname}}" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="middle_name">Middle Name</label>
-                                    <input type="text" id="middle_name" name="middle_name" value="{{$technician->middlename ?? 'N/A'}}" readonly>
+                                    <label for="middle-name">Middle Name</label>
+                                    <input type="text" id="middle-name" name="middle-name" value="" required>
                                 </div> 
                                 <div class="form-group">
-                                    <label for="last_name">Last Name</label>
-                                    <input type="text" id="last_name" name="last_name" value="{{$technician->lastname}}" readonly>
+                                    <label for="last-name">Last Name</label>
+                                    <input type="text" id="last-name" name="last-name" value="" required>
                                 </div> 
 
                                 <div class="form-group">
-                                    <label for="email_address">Email Address</label>
-                                    <input type="text" id="email_address" name="email_address" value="{{$technician->email}}" readonly>
+                                    <label for="email-address">Email Address</label>
+                                    <input type="text" id="email-address" name="email-address" value="" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="contact_no">Contact No.</label>
-                                    <input type="text" id="contact_no" name="contact_no" value="{{$technician->contact_no}}" readonly>
+                                    <label for="contact-no">Contact No.</label>
+                                    <input type="text" id="contact-no" name="contact-no" value="" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="educational_bg">Educational Background</label>
-                                    <input type="text" id="educational_bg" name="educational_bg" value="{{$technician->educational_background}}" readonly>
+                                    <label for="educational-bg">Educational Background</label>
+                                    <input type="text" id="educational-bg" name="educational-bg" value="" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="province">Province</label>
-                                    <input type="text" id="province" name="province" value="{{$technician->province}}" readonly>
+                                    <input type="text" id="province" name="province" value="" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="city">City</label>
-                                    <input type="text" id="city" name="city" value="{{$technician->city}}" readonly>
+                                    <input type="text" id="city" name="city" value="" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="barangay">Barangay</label>
-                                    <input type="text" id="barangay" name="barangay" value="{{$technician->barangay}}" readonly>
+                                    <input type="text" id="barangay" name="barangay" value="" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="ZIP_code">ZIP Code</label>
-                                    <input type="text" id="ZIP_code" name="ZIP_code" value="{{$technician->zip_code}}" readonly>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="d_o_b">Date of Birth</label>
-                                    <input type="text" id="d_o_b" name="d_o_b" value="{{$technician->date_of_birth->format('M d, Y')}}" readonly>
+                                    <label for="ZIP-code">ZIP Code</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
                                 </div>
                             </div>
                         </div>
@@ -139,37 +130,48 @@
 
                             <div class="form-section col-3">
                                 <div class="form-group">
-                                    <label for="shop_name">Shop Name</label>
-                                    <input type="text" id="shop_name" name="shop_name" value="{{$technician->repairshopCredentials->shop_name}}" readonly>
+                                    <label for="first-name">Shop Name</label>
+                                    <input type="text" id="first-name" name="first-name" value="" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="shop_email">Shop Email</label>
-                                    <input type="text" id="shop_email" name="shop_email" value="{{$technician->repairshopCredentials->shop_email}}" readonly>
+                                    <label for="middle-name">Middle Name</label>
+                                    <input type="text" id="middle-name" name="middle-name" value="" required>
                                 </div> 
                                 <div class="form-group">
-                                    <label for="shop_contact">Shop Contact No.</label>
-                                    <input type="text" id="shop_contact" name="shop_contact" value="{{$technician->repairshopCredentials->shop_contact}}" readonly>
+                                    <label for="last-name">Last Name</label>
+                                    <input type="text" id="last-name" name="last-name" value="" required>
                                 </div> 
+
                                 <div class="form-group">
-                                    <label for="shop_address">Address</label>
-                                    <input type="text" id="shop_address" name="shop_address" value="{{$technician->repairshopCredentials->shop_address}}" readonly>
-                                </div> 
+                                    <label for="email-address">Email Address</label>
+                                    <input type="text" id="email-address" name="email-address" value="" required>
+                                </div>
                                 <div class="form-group">
-                                    <label for="shop_province">Province</label>
-                                    <input type="text" id="shop_province" name="shop_province" value="{{$technician->repairshopCredentials->shop_province}}" readonly>
-                                </div> 
+                                    <label for="contact-no">Contact No.</label>
+                                    <input type="text" id="contact-no" name="contact-no" value="" required>
+                                </div>
                                 <div class="form-group">
-                                    <label for="shop_city">City</label>
-                                    <input type="text" id="shop_city" name="shop_city" value="{{$technician->repairshopCredentials->shop_city}}" readonly>
-                                </div> 
+                                    <label for="educational-bg">Educational Background</label>
+                                    <input type="text" id="educational-bg" name="educational-bg" value="" required>
+                                </div>
+
                                 <div class="form-group">
-                                    <label for="shop_barangay">Barangay</label>
-                                    <input type="text" id="shop_barangay" name="shop_barangay" value="{{$technician->repairshopCredentials->shop_barangay}}" readonly>
-                                </div> 
+                                    <label for="province">Province</label>
+                                    <input type="text" id="province" name="province" value="" required>
+                                </div>
                                 <div class="form-group">
-                                    <label for="shop_zip_code">ZIP Code</label>
-                                    <input type="text" id="shop_zip_code" name="shop_zip_code" value="{{$technician->repairshopCredentials->shop_zip_code}}" readonly>
-                                </div> 
+                                    <label for="city">City</label>
+                                    <input type="text" id="city" name="city" value="" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="barangay">Barangay</label>
+                                    <input type="text" id="barangay" name="barangay" value="" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ZIP-code">ZIP Code</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
                             </div>
 
                             <div class="form-header">
@@ -181,21 +183,21 @@
                             </div>
                             <div class="form-section col-4">
                                 <div class="form-group">
-                                    <label for="badge_1">Badge 1</label>
-                                    <input type="text" id="badge_1" name="badge_1" value="{{$technician->repairshopBadges->badge_1 ?? ''}}" readonly>
+                                    <label for="first-name">Badge 1</label>
+                                    <input type="text" id="first-name" name="first-name" value="" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="badge_2">Badge 2</label>
-                                    <input type="text" id="badge_2" name="badge_2" value="{{$technician->repairshopBadges->badge_2 ?? ''}}" readonly>
+                                    <label for="middle-name">Badge 2</label>
+                                    <input type="text" id="middle-name" name="middle-name" value="" required>
                                 </div> 
                                 <div class="form-group">
-                                    <label for="badge_3">Badge 3</label>
-                                    <input type="text" id="badge_3" name="badge_3" value="{{$technician->repairshopBadges->badge_3 ?? ''}}" readonly>
+                                    <label for="last-name">Badge 3</label>
+                                    <input type="text" id="last-name" name="last-name" value="" required>
                                 </div> 
 
                                 <div class="form-group">
-                                    <label for="badge_4">Badge 4</label>
-                                    <input type="text" id="badge_4" name="badge_4" value="{{$technician->repairshopBadges->badge_4 ?? ''}}" readonly>
+                                    <label for="email-address">Badge 4</label>
+                                    <input type="text" id="email-address" name="email-address" value="" required>
                                 </div>
                             </div>
 
@@ -205,32 +207,41 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="main_mastery">Main Mastery</label>
-                                <input type="text" id="main_mastery" name="main_mastery" value="{{$technician->repairshopMastery->main_mastery ?? ''}}" required>
-                            </div>
-
-                            <div class="form-section col-5">
-                                @foreach(['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One'] as $item)
-                                <div class="mastery {{$technician->repairshopMastery && $technician->repairshopMastery->$item ? 'active' : ''}}">
-                                    <img src="{{asset('images/' . $item . '.png')}}">
-                                    <p>{{$item}}</p>
-                                </div>
-                                @endforeach
+                                <label for="ZIP-code">Main Mastery</label>
+                                <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
                             </div>
 
 
                             <div class="line">
-                                <h3>REPAIR SHOP SERVICES</h3>
+                                <h3>REPAIR SHOP repairS</h3>
                                 <div class="lines"> </div>
                             </div>
 
                             <div class="form-section col-2">
-                                @foreach($technician->repairshopServices as $service)
-                                    <div class="form-group">
-                                        <label for="service">Service {{$loop->iteration}}</label>
-                                        <input type="text" id="service" name="service" value="{{$service->service}}" required>
-                                    </div>
-                                @endforeach
+                                <div class="form-group">
+                                    <label for="ZIP-code">Service 1</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ZIP-code">Service 2</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ZIP-code">Service 3</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ZIP-code">Service 4</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ZIP-code">Service 5</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
                             </div>
 
                             <div class="line">
@@ -239,27 +250,34 @@
                             </div>
 
                             <div class="form-section col-3">
-                                @foreach($technician->repairshopSchedules as $schedule)
-                                    @php
-                                        $weekDays = [ 
-                                            1 => "Monday", 
-                                            2 => "Tuesday", 
-                                            3 => "Wednesday", 
-                                            4 => "Thursday", 
-                                            5 => "Friday", 
-                                            6 => "Saturday", 
-                                            7 => "Sunday"]
-                                    @endphp
-                                    <div class="form-group">
-                                        <label for="{{$weekDays[$schedule->day]}}">{{$weekDays[$schedule->day]}}</label>
-                                        @if($schedule->opening_time || $schedule->closing_time)
-                                            <input type="text" id="{{$weekDays[$schedule->day]}}" name="{{$weekDays[$schedule->day]}}" value="{{$schedule->opening_time->format('h:i A')}} - {{$schedule->closing_time->format('h:i A')}}" readonly>
-                                        @else
-                                        <input type="text" id="{{$weekDays[$schedule->day]}}" name="{{$weekDays[$schedule->day]}}" value="Close" readonly>
-                                        @endif
-                                        
-                                    </div>
-                                @endforeach
+                                <div class="form-group">
+                                    <label for="ZIP-code">Monday</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ZIP-code">Tuesday</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ZIP-code">Wednesday</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ZIP-code">Thursday</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ZIP-code">Friday</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ZIP-code">Saturday</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ZIP-code">Sunday</label>
+                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
+                                </div>
                             </div>
 
                             <div class="line">
@@ -268,12 +286,12 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="repairshop_header">Header</label>
-                                <input type="text" id="repairshop_header" name="repairshop_header" value="{{$technician->repairshopProfile->header}}" readonly>
+                                <label for="ZIP-code">Header</label>
+                                <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
                             </div>
                             <div class="form-group">
-                                <label for="repairshop_description">Description</label>
-                                <textarea type="text" id="repairshop_description" name="repairshop_description" readonly>{{$technician->repairshopProfile->description}}</textarea>
+                                <label for="ZIP-code">Description</label>
+                                <textarea type="text" id="ZIP-code" name="ZIP-code" value="" required></textarea>
                             </div>
                         </div>
 
@@ -344,17 +362,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        @foreach($technician->repairshopRepairStatus as $repairdata)
                                         <tr>
-                                            <td>{{$repairdata->id}}</td>
-                                            <td>{{$repairdata->customer_fullname}}</td>
-                                            <td>{{$repairdata->status}}</td>
-                                            <td>{{$repairdata->repairstatus}}</td>
-                                            <td>{{$repairdata->revenue}}</td>
-                                            <td>{{$repairdata->updated_at->format('M d, Y, h:i A')}}</td>
-                                            <td><button class="view-details" data-appointment-id="{{$repairdata->appointment_id ?? ''}}">View</button></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><button class="view-details" data-appointment-id="">View</button></td>
                                         </tr>
-                                        @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -381,17 +397,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($technician->repairshopAppointments as $appointmentData)
                                         <tr>
-                                            <td>{{$appointmentData->id}}</td>
-                                            <td>{{$appointmentData->fullname}}</td>
-                                            <td>{{$appointmentData->status}}</td>
-                                            <td>{{$appointmentData->appointment_date}}</td>
-                                            <td>{{$appointmentData->appointment_time}}</td>
-                                            <td>{{$appointmentData->updated_at->format('M d, Y, h:i A')}}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                             <td><button class="view-details" data-appointment-id="">View</button></td>
                                         </tr>
-                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -566,8 +580,6 @@
         // Severe: For more serious violations that require significant actions like temporary suspension (e.g., repeat offenses, customer complaints).
         // Critical: For extreme violations that may result in termination or legal action (e.g., fraud, gross negligence).
         // Urgent: For issues that require immediate action, often tied with safety or critical performance (e.g., serious misconduct).
-
-        //$ loop -> iteration - can serve as your row count or headcount foreach data
 
     </script>
 </body>

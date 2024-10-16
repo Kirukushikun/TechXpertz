@@ -129,7 +129,7 @@
                     <div class="form-group">
                         <label for="mastery">Main Mastery</label>
                         @php
-                            $savedValue = $technicianMastery->main_mastery;
+                            $savedValue = $technicianMastery->main_mastery ?? '';
                         @endphp
                         <select name="mastery" id="mastery" required>
                             <option value="" @if(empty($savedValue)) selected @endif></option>

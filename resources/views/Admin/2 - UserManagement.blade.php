@@ -68,20 +68,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($allUsers as $user)
                                     <tr>
-                                        <td>Ishi Robles</td>
-                                        <td>Ishirobless@gmail.com</td>
-                                        <td>Customer</td>
+                                        <td>{{$user->firstname}} {{$user->middlename ?? ''}} {{$user->lastname}}</td>
+                                        <td>{{$user->email}}</td>
+                                        <td>{{$user->role}}</td>
                                         <td>
-                                            Verified
+                                            {{$user->profile_status}}
                                         </td>
                                         <td>
                                             <input type="text" value="Active">
                                         </td>
                                         <td>
-                                            <button>Manage</button>
+                                            <button onclick="window.location.href='{{route('admin.viewprofile', ['userRole' => $user->role,'userID' => $user->id])}}'">Manage</button>
                                         </td>
                                     </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>                        
@@ -109,11 +111,10 @@
                                             <input type="text" value="Active">
                                         </td>
                                         <td>
-                                            <button>Manage</button>
+                                            <button onclick="window.location.href='{{route('admin.viewprofile', ['userRole' => $user->role,'userID' => $user->id])}}'">Manage</button>
                                         </td>
                                     </tr>
                                     @endforeach
-                                    
                                 </tbody>
                             </table>
 
@@ -155,7 +156,7 @@
                                             <input type="text" value="Active">
                                         </td>
                                         <td>
-                                            <button>Manage</button>
+                                            <button onclick="window.location.href='{{route('admin.viewprofile', ['userRole' => $user->role,'userID' => $user->id])}}'">Manage</button>
                                         </td>
                                     </tr>
                                     @endforeach

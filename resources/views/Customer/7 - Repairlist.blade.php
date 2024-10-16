@@ -32,7 +32,10 @@
             @endphp
 
             <div class="repair-card">
-                <img src="path/to/laptop-image.jpg" alt="MacBook Pro 2020">
+                <div class="img">
+                    <img src="{{asset('images/' . $appointment->device_type . '.png')}}">
+                </div>
+                
 
                 <div class="repair-info">
                     <div class="left-details">

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('role')->default('customer');
-            $table->enum('profile_status', ['verified', 'restricted'])->default('verified');
+            $table->string('role')->default('Customer');
+            $table->enum('profile_status', ['flagged', 'pending' ,'verified', 'restricted'])->default('verified');
 
             $table->string('firstname');
             $table->string('lastname');

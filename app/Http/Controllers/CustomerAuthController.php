@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Customer;
 use App\Models\Technician;
 use Illuminate\Http\Request;

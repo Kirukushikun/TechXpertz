@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Technician;
 use App\Models\Customer;
 use App\Models\RepairShop_Credentials;
@@ -106,6 +107,14 @@ class TechnicianAuthController extends Controller
                 'shop_barangay' => $validatedData['shop_barangay'],
                 'shop_zip_code' => $validatedData['shop_zip_code'],
             ]);
+
+            foreach([1, 2, 3, 4, 5, 6, 7] as $days){
+                RepairShop_Schedules::create([
+                    'technician_id' => $technician->id,
+                    'day' => $days,
+                ]);                
+            }
+
             return redirect()->route('technician.login');
         } catch (\Illuminate\Database\QueryException $exception) {
             if ($exception->errorInfo[1] === 1062) {

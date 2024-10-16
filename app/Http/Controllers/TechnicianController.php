@@ -678,29 +678,31 @@ class TechnicianController extends Controller
             $existingServices = RepairShop_Services::where('technician_id', $technician->id)->get();
             
             // Iterate over the provided services
-            foreach ($request->input('service') as $index => $service) {
-                if (!empty($service)) {
-                    // Check if the service already exists (based on ID or any other unique attribute)
-                    $existingService = $existingServices->get($index);
+            if($request->input('service')){
+                foreach ($request->input('service') as $index => $service) {
+                    if (!empty($service)) {
+                        // Check if the service already exists (based on ID or any other unique attribute)
+                        $existingService = $existingServices->get($index);
 
-                    // Update the existing service or create a new one
-                    RepairShop_Services::updateOrCreate(
-                        [
-                            'id' => $existingService->id ?? null, // Use the existing ID if available
-                            'technician_id' => $technician->id,
-                        ],
-                        [
-                            'service' => $service,
-                        ]
-                    );
+                        // Update the existing service or create a new one
+                        RepairShop_Services::updateOrCreate(
+                            [
+                                'id' => $existingService->id ?? null, // Use the existing ID if available
+                                'technician_id' => $technician->id,
+                            ],
+                            [
+                                'service' => $service,
+                            ]
+                        );
+                    }
                 }
-            }
 
-            // If there are fewer services in the request than in the database, remove the extra ones
-            if ($existingServices->count() > count($request->input('service'))) {
-                $excessServices = $existingServices->skip(count($request->input('service')));
-                foreach ($excessServices as $excessService) {
-                    $excessService->delete();
+                // If there are fewer services in the request than in the database, remove the extra ones
+                if ($existingServices->count() > count($request->input('service'))) {
+                    $excessServices = $existingServices->skip(count($request->input('service')));
+                    foreach ($excessServices as $excessService) {
+                        $excessService->delete();
+                    }
                 }
             }
 

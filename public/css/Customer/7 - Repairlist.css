@@ -71,10 +71,17 @@
     box-shadow: rgba(133, 133, 133, 0.35) 0px 5px 15px;
 }
 
-.repair-card img{
+.repair-card .img{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 50%;
     border-radius: 8px 0 0 8px;
-    background-color: #666666;
+    background-color: #7B5CAD;
+    background-position:center;
+} .repair-card .img img{
+    width: 180px;
 }
 
 .repair-card .repair-info{

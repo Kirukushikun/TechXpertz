@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Customer;
 use App\Models\Customer_Notifications;
 use App\Models\Customer_RepairStatus;
