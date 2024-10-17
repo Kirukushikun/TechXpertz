@@ -27,57 +27,57 @@
         <div class="repair-list-container">
             @foreach($repairDetails as $repair)
 
-            @php
-                $appointment = $appointmentDetails->firstWhere('customer_id', $repair->customer_id);
-            @endphp
+                @php
+                    $appointment = $appointmentDetails->firstWhere('customer_id', $repair->customer_id);
+                @endphp
 
-            <div class="repair-card">
-                <div class="img">
-                    <img src="{{asset('images/' . $appointment->device_type . '.png')}}">
-                </div>
-                
+                <div class="repair-card">
+                    <div class="img">
+                        <img src="{{asset('images/' . $appointment->device_type . '.png')}}">
+                    </div>
+                    
 
-                <div class="repair-info">
-                    <div class="left-details">
-                        <div class="device-details">
-                            <p class="repair-id">#{{$repair->id}}</p>
-                            <h2 class="repair-name">{{$appointment->device_model}}</h2>
-                            <p class="repair-status">{{$repair->repairstatus}}</p>                        
+                    <div class="repair-info">
+                        <div class="left-details">
+                            <div class="device-details">
+                                <p class="repair-id">#{{$repair->id}}</p>
+                                <h2 class="repair-name">{{$appointment->device_model}}</h2>
+                                <p class="repair-status">{{$repair->repairstatus}}</p>                        
+                            </div>
+
+                            <div class="repairshop-details">
+                                <p>Repair Shop:</p>
+                                <h3>{{$repair->technician->repairshopCredentials->shop_name}}</h3> <!-- Access repair shop name -->
+                                <ul class="repair-features" style="list-style-type: none;">
+                                    <li><i class="fa-solid fa-check"></i>{{$repair->technician->repairshopBadges->badge_1}}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{$repair->technician->repairshopBadges->badge_2}}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{$repair->technician->repairshopBadges->badge_3}}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{$repair->technician->repairshopBadges->badge_4}}</li>
+                                </ul>                        
+                            </div>
                         </div>
 
-                        <div class="repairshop-details">
-                            <p>Repair Shop:</p>
-                            <h3>{{$repair->technician->repairshopCredentials->shop_name}}</h3> <!-- Access repair shop name -->
-                            <ul class="repair-features" style="list-style-type: none;">
-                                <li><i class="fa-solid fa-check"></i>{{$repair->technician->repairshopBadges->badge_1}}</li>
-                                <li><i class="fa-solid fa-check"></i>{{$repair->technician->repairshopBadges->badge_2}}</li>
-                                <li><i class="fa-solid fa-check"></i>{{$repair->technician->repairshopBadges->badge_3}}</li>
-                                <li><i class="fa-solid fa-check"></i>{{$repair->technician->repairshopBadges->badge_4}}</li>
-                            </ul>                        
+                        <div class="right-details">
+                            <div class="repair-payment-status">
+                                <p>Paid Status:</p>
+                                <h4>{{$repair->paid_status}}</h4>
+                            </div>
+
+                            <div class="repair-payment-cost">
+                                <p>Repair Cost:</p>
+                                <h1 class="repair-cost">P {{$repair->revenue}}</h1>
+                            </div>
+                            
+                            <div class="repair-buttons">
+                                <button class="repair-view-details" onclick="window.location.href='{{ route('viewrepairstatus', ['id' => $repair->id]) }}'">View Details</button>
+                                <button class="repair-chat">
+                                    <i class="fa-solid fa-message"></i>
+                                </button>
+                            </div>                    
                         </div>
                     </div>
-
-                    <div class="right-details">
-                        <div class="repair-payment-status">
-                            <p>Paid Status:</p>
-                            <h4>{{$repair->paid_status}}</h4>
-                        </div>
-
-                        <div class="repair-payment-cost">
-                            <p>Repair Cost:</p>
-                            <h1 class="repair-cost">P {{$repair->revenue}}</h1>
-                        </div>
-                        
-                        <div class="repair-buttons">
-                            <button class="repair-view-details" onclick="window.location.href='{{ route('viewrepairstatus', ['id' => $repair->id]) }}'">View Details</button>
-                            <button class="repair-chat">
-                                <i class="fa-solid fa-message"></i>
-                            </button>
-                        </div>                    
-                    </div>
+                    
                 </div>
-                
-            </div>
             @endforeach
         </div>
 

@@ -5,11 +5,17 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>TechXpertz</title>
+        <!-- Crucial Part on every forms -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!-- Crucial Part on every forms/ -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="{{ asset('css/Customer/header-footer.css') }}">
         <link rel="stylesheet" href="{{ asset('css/Customer/6 - Account.css') }}">
     </head>
-    <body>
+    <body id="main-body">
+
+        <div class="modal" id="modal">
+        </div>
 
         @yield('header')    
 
@@ -37,7 +43,11 @@
                     
                     <div class="profile-container">
                         <div class="profile-detail">
-                            <div class="image"></div>
+                            @if($customerData->image_profile)
+                                <div class="image" style="background-image: url('{{ asset($customerData->image_profile) }}');"></div>
+                            @else
+                                <div class="image"></div>
+                            @endif
                             <div class="details">
                                 <h3>{{$customerData->firstname}} {{$customerData->lastname}}</h3>
                                 <p>{{$customerData->email}}</p>                                
@@ -45,8 +55,12 @@
                         </div>
                         
                         <div class="profile-action">
-                            <button class="submit">Change picture</button>
-                            <button class="normal">Delete picture</button>
+                            @if($customerData->image_profile)
+                            <button type="button" class="upload-image submit" data-customer-id="{{$customerData->id}}">Change picture</button>
+                            @else
+                            <button type="button" class="upload-image submit" data-customer-id="{{$customerData->id}}">Upload picture</button>
+                            @endif
+                            <button type="button" class="normal">Delete picture</button>
                         </div>
                     </div>
 
@@ -202,5 +216,57 @@
             // Display the first section by default
             sections[0].style.display = 'flex';
         });
+    </script>
+
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+    <script>
+        let uploadImage = document.querySelector('button.upload-image');
+        let modal = document.getElementById('modal');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        uploadImage.addEventListener('click', function(){
+            let customerID = this.getAttribute('data-customer-id');
+
+            modal.innerHTML = `
+                <form class="modal-content" action="/customer/myaccount/update/${customerID}"  method="POST" enctype="multipart/form-data">
+
+                    <input type="hidden" name="_token" value="${csrfToken}">
+                    <input type="hidden" name="_method" value="PATCH">
+
+                    <h2>Upload Your Image</h2>
+                    <div class="image-upload">
+                        <label for="file-input" class="upload-label">
+                            <img id="preview" src="https://via.placeholder.com/150" alt="Image Preview">
+                            <div class="upload-text">Click to Upload Image</div>
+                        </label>
+                        <input id="file-input" type="file" name="image" onchange="previewImage(event)" />
+                    </div>
+                    <div class="modal-action">
+                        <button type="submit" class="submit">Save</button>  
+                        <button type="button" class="close normal">Dismiss</button> 
+                    </div>
+                </form>
+            `;
+
+            modal.classList.add('active');
+
+            document.querySelector('.close').onclick = function () {
+                modal.classList.remove('active');
+            };
+        })
     </script>
 </html>

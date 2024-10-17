@@ -18,6 +18,7 @@ use App\Models\RepairShop_Socials;
 use App\Models\RepairShop_Appointments;
 use App\Models\RepairShop_RepairStatus;
 use App\Models\RepairShop_Badges;
+use App\Models\RepairShop_Images;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -760,6 +761,32 @@ class TechnicianController extends Controller
                     'description' => $validatedAbout['description'],
                 ]
             );
+
+            // --------------------------------------------------------------------------
+
+            $request->validate([
+                'profile_image' => 'required|mimes:png,jpg,jpeg,webp'
+            ]);
+
+            if($request->hasFile('profile_image')) {  // Better check for uploaded file
+                $file = $request->file('profile_image');
+                $extension = $file->getClientOriginalExtension();  // Corrected typo: $extension
+            
+                $filename = time() . '.' . $extension;  // Use correct variable
+                $path = 'uploads/technician/';
+            
+                // Move the file to the directory and append filename to the path
+                $file->move($path, $filename);
+            
+                // Full path to be stored in the database
+                $imagePath = $path . $filename;
+            
+                // Save the image in the database
+                RepairShop_Images::create([
+                    'technician_id' => $technician->id,
+                    'image_path' => $imagePath,  // Store the full image path
+                ]);
+            }
 
             return back()->with('success', 'Saved successfully')->with('success_message', 'Changes to the profile has been saved successfully.');
         }

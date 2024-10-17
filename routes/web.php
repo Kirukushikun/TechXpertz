@@ -41,7 +41,8 @@ Route::get('/repairshop/{id}', [CustomerController::class, 'viewshop'])->name('v
 Route::get('/bookappointment/{id}', [CustomerController::class, 'viewappointment'])->name('viewappointment');
 Route::post('/bookappointment/{id}', [CustomerController::class, 'bookappointment'])->name('bookappointment');
 
-Route::get('customer/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
+Route::get('/customer/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
+Route::patch('/customer/myaccount/update/{customerID}', [CustomerController::class, 'myaccountUpdate']);
 
 Route::get('/repairlist', [CustomerController::class, 'viewrepairlist'])->name('viewrepairlist');
 

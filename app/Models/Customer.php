@@ -28,6 +28,10 @@ class Customer extends Authenticatable
         'lastname',
         'email',
         'password',
+        'profile_status',
+        'role',
+        'image_profile',
+        'image_status',
     ];
 
     /**

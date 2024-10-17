@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('role')->default('Customer');
             $table->enum('profile_status', ['flagged', 'pending' ,'verified', 'restricted'])->default('verified');
 
+            $table->string('image_profile')->nullable();
+            $table->enum('image_status', ['pending', 'active', 'deleted'])->default('active');
+
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique();

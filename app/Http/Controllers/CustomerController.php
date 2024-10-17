@@ -231,6 +231,35 @@ class CustomerController extends Controller
         return redirect()->route('customer.loginCustomer');
 
     }
+
+    public function myaccountUpdate(Request $request, $customerID){
+        $customer = Customer::find($customerID);
+        
+        $request->validate([
+            'image' => 'required|mimes:png,jpg,jpeg,webp'
+        ]);
+
+        if($request->hasFile('image')) {  // Better check for uploaded file
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();  // Corrected typo: $extension
+        
+            $filename = time() . '.' . $extension;  // Use correct variable
+            $path = 'uploads/customer/';
+        
+            // Move the file to the directory and append filename to the path
+            $file->move($path, $filename);
+        
+            // Full path to be stored in the database
+            $imagePath = $path . $filename;
+
+            $customer->update([
+                'image_profile' => $imagePath,
+            ]);
+        }
+
+        return back()->with('success', 'Profile Updated Successfully');
+
+    }
     
     // PRIVATE FUNCTIONS ---------
 
