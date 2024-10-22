@@ -23,19 +23,12 @@ class RepairShop_Images extends Model
      */
     protected $fillable = [
         'technician_id',
-        'image_status',
-        'image_path',
-        'image_type',
-        'is_primary',
-    ];
-
-        /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'is_primary' => 'boolean',
+        'gallery_status',
+        'image_profile',
+        'image_2',
+        'image_3',
+        'image_4',
+        'image_5',
     ];
 
     public function technician()

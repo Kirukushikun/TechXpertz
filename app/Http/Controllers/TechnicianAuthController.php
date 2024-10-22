@@ -115,6 +115,10 @@ class TechnicianAuthController extends Controller
                 ]);                
             }
 
+            RepairShop_Images::create([
+                'technician_id' => $technician->id,
+            ]);
+
             return redirect()->route('technician.login');
         } catch (\Illuminate\Database\QueryException $exception) {
             if ($exception->errorInfo[1] === 1062) {

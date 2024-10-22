@@ -135,7 +135,10 @@ class Technician extends Authenticatable
     // Relationship with Technician Images
     public function repairshopImages()
     {
-        return $this->hasMany(RepairShop_Images::class);
+        return $this->hasOne(RepairShop_Images::class);
     }
 
+    public function conversation(){
+        return $this->hasMany(Conversation::class);
+    }
 }

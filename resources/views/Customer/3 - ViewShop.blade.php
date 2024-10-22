@@ -25,13 +25,13 @@
             <div class="service-details">
                 <div class="left">
                     <div class="image-gallery">
-                        <img src="" alt="JBL Service Center">
+                        <span style="background-image: url('{{ asset($repairshopImages->image_profile) }}');"></span>
                         <div class="thumbnails">
                             <i class="fa-solid fa-angle-up"></i>
-                            <img src="" alt="Thumbnail 1" class="active">
-                            <img src="" alt="Thumbnail 2">
-                            <img src="" alt="Thumbnail 3">
-                            <img src="" alt="Thumbnail 4">
+                            <span style="background-image: url('{{ asset($repairshopImages->image_2) }}');"></span>
+                            <span style="background-image: url('{{ asset($repairshopImages->image_3) }}');"></span>
+                            <span style="background-image: url('{{ asset($repairshopImages->image_4) }}');"></span>
+                            <span style="background-image: url('{{ asset($repairshopImages->image_5) }}');"></span>
                             <i class="fa-solid fa-angle-down"></i>
                         </div>
                     </div>

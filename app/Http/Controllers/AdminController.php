@@ -136,6 +136,24 @@ class AdminController extends Controller
             }
         }
 
+        public function profileupdate($userType, $userID, $actionType){
+            if($userType == "technician"){
+                $technician = Technician::find($userID);
+
+                if($actionType == "verify"){
+                    $technician->update([
+                        'profile_status' => 'complete',
+                    ]);                    
+                } elseif($actionType == "restrict"){
+                    $technician->update([
+                        'profile_status' => 'restricted',
+                    ]);                    
+                }
+
+                return back()->with('success', 'User profile updated successfully');
+            }
+        }
+
     public function notificationcenter(){
         $notificationHistory = Admin_NotificationHistory::orderBy('created_at', 'desc')->get();
         return view('Admin.3 - NotificationCenter', [

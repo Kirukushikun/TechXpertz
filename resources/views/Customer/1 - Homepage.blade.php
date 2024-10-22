@@ -151,7 +151,7 @@
                 @else
                     @foreach($repairshops as $repairshop)
                         <div class="shop">
-                            <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
+                            <div class="shop-image" style="background-image: url('{{ asset($repairshop['repairshopImage']) }}');"></div>
 
                             <div class="shop-details">
                                 <div class="shop-name">

@@ -18,13 +18,13 @@
     align-items: center;
 
     padding: 40px 0;
-    width: 18%;
+    width: 20%;
     border-radius: 7px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .right{
     padding: 40px 20px 40px 40px;
-    width: 80%;
+    width: 75%;
     height: 100%;
 
     overflow: hidden;
@@ -155,13 +155,13 @@
     flex-direction: column;
 } .profile-detail .details span{
    padding: 5px 20px;
-   border: 2px solid var(--success);
-   color: var(--success);
    border-radius: 7px;
    width: fit-content;
    margin-top: 5px;
    font-weight: 600;
-}
+   text-transform: capitalize;
+} 
+
 .profile-action{
     display: flex;
     flex-direction: column;
@@ -469,4 +469,56 @@ table td a{
 }
 .mastery img{
     width: 25px;
+}
+
+.admin-actions{
+    padding: 25px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+
+    width: 300px;
+
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.admin-buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.admin-buttons button{
+    border: 2px solid;
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+#complete{
+    border: 2px solid var(--success);
+    color: var(--success);
+}
+/* #restricted{
+    border: 2px solid var(--danger);
+    color: var(--danger);
+} */
+#restricted{
+    border: 2px solid var(--danger);
+    color: var(--danger);
+}
+
+#pending{
+    border: 2px solid #f2c32a;
+    color: #f2c32a;
+}
+
+#incomplete{
+    border: 2px solid var(--lighted-text-color);
+    color: var(--lighted-text-color);
 }

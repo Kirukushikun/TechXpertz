@@ -242,6 +242,7 @@
             let customerID = this.getAttribute('data-customer-id');
 
             modal.innerHTML = `
+            
                 <form class="modal-content" action="/customer/myaccount/update/${customerID}"  method="POST" enctype="multipart/form-data">
 
                     <input type="hidden" name="_token" value="${csrfToken}">

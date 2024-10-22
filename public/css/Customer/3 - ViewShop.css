@@ -57,10 +57,14 @@
     height: 80%;
     gap: 20px;
 }
-.service-details .image-gallery img {
+.service-details .image-gallery span {
     width: 100%;
     border-radius: 5px;
     background-color: var(--lighted-text-color);
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .service-details .image-gallery .thumbnails {
@@ -71,11 +75,15 @@
     gap: 20px;
     width: 15%;
 }
-.service-details .image-gallery .thumbnails img {
+.service-details .image-gallery .thumbnails span {
     background-color: var(--lighted-text-color);
     height: 80px;
     object-fit: cover;
     cursor: pointer;
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 .service-details .image-gallery .thumbnails i {
     font-size: 20px;

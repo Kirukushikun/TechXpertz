@@ -13,6 +13,7 @@ use App\Models\RepairShop_Reviews;
 use App\Models\RepairShop_Schedules;
 use App\Models\RepairShop_Services;
 use App\Models\RepairShop_Socials;
+use App\Models\RepairShop_Images;
 
 use App\Models\RepairShop_RepairStatus;
 use App\Models\RepairShop_Appointments;
@@ -57,13 +58,15 @@ class CustomerController extends Controller
         $detailedSchedule = $this->getDetailedSchedule($id);
 
         $repairshopMastery = RepairShop_Mastery::where('technician_id', $repairshop->id)->first();
+        $repairshopImages = RepairShop_Images::where('technician_id', $repairshop->id)->first();
 
         return view('Customer.3 - ViewShop', [
             'repairshop' => $repairshop,
             'services' => $services,
             'reviewData' => $reviewData,
             'detailedSchedule' => $detailedSchedule,
-            'repairshopMastery' => $repairshopMastery
+            'repairshopMastery' => $repairshopMastery,
+            'repairshopImages' => $repairshopImages,
         ]);
     }
 
@@ -260,6 +263,10 @@ class CustomerController extends Controller
         return back()->with('success', 'Profile Updated Successfully');
 
     }
+
+    public function viewmessages(){
+        return view('Customer.8 - Messages');
+    }
     
     // PRIVATE FUNCTIONS ---------
 
@@ -296,6 +303,8 @@ class CustomerController extends Controller
                     'repairshopBadge4' => $repairshop->repairshopBadges->badge_4,
 
                     'repairshopMastery' => $repairshop->repairshopMastery->main_mastery,
+
+                    'repairshopImage' => $repairshop->repairshopImages->image_profile,
 
                     'formattedDays' => $formattedDays,
                     'totalReviews' => $totalReviews,
@@ -341,6 +350,8 @@ class CustomerController extends Controller
                     'repairshopBadge4' => $repairshop->repairshopBadges->badge_4,
 
                     'repairshopMastery' => $repairshop->repairshopMastery->main_mastery,
+
+                    'repairshopImage' => $repairshop->repairshopImages->image_profile,
 
                     'formattedDays' => $formattedDays,
                     'totalReviews' => $totalReviews,

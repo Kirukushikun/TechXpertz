@@ -9,6 +9,7 @@ use App\Http\Controllers\TechnicianController;
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
+use App\Livewire\Chat\Index;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,8 @@ Route::get('/repairlist', [CustomerController::class, 'viewrepairlist'])->name('
 
 Route::get('/repairstatus/{id}', [CustomerController::class, 'viewrepairstatus'])->name('viewrepairstatus');
 
+Route::get('/messages', [CustomerController::class, 'viewmessages'])->name('viewmessages');
+
 // TECHNICIAN AUTH---------------------------------------------------------------
 
 Route::get('/technician/login', [TechnicianAuthController::class, 'login'])->name('technician.login');
@@ -83,7 +86,8 @@ Route::middleware('technician.auth')->group(function(){
     Route::get('/technician/shopreviews', [TechnicianController::class, 'shopreviews'])->name('technician.shopreviews');
 
     Route::get('/technician/profile', [TechnicianController::class, 'profile'])->name('technician.profile');
-    Route::post('/technician/profile', [TechnicianController::class, 'updateProfile'])->name('technician.updateProfile');
+        Route::post('/technician/profile', [TechnicianController::class, 'updateProfile'])->name('technician.updateProfile');
+        Route::patch('/technician/profile/{technicianID}/{imageType}', [TechnicianController::class, 'updateImage']);
 });
 
 
@@ -103,6 +107,7 @@ Route::middleware('admin.auth')->group(function(){
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/usermanagement', [AdminController::class, 'usermanagement'])->name('admin.usermanagement');
         Route::get('/admin/viewprofile/{userRole}/{userID}', [AdminController::class, 'viewprofile'])->name('admin.viewprofile');
+        Route::patch('/admin/viewprofile/{userType}/{userID}/{actionType}', [AdminController::class, 'profileupdate'])->name('admin.profileupdate');
 
     Route::get('/admin/notificationcenter', [AdminController::class, 'notificationcenter'])->name('admin.notificationcenter');
         Route::post('/admin/notificationcenter/{targetType}', [AdminController::class, 'notificationcreate']);
@@ -115,5 +120,4 @@ Route::middleware('admin.auth')->group(function(){
     Route::patch('/admin/reviewsmanagement/{reviewID}', [AdminController::class, 'reviewupdate']);
     
 });
-
 

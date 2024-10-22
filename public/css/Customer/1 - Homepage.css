@@ -223,6 +223,9 @@
 .shop-image {
     height: 280px;
     background-color: var(--lighted-text-color);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .shop-details {

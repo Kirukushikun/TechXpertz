@@ -561,6 +561,7 @@ class TechnicianController extends Controller
         $technicianMastery = $technicianInfo->repairshopMastery;
         $technicianSchedules = $technicianInfo->repairshopSchedules;
         $technicianProfile = $technicianInfo->repairshopProfile;
+        $technicianImages = $technicianInfo->repairshopImages;
 
         $daysOfWeek = [
             1 => 'monday',
@@ -607,6 +608,7 @@ class TechnicianController extends Controller
             'technicianSchedules' => $technicianSchedules,
             'formattedTimes' => $formattedTimes,
             'technicianProfile' => $technicianProfile,
+            'technicianImages' => $technicianImages,
         ]);
     }
         public function updateProfile(Request $request){
@@ -789,6 +791,34 @@ class TechnicianController extends Controller
             }
 
             return back()->with('success', 'Saved successfully')->with('success_message', 'Changes to the profile has been saved successfully.');
+        }
+
+        public function updateImage(Request $request, $technicianID, $imageType){
+            $technician = RepairShop_Images::find($technicianID);
+
+            $request->validate([
+                'image' => 'required|mimes:png,jpg,jpeg,webp'
+            ]);
+
+            if($request->hasFile('image')) {  // Better check for uploaded file
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();  // Corrected typo: $extension
+            
+                $filename = time() . '.' . $extension;  // Use correct variable
+                $path = 'uploads/technician/';
+            
+                // Move the file to the directory and append filename to the path
+                $file->move($path, $filename);
+            
+                // Full path to be stored in the database
+                $imagePath = $path . $filename;
+    
+                $technician->update([
+                    $imageType => $imagePath,
+                ]);
+            }
+
+            return back()->with('success', 'Profile Updated Successfully');
         }
 
     private function reviewSystem($id){

@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management</title>
+    <!-- Crucial Part on every forms -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- Crucial Part on every forms/ -->
     <link rel="stylesheet" href="{{ asset('css/Admin/6 - ViewProfile.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/admin-sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/admin-modal.css') }}">
@@ -13,7 +16,7 @@
 <body>
     <div class="dashboard">
 
-        <div class="modal">
+        <div id="modal" class="modal">
 
         </div>
 
@@ -62,7 +65,7 @@
                                     <div class="details">
                                         <h3>{{$technician->firstname}} {{$technician->middlename ?? ''}} {{$technician->lastname}}</h3>
                                         <p>{{$technician->email}}</p> 
-                                        <span>{{$technician->profile_status}}</span>                               
+                                        <span id="{{$technician->profile_status}}">{{$technician->profile_status == 'complete' ? 'verified' : $technician->profile_status}}</span>                               
                                     </div>
                                 </div>
                                 
@@ -521,7 +524,16 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>                    
+                    </div>
+                    
+                    <div id="admin-actions" class="admin-actions">
+                        <h3>Actions</h3>
+                        <div class="admin-buttons">
+                           <button id="complete" data-user-role="technician" data-user-id="{{$technician->id}}" data-button-type="verify">VERIFY ACCOUNT</button>   
+                           <button id="restricted" data-user-role="technician" data-user-id="{{$technician->id}}" data-button-type="restrict">RESTRICT ACCOUNT</button> 
+                           <!-- <button class="delete" data-user-role="technician" data-user-id="{{$technician->id}}" data-button-type="delete">DELETE ACCOUNT</button>      -->
+                        </div>         
+                    </div>
                 </div>
 
             </div>
@@ -531,6 +543,91 @@
     <script src="{{ asset('js/Admin/2 - UserManagement.js') }}"></script>
     <script src="{{ asset('js/Admin/admin-navbars.js') }}"></script>
     <script src="{{ asset('js/Admin/admin-modal.js') }}"></script>
+
+    <script>
+        let modal = document.getElementById('modal');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        let adminActions = document.getElementById('admin-actions');
+        let adminButtons = adminActions.querySelectorAll('button');
+
+        adminButtons.forEach(button => {
+            button.addEventListener('click', function(){
+                let userID = this.getAttribute('data-user-id');
+                let userType = this.getAttribute('data-user-role');
+                let actionType = this.getAttribute('data-button-type');
+                verifyAction(userType, userID, actionType);
+            });
+        });
+
+        function verifyAction(userType, userID, actionType){
+
+            if(actionType == "verify"){
+                modal.innerHTML = `
+                    <form action="/admin/viewprofile/${userType}/${userID}/${actionType}" method="POST">
+                        <input type="hidden" name="_token" value="${csrfToken}">
+                        <input type="hidden" name="_method" value="PATCH">
+                        
+                        <div class="modal-verification">
+                            <i class="fa-solid fa-user-check" id="check"></i>
+                            <div class="verification-message">
+                                <h2>Verify Account</h2>
+                                <p>Are you sure you want to verify this technician?</p>
+                            </div>
+                            <div class="verification-action">
+                                <button type="submit" class="success">Verify</button>
+                                <button type="button" class="normal"><b>Dismiss</b></button>
+                            </div>
+                        </div>                
+                    </form>
+                `;                
+            } else if (actionType == "restrict"){
+                modal.innerHTML = `
+                    <form action="/admin/viewprofile/${userType}/${userID}/${actionType}" method="POST">
+                        <input type="hidden" name="_token" value="${csrfToken}">
+                        <input type="hidden" name="_method" value="PATCH">
+
+                        <div class="modal-verification">
+                            <i class="fa-solid fa-user-xmark" id="exclamation"></i>
+                            <div class="verification-message">
+                                <h2>Restrict Account</h2>
+                                <p>Are you sure you want to Restrict this technician?</p>                        
+                            </div>
+                            <div class="verification-action">
+                                <button type="submit" class="danger">Restrict</button>
+                                <button type="button" class="normal"><b>Dismiss</b></button>
+                            </div>
+                        </div>                 
+                    </form>
+                `;   
+            } else if (actionType == "delete"){
+                modal.innerHTML = `
+                   <form method="POST">
+                        <input type="hidden" name="_token" value="${csrfToken}">
+                        <input type="hidden" name="_method" value="PATCH">
+
+                        <div class="modal-verification">
+                            <i class="fa-solid fa-user-minus" id="exclamation"></i>
+                            <div class="verification-message">
+                                <h2>Delete Account</h2>
+                                <p>Are you sure you want to Delete this Account?</p>                        
+                            </div>
+                            <div class="verification-action">
+                                <button type="submit" class="danger">Delete</button>
+                                <button type="button" class="normal"><b>Dismiss</b></button>
+                            </div>
+                        </div>                 
+                    </form>
+                `;   
+            }
+
+            // Close modal when 'X' is clicked
+            document.querySelector('.normal').onclick = function () {
+                modal.classList.remove("active");
+            };
+
+            modal.classList.add('active');
+        }
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
