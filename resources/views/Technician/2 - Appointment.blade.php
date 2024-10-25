@@ -98,8 +98,9 @@
                                         <td>{{$confirmed['formatted_time']}}</td>
                                         <td><button class="view-details" data-appointment-id="{{$confirmed['ID']}}">View</button></td>
                                         <td>
-                                            <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-appointment-status="cancel" style="color:red;"><i class="fa-regular fa-calendar-xmark"></i></a>
-                                            <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-customer-id="{{$confirmed['customer_id']}}" data-appointment-status="repair" style="color:blue;"><i class="fa-solid fa-screwdriver-wrench"></i></a>
+                                            <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-appointment-status="cancel"><i class="fa-regular fa-calendar-xmark cancel"></i></a>
+                                            <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-customer-id="{{$confirmed['customer_id']}}" data-appointment-status="repair"><i class="fa-solid fa-screwdriver-wrench chat"></i></a>
+                                            <a href="/technician/messages/{{$confirmed['customer_id']}}"><i class="fa-solid fa-message chat"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -136,8 +137,9 @@
                                 <td>{{$request['formatted_time']}}</td>
                                 <td><button class="view-details" data-appointment-id="{{$request['ID']}}">View</button></td>
                                 <td>
-                                    <a class="appointment-btn" data-appointment-id="{{$request['ID']}}" data-appointment-status="reject" style="color:red;"><i class="fa-regular fa-calendar-xmark"></i></a>
-                                    <a class="appointment-btn" data-appointment-id="{{$request['ID']}}" data-appointment-status="confirm" style="color:green;"><i class="fa-regular fa-calendar-check"></i></a>
+                                    <a class="appointment-btn" data-appointment-id="{{$request['ID']}}" data-appointment-status="reject"><i class="fa-regular fa-calendar-xmark cancel"></i></a>
+                                    <a class="appointment-btn" data-appointment-id="{{$request['ID']}}" data-appointment-status="confirm"><i class="fa-regular fa-calendar-check confirm"></i></a>
+                                    <a  href="/technician/messages/{{$confirmed['customer_id']}}"><i class="fa-solid fa-message chat"></i></a>
                                 </td>
                             </tr>
                             @endforeach

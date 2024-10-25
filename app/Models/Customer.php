@@ -72,4 +72,5 @@ class Customer extends Authenticatable
     public function conversation(){
         return $this->hasMany(Conversation::class);
     }
+
 }

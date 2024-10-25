@@ -21,6 +21,9 @@ use App\Models\RepairShop_Badges;
 use App\Models\RepairShop_Images;
 use Carbon\Carbon;
 
+use App\Models\Message;
+use App\Models\Conversation;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -72,7 +75,9 @@ class TechnicianController extends Controller
         $pendingStatus = $repairstatus->where('status', 'in progress');
         $completedStatus = $repairstatus->where('repairstatus', 'Ready For Pickup');
 
-        $reviews = Repairshop_Reviews::where('technician_id', $technician->id)->get();
+        $reviews = Repairshop_Reviews::where('technician_id', $technician->id)
+            ->where('status', 'Approved')
+            ->get();
         $totalRepairs = $repairstatus->where('repairstatus', 'Device Collected');
         $revenue = $this->formatMoney($totalRepairs->sum('revenue'));
 
@@ -524,6 +529,21 @@ class TechnicianController extends Controller
     public function messages(){
         return view('Technician.4 - Messages');
     }
+        public function messageCustomer($customerID){
+            $conversation = Conversation::where('sender_id', $customerID)->first();
+
+            if($conversation){
+                $conversation->touch();
+            }else{
+                Conversation::create([
+                    'sender_id' => $customerID,
+                    'sender_type' => 'customer',
+                    'receiver_id' => Auth::guard('technician')->user()->id,
+                    'receiver_type' => 'technician'
+                ]); 
+            }
+            return view('Technician.4 - Messages');
+        }
 
     public function shopreviews(){
 

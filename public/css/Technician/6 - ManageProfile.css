@@ -316,27 +316,67 @@ form h3{
 
     gap: 20px;
 }
-.images{
+
+.image-container {
     border-radius: 7px;
-    background-color: var(--primary-color);
-    cursor: pointer;
+    background-color: black;
+    /* background-color: #888; */
+    overflow: hidden;
+    position: relative;
+
     color: #cacaca;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    font-weight: 600;
+    gap: 10px;
+    letter-spacing: 1px;
+} .image-container:hover .images {
+    transition: 0.3s ease;
+    transform: scale(105%);
+    filter: brightness(50%);
+    object-fit: cover;
+} .image-container:hover .image-action {
+    opacity: 1;
+}
 
+
+.images{
+    width: 100%;
+    height: 100%;
+    position: absolute;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-
-    font-size: 20px;
-}
-
-.images img{
+} .images img{
     width: 45px;
 }
+
+.image-action{
+    opacity: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    font-size: 20px;
+    z-index: 1;
+    transition: 0.3s ease;
+} .image-container i{
+    
+    transition: 0.4s ease;
+    color: white;
+    font-size: 20px;
+} .image-action i:hover{
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+
+
 
 .img1{
     grid-area: img1;
@@ -365,6 +405,9 @@ form h3{
     display: flex;
     flex-direction: column;
     gap: 10px;
+    max-height: 100px;
+    overflow: hidden;
+    overflow-y: auto;
 }
 
 .shop-links .link{
@@ -385,8 +428,7 @@ form h3{
     color: var(--danger);
     cursor: pointer;
 }
-
-.shop-links .add-link{
+.add-link{
     width: fit-content;
     display: flex;
     align-items: center;

@@ -73,7 +73,7 @@
                             
                             @if($notification->is_read)
                                 <button style="color: #999" disabled>
-                                    <i class="fa-solid fa-envelope-open-text"></i>Mark as Read
+                                    <i class="fa-solid fa-envelope-open-text"></i>Marked as Read
                                 </button>
                             @else
                                 <button type="submit" style="cursor:pointer;">

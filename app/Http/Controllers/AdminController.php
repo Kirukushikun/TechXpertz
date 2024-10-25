@@ -282,10 +282,6 @@ class AdminController extends Controller
         public function reviewupdate(Request $request, $reviewID){
             $review = RepairShop_Reviews::find($reviewID);
 
-            // if (!$review) {
-            //     return response()->json(['message' => 'Review not found'], 404);
-            // }
-
             $review->update([
                 'status' => $request->input('status'), // Access 'status' from the request body
             ]);

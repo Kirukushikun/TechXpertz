@@ -38,7 +38,7 @@ class RepairShop_Appointments extends Authenticatable
         'device_serial',
 
         'issue_descriptions',
-        'error_messages',
+        'error_message',
         'repair_attempts',
         'recent_events',
         'prepared_parts',

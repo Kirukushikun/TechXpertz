@@ -7,7 +7,7 @@
     </div>
     <div class="icons">
         <i class="fa-solid fa-screwdriver-wrench load" onclick="window.location.href='/repairlist'"></i>
-        <i class="fa-solid fa-message"></i>
+        <i class="fa-solid fa-message" onclick="window.location.href='/messages'"></i>
     </div>
 
     @auth

@@ -41,16 +41,20 @@ Route::get('/repairshop/{id}', [CustomerController::class, 'viewshop'])->name('v
 
 Route::get('/bookappointment/{id}', [CustomerController::class, 'viewappointment'])->name('viewappointment');
 Route::post('/bookappointment/{id}', [CustomerController::class, 'bookappointment'])->name('bookappointment');
+Route::patch('/bookappointment/cancel/{repairID}', [CustomerController::class, 'cancelAppointment']);
+
 
 Route::get('/customer/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
-Route::patch('/customer/myaccount/update/{customerID}', [CustomerController::class, 'myaccountUpdate']);
+Route::patch('/customer/myaccount/{actionType}/{customerID}', [CustomerController::class, 'myaccountUpdate'])->name('customer.updateprofile');
+Route::patch('/customer/myaccount/notification/update/{notificationID}',  [CustomerController::class, 'notificationUpdate']);
 
 Route::get('/repairlist', [CustomerController::class, 'viewrepairlist'])->name('viewrepairlist');
 
 Route::get('/repairstatus/{id}', [CustomerController::class, 'viewrepairstatus'])->name('viewrepairstatus');
+Route::post('/review/{technicianID}', [CustomerController::class, 'submitReview']);
 
-Route::get('/messages', [CustomerController::class, 'viewmessages'])->name('viewmessages');
-
+Route::get('/messages', [CustomerController::class, 'messages'])->name('customer.messages');
+Route::get('/message/repairshop/{repairshopID}', [CustomerController::class, 'messageRepairshop'])->name('customer.messageRepairshop');
 // TECHNICIAN AUTH---------------------------------------------------------------
 
 Route::get('/technician/login', [TechnicianAuthController::class, 'login'])->name('technician.login');
@@ -82,6 +86,7 @@ Route::middleware('technician.auth')->group(function(){
         Route::post('/technician/repairstatus/create/walk-ins', [TechnicianController::class, 'repairstatusCreateWalkIn']);
 
     Route::get('/technician/messages', [TechnicianController::class, 'messages'])->name('technician.messages');
+        Route::get('/technician/messages/{customerID}', [TechnicianController::class, 'messageCustomer']);
 
     Route::get('/technician/shopreviews', [TechnicianController::class, 'shopreviews'])->name('technician.shopreviews');
 

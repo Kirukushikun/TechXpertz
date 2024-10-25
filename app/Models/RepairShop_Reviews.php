@@ -27,6 +27,7 @@ class RepairShop_Reviews extends Authenticatable
         'ID',
         'customer_id',
         'technician_id',
+        'customer_fullname',
 
         'rating',
         'review_comment',

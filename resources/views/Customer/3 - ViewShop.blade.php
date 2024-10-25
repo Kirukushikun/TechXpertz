@@ -108,7 +108,7 @@
 
                     <div class="buttons">
                         <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                        <button class="chat">CHAT</button>
+                        <button class="chat" onclick="window.location.href='{{route('customer.messageRepairshop', ['repairshopID' => $repairshop->id])}}'">CHAT</button>
                         <button class="appointment highlight load" id="button" onclick="window.location.href='{{route('viewappointment', ['id' => $repairshop->id])}}'">MAKE AN APPOINTMENT</button>
                     </div>
                 </div>

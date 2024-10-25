@@ -112,28 +112,33 @@
                     <div class="shop-images">
 
                         @if($technicianImages->image_profile)
-                            <div class="images img1" data-image="image_profile" data-technician-id="{{$technicianImages->technician_id}}" style="background-image: url('{{ asset($technicianImages->image_profile) }}');">
-
-                            </div>   
+                            <div class="image-container img1">
+                                <div class="images" style="background-image: url('{{ asset($technicianImages->image_profile) }}');"></div>                                   
+                                <div class="image-action">
+                                    <i class="fa-solid fa-eye"></i>
+                                    <i class="fa-solid fa-pen-to-square upload" data-image="image_profile" data-technician-id="{{$technicianImages->technician_id}}"></i>
+                                    <i class="fa-solid fa-trash"></i>
+                                </div>
+                            </div>
                         @else
-                            <div class="images img1" data-image="image_profile" data-technician-id="{{$technicianImages->technician_id}}">
+                            <div class="image-container img1 upload" data-image="image_profile" data-technician-id="{{$technicianImages->technician_id}}" style="background-color: #7B5CAD;">
                                 <img src="{{asset('images/image-plus.png')}}">    
-                                Shop Profile
-                            </div>                        
+                                 Shop Profile 
+                            </div>
                         @endif
-
 
                         @foreach(["2", "3", "4", "5"] as $image)
                             @if(isset($technicianImages->{'image_' .$image}))
-                                <div class="images img{{$image}}" 
-                                    data-image="image_{{$image}}" 
-                                    data-technician-id="{{$technicianImages->technician_id}}" 
-                                    style="background-image: url('{{ asset($technicianImages->{'image_' .$image}) }}');">
-                                </div> 
+                                <div class="image-container img{{$image}}">
+                                    <div class="images" style="background-image: url('{{ asset($technicianImages->{'image_' .$image}) }}');"></div> 
+                                    <div class="image-action">
+                                        <i class="fa-solid fa-eye"></i>
+                                        <i class="fa-solid fa-pen-to-square upload" data-image="image_{{$image}}" data-technician-id="{{$technicianImages->technician_id}}"></i>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </div>
+                                </div>
                             @else
-                                <div class="images img{{$image}}" 
-                                    data-image="image_{{$image}}" 
-                                    data-technician-id="{{$technicianImages->technician_id}}">
+                                <div class="upload image-container img{{$image}}" data-image="image_{{$image}}" data-technician-id="{{$technicianImages->technician_id}}" style="background-color: #7B5CAD; cursor: pointer;">
                                     <i class="fa-solid fa-plus"></i>
                                 </div>
                             @endif
@@ -144,8 +149,9 @@
                     <h3>Shop Links<img src="{{asset('images/link.png')}}"></h3>
                     <div class="shop-links">
                         <div class="link"><span><i class="fa-brands fa-youtube link-icon"></i>: https://www.w3.org/Provider/Style/dummy.html</span> <i class="fa-regular fa-trash-can delete"></i></div>
-                        <button class="add-link">Add Link<i class="fa-solid fa-plus"></i></button>
                     </div>
+
+                    <button class="add-link">Add Link<i class="fa-solid fa-plus"></i></button>
                 </div>
 
                 <div class="right-content">
@@ -352,11 +358,6 @@
             </form>
 
         </main>
-
-
-
-
-
     </div>
     
     <script src="{{asset('js/Technician/6 - ManageProfile.js')}}"></script>
@@ -383,7 +384,7 @@
     </script>
 
     <script>
-        let imageDiv = document.getElementsByClassName('images');
+        let imageDiv = document.getElementsByClassName('upload');
 
         Array.from(imageDiv).forEach(image => {
             image.addEventListener('click', function(){
@@ -473,6 +474,10 @@
                 tab.style.height = "87%";
             });
         }
+    </script>
+
+    <script>
+
     </script>
 </body>
 </html>

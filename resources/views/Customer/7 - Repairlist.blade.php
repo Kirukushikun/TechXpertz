@@ -27,21 +27,20 @@
         <div class="repair-list-container">
             @foreach($repairDetails as $repair)
 
-                @php
-                    $appointment = $appointmentDetails->firstWhere('customer_id', $repair->customer_id);
-                @endphp
-
                 <div class="repair-card">
                     <div class="img">
-                        <img src="{{asset('images/' . $appointment->device_type . '.png')}}">
+                        
                     </div>
                     
+                    @php
+                        $deviceInfo = App\Models\RepairShop_Appointments::find($repair->appointment_id);
+                    @endphp
 
                     <div class="repair-info">
                         <div class="left-details">
                             <div class="device-details">
                                 <p class="repair-id">#{{$repair->id}}</p>
-                                <h2 class="repair-name">{{$appointment->device_model}}</h2>
+                                <h2 class="repair-name">{{$deviceInfo->device_model}}</h2>
                                 <p class="repair-status">{{$repair->repairstatus}}</p>                        
                             </div>
 

@@ -52,10 +52,7 @@
 
             // Start observing the target div
             observer.observe(messageContainer, config);
-
         });
-
-
 
         scrollToBottom()
     </script>

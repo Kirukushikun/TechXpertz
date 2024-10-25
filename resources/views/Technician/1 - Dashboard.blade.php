@@ -60,6 +60,7 @@
                     <div class="info">
                         <p>Reviews</p>
                         <h2>{{count($reviews)}}</h2>
+                        
                     </div>
                     <div class="progress reviews">
                         <h4 class="percentage">+1.9%</h4>

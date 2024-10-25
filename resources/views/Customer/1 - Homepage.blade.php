@@ -18,7 +18,7 @@
 
         @yield('header')
         
-        <div class="container-1">
+        <div class="container-1" style="background-image:url({{asset('images/container1-background.png')}});">
             <div class="text-content">
                 <h1>Discover the perfect tech solutions for your needs</h1>
                 <p>Explore a wide range of services tailored to meet your unique requirements, ensuring you find the perfect fit for your tech needs</p>

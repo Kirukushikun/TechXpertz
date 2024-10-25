@@ -43,7 +43,6 @@
 
     text-align: center;
     padding: 40px;
-    margin-bottom: 20px;
 }
 
 .upper .header h1 {
@@ -163,16 +162,29 @@
 .timeline-description button{
     padding: 5px 20px;
     border-radius: 7px;
-    border: 2px solid #FFD700;
-    color: #FFD700;
     font-weight: 600;
     font-size: 16px;
     background-color: transparent;
     cursor: pointer;
     margin-top: 15px;
     transition: 0.3s;
-}.timeline-description button:hover{
+}
+
+#rate-repair{
+    border: 2px solid #FFD700;
+    color: #FFD700;
+}#rate-repair:hover{
     border: 2px solid white;
     color: white;
     background-color: #FFD700 ;
 }
+
+#cancel-appointment{
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}#cancel-appointment:hover{
+    border: 2px solid white;
+    color: white;
+    background-color: var(--primary-color) ;
+}
+

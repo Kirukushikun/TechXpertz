@@ -79,10 +79,13 @@
 }
 
 .form-action{
+    display: none;
+}
+.form-action.active{
     display: flex;
     gap: 10px;
     justify-content: end;
-}.form-action button{
+}.form-action button, .delete-action button{
     padding: 10px 20px;
     font-weight: 600;
     border-radius: 7px;
@@ -249,7 +252,6 @@
     font-size: 18px;
     color: var(--primary-color);
     text-decoration: none;
-    margin-right: 15px;
 
     background-color: transparent;
     border: none;
@@ -286,26 +288,26 @@
     padding-right: 25px;
 }
 
-.notification-message p {
+.notification-body .notification-message p {
     margin: 0;
     padding: 10px 0;
     color: #555;
 }
 
-.notification-checklist ul {
+.notification-body .notification-checklist ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.notification-checklist li {
+.notification-body .notification-checklist li {
     color: #333;
     padding: 5px 0;
     display: flex;
     align-items: center;
 }
 
-.notification-checklist li i {
+.notification-body .notification-checklist li i {
     color: var(--primary-color);
     margin-right: 8px;
 }
@@ -326,6 +328,12 @@
 
 #delete-account{
     justify-content: space-between;
+}
+
+.delete-action{
+    display: flex;
+    gap: 10px;
+    justify-content: end;
 }
 
 #delete-account ul{
@@ -363,13 +371,13 @@ body.disable{
     align-items: center;
     justify-content: center;
 
-    padding: 60px 80px;
+    padding: 60px 50px;
     background-color: white;
 
     border-radius: 10px;
     gap: 30px;
 
-    width: 500px;
+    width: 600px;
 }
 .image-upload {
     display: flex;
@@ -381,6 +389,8 @@ body.disable{
     border-radius: 10px;
     width: 100%;
     cursor: pointer;
+    padding: 50px 0;
+    gap: 10px;
 }
 
 .upload-label {
@@ -442,4 +452,24 @@ input[type="file"] {
     background-color: transparent;
     border: solid 2px var(--lighted-text-color);
     color: var(--text-color);
+}
+
+.empty{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 600;
+
+    color: #c5c5c5;
+
+    gap: 20px;
+    font-size: 17px;
+
+    user-select: none;
+}.empty i{
+    font-size: 60px;
 }

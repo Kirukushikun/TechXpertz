@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 class CustomerAuthController extends Controller
 {   
     public function login(){
@@ -77,6 +80,35 @@ class CustomerAuthController extends Controller
             return redirect(route('customer.signup'))->with("error", "Passwords do not match. Please try again.");
         }
         
+    }
+
+    public function changePassword(Request $request){
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed', // 'confirmed' ensures password matches confirmation
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Get the currently authenticated customer
+        $customer = Auth::guard('customer')->user();
+
+        // Check if the current password is correct
+        if (!Hash::check($request->current_password, $customer->password)) {
+            return back()->with('error', 'Your current password is incorrect.');
+        }
+
+        // Update password in a transaction for data integrity
+        DB::transaction(function () use ($customer, $request) {
+            $customer->password = Hash::make($request->new_password);
+            $customer->save();
+        });
+
+        // Redirect with success message
+        return back()->with('status', 'Password changed successfully.');
     }
     
 

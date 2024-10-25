@@ -13,7 +13,7 @@ class TechnicianChat extends Component
 {
     public $messageText; // Holds the input message text
     public $activeConversationID; // Holds the currently active conversation ID
-    public $messages = []; // Holds the messages of the active conversation
+    public $messages; // Holds the messages of the active conversation
     public $conversations = []; // Holds the conversation list
     public $activeConversation; // Hold the active conversation model
 
@@ -39,8 +39,7 @@ class TechnicianChat extends Component
             // Ensure the result is an array if it's being merged with an array later
             $this->messages = Message::where('conversation_id', $this->activeConversationID)
                 ->orderBy('created_at', 'asc')
-                ->get()
-                ->toArray(); // Convert the collection to an array
+                ->get();
         }
     }
 
@@ -64,11 +63,7 @@ class TechnicianChat extends Component
     }
 
     // Function to send a message to the active conversation
-    public function sendMessage()
-    {
-        $this->validate([
-            'messageText' => 'required|max:1700',
-        ]);
+    public function sendMessage(){
 
         Message::create([
             'body' => $this->messageText,
@@ -105,10 +100,11 @@ class TechnicianChat extends Component
     }
 
     public function render()
-    {
-        return view('livewire.TechnicianChat', [
+    {   
+        $this->loadMessages();
+        $this->loadChatList();
+        return view('livewire.technician-chat', [
             'conversations' => $this->conversations,
-            'messages' => $this->messages,
             'activeConversation' => $this->activeConversation, // Pass the active conversation to the view
         ]);
     }

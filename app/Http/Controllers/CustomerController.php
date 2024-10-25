@@ -18,10 +18,19 @@ use App\Models\RepairShop_Images;
 use App\Models\RepairShop_RepairStatus;
 use App\Models\RepairShop_Appointments;
 
+use App\Models\Message;
+use App\Models\Conversation;
+
+use Illuminate\Support\Facades\File;
+
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 
 class CustomerController extends Controller
 {
@@ -180,6 +189,29 @@ class CustomerController extends Controller
 
     }
 
+        public function cancelAppointment($repairID){
+            $repairstatus = RepairShop_RepairStatus::find($repairID);
+            $appointment = RepairShop_Appointments::find($repairstatus->appointment_id);
+
+            Customer_RepairStatus::create([
+                'technician_id' => $repairstatus->technician_id,
+                'repair_id' => $repairstatus->id,
+                'customer_id' => Auth::user()->id,
+                'repairstatus' => 'Appointment Cancelled',
+                'repairstatus_message' => 'The appointment request has been successfully cancelled. The repair shop has been notified of the cancellation.'
+            ]);
+
+            $appointment->update([
+                'status' => 'cancelled',
+            ]);
+
+            $repairstatus->update([
+                'repairstatus' => 'Appointment Cancelled',
+            ]);
+
+            return back()->with('success', 'Request Cancelled')->with('success_message','You appointment request has been cancelled successfully');
+        }
+
     public function viewrepairlist(){
         if(Auth::check()){
 
@@ -187,13 +219,11 @@ class CustomerController extends Controller
             $repairDetails = RepairShop_RepairStatus::where('customer_id', Auth::user()->id)
                                 ->with(['technician.repairshopCredentials']) // Eager load technician and repair shop details
                                 ->with(['technician.repairshopBadges'])
+                                ->orderBy('created_at', 'desc')
                                 ->get();
-            
-            $appointmentDetails = RepairShop_Appointments::where('customer_id', Auth::user()->id)->get();
     
             return view('Customer.7 - Repairlist', [
                 'repairDetails' => $repairDetails,
-                'appointmentDetails' => $appointmentDetails
             ]);
         }
         return redirect()->route('customer.loginCustomer');
@@ -220,6 +250,34 @@ class CustomerController extends Controller
         return back()->with('error', 'The Repair ID you entered does not exist. Please double-check and try again.');
     }
 
+        public function submitReview(Request $request, $technicianID){
+            if(Auth::check()){
+                $customer = Customer::find(Auth::user()->id);
+                $validatedData = $request->validate([
+                    'rating' => 'required|integer',
+                    'comment' => 'nullable|string|max:255',
+                    'repairID' => 'required|integer'
+                ]);
+                RepairShop_Reviews::create([
+                    'customer_id' => $customer->id,
+                    'technician_id' => $technicianID,
+                    'customer_fullname' => $customer->firstname,
+                    'rating' => $validatedData['rating'],
+                    'review_comment' => $validatedData['comment'],
+                ]);
+                Customer_RepairStatus::create([
+                    'technician_id' => $technicianID,
+                    'repair_id' => $validatedData['repairID'],
+                    'customer_id' => $customer->id,
+                    'repairstatus' => 'Review Submitted'
+                ]);
+                return back()->with('success', 'Review submmited successfully');
+            }
+
+            return redirect()->route('customer.loginCustomer');
+
+        }
+
     public function myaccount(){
 
         if(Auth::check()){
@@ -235,37 +293,157 @@ class CustomerController extends Controller
 
     }
 
-    public function myaccountUpdate(Request $request, $customerID){
+    public function myaccountUpdate(Request $request, $actionType, $customerID){
         $customer = Customer::find($customerID);
         
-        $request->validate([
-            'image' => 'required|mimes:png,jpg,jpeg,webp'
-        ]);
+        if($actionType == 'upload'){
+            $request->validate([
+                'image' => 'required|mimes:png,jpg,jpeg,webp'
+            ]);
+            
+            if($request->hasFile('image')) {  // Check if a new image is uploaded
+                // Get the new file and extension
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension(); 
+                
+                // Define the new filename and path
+                $filename = time() . '.' . $extension;  
+                $path = 'uploads/customer/';
+                
+                // Check if the customer has an existing image and delete it
+                if($customer->image_profile) {
+                    $oldImagePath = public_path($customer->image_profile);
+                    
+                    if(File::exists($oldImagePath)) {
+                        File::delete($oldImagePath); // Delete the old image
+                    }
+                }
+                
+                // Move the new file to the directory and append filename to the path
+                $file->move($path, $filename);
+                
+                // Full path to be stored in the database
+                $imagePath = $path . $filename;
+            
+                // Update the customer's profile with the new image
+                $customer->update([
+                    'image_profile' => $imagePath,
+                ]);
+            }
+        }elseif($actionType == 'delete'){
+                // Check if the customer has an existing image and delete it
+                if($customer->image_profile) {
+                    $oldImagePath = public_path($customer->image_profile);
+                    
+                    if(File::exists($oldImagePath)) {
+                        File::delete($oldImagePath); // Delete the old image
+                    }
+                }
 
-        if($request->hasFile('image')) {  // Better check for uploaded file
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();  // Corrected typo: $extension
-        
-            $filename = time() . '.' . $extension;  // Use correct variable
-            $path = 'uploads/customer/';
-        
-            // Move the file to the directory and append filename to the path
-            $file->move($path, $filename);
-        
-            // Full path to be stored in the database
-            $imagePath = $path . $filename;
+                // Update the customer's profile with the new image
+                $customer->update([
+                    'image_profile' => null,
+                ]);
+        }elseif($actionType == 'update'){
+
+            if($request->current_password){
+                // Custom validation messages
+                $messages = [
+                    'new_password.required' => 'Please enter a new password.',
+                    'new_password.min' => 'The new password must be at least 8 characters long.',
+                    'new_password.confirmed' => 'The new password and confirmation password do not match.',
+                    'current_password.required' => 'Please enter your current password.',
+                ];
+
+                // Validation with custom messages
+                $validator = Validator::make($request->all(), [
+                    'current_password' => 'required',
+                    'new_password' => 'required|min:8|confirmed', // confirmed ensures the password confirmation matches
+                ], $messages);
+
+                // Check if validation fails
+                if ($validator->fails()) {
+                    return back()->with('error', 'Password Change Failed')
+                                ->with('error_message', $validator->errors()->first()); // Send the first validation error
+                }
+
+                // Check if the current password is correct
+                if (!Hash::check($request->current_password, $customer->password)) {
+                    return back()->with('error', 'Password Change Failed')->with('error_message', 'The current password you entered is incorrect. Please try again.');
+                }
+
+                // Ensure the new password is different from the current password
+                if (Hash::check($request->current_password, $customer->password)) {
+                    return back()->with('error', 'Password Change Failed')->with('error_message', 'The new password cannot be the same as the current password.');
+                }
+
+                // Update password in a transaction for data integrity
+                DB::transaction(function () use ($customer, $request) {
+                    $customer->password = Hash::make($request->new_password);
+                    $customer->save();
+                });
+
+                // Redirect with success message
+                return back()->with('success', 'Password Changed')->with('success_message', 'Your password has been changed successfully.');
+
+            }
+
+            // If confirm and new password has value but the current password do not. Return error
+            if($request->new_password || $request->new_password_confirmation && $request->current_password == null){
+                return back()->with('error', 'Password Change Failed')->with('error_message', 'Please ensure you entered your current password.');
+            }
+
+            $validatedData = $request->validate([
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+            ]);
 
             $customer->update([
-                'image_profile' => $imagePath,
+                'firstname' => $validatedData['first_name'],
+                'lastname' => $validatedData['last_name'],
+                'email' => $validatedData['email']
             ]);
+
         }
 
-        return back()->with('success', 'Profile Updated Successfully');
+        return back()->with('success', 'Profile Updated')->with('success_message', 'Your profile information has been successfully updated.');
 
     }
 
-    public function viewmessages(){
-        return view('Customer.8 - Messages');
+    public function notificationUpdate($notificationID){
+        $notification = Customer_Notifications::find($notificationID);
+        $repairstatus =
+        $notification->update([
+            'is_read' => true,
+        ]);
+        return response()->json(['message' => 'Notification updated successfully'], 200);
+    }
+
+    public function messages(){
+        if(Auth::check()){
+            return view('Customer.8 - Messages');
+        }
+        return redirect()->route('customer.loginCustomer');
+    }
+
+    public function messageRepairshop($repairshopID){
+        if(Auth::check()){
+            $conversation = Conversation::where('receiver_id', $repairshopID)->first();
+            if($conversation){
+                $conversation->touch();
+            }else{
+                Conversation::create([
+                    'sender_id' => Auth::user()->id,
+                    'sender_type' => 'customer',
+                    'receiver_id' => $repairshopID,
+                    'receiver_type' => 'technician'
+                ]); 
+            }
+
+            return view('Customer.8 - Messages');
+        }
+        return redirect()->route('customer.loginCustomer');
     }
     
     // PRIVATE FUNCTIONS ---------

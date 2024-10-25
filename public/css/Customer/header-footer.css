@@ -39,7 +39,7 @@
     color: var(--text-color);
     cursor: pointer;
 }
-.navbar .logo span {
+.navbar span{
     color: var(--highlight);
 }
 
@@ -190,3 +190,14 @@
     font-weight: 300;
     letter-spacing: 1px;
 }
+
+footer .logo {
+    font-size: 34px;
+    font-weight: bold;
+    color: var(--text-color);
+    cursor: pointer;
+}
+footer span {
+    color: var(--highlight);
+}
+
