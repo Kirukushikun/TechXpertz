@@ -507,19 +507,13 @@
                         <h2>Security</h2>
                         <div class="security">
                             <div class="input-group">
-                                <label for="username">Username</label>
-                                <input type="text" id="username" name="username" required>
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" required>
                             </div>
-                            <div class="group-container">
-                                <div class="input-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" id="password" name="password" required>
-                                </div>
-                                <div class="input-group">
-                                    <label for="password_confirmation">Confirm Password</label>
-                                    <input type="password" id="password_confirmation" name="password_confirmation" required>
-                                </div>                                
-                            </div>
+                            <div class="input-group">
+                                <label for="password_confirmation">Confirm Password</label>
+                                <input type="password" id="password_confirmation" name="password_confirmation" required>
+                            </div> 
                             <p>By creating an account, you agree to the <a href="">Terms of Service</a> and <a href="">Privacy Policy</a></p>
                         </div>
                         <div class="form-navigation-buttons">

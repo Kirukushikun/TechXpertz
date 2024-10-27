@@ -1,28 +1,32 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const messageInput = document.querySelector('.message-input input');
-    const sendButton = document.querySelector('.message-input button');
-    const messagesContainer = document.querySelector('.messages-container');
+var messageContainer = document.querySelector('.messages-container');
+var scrollToBottomDiv = document.getElementById('scrollToBottom');
 
-    sendButton.addEventListener('click', sendMessage);
-
-    messageInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            sendMessage();
-        }
-    });
-
-    function sendMessage() {
-        const messageText = messageInput.value.trim();
-        if (messageText === '') {
-            return;
-        }
-
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message', 'sent');
-        messageElement.innerHTML = `<p>${messageText}</p><span class="time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>`;
-        
-        messagesContainer.appendChild(messageElement);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        messageInput.value = '';
+function scrollToBottom() {
+    var messageContainer = document.querySelector('.messages-container');
+    var scrollToBottomDiv = document.getElementById('scrollToBottom');
+    if (scrollToBottomDiv) {
+        scrollToBottomDiv.scrollIntoView({ behavior: 'smooth' });
     }
+}
+
+// Create a new MutationObserver instance
+const observer = new MutationObserver((mutationsList, observer) => {
+    mutationsList.forEach((mutation) => {
+        console.log(mutation); // This will log the mutation object when something changes
+        // You can also trigger a function or update UI here
+        scrollToBottom();
+    });
 });
+
+// Configure the observer to look for changes to child elements, attributes, or text content
+const config = {
+    childList: true, // Observe changes to the child elements (e.g., nodes added or removed)
+    attributes: true, // Observe changes to attributes
+    subtree: true, // Observe changes inside child elements of the div
+    characterData: true // Observe changes to the text inside nodes
+};
+
+// Start observing the target div
+observer.observe(messageContainer, config);
+
+scrollToBottom();

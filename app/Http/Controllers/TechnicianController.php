@@ -24,6 +24,8 @@ use Carbon\Carbon;
 use App\Models\Message;
 use App\Models\Conversation;
 
+use Illuminate\Support\Facades\File;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -813,32 +815,47 @@ class TechnicianController extends Controller
             return back()->with('success', 'Saved successfully')->with('success_message', 'Changes to the profile has been saved successfully.');
         }
 
-        public function updateImage(Request $request, $technicianID, $imageType){
+        public function updateImage(Request $request, $technicianID, $imageType) {
             $technician = RepairShop_Images::find($technicianID);
-
+        
+            // Validate the image type to ensure it's a recognized field
+            $validImageTypes = ['image_profile', 'image_2', 'image_3', 'image_4', 'image_5'];
+            if (!in_array($imageType, $validImageTypes)) {
+                return back()->withErrors(['Invalid image type specified']);
+            }
+        
             $request->validate([
                 'image' => 'required|mimes:png,jpg,jpeg,webp'
             ]);
-
-            if($request->hasFile('image')) {  // Better check for uploaded file
+        
+            if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $extension = $file->getClientOriginalExtension();  // Corrected typo: $extension
-            
-                $filename = time() . '.' . $extension;  // Use correct variable
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
                 $path = 'uploads/technician/';
-            
-                // Move the file to the directory and append filename to the path
+        
+                // Check if the specific image type exists and delete it
+                if ($technician->$imageType) {
+                    $oldImagePath = public_path($technician->$imageType);
+        
+                    if (File::exists($oldImagePath)) {
+                        File::delete($oldImagePath); // Delete the old image
+                    }
+                }
+        
+                // Move the file to the directory and set the new image path
                 $file->move($path, $filename);
-            
+        
                 // Full path to be stored in the database
                 $imagePath = $path . $filename;
-    
+        
+                // Update the specific image type with the new image path
                 $technician->update([
                     $imageType => $imagePath,
                 ]);
             }
-
-            return back()->with('success', 'Profile Updated Successfully');
+        
+            return back()->with('success', 'Profile Updated')->with('success_message', 'Your profile has been updated successfully');
         }
 
     private function reviewSystem($id){

@@ -12,12 +12,17 @@ viewDetails.forEach(button => {
 
 // Fetch appointment details from the given id
 function fetchAppointmentDetails(appointmentID) {
-    // Insert repairID dynamically into the URL
-    fetch(`/technician/appointment/details/${appointmentID}`)
-        .then(response => response.json())
-        .then(data => {
-            displayModal(data);
-        })
+    try {
+        // Insert repairID dynamically into the URL
+        fetch(`/technician/appointment/details/${appointmentID}`)
+            .then(response => response.json())
+            .then(data => {
+                displayModal(data);
+            })        
+    } catch (error) {
+        // Catch any errors (network, HTTP errors, etc.)
+        console.error('Error:', error);
+    }
 }
 
 // After successfully fetching we will display those data

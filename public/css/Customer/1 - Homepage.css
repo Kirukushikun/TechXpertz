@@ -339,13 +339,6 @@
     color: var(--primary-color);
 }
 
-.shop-container{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-areas: none;
-    gap: 25px;
-}
-
 .best-shops {
     display: none;
 }

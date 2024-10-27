@@ -454,7 +454,7 @@ class CustomerController extends Controller
 
     private function getRepairShopSummary($category = null){
 
-        if (empty($category)){
+        if (empty($category) || $category == "All"){
             $repairshops = Technician::where('profile_status', 'complete')->get();
 
             $repairshopData = []; // Initialize the array

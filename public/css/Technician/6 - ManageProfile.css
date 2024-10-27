@@ -119,7 +119,7 @@ header {
 
 
 form h3{
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 
 }form h3 span{
     color: white;
@@ -404,8 +404,7 @@ form h3{
 .shop-links{
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    max-height: 100px;
+    max-height: 80px;
     overflow: hidden;
     overflow-y: auto;
 }
@@ -414,6 +413,16 @@ form h3{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 10px;
+}.shop-links .link p{
+    max-width: 500px;
+    overflow-y: auto;
+    white-space:nowrap;
+}.shop-links .link p::-webkit-scrollbar{
+    display: none;
+}
+.shop-links .link p span{
+    white-space:nowrap;
 }
 
 .shop-links .link .link-icon{
@@ -493,4 +502,21 @@ form h3{
 
 input[type="file"] {
     display: none;
+}
+
+.empty{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+
+    font-weight: 500;
+    color: #c9c9c9;
+}
+
+.empty img{
+    width: 80px;
 }

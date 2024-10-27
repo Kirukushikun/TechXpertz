@@ -42,9 +42,8 @@
                 </div>
             </div>
 
-            <div class="shops">
+            <div class="shop-container">
                 @if(count($repairshops) === 0)
-                    
                     <p class="no-shop">
                         <i class="fa-solid fa-shop-slash"></i>
                         <span>No Shops Available</span>
@@ -103,6 +102,53 @@
                         </div>                   
                     @endforeach
                 @endif
+
+                <!-- Dummy loop
+                @for($i = 0; $i <= 6; $i++)
+                    <div class="shop">
+                        <div class="shop-image" style="background-image: url('path/to/default-image.jpg');"></div>
+
+                        <div class="shop-details">
+                            <div class="shop-name">
+                                <h3>Repair Shop Name repair and services</h3>
+                                <img src="images/default-mastery.png">
+                            </div>
+                            
+                            <div class="shop-location">
+                                <p>1234 Repair St., Barangay Example, Example City, Example Province Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, harum.</p>
+                            </div>
+                            
+                            <div class="shop-schedule">
+                                <p>+63 912 345 6789</p>
+                                <h4>Mon - Fri</h4>              
+                            </div>
+
+                            <ul>
+                                <li><i class="fa-solid fa-check"></i> Badge 1</li>
+                                <li><i class="fa-solid fa-check"></i> Badge 2</li>
+                                <li><i class="fa-solid fa-check"></i> Badge 3</li>
+                                <li><i class="fa-solid fa-check"></i> Badge 4</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="shop-footer">
+                            <div class="rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fa-regular fa-star"></i>
+                                </div>
+                                <p>10 Reviews</p>
+                            </div>
+                            <div class="actions">
+                                <button class="favorite"><i class="fa-regular fa-heart"></i></button>
+                                <button class="view load" onclick="window.location.href='shop-view-link.html'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                @endfor -->
             </div>
 
             <div class="pagination">

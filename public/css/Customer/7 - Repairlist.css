@@ -249,3 +249,37 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+@media(max-width:1825px){
+    .repair-list-container{
+        margin: 125px 10% 55px;
+    }
+}
+
+@media(max-width:1496px){
+    .repair-list-container{
+        margin: 125px 5% 55px;
+    }
+}
+
+@media(max-width:1236px){
+    .upper .search-box {
+        width: 75%;
+    }
+}
+
+@media(max-width:894px){
+    .repair-card .img{
+        display: none;
+    } 
+    .upper .search-box {
+        width: 90%;
+    }
+}
+
+@media(max-width:656px){
+
+    .upper .search-box {
+        flex-direction: column;
+    }
+}

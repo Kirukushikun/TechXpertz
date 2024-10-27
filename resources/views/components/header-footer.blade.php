@@ -11,7 +11,7 @@
     </div>
 
     <div class="collapse-categories">
-        <a href="#">All Categories</a>
+        <a href="{{ route('viewcategory', ['category'=>'All']) }}" class="load">All Categories</a>
         <a href="{{ route('viewcategory', ['category'=>'Smartphone']) }}" class="load">Smartphones</a>
         <a href="{{ route('viewcategory', ['category'=>'Tablet']) }}" class="load">Tablets</a>
         <a href="{{ route('viewcategory', ['category'=>'Desktop']) }}" class="load">Desktops</a>
@@ -52,7 +52,7 @@
 </nav>
 
 <div class="categories">
-    <a href="#">All Categories</a>
+    <a href="{{ route('viewcategory', ['category'=>'All']) }}" class="load">All Categories</a>
     <a href="{{ route('viewcategory', ['category'=>'Smartphone']) }}" class="load">Smartphones</a>
     <a href="{{ route('viewcategory', ['category'=>'Tablet']) }}" class="load">Tablets</a>
     <a href="{{ route('viewcategory', ['category'=>'Desktop']) }}" class="load">Desktops</a>

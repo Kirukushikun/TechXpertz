@@ -30,7 +30,7 @@ class TechnicianAuthController extends Controller
     function logoutTechnician(){
         Session::flush();
         Auth::logout();
-        return redirect()->intended(route('technician.login'));
+        return redirect()->route('technician.login');
     }
 
     public function signup(){

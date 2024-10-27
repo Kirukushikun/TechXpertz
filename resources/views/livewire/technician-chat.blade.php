@@ -114,14 +114,3 @@
 </div>    
 
 
-
-<script>
-    function scrollToBottom() {
-        var messageContainer = document.querySelector('.messages-container');
-        var scrollToBottomDiv = document.getElementById('scrollToBottom');
-        if (scrollToBottomDiv) {
-            scrollToBottomDiv.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-</script>
-
