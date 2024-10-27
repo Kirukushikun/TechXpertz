@@ -7,10 +7,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
     <link rel="stylesheet" href="{{asset('css/Technician/technician-sidebar.css')}}">
-
-    <link rel="stylesheet" href="{{asset('css/Technician/1 - Dashboard.css')}}">
     <link rel="stylesheet" href="{{asset('css/Technician/technician-modal.css')}}">
+    <link rel="stylesheet" href="{{asset('css/Technician/1 - Dashboard.css')}}">
+    
 </head>
 <body>
     <div class="dashboard">
@@ -178,8 +179,8 @@
                                     <td>{{$upcoming->formatted_time}}</td>
                                     <td><button class="view-details" data-appointment-id="{{$upcoming->id}}">View</button></td>
                                     <td>
-                                    <a class="appointment-btn" data-appointment-id="{{$upcoming->id}}" data-appointment-status="cancel" style="color:red;"><i class="fa-regular fa-calendar-xmark"></i></a>
-                                    <!-- <a class="more" href=""><i class="fa-solid fa-ellipsis"></i></a> -->
+                                        <a class="appointment-btn" data-appointment-id="{{$upcoming->id}}" data-appointment-status="cancel" style="color:red;"><i class="fa-regular fa-calendar-xmark"></i></a>
+                                        <a class="appointment-btn" data-appointment-id="{{$upcoming->id}}" data-appointment-status="repair" data-customer-id="{{$upcoming->id}}" ><i class="fa-solid fa-screwdriver-wrench chat"></i></a>
                                     </td>
                                 </tr>                            
                             @endforeach
@@ -191,7 +192,7 @@
         </main>
     </div>
     
-    <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
-    <script src="{{asset('js/Technician/technician-modal.js')}}"></script>
+    <script src="{{asset('js/Technician/1 - Dashboard.js')}}" defer></script>
+    <script src="{{asset('js/Technician/technician-sidebar.js')}}" defer></script>
 </body>
 </html>

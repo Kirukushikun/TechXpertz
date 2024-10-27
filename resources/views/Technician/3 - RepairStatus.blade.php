@@ -198,9 +198,11 @@
         </main>
     </div>
     
-    <script src="{{asset('js/Technician/3 - RepairStatus.js')}}"></script>
-    <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
-    <script src="{{asset('js/Technician/technician-modal.js')}}"></script>
-    <script src="{{asset('js/Technician/technician-notification.js')}}"></script>
+    <script src="{{asset('js/Technician/3 - RepairStatus.js')}}" defer></script>
+    <script src="{{asset('js/Technician/technician-sidebar.js')}}" defer></script>
+    <script src="{{asset('js/Technician/technician-notification.js')}}" defer></script>
+
+    <script src="{{asset('js/Technician/technician-modal.js')}}" defer></script>
+    
 </body>
 </html>

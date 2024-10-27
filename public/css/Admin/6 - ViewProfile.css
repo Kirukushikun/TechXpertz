@@ -325,6 +325,10 @@ table td a{
     border-radius: 7px;
     border: 2px solid #e4e4e4;
     padding: 30px;
+}.review.Approved{
+    border: 3px solid var(--success);
+}.review.Rejected{
+    border: 3px solid var(--danger);
 }
 
 .review .review-header {
@@ -339,9 +343,15 @@ table td a{
     font-weight: 500;
 
 }.review-header .stars{
-    font-size: 15px;
+    font-size: 18px;
     color: #f7e700;
     user-select: none;
+} .review-header .status{
+    padding: 5px 20px;
+    border: 2px solid var(--success);
+    color: var(--success);
+    border-radius: 7px;
+    font-weight: 600;
 }
 
 .review .review-body {
@@ -379,6 +389,27 @@ table td a{
 
 }
 
+.review-body .review-action{
+    display: flex;
+    justify-content: end;
+    gap: 15px;
+    margin-top: 10px;
+}.review-body .review-action button{
+    display: flex;
+    justify-content: end;
+    border-radius: 7px;
+    border: none;
+    padding: 7px 20px;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    color: white;
+}.review-action button.Approve{
+    background-color: var(--success);
+}.review-action button.Reject{
+    background-color: var(--danger);
+}
+
 
 .disciplinary-card{
     border-radius: 7px;
@@ -401,7 +432,8 @@ table td a{
     border-radius: 7px;
     width: fit-content;
     margin-top: 5px;
-    font-weight: 600;    align-items: center;
+    font-weight: 600;
+    align-items: center;
     justify-content: space-between;
 }
 
@@ -504,10 +536,7 @@ table td a{
     border: 2px solid var(--success);
     color: var(--success);
 }
-/* #restricted{
-    border: 2px solid var(--danger);
-    color: var(--danger);
-} */
+
 #restricted{
     border: 2px solid var(--danger);
     color: var(--danger);

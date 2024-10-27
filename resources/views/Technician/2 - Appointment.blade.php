@@ -100,7 +100,7 @@
                                         <td>
                                             <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-appointment-status="cancel"><i class="fa-regular fa-calendar-xmark cancel"></i></a>
                                             <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-customer-id="{{$confirmed['customer_id']}}" data-appointment-status="repair"><i class="fa-solid fa-screwdriver-wrench chat"></i></a>
-                                            <a href="/technician/messages/{{$confirmed['customer_id']}}"><i class="fa-solid fa-message chat"></i></a>
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
@@ -139,7 +139,7 @@
                                 <td>
                                     <a class="appointment-btn" data-appointment-id="{{$request['ID']}}" data-appointment-status="reject"><i class="fa-regular fa-calendar-xmark cancel"></i></a>
                                     <a class="appointment-btn" data-appointment-id="{{$request['ID']}}" data-appointment-status="confirm"><i class="fa-regular fa-calendar-check confirm"></i></a>
-                                    <a  href="/technician/messages/{{$confirmed['customer_id']}}"><i class="fa-solid fa-message chat"></i></a>
+                                    
                                 </td>
                             </tr>
                             @endforeach
@@ -189,10 +189,10 @@
         </main>
     </div>
     
-    <script src="{{asset('js/Technician/2 - Appointment.js')}}"></script>
-    <script src="{{asset('js/Technician/technician-sidebar.js')}}"></script>
-    <script src="{{asset('js/Technician/technician-modal.js')}}"></script>
-    <script src="{{asset('js/Technician/technician-notification.js')}}"></script>
+    <script src="{{asset('js/Technician/2 - Appointment.js')}}" defer></script>
+    <script src="{{asset('js/Technician/technician-sidebar.js')}}" defer></script>
+    <script src="{{asset('js/Technician/technician-notification.js')}}" defer></script>
+
     
 </body>
 </html>

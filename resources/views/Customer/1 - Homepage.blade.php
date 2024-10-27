@@ -6,8 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>TechXpertz</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="{{ asset('css/Customer/header-footer.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-headerfooter.css') }}">
         <link rel="stylesheet" href="{{ asset('css/Customer/customer-loadingscreen.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-modal.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-notification.css') }}">
+
         <link rel="stylesheet" href="{{ asset('css/Customer/1 - Homepage.css') }}">
     </head>
     <body>
@@ -79,7 +83,7 @@
                         <img src="{{asset('images/Smartwatch.png')}}">
                     </div>
                     <div class="text">
-                        <h3>Smartwatche</h3>
+                        <h3>Smartwatch</h3>
                         <p>Repair Shops</p>
                     </div>
                 </div>
@@ -145,7 +149,7 @@
                 </div>
             </div>
 
-            <div class="shops">
+            <div class="best-shops shop-container active">
                 @if(count($repairshops) === 0)
                     <p class="no-shop">No Shops Available</p>
                 @else
@@ -181,13 +185,13 @@
                                     <div class="stars">
                                         @for ($i = 1; $i <= 5; $i++)
                                             @if ($i <= floor($repairshop['averageRating']))
-                                                <!-- Solid star for whole numbers -->
+                                                
                                                 <i class="fas fa-star"></i>
                                             @elseif ($i == ceil($repairshop['averageRating']) && fmod($repairshop['averageRating'], 1) != 0)
-                                                <!-- Half star for decimals -->
+                                                
                                                 <i class="fa-solid fa-star-half-stroke"></i>
                                             @else
-                                                <!-- Empty star -->
+                                                
                                                 <i class="fa-regular fa-star"></i>
                                             @endif
                                         @endfor
@@ -202,12 +206,233 @@
                         </div>                    
                     @endforeach                
                 @endif
+
+                <div class="shop">
+                    <div class="shop-image" style="background-image: url('path/to/default-image.jpg');"></div>
+
+                    <div class="shop-details">
+                        <div class="shop-name">
+                            <h3>Repair Shop Name repair and services</h3>
+                            <img src="images/default-mastery.png">
+                        </div>
+                        
+                        <div class="shop-location">
+                            <p>1234 Repair St., Barangay Example, Example City, Example Province Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, harum.</p>
+                        </div>
+                        
+                        <div class="shop-schedule">
+                            <p>+63 912 345 6789</p>
+                            <h4>Mon - Fri</h4>              
+                        </div>
+
+                        <ul>
+                            <li><i class="fa-solid fa-check"></i> Badge 1</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 2</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 3</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 4</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="shop-footer">
+                        <div class="rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fa-regular fa-star"></i>
+                            </div>
+                            <p>10 Reviews</p>
+                        </div>
+                        <div class="actions">
+                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
+                            <button class="view load" onclick="window.location.href='shop-view-link.html'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="shop">
+                    <div class="shop-image" style="background-image: url('path/to/default-image.jpg');"></div>
+
+                    <div class="shop-details">
+                        <div class="shop-name">
+                            <h3>Repair Shop Name</h3>
+                            <img src="images/default-mastery.png">
+                        </div>
+                        
+                        <div class="shop-location">
+                            <p>1234 Repair St., Barangay Example, Example City, Example Province</p>
+                        </div>
+                        
+                        <div class="shop-schedule">
+                            <p>+63 912 345 6789</p>
+                            <h4>Mon - Fri</h4>              
+                        </div>
+
+                        <ul>
+                            <li><i class="fa-solid fa-check"></i> Badge 1</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 2</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 3</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 4</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="shop-footer">
+                        <div class="rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fa-regular fa-star"></i>
+                            </div>
+                            <p>10 Reviews</p>
+                        </div>
+                        <div class="actions">
+                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
+                            <button class="view load" onclick="window.location.href='shop-view-link.html'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="shop">
+                    <div class="shop-image" style="background-image: url('path/to/default-image.jpg');"></div>
+
+                    <div class="shop-details">
+                        <div class="shop-name">
+                            <h3>Repair Shop Name</h3>
+                            <img src="images/default-mastery.png">
+                        </div>
+                        
+                        <div class="shop-location">
+                            <p>1234 Repair St., Barangay Example, Example City, Example Province</p>
+                        </div>
+                        
+                        <div class="shop-schedule">
+                            <p>+63 912 345 6789</p>
+                            <h4>Mon - Fri</h4>              
+                        </div>
+
+                        <ul>
+                            <li><i class="fa-solid fa-check"></i> Badge 1</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 2</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 3</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 4</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="shop-footer">
+                        <div class="rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fa-regular fa-star"></i>
+                            </div>
+                            <p>10 Reviews</p>
+                        </div>
+                        <div class="actions">
+                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
+                            <button class="view load" onclick="window.location.href='shop-view-link.html'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="shop hidden">
+                    <div class="shop-image" style="background-image: url('path/to/default-image.jpg');"></div>
+
+                    <div class="shop-details">
+                        <div class="shop-name">
+                            <h3>Repair Shop Name</h3>
+                            <img src="images/default-mastery.png">
+                        </div>
+                        
+                        <div class="shop-location">
+                            <p>1234 Repair St., Barangay Example, Example City, Example Province</p>
+                        </div>
+                        
+                        <div class="shop-schedule">
+                            <p>+63 912 345 6789</p>
+                            <h4>Mon - Fri</h4>              
+                        </div>
+
+                        <ul>
+                            <li><i class="fa-solid fa-check"></i> Badge 1</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 2</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 3</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 4</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="shop-footer">
+                        <div class="rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fa-regular fa-star"></i>
+                            </div>
+                            <p>10 Reviews</p>
+                        </div>
+                        <div class="actions">
+                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
+                            <button class="view load" onclick="window.location.href='shop-view-link.html'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="shop hidden">
+                    <div class="shop-image" style="background-image: url('path/to/default-image.jpg');"></div>
+
+                    <div class="shop-details">
+                        <div class="shop-name">
+                            <h3>Repair Shop Name</h3>
+                            <img src="images/default-mastery.png">
+                        </div>
+                        
+                        <div class="shop-location">
+                            <p>1234 Repair St., Barangay Example, Example City, Example Province</p>
+                        </div>
+                        
+                        <div class="shop-schedule">
+                            <p>+63 912 345 6789</p>
+                            <h4>Mon - Fri</h4>              
+                        </div>
+
+                        <ul>
+                            <li><i class="fa-solid fa-check"></i> Badge 1</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 2</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 3</li>
+                            <li><i class="fa-solid fa-check"></i> Badge 4</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="shop-footer">
+                        <div class="rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fa-regular fa-star"></i>
+                            </div>
+                            <p>10 Reviews</p>
+                        </div>
+                        <div class="actions">
+                            <button class="favorite"><i class="fa-regular fa-heart"></i></button>
+                            <button class="view load" onclick="window.location.href='shop-view-link.html'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         @yield('footer')
-
-        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}"></script>
-
+        
+        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+        <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
     </body>
 </html>

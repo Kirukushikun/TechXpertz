@@ -55,7 +55,10 @@ class CustomerController extends Controller
     }
 
     public function viewshop($id){
-        $repairshop = Technician::find($id);
+        $repairshop = Technician::find($id)
+            ->with(['repairshopReviews' => function ($query) {
+                $query->orderBy('created_at', 'desc')->where('status', 'Approved');
+            }])->find($id);;
 
         // Retrieve all services from a specific repairshop
         $services = Repairshop_Services::where('technician_ID', $id)->get();
@@ -269,7 +272,8 @@ class CustomerController extends Controller
                     'technician_id' => $technicianID,
                     'repair_id' => $validatedData['repairID'],
                     'customer_id' => $customer->id,
-                    'repairstatus' => 'Review Submitted'
+                    'repairstatus' => 'Review Submitted',
+                    'repairstatus_message' => 'Thank you for taking the time to rate and review the repair shop! Your feedback helps both the shop and future customers. We truly appreciate your input and support!',
                 ]);
                 return back()->with('success', 'Review submmited successfully');
             }

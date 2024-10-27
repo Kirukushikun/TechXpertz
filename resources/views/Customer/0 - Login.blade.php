@@ -32,8 +32,9 @@
                                     <input type="checkbox" name="remember_me" id="dark-mode-toggle">
                                     <span class="slider round"></span>
                                 </label>         
-                                Remember Me
+                                <p>Remember Me</p>
                             </label>
+                            
                             <a href="#">Forgot password?</a>
                         </div>
                         <button type="submit" id="submit" class="load">Sign in</button>
@@ -52,6 +53,6 @@
         </div>
     </body>
 
-    <!-- <script src="{{ asset('js/Customer/0 - Login.js') }}" type="module"></script> -->
+    
 
 </html>

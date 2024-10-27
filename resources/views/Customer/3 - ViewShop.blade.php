@@ -6,8 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>TechXpertz</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="{{ asset('css/Customer/header-footer.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-headerfooter.css') }}">
         <link rel="stylesheet" href="{{ asset('css/Customer/customer-loadingscreen.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-modal.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-notification.css') }}">
+        
         <link rel="stylesheet" href="{{ asset('css/Customer/3 - ViewShop.css') }}">
     </head>
     <body>
@@ -108,7 +112,7 @@
 
                     <div class="buttons">
                         <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                        <button class="chat" onclick="window.location.href='{{route('customer.messageRepairshop', ['repairshopID' => $repairshop->id])}}'">CHAT</button>
+                        <button class="chat load" onclick="window.location.href='{{route('customer.messageRepairshop', ['repairshopID' => $repairshop->id])}}'">CHAT</button>
                         <button class="appointment highlight load" id="button" onclick="window.location.href='{{route('viewappointment', ['id' => $repairshop->id])}}'">MAKE AN APPOINTMENT</button>
                     </div>
                 </div>
@@ -162,21 +166,70 @@
 
             <div class="description">
                 <div class="tabs">
-                    <div class="tab active">About</div>
-                    <div class="tab">Specialization</div>
-                    <div class="tab">Certificates</div>
-                    <div class="tab">Reviews ({{$reviewData['totalReviews']}})</div>
+                    <div class="tab active" data-tab="about">About</div>
+                    <div class="tab" data-tab="specialization">Specialization</div>
+                    <div class="tab" data-tab="certificates">Certificates</div>
+                    <div class="tab" data-tab="reviews">Reviews ({{$reviewData['totalReviews']}})</div>
                 </div>
 
-                <div class="content">
+                <div id="about" class="tab-content active">
                     <h2>{{$repairshop->repairshopProfile->header}}</h2>   
                     <p>{{$repairshop->repairshopProfile->description}}</p>
-                </div>                
+                </div>
+
+                <div id="specialization" class="tab-content">
+                    <h2>Specialization</h2>   
+                    <p>{{$repairshop->repairshopProfile->description}}</p>
+                </div>
+
+                <div id="certificates" class="tab-content">
+                    <h2>Certificates</h2>   
+                    <p>{{$repairshop->repairshopProfile->description}}</p>
+                </div>
+
+                <div id="reviews" class="tab-content">
+                    @foreach($repairshop->repairshopReviews as $review)  
+                        <div class="review" style="{{!$loop->last ? 'border-bottom:2px solid #d9d9d9;' : ''}}">
+                            <div class="review-header">
+                                <span class="review-date">{{$review->created_at->format('M d, Y')}}</span>
+                                <div class="stars">
+                                    @for ($i = 1; $i <= $review->rating; $i++ )
+                                        <span class="star"><i class="fa-solid fa-star"></i></span>
+                                    @endfor
+                                </div>
+                            </div>
+            
+                            <div class="review-body">
+                                <div class="reviewer-info">
+                                    @php
+                                        $customer = App\Models\Customer::find($review->customer_id);
+                                    @endphp
+                                    @if($customer->image_profile)
+                                        <span class="reviewer-avatar" style="background-image: url('{{ asset($customer->image_profile) }}');">
+                                            <!-- <i class="fa-solid fa-user"></i> -->
+                                        </span>
+                                    @else
+                                        <span class="reviewer-avatar">
+                                            <i class="fa-solid fa-user"></i>
+                                        </span>
+                                    @endif
+                                    <div class="reviewer-details">
+                                        <span class="reviewer-name">{{$review->customer_fullname}}</span>
+                                    </div>
+                                </div>
+                                <p class="review-text">
+                                    {{$review->review_comment}}
+                                </p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
             </div>
         </div>
 
         @yield('footer')
-
-        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}"></script>
+        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+        <script src="{{asset('js/Customer/3 - ViewShop.js')}}" defer></script>
     </body>
 </html>

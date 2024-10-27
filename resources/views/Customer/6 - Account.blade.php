@@ -9,9 +9,13 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Crucial Part on every forms/ -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="{{ asset('css/Customer/header-footer.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/Customer/6 - Account.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-headerfooter.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-loadingscreen.css') }}">
         <link rel="stylesheet" href="{{ asset('css/Customer/customer-modal.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-notification.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('css/Customer/6 - Account.css') }}">
     </head>
     <body id="main-body">
 
@@ -191,8 +195,6 @@
                     @endif
                 </div>
 
- 
-
                 <!-- Privacy Section -->
                 <div id="privacy-policy" class="form-section">
                     <h2>Privacy Policy</h2>
@@ -225,178 +227,6 @@
 
     </body>
 
-    <!-- SIDEBAR FUNCTION -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const links = document.querySelectorAll('.profile-navigation a');
-            const sections = document.querySelectorAll('.left .form-section');
-
-            // Add event listeners to each navigation link
-            links.forEach(link => {
-                link.addEventListener('click', function (event) {
-                    event.preventDefault();
-
-                    // Remove the 'active' class from all links
-                    links.forEach(link => link.classList.remove('active'));
-
-                    // Add the 'active' class to the clicked link
-                    this.classList.add('active');
-
-                    // Hide all sections
-                    sections.forEach(section => section.style.display = 'none');
-
-                    // Show the corresponding section
-                    const sectionId = this.getAttribute('data-target');
-                    document.getElementById(sectionId).style.display = 'flex';
-                });
-            });
-
-            // Display the first section by default
-            sections[0].style.display = 'flex';
-        });
-    </script>
-
-    <!-- PREVIEW IMAGE FUNCTION -->
-    <script>
-        function previewImage(event) {
-            const preview = document.getElementById('preview');
-            const file = event.target.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    </script>
-
-    <!-- UPLOAD IMAGE FUNCTION -->
-    <script>
-        let uploadImage = document.querySelectorAll('button.upload-image');
-        let modal = document.getElementById('modal');
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        uploadImage.forEach(button => {
-            button.addEventListener('click', function(){
-                let customerID = this.getAttribute('data-customer-id');
-                let actionType = this.getAttribute('data-action');
-                
-                if(actionType == 'upload'){
-                    modal.innerHTML = `                    
-                        <form class="modal-content" action="/customer/myaccount/${actionType}/${customerID}"  method="POST" enctype="multipart/form-data">
-
-                            <input type="hidden" name="_token" value="${csrfToken}">
-                            <input type="hidden" name="_method" value="PATCH">
-
-                            
-                            <div class="image-upload">
-                                <h2>Upload Your Image</h2>
-                                <label for="file-input" class="upload-label">
-                                    <img id="preview" src="{{ asset('images/image-upload.png') }}" alt="Image Preview">
-                                    
-                                </label>
-                                <input id="file-input" type="file" name="image" onchange="previewImage(event)" />
-                            </div>
-                            <div class="modal-action">
-                                <button type="submit" class="submit">Save</button>  
-                                <button type="button" class="close normal">Dismiss</button> 
-                            </div>
-                        </form>
-                    `;                    
-                }else if(actionType == 'delete'){
-                    modal.innerHTML = `
-                        <form action="/customer/myaccount/${actionType}/${customerID}" method="POST">
-                            <input type="hidden" name="_token" value="${csrfToken}">
-                            <input type="hidden" name="_method" value="PATCH">
-
-                            <div class="modal-verification">
-                                <i class="fa-solid fa-triangle-exclamation" id="repair"></i>
-                                <div class="verification-message">
-                                    <h2>Delete Profile</h2>
-                                    <p>Are you sure you want to Delete your picture?</p>                        
-                                </div>
-                                <div class="verification-action">
-                                    <button type="submit" class="submit">Delete Picture</button>
-                                    <button type="button" class="close normal"><b>Dismiss</b></button>
-                                </div>
-                            </div>                 
-                        </form>
-                    `;
-                }
-
-                modal.classList.add('active');
-
-                document.querySelector('.close').onclick = function () {
-                    modal.classList.remove('active');
-                };
-            })
-        });
-    </script>
-
-    <!-- DISPLAYS SAVE BUTTON FOR EVERY CHANGES DETECTED -->
-    <script>
-        let profileSettings = document.getElementById('account-settings');
-        let inputs = profileSettings.querySelectorAll('input');
-
-        inputs.forEach(input => {
-            input.addEventListener('input', function(){
-                displaySaveChanges();
-            });
-        });
-
-        function displaySaveChanges(){
-            document.getElementById('form-action').classList.add('active');
-        }
-    </script>
-
-    <script>
-        document.querySelectorAll('.notification-action').forEach(notificationElement => {
-            const markAsReadButton = notificationElement.querySelector('.submit');
-            
-            if (!markAsReadButton) return;  // Early return if no button is found
-            
-            const notificationID = markAsReadButton.getAttribute('data-notification-id');
-            
-            markAsReadButton.addEventListener('click', () => {
-                // Disable the button to prevent multiple requests
-                markAsReadButton.disabled = true;
-
-                updateNotification(notificationID);
-
-                // Change the button appearance after marking as read
-                markAsReadButton.innerHTML = `
-                    <button style="color: #999" class="marked-as-read" disabled>
-                        <i class="fa-solid fa-envelope-open-text"></i>Marked as Read
-                    </button>
-                `;
-                
-                console.log(`Notification ID: ${notificationID}`);
-            });
-        });
-
-        function updateNotification(notificationID) {
-            fetch(`/customer/myaccount/notification/update/${notificationID}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Notification marked as read successfully');
-                } else {
-                    console.log('Failed to mark notification as read');
-                }
-            })
-            .catch(error => {
-                console.error('There was an error with the request:', error);
-            });
-        }
-    </script>
-
-
-    <script src="{{asset('js/Customer/customer-notification.js')}}"></script>
+    <script src="{{asset('js/Customer/6 - Account.js')}}" defer></script>
+    <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
 </html>

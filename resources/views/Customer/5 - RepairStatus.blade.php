@@ -9,11 +9,40 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Crucial Part on every forms/ -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="{{ asset('css/Customer/header-footer.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/Customer/5 - RepairStatus.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-headerfooter.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-loadingscreen.css') }}">
         <link rel="stylesheet" href="{{ asset('css/Customer/customer-modal.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-notification.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('css/Customer/5 - RepairStatus.css') }}">
+
     </head>
     <body>
+
+        @if(session()->has('error'))
+            <div class="push-notification danger active">
+                <i class="fa-solid fa-bell danger"></i>
+                <div class="notification-message">
+                    <h4>Appointment Booked</h4>
+                    <p>{{session('error')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @elseif(session()->has('success'))
+            <div class="push-notification success active">
+                <i class="fa-solid fa-bell success"></i>
+                <div class="notification-message">
+                    <h4>Appointment Booked</h4>
+                    <p>{{session('success')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @endif
+
+    <div class="loading-screen">
+        <div class="loader"></div>
+    </div>
 
     <div class="modal" id="modal">
       
@@ -134,137 +163,7 @@
 
         
     </body>
-
-    <script>
-        let modal = document.getElementById('modal');
-        let cancelBtn = document.getElementById('cancel-appointment');
-        let rateBtn = document.getElementById('rate-repair');
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        cancelBtn.addEventListener('click', function(){
-            let repairID = this.getAttribute('data-repair-id');
-            modal.innerHTML = `
-                <form action="/bookappointment/cancel/${repairID}" method="POST">
-                    <input type="hidden" name="_token" value="${csrfToken}">
-                    <input type="hidden" name="_method" value="PATCH">
-
-                    <div class="modal-verification">
-                        <i class="fa-solid fa-triangle-exclamation" id="repair"></i>
-                        <div class="verification-message">
-                            <h2>Cancel Request</h2>
-                            <p>Are you sure you want to cancel your request?</p>                        
-                        </div>
-                        <div class="verification-action">
-                            <button type="submit" class="submit">Cancel Appointment</button>
-                            <button type="button" class="close normal"><b>Dismiss</b></button>
-                        </div>
-                    </div>                 
-                </form>
-            `;
-
-            modal.classList.add('active');
-
-            document.querySelector('.close').onclick = function () {
-                modal.classList.remove('active');
-            };
-        });
-
-    </script>
-
-    <script>
-        rateBtn.addEventListener('click', function(){
-            let technicianID = this.getAttribute('data-technician-id');
-            let repairID = this.getAttribute('data-repair-id');
-
-            modal.innerHTML = `
-                <form action="/review/${technicianID}" class="review-form" method="POST">
-                    <input type="hidden" name="_token" value="${csrfToken}">
-
-                    <input type="text" id="rating" name="rating" hidden>
-                    <input type="text" id="repairID" name="repairID" value="${repairID}" hidden>
-
-                    <div class="left">
-                        <div class="review-header">
-                            <h2>How would you rate our service?</h2>
-                            <p>Please rate your experience with the repair service from the repair shop and provide a feedback.</p>
-                        </div>
-                        
-                        <div class="review-rating">
-                            <div class="star-container" id="starContainer">
-                                <i class="fa-regular fa-star star" data-value="1"></i>
-                                <i class="fa-regular fa-star star" data-value="2"></i>
-                                <i class="fa-regular fa-star star" data-value="3"></i>
-                                <i class="fa-regular fa-star star" data-value="4"></i>
-                                <i class="fa-regular fa-star star" data-value="5"></i>
-                            </div>                
-                        </div>
-
-                        <div class="review-comment">
-                            <h4>Comment:</h4>
-                            <textarea class="comment" name="comment" id="comment"></textarea>
-                        </div>
-
-                        <div class="review-action">
-                            <button type="submit">Submit</button>
-                            <a href="#" class="close">Maybe, later</a>
-                        </div>
-                        
-                    </div>
-
-                    <div class="right">
-                        <!-- You can add more content here if needed -->
-                    </div>
-                </form> 
-            `;
-
-            rate();
-
-            modal.classList.add('active');
-
-            document.querySelector('.close').onclick = function (e) {
-                e.preventDefault(); // Prevents anchor default action
-                modal.classList.remove('active');
-            };
-        }); 
-
-        function rate(){
-            const stars = document.querySelectorAll('.star');
-            let currentRating = 0;
-
-            // Function to fill the stars up to the given rating
-            const fillStars = (rating) => {
-                stars.forEach(star => {
-                    if (parseInt(star.getAttribute('data-value')) <= rating) {
-                        star.classList.add('fa-solid');
-                        star.classList.remove('fa-regular');
-                    } else {
-                        star.classList.remove('fa-solid');
-                        star.classList.add('fa-regular');
-                    }
-                });
-            };
-
-            // Handle star hover
-            stars.forEach(star => {
-                star.addEventListener('mouseover', (e) => {
-                    const hoverRating = parseInt(e.target.getAttribute('data-value'));
-                    fillStars(hoverRating);
-                });
-
-                // Handle star click
-                star.addEventListener('click', (e) => {
-                    currentRating = parseInt(e.target.getAttribute('data-value'));
-                    document.getElementById('rating').value = currentRating; // Set the hidden rating input value
-                    fillStars(currentRating);
-                });
-
-                // Reset stars to current rating on mouseout
-                star.addEventListener('mouseout', () => {
-                    fillStars(currentRating);
-                });
-            });
-        }
-    </script>
-
-    <script src="{{asset('js/Customer/customer-notification.js')}}"></script>
+    <script src="{{asset('js/Customer/5 - RepairStatus.js')}}" defer></script>
+    <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+    <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
 </html>

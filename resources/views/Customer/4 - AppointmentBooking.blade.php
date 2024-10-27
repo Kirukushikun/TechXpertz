@@ -6,8 +6,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>TechXpertz</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="{{ asset('css/Customer/header-footer.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-headerfooter.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-loadingscreen.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-modal.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-notification.css') }}">
+        
         <link rel="stylesheet" href="{{ asset('css/Customer/4 - AppointmentBooking.css') }}">
+        
         <style>
             .summary h4 {
                 text-transform: capitalize;
@@ -67,10 +73,14 @@
                     <div class="form-group">
                         <label for="device-type">Device Type</label>
                         <select id="device_type" name="device_type" required>
-                            <option value="laptop">Laptop</option>
-                            <option value="desktop">Desktop</option>
-                            <option value="tablet">Tablet</option>
-                            <option value="phone">Phone</option>
+                            @php
+                                $mastery = App\Models\RepairShop_Mastery::where('technician_id', $technicianID)->first();
+                            @endphp
+                            @foreach(['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone'] as $item)
+                                @if($mastery->$item)
+                                    <option value="{{$item}}">{{$item}}</option>
+                                @endif
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
@@ -235,95 +245,7 @@
 
         @yield('footer')
 
-        <script>
-            // Get the close icon element
-            const closeNotification = document.getElementById('close-notification');
-
-            // Add a click event listener to the close icon
-            closeNotification.addEventListener('click', function() {
-                // Get the push notification container
-                const notification = document.querySelector('.push-notification');
-                
-                // Remove the 'active' class to hide the notification
-                notification.classList.remove('active');
-            });
-        </script>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Function to update the summary
-                function updateSummary(inputId, summaryClass) {
-                    const inputElement = document.getElementById(inputId);
-                    const summaryElement = document.querySelector(summaryClass + ' h4');
-
-                    inputElement.addEventListener('input', function () {
-                        summaryElement.textContent = inputElement.value;
-                    });
-                }
-
-                // Update Full Name
-                document.getElementById('firstname').addEventListener('input', function () {
-                    const firstName = document.getElementById('firstname').value;
-                    const lastName = document.getElementById('lastname').value;
-                    document.querySelector('.contact-summary .detail-group:nth-child(1) h4').textContent = `${firstName} ${lastName}`;
-                });
-
-                document.getElementById('lastname').addEventListener('input', function () {
-                    const firstName = document.getElementById('firstname').value;
-                    const lastName = document.getElementById('lastname').value;
-                    document.querySelector('.contact-summary .detail-group:nth-child(1) h4').textContent = `${firstName} ${lastName}`;
-                });
-
-                // Update Contact
-                updateSummary('contact_no', '.contact-summary .detail-group:nth-child(2)');
-
-                // Update Email
-                updateSummary('email', '.contact-summary .detail-group:nth-child(3)');
-
-                // Update Device Type
-                updateSummary('device_type', '.device-summary .detail-group:nth-child(1)');
-
-                // Update Brand
-                updateSummary('device_brand', '.device-summary .detail-group:nth-child(2)');
-
-                // Update Model
-                updateSummary('device_model', '.device-summary .detail-group:nth-child(3)');
-
-                // Update Serial Number
-                updateSummary('device_serial', '.device-summary .detail-group:nth-child(4)');
-
-                // Update Request Date
-                updateSummary('appointment_date', '.schedule-summary .detail-group:nth-child(1)');
-
-                // Update Request Time
-                updateSummary('appointment_time', '.schedule-summary .detail-group:nth-child(2)');
-
-                // Update Urgency Level
-                updateSummary('appointment_urgency', '.schedule-summary .detail-group:nth-child(3)');
-
-                // Handle dynamic checkmarks for device issues
-                const issueTextAreas = document.querySelectorAll('.form-group-excluded textarea');
-
-                issueTextAreas.forEach(function (textarea, index) {
-                    const checkMark = document.querySelector('.issue-summary .detail-group:nth-child(' + (index + 1) + ') i');
-
-                    textarea.addEventListener('input', function () {
-                        if (textarea.value.trim() !== "") {
-                            checkMark.style.display = 'inline'; // Show the checkmark
-                        } else {
-                            checkMark.style.display = 'none'; // Hide the checkmark if the field is empty
-                        }
-                    });
-
-                    // Initialize the state of the checkmark when the page loads
-                    if (textarea.value.trim() !== "") {
-                        checkMark.style.display = 'inline';
-                    } else {
-                        checkMark.style.display = 'none';
-                    }
-                });
-
-            });
-        </script>
+        <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
+        <script src="{{asset('js/Customer/4 - AppointmentBooking.js')}}" defer></script>
     </body>
 </html>

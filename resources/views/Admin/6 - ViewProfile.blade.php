@@ -282,7 +282,7 @@
 
                         <div id="compliance-documents" class="form-container">
                             <div class="form-header">
-                                <h2>Compliance & Documentation</h2>
+                                <h2>Image & Documentation</h2>
                             </div>
 
                             <div class="form-body">
@@ -389,8 +389,8 @@
                                             <td>{{$appointmentData->id}}</td>
                                             <td>{{$appointmentData->fullname}}</td>
                                             <td>{{$appointmentData->status}}</td>
-                                            <td>{{$appointmentData->appointment_date}}</td>
-                                            <td>{{$appointmentData->appointment_time}}</td>
+                                            <td>{{$appointmentData->appointment_date->format('M d, Y')}}</td>
+                                            <td>{{$appointmentData->appointment_time->format('h:i A')}}</td>
                                             <td>{{$appointmentData->updated_at->format('M d, Y, h:i A')}}</td>
                                             <td><button class="view-details" data-appointment-id="">View</button></td>
                                         </tr>
@@ -403,55 +403,39 @@
                             <div class="form-header">
                                 <h2>Ratings & Feedback</h2>
                             </div>
-
-                            <div class="review">
-                                <div class="review-header">
-                                    <span class="review-date">Jan 20, 2024</span>
-                                    <div class="stars">
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                    </div>
-                                </div>
-                
-                                <div class="review-body">
-                                    <div class="reviewer-info">
-                                        <span class="reviewer-avatar">AK</span>
-                                        <div class="reviewer-details">
-                                            <span class="reviewer-name">Alex K.</span>
+                             
+                            @foreach($technician->repairshopReviews as $review)
+                                <div class="review {{$review->status}}">
+                                    <div class="review-header">
+                                        <!-- <span class="status">Approved</span> -->
+                                        <span class="review-date">{{$review->created_at->format('M d, Y')}}</span>
+                                        <div class="stars">
+                                            @for($i = 1; $i <= $review->rating; $i++)
+                                                <span class="star"><i class="fa-solid fa-star"></i></span>
+                                            @endfor
                                         </div>
                                     </div>
-                                    <p class="review-text">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo est modi, vitae tempore quia asperiores tenetur facilis, ipsam temporibus mollitia nihil suscipit vero necessitatibus porro nostrum error. Corrupti, nulla voluptatibus!
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="review">
-                                <div class="review-header">
-                                    <span class="review-date">Jan 20, 2024</span>
-                                    <div class="stars">
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                    </div>
-                                </div>
-                
-                                <div class="review-body">
-                                    <div class="reviewer-info">
-                                        <span class="reviewer-avatar">AK</span>
-                                        <div class="reviewer-details">
-                                            <span class="reviewer-name">Alex K.</span>
+                    
+                                    <div class="review-body">
+                                        <div class="reviewer-info">
+                                            <span class="reviewer-avatar">AK</span>
+                                            <div class="reviewer-details">
+                                                <span class="reviewer-name">Alex K.</span>
+                                                
+                                            </div>
                                         </div>
+                                        <p class="review-text">
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo est modi, vitae tempore quia asperiores tenetur facilis, ipsam temporibus mollitia nihil suscipit vero necessitatibus porro nostrum error. Corrupti, nulla voluptatibus!
+                                        </p>
+                                        @if($review->status == "Pending")
+                                            <div class="review-action">
+                                                <button class="Approve" button-action="Approve" data-review-id="{{$review->id}}">Approve</button>
+                                                <button class="Reject" button-action="Reject" data-review-id="{{$review->id}}">Reject</button>
+                                            </div>
+                                        @endif
                                     </div>
-                                    <p class="review-text">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo est modi, vitae tempore quia asperiores tenetur facilis, ipsam temporibus mollitia nihil suscipit vero necessitatibus porro nostrum error. Corrupti, nulla voluptatibus!
-                                    </p>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
 
                         <div id="disciplinary-records" class="form-container">
@@ -500,7 +484,7 @@
 
                         <div id="access-logs" class="form-container">
                             <div class="form-header">
-                                <h2>Access Logs</h2>
+                                <h2>Activity Logs</h2>
                             </div>
 
                             <table>
@@ -666,6 +650,72 @@
 
         //$ loop -> iteration - can serve as your row count or headcount foreach data
 
+    </script>
+
+    <script>
+        // Run the code only after the webpage is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all the review-action sections on the page
+            const reviewActions = document.querySelectorAll('.review-action');
+
+            // Loop through each review-action section
+            reviewActions.forEach(function(action) {
+                // Find the parent review container (the element with the 'review' class)
+                const reviewContainer = action.closest('.review');
+
+                // Find the Approve and Reject buttons
+                const approveButton = action.querySelector('.Approve');
+                const rejectButton = action.querySelector('.Reject');
+
+                // When the Approve button is clicked
+                if (approveButton) {
+                    approveButton.addEventListener('click', function() {
+                        let reviewID = this.getAttribute('data-review-id');
+                        updateReview(reviewID, 'Approved');
+                        // Remove existing status classes (Pending, Rejected) and add Approved
+                        reviewContainer.classList.remove('Pending', 'Rejected');
+                        reviewContainer.classList.add('Approved');
+
+                        action.style.display = "none";
+                    });
+                }
+
+                // When the Reject button is clicked
+                if (rejectButton) {
+                    rejectButton.addEventListener('click', function() {
+                        let reviewID = this.getAttribute('data-review-id');
+                        updateReview(reviewID, 'Rejected');
+                        // Remove existing status classes (Pending, Approved) and add Rejected
+                        reviewContainer.classList.remove('Pending', 'Approved');
+                        reviewContainer.classList.add('Rejected');
+                        
+                        action.style.display = "none";
+                    });
+                }
+            });
+
+            function updateReview(reviewID, reviewStatus){
+                fetch(`/admin/reviewsmanagement/${reviewID}`, {
+                    method: 'PATCH', // You can use 'PUT' or 'PATCH' depending on your API design
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    body: JSON.stringify({ status: reviewStatus }) // Send necessary data in the body
+                    })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Review updated successfully');
+                    } else {
+                        console.log('Review update failed');
+                    }
+                })
+                .catch(error => {
+                    console.log('There was an error with the request:', error);
+                });
+            }
+
+        });
     </script>
 </body>
 </html>

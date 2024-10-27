@@ -6,8 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>TechXpertz</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="{{ asset('css/Customer/header-footer.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-headerfooter.css') }}">
         <link rel="stylesheet" href="{{ asset('css/Customer/customer-loadingscreen.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-modal.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/Customer/customer-notification.css') }}">
+        
         <link rel="stylesheet" href="{{ asset('css/Customer/2 - ViewCategory.css') }}">
     </head>
     <body>
@@ -28,7 +32,7 @@
             <div class="header">
                 <nav>
                     <a href="#" class="active">{{$category}} Repair Shops</a>
-                    <p>Showing 9 out o 120 results</p>
+                    <p>Showing 9 out of 120 results</p>
                 </nav>
     
                 <div class="header-actions">
@@ -93,7 +97,7 @@
                                 </div>
                                 <div class="actions">
                                     <button class="favorite"><i class="fa-regular fa-heart"></i></button>
-                                    <button class="view" id="button" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                                    <button class="view load" id="button" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
                                 </div>
                             </div>
                         </div>                   
@@ -111,7 +115,6 @@
 
         @yield('footer')
 
-        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}"></script>
-
+        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
     </body>
 </html>

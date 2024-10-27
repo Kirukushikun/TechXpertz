@@ -115,6 +115,11 @@ class TechnicianAuthController extends Controller
                 ]);                
             }
 
+            // RepairShop_Mastery::create([
+            //     'technician_id' => $technician->id,
+            //     'main_mastery' => 'Smartphone'
+            // ]);
+
             RepairShop_Images::create([
                 'technician_id' => $technician->id,
             ]);

@@ -73,8 +73,8 @@
                                         <td>{{$user->firstname}} {{$user->middlename ?? ''}} {{$user->lastname}}</td>
                                         <td>{{$user->email}}</td>
                                         <td>{{$user->role}}</td>
-                                        <td>
-                                            {{$user->profile_status}}
+                                        <td style="text-transform:capitalize;">
+                                            {{$user->profile_status == 'complete' ? 'Verified' : $user->profile_status}}
                                         </td>
                                         <td>
                                             <input type="text" value="Active">
@@ -145,12 +145,8 @@
                                     <tr>
                                         <td>{{$user->firstname}} {{$user->middlename ?? ''}} {{$user->lastname}}</td>
                                         <td>{{$user->email}}</td>
-                                        <td>
-                                            @if($user->profile_status == 'complete')
-                                                verified
-                                            @else
-                                                {{$user->profile_status}}
-                                            @endif
+                                        <td style="text-transform:capitalize;">
+                                            {{$user->profile_status == 'complete' ? 'Verified' : $user->profile_status}}
                                         </td>
                                         <td>
                                             <input type="text" value="Active">
