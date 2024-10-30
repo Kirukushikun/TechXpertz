@@ -237,3 +237,22 @@ header {
     font-weight: 500;
     color: #c0c0c0;
 }
+
+.empty-conversation{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    user-select: none;
+}
+.empty-conversation img{
+    width: 85px;
+    margin-bottom: 10px;
+}
+.empty-conversation p{
+    width: 70%;
+    font-weight: 500;
+    color: #c0c0c0;
+}

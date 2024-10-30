@@ -45,7 +45,7 @@
 
         @yield('header')    
 
-        <div class="appointment-form">
+        <div class="account-form">
 
             <div class="right">
                 <div class="upper">

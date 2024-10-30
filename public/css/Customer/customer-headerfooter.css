@@ -478,6 +478,11 @@ footer span {
         display: flex;
         justify-content: center;
     }
+    .contact-info{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 
@@ -489,5 +494,32 @@ footer span {
     .footer-container .contact-info{
         display: flex;
         flex-direction: column;
+    }
+}
+
+
+@media(max-height:705px){
+    .collapse-categories a{
+        font-size: 15px;
+    }
+    .collapse-footer{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+    }
+    .collapse-footer .account-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--primary-color);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 12px;
+        cursor: pointer;
+        font-size: 14px;
+    }.collapse-footer .account-button i{
+        margin-right: 13px;
     }
 }

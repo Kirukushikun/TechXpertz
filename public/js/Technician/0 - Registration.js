@@ -127,3 +127,18 @@ document.getElementById('proof-file-1').addEventListener('change', function() {
     const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
     document.getElementById('proofFileName-1').textContent = fileName;
 });
+
+//---------------------------------------------------------------
+
+let emailInput = document.getElementById('email');
+let emailPreview = document.getElementById('email-preview');
+
+emailInput.addEventListener('input', function(){
+    emailPreview.value = this.value;
+});
+
+emailPreview.addEventListener('input', function(){
+    emailInput.value = this.value;
+});
+
+//--------------------------------------------------------------

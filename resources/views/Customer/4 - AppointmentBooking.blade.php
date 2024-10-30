@@ -21,7 +21,6 @@
         </style>
     </head>
     <body>
-
         @if(session()->has('error'))
             <div class="push-notification danger active">
                 <i class="fa-solid fa-bell danger"></i>
@@ -247,5 +246,6 @@
 
         <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
         <script src="{{asset('js/Customer/4 - AppointmentBooking.js')}}" defer></script>
+        <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
     </body>
 </html>

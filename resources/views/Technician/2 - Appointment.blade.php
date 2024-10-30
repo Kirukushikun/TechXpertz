@@ -22,8 +22,8 @@
             <div class="push-notification danger active">
                 <i class="fa-solid fa-bell danger"></i>
                 <div class="notification-message">
-                    <h4>Appointment Booked</h4>
-                    <p>{{session('error')}}</p>
+                    <h4>{{session('error')}}</h4>
+                    <p>{{session('error_message')}}</p>
                 </div>
                 <i class="fa-solid fa-xmark" id="close-notification"></i>
             </div>

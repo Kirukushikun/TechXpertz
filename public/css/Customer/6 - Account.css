@@ -22,7 +22,7 @@
     font-family: "Poppins";
 }
 
-.appointment-form {
+.account-form {
     display: flex;
     gap: 40px;
     padding: 40px 15%;
@@ -451,4 +451,95 @@ input[type="file"] {
     user-select: none;
 }.empty i{
     font-size: 60px;
+}
+
+@media(max-width:1825px){
+    .account-form {
+        padding: 40px 10%;
+    }
+    
+}
+
+@media(max-width:1496px){
+    .account-form {
+        padding: 40px 5%;
+    }
+    
+}
+
+@media(max-width:844px){
+    .account-form {
+        padding: 0;
+        gap: 0;
+    }
+    .right {
+        border-radius: 0px;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+    .left {
+        border-radius: 0px;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+}
+
+@media(max-width:719px){
+    .account-form {
+        flex-direction: column;
+    }
+    .right{
+        width: 100%;
+        padding-bottom:0 ;
+    }
+    .left {
+        width: 100%;
+    }
+
+    /* .right h2{
+        padding: 10px 40px 30px;
+    } */
+    
+    /* .right .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+    } */
+
+    .right .upper{
+        margin-bottom: unset;
+    }
+    
+    .right .profile-navigation {
+        width: 100%;
+    }
+    
+    .right .profile-navigation ul {
+        display:flex ;
+        align-items: unset;
+    }
+
+    
+    .right .profile-navigation ul a {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        height: 100%;
+    }
+    
+    .right .profile-navigation ul a.active {
+        border-right: none;
+        border-bottom: 5px solid var(--primary-color);
+    }
+    
+    .right .profile-navigation li a:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .logout-button {
+        display: none;
+    }
+
 }

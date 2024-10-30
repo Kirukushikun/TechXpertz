@@ -24,19 +24,17 @@
         
         <div class="container-shop">
             <nav class="breadcrumbs">
-                <a href="#">Home</a> / <a href="#">{{$repairshop->repairshopMastery->main_mastery}}</a> / <a href="#">{{$repairshop->repairshopCredentials->shop_name}}</a>
+                <a href="/">Home</a> / <a href="#">{{$repairshop->repairshopMastery->main_mastery}}</a> / <a href="#">{{$repairshop->repairshopCredentials->shop_name}}</a>
             </nav>
             <div class="service-details">
                 <div class="left">
                     <div class="image-gallery">
                         <span style="background-image: url('{{ asset($repairshopImages->image_profile) }}');"></span>
                         <div class="thumbnails">
-                            <i class="fa-solid fa-angle-up"></i>
                             <span style="background-image: url('{{ asset($repairshopImages->image_2) }}');"></span>
                             <span style="background-image: url('{{ asset($repairshopImages->image_3) }}');"></span>
                             <span style="background-image: url('{{ asset($repairshopImages->image_4) }}');"></span>
                             <span style="background-image: url('{{ asset($repairshopImages->image_5) }}');"></span>
-                            <i class="fa-solid fa-angle-down"></i>
                         </div>
                     </div>
                     <div class="social-icons">
@@ -73,13 +71,13 @@
                         </div>
                         |
                         <div class="repaired">
-                            <i class="fa-solid fa-check"></i>
-                            <p>320 Repaired</p>
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                            <p>320 <span>Repaired</span></p>
                         </div>
                         |
                         <div class="views">
                             <i class="fa-solid fa-eye"></i>
-                            <p>1.4k Viewed</p>
+                            <p>1.4k <span>Viewed</span></p>
                         </div>
                     </div>
                     <div class="mastery">
@@ -120,7 +118,6 @@
         </div>
 
         <div class="container-description">
-
             <div class="review-summary">
                 
                 <div class="rating">
@@ -128,13 +125,13 @@
                     <div class="rating-stars">
                         @for ($i = 1; $i <= 5; $i++)
                             @if ($i <= floor($reviewData['averageRating']))
-                                <!-- Solid star for whole numbers -->
+                                
                                 <i class="fas fa-star"></i>
                             @elseif ($i == ceil($reviewData['averageRating']) && fmod($reviewData['averageRating'], 1) != 0)
-                                <!-- Half star for decimals -->
+                                
                                 <i class="fa-solid fa-star-half-stroke"></i>
                             @else
-                                <!-- Empty star -->
+                               
                                 <i class="fa-regular fa-star"></i>
                             @endif
                         @endfor
@@ -159,8 +156,6 @@
                             </div>
                         </div>
                     @endfor
-
-
                 </div>
             </div>
 
@@ -188,6 +183,7 @@
                 </div>
 
                 <div id="reviews" class="tab-content">
+                    <h2>Reviews</h2>      
                     @foreach($repairshop->repairshopReviews as $review)  
                         <div class="review" style="{{!$loop->last ? 'border-bottom:2px solid #d9d9d9;' : ''}}">
                             <div class="review-header">
@@ -206,7 +202,7 @@
                                     @endphp
                                     @if($customer->image_profile)
                                         <span class="reviewer-avatar" style="background-image: url('{{ asset($customer->image_profile) }}');">
-                                            <!-- <i class="fa-solid fa-user"></i> -->
+                                            
                                         </span>
                                     @else
                                         <span class="reviewer-avatar">
@@ -231,5 +227,6 @@
         @yield('footer')
         <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
         <script src="{{asset('js/Customer/3 - ViewShop.js')}}" defer></script>
+        <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
     </body>
 </html>

@@ -503,7 +503,9 @@ class CustomerController extends Controller
             $technicianIDs = $repairshopCategory->pluck('technician_id');
 
             // Getting all the technicians that match the IDs in the specified category
-            $repairshops = Technician::whereIn('id', $technicianIDs)->get();
+            $repairshops = Technician::whereIn('id', $technicianIDs)
+                ->where('profile_status', 'complete')
+                ->get();
 
             $repairshopData = []; // Initialize the array
             foreach($repairshops as $repairshop){

@@ -16,6 +16,8 @@
                     </div>
                     @if(session()->has('error'))
                         <p class="error-message">{{session('error')}}</p>
+                    @elseif(session()->has('success'))
+                        <p class="success-message">{{session('success')}}</p>
                     @endif
                     <form action="{{route('technician.loginTechnician')}}" method="POST">
                         @csrf

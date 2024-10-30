@@ -6,12 +6,29 @@
     <title>Registration</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{asset('css/Technician/0 - Registration.css')}}">
+    <link rel="stylesheet" href="{{asset('css/Technician/technician-notification.css')}}">
 </head>
 <body>
 
-    @if($errors->any())
-        {{ implode('', $errors->all('<div>:message</div>')) }}
-    @endif
+        @if(session()->has('error'))
+            <div class="push-notification danger active">
+                <i class="fa-solid fa-bell danger"></i>
+                <div class="notification-message">
+                    <h4>{{session('error')}}</h4>
+                    <p>{{session('error_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @elseif(session()->has('success'))
+            <div class="push-notification success active">
+                <i class="fa-solid fa-bell success"></i>
+                <div class="notification-message">
+                    <h4>{{session('success')}}</h4>
+                    <p>{{session('success_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @endif
 
     <div class="Registration-Form">
         
@@ -507,13 +524,20 @@
                         <h2>Security</h2>
                         <div class="security">
                             <div class="input-group">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" name="password" required>
+                                <label for="email-preview">Email Address</label>
+                                <input type="email-preview" id="email-preview" name="email-preview" required>
                             </div>
-                            <div class="input-group">
-                                <label for="password_confirmation">Confirm Password</label>
-                                <input type="password" id="password_confirmation" name="password_confirmation" required>
-                            </div> 
+                            <div class="group-container">
+                                <div class="input-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" name="password" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="password_confirmation">Confirm Password</label>
+                                    <input type="password" id="password_confirmation" name="password_confirmation" required>
+                                </div>   
+                            </div>
+                             
                             <p>By creating an account, you agree to the <a href="">Terms of Service</a> and <a href="">Privacy Policy</a></p>
                         </div>
                         <div class="form-navigation-buttons">
@@ -527,6 +551,7 @@
     </div>
 
     
-    <script src="{{asset('js/Technician/0 - Registration.js')}}"></script>
+    <script src="{{asset('js/Technician/0 - Registration.js')}}" defer></script>
+    <script src="{{asset('js/Technician/technician-notification.js')}}" defer></script>
 </body>
 </html>

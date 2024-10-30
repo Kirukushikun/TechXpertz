@@ -146,3 +146,51 @@
     margin-top: 15px;
 }
 
+@media(max-width:1825px){
+    .appointment-form{
+        padding: 40px 10%;
+    }
+}
+
+@media(max-width:1496px){
+    .appointment-form{
+        padding: 40px 5%;
+    }
+    .right{
+        width: 400px;
+    }
+}
+
+@media (max-width:1039px){
+    .appointment-form {
+        gap: 0;
+    }
+}
+
+@media (max-width:941px){
+    .appointment-form {
+        gap: 0;
+    }
+    .left .form-section .form-group{
+        width: 100%;
+    }
+}
+
+@media (max-width:768px){
+    .appointment-form {
+        flex-direction: column;
+    }
+    .left{
+        width: 100%;
+    }
+    .right{
+        width: 100%;
+    }
+
+    .left .form-section .form-group {
+        margin-right: 0;
+    }
+    .left .form-section .form-group-excluded{
+        margin-right: 0;
+    }
+}

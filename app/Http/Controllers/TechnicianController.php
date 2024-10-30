@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\File;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TechnicianController extends Controller
 {   
@@ -641,7 +642,7 @@ class TechnicianController extends Controller
             $repairshopMastery = RepairShop_Mastery::firstOrNew(['technician_id' => $technician->id]);
 
             // Set the main mastery
-            $repairshopMastery->main_mastery = $request->mastery; //Just default value for now
+            $repairshopMastery->main_mastery = $request->mastery ?? 'Smartphone'; //Just default value for now
 
             // List of specializations
             $specializations = ['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One'];
@@ -752,7 +753,12 @@ class TechnicianController extends Controller
                 // Get the opening and closing times if the day is open
                 $openingTime = $status === 'open' ? $request->input("{$day}-open-time") : null;
                 $closingTime = $status === 'open' ? $request->input("{$day}-close-time") : null;
-
+                
+                
+                if($status === 'open' && !$openingTime && !$closingTime){
+                    return back()->with('error', 'Error Profile Update')->with('error_message', 'You must specify your opening time and closing time');
+                }
+                
                 // Update or create the schedule for this day
                 RepairShop_Schedules::updateOrCreate(
                     [
@@ -771,7 +777,7 @@ class TechnicianController extends Controller
 
             $validatedAbout = $request->validate([
                 'header' => 'nullable|string|max:255',
-                'description' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
             ]);            
 
             $technician->repairshopProfile()->updateOrCreate(

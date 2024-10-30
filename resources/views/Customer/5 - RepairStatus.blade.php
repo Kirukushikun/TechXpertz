@@ -64,10 +64,10 @@
                 <div class="repair-info">
                     <p>Repair ID:</p>
                     <span><b>#{{$repairstatusData->id}}</b></span>
-                    <ul>
+                    <!-- <ul>
                         <li><strong>1x</strong> Original LED Replacement</li>
                         <li><strong>1x</strong> Original Battery Replacement</li>
-                    </ul>
+                    </ul> -->
                 </div>
 
 

@@ -77,17 +77,28 @@
 }
 
 .shop-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas: none;
+    gap: 25px;
 }
-.shop-container .no-shop{
+.no-shop{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+
     width: 100%;
+    font-size: 17px;
+    font-weight: 500;
     color: var(--lighted-text-color);
     background-color: #f0f0f0;
     border-radius: 10px;
     text-align: center;
     padding: 250px 0;
+}.no-shop i{
+    font-size: 30px;
 }
 
 .shop {
@@ -96,7 +107,6 @@
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: calc(25% - 20px);
     box-sizing: border-box;
     overflow: hidden;
     margin-bottom: 40px;
@@ -266,10 +276,6 @@
     .shop-container{
         grid-template-columns: 1fr 1fr 1fr;
     }
-    .shop {
-        width: calc(33.33% - 20px);
-    }
-
     .shop.hidden{
         display: flex;
     }
@@ -279,10 +285,6 @@
     .shop-container{
         grid-template-columns: 1fr 1fr;
     }
-    .shop {
-        width: calc(50% - 20px);
-    }
-
     .shop.hidden{
         display: flex;
     }
@@ -292,39 +294,28 @@
     .shop-container{
         grid-template-columns: 1fr;
     }
-    .shop {
-        width: 100%;
-    }
-
     .shop.hidden{
         display: none;
     }
 }
 
 @media(max-width:602px){
-    .header nav a {
-        font-size: 17px;
-    }
     .header nav a.active {
         font-size: 20px;
     }
-    .header nav{
-        gap: 20px;
-    }
-    .header-actions{
-        display: flex;
-        align-items: center;
-        gap: 13px;
-    }.header-actions i{
-        padding: 6px 6px;
-        color: var(--primary-color);
-    }
 }
 
-
-@media(max-width:430px){
-
-    .header-actions{
+@media(max-width:500px){
+    .banner{
         display: none;
+    }
+    .header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .header nav a.active {
+        font-size: 25px;
     }
 }

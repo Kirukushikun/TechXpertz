@@ -76,8 +76,8 @@
             <div class="push-notification danger active">
                 <i class="fa-solid fa-bell danger"></i>
                 <div class="notification-message">
-                    <h4>Appointment Booked</h4>
-                    <p>{{session('error')}}</p>
+                    <h4>{{session('error')}}</h4>
+                    <p>{{session('error_message')}}</p>
                 </div>
                 <i class="fa-solid fa-xmark" id="close-notification"></i>
             </div>
@@ -207,11 +207,11 @@
                         <div class="form-section">
                             <div class="form-group">
                                 <label for="header">Header</label>
-                                <input id="header" name="header" value="{{$technicianProfile->header ?? '' }}">
+                                <input id="header" name="header" class="header" value="{{$technicianProfile->header ?? '' }}">
                             </div>
                             <div class="form-group">
                                 <label for="description">Description</label>
-                                <textarea id="description" name="description">{{$technicianProfile->description ?? '' }}</textarea>
+                                <textarea id="description" name="description" class="description">{{$technicianProfile->description ?? '' }}</textarea>
                             </div>
                         </div>
                     </div>

@@ -48,7 +48,7 @@
                 <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
             </form>
         @else
-            <div class="empty-messages" style="box-shadow: rgba(190, 197, 204, 0.2) 0px 8px 24px; border-radius:7px; background-color:white;">
+            <div class="empty-conversation" style="box-shadow: rgba(190, 197, 204, 0.2) 0px 8px 24px; border-radius:7px; background-color:white;">
                 <img src="{{asset('images/message-x.png')}}" alt="">
                 <p>
                     You haven't started any conversations yet.
@@ -105,7 +105,7 @@
 
             <!-- isEmpty works and shows the message, else from the if statement above doesnt work so we just used forbidden jutsu bellow just for the sake of showing a message if chat list is empty -->
             @if($conversations->isEmpty())
-                <div class="empty-messages">
+                <div class="empty-conversation">
                     <p>No available contacts</p>
                 </div>
             @endif

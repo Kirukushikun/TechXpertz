@@ -6,6 +6,8 @@ use App\Models\Admin;
 use App\Models\Technician;
 use App\Models\Customer;
 use App\Models\RepairShop_Credentials;
+use App\Models\RepairShop_Schedules;
+use App\Models\RepairShop_Images;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -52,7 +54,6 @@ class TechnicianAuthController extends Controller
             'barangay' => 'required|string|max:255',
             'zip_code' => 'required|string|max:255',
             
-            'username' => 'required|string|max:255|unique:technicians',
             'password' => 'required|string|min:8|confirmed',
 
             'shop_name' => 'required|string|max:255',
@@ -65,71 +66,76 @@ class TechnicianAuthController extends Controller
             'shop_zip_code' => 'required|string|max:255',
         ]);
 
-        $email = $validatedData['email'];
-        $rehashed = Hash::make($validatedData['password']);
-
-        // Check if the email exists in any of the user tables
-        $existsInCustomer = Customer::where('email', $email)->exists();
-        $existsInTechnician = Technician::where('email', $email)->exists();
-        $existsInAdmin = Admin::where('email', $email)->exists();
-
-        // If email is found in any table, return with an error
-        // ($existsInCustomer || $existsInTechnician || $existsInAdmin)
-        
-        if ($existsInCustomer || $existsInTechnician || $existsInAdmin) {
-            return redirect()->back()->withErrors(['email' => 'This email is already registered.']);
-        }
 
         try {
-            $technician = Technician::create([
-                'firstname' => $validatedData['firstname'],
-                'middlename' => $validatedData['middlename'],
-                'lastname' => $validatedData['lastname'],
-                'email' => $validatedData['email'],
-                'contact_no' => $validatedData['contact_no'],
-                'educational_background' => $validatedData['educational_background'],
-                'province' => $validatedData['province'],
-                'city' => $validatedData['city'],
-                'barangay' => $validatedData['barangay'],
-                'zip_code' => $validatedData['zip_code'],
-                'date_of_birth' => $validatedData['date_of_birth'],
-                'username' => $validatedData['username'],
-                'password' => $rehashed,
-            ]);
-            $repairshop = RepairShop_Credentials::create([
-                'technician_id' => $technician->id,
-                'shop_name' => $validatedData['shop_name'],
-                'shop_email' => $validatedData['shop_email'],
-                'shop_contact' => $validatedData['shop_contact'],
-                'shop_address' => $validatedData['shop_address'],
-                'shop_province' => $validatedData['shop_province'],
-                'shop_city' => $validatedData['shop_city'],
-                'shop_barangay' => $validatedData['shop_barangay'],
-                'shop_zip_code' => $validatedData['shop_zip_code'],
-            ]);
-
-            foreach([1, 2, 3, 4, 5, 6, 7] as $days){
-                RepairShop_Schedules::create([
+            $email = $validatedData['email'];
+            $rehashed = Hash::make($validatedData['password']);
+    
+            // Check if the email exists in any of the user tables
+            $existsInCustomer = Customer::where('email', $email)->exists();
+            $existsInTechnician = Technician::where('email', $email)->exists();
+            $existsInAdmin = Admin::where('email', $email)->exists();
+    
+            // If email is found in any table, return with an error
+            // ($existsInCustomer || $existsInTechnician || $existsInAdmin)
+            
+            if ($existsInCustomer || $existsInTechnician || $existsInAdmin) {
+                return redirect()->back()->with("error", "Registration Error")->with('error_message', 'The email address you entered is already registered. Please use a different email.');
+            } else {
+                $technician = Technician::create([
+                    'firstname' => $validatedData['firstname'],
+                    'middlename' => $validatedData['middlename'],
+                    'lastname' => $validatedData['lastname'],
+                    'email' => $validatedData['email'],
+                    'contact_no' => $validatedData['contact_no'],
+                    'educational_background' => $validatedData['educational_background'],
+                    'province' => $validatedData['province'],
+                    'city' => $validatedData['city'],
+                    'barangay' => $validatedData['barangay'],
+                    'zip_code' => $validatedData['zip_code'],
+                    'date_of_birth' => $validatedData['date_of_birth'],
+                    'password' => $rehashed,
+                ]);
+                $repairshop = RepairShop_Credentials::create([
                     'technician_id' => $technician->id,
-                    'day' => $days,
-                ]);                
+                    'shop_name' => $validatedData['shop_name'],
+                    'shop_email' => $validatedData['shop_email'],
+                    'shop_contact' => $validatedData['shop_contact'],
+                    'shop_address' => $validatedData['shop_address'],
+                    'shop_province' => $validatedData['shop_province'],
+                    'shop_city' => $validatedData['shop_city'],
+                    'shop_barangay' => $validatedData['shop_barangay'],
+                    'shop_zip_code' => $validatedData['shop_zip_code'],
+                ]);
+    
+                foreach([1, 2, 3, 4, 5, 6, 7] as $days){
+                    RepairShop_Schedules::create([
+                        'technician_id' => $technician->id,
+                        'day' => $days,
+                    ]);                
+                }
+    
+                // RepairShop_Mastery::create([
+                //     'technician_id' => $technician->id,
+                //     'main_mastery' => 'Smartphone'
+                // ]);
+    
+                $repairshopImages = RepairShop_Images::create([
+                    'technician_id' => $technician->id,
+                    'gallery_status' => 'Active',
+                    'image_profile' => null,
+                    'image_2' => null,
+                    'image_3' => null,
+                    'image_4' => null,
+                    'image_5' => null,
+                ]);
+    
+                return redirect()->route('technician.login')->with('success', 'Account created successfully.');
             }
 
-            // RepairShop_Mastery::create([
-            //     'technician_id' => $technician->id,
-            //     'main_mastery' => 'Smartphone'
-            // ]);
 
-            RepairShop_Images::create([
-                'technician_id' => $technician->id,
-            ]);
-
-            return redirect()->route('technician.login');
         } catch (\Illuminate\Database\QueryException $exception) {
-            if ($exception->errorInfo[1] === 1062) {
-                return redirect()->route('technician.signup')->with("error", "Email or username already exists. Please use a different one.");
-            }
-            return redirect()->route('technician.signup')->with("error", "An error occurred. Please try again later.");
+            return redirect()->route('technician.signup')->with("error", "Error Occurred")->with('error_message', 'An error occurred while processing your request. Please try again');
         }
     }   
 }

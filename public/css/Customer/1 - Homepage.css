@@ -339,21 +339,33 @@
     color: var(--primary-color);
 }
 
-.best-shops {
+.shop-container {
     display: none;
 }
-.best-shops.active {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+.shop-container.active {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas: none;
+    gap: 25px;
 }
-.best-shops .no-shop{
+
+.no-shop{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+
     width: 100%;
+    font-size: 17px;
+    font-weight: 500;
     color: var(--lighted-text-color);
     background-color: #f0f0f0;
     border-radius: 10px;
     text-align: center;
     padding: 250px 0;
+}.no-shop i{
+    font-size: 30px;
 }
 
 .shop {
@@ -362,7 +374,6 @@
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: calc(25% - 20px);
     box-sizing: border-box;
     overflow: hidden;
 }
@@ -488,6 +499,35 @@
     color: var(--white);
 }
 
+.pagination{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    margin-top: 20px;
+}
+.pagination a{
+    color: var(--primary-color);
+    background-color: var(--secondary-color);
+    font-size: 14px;
+    font-weight: 600;
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    
+    border-radius: 7px;
+}.pagination a.active{
+    color: var(--white);
+    background-color: var(--primary-color);
+}.pagination a i{
+    font-size: 20px;
+}
+
 
 @media(max-width:1825px){
     .container-3 {
@@ -502,11 +542,8 @@
 }
 
 @media(max-width:1236px){
-    .shop-container{
+    .shop-container.active{
         grid-template-columns: 1fr 1fr 1fr;
-    }
-    .shop {
-        width: calc(33.33% - 20px);
     }
 
     .shop.hidden{
@@ -515,11 +552,8 @@
 }
 
 @media(max-width:1052px){
-    .shop-container{
+    .shop-container.active{
         grid-template-columns: 1fr 1fr;
-    }
-    .shop {
-        width: calc(50% - 20px);
     }
 
     .shop.hidden{
@@ -528,11 +562,8 @@
 }
 
 @media(max-width:700px){
-    .shop-container{
+    .shop-container.active{
         grid-template-columns: 1fr;
-    }
-    .shop {
-        width: 100%;
     }
 
     .shop.hidden{

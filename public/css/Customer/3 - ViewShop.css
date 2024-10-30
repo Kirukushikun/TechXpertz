@@ -53,8 +53,6 @@
 
 .service-details .image-gallery {
     display: flex;  
-    
-    height: 80%;
     gap: 20px;
 }
 .service-details .image-gallery span {
@@ -73,11 +71,11 @@
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-    width: 15%;
+    width: 20%;
 }
 .service-details .image-gallery .thumbnails span {
     background-color: var(--lighted-text-color);
-    height: 80px;
+    height: 90px;
     object-fit: cover;
     cursor: pointer;
 
@@ -85,12 +83,7 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
-.service-details .image-gallery .thumbnails i {
-    font-size: 20px;
-    padding: 5px;
-    cursor: pointer;
-}
-    
+  
     /* .service-details .image-gallery .thumbnails img:hover,
     .service-details .image-gallery .thumbnails img.active {
         border-color: var(--primary-color);
@@ -219,7 +212,6 @@
     border-radius: 10px;
     padding: 40px;
     color: var(--white);
-
 }
 
 .review-summary .rating {
@@ -285,7 +277,7 @@
     color: var(--light-grey)
 }
 
-.description{
+.container-description .description{
     flex: 5;
     z-index: auto;
     height: 480px;
@@ -310,7 +302,6 @@
 .tabs .tab.active {
     color: var(--primary-color);
     margin: 0 20px;
-    font-size: 20px;
     font-weight: 700;
     border-bottom: solid;
     border-width: 4px;
@@ -402,4 +393,159 @@
     color: #666666;
     font-size: 14px;
 
+}
+
+@media(max-width:1825px){
+    .container-shop {
+        padding: 20px 10%;
+    }
+
+    .container-description {
+        padding: 40px 10%;
+    }
+}
+
+@media(max-width:1496px){
+    .container-shop {
+        padding: 20px 5%;
+    }
+    .container-description {
+        padding: 40px 5%;
+    }
+}
+
+@media(max-width:1060px){
+    .service-details .image-gallery {
+        flex-direction: column;
+    }
+    .service-details .image-gallery span {
+        height: 450px;
+    }
+    
+    .service-details .image-gallery .thumbnails {
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .rating {
+        font-size: 13px;
+    }.repaired{
+        font-size: 13px;
+    }.views{
+        font-size: 13px;
+    }
+        
+    .service-details .details .rating .stars {
+        font-size: 13px;
+    }
+    
+    .service-details .details .mastery{
+        display: flex;
+        align-items: center;
+        padding: 20px 0;
+        gap: 15px;
+        font-size: 35px;
+        color: var(--primary-color);
+    
+        border-bottom: solid;
+        border-width: 2px;
+        border-color: #eeeeee;
+    }   
+}
+
+@media(max-width:900px){
+    .service-details {
+        flex-direction: column;
+    }
+    .service-details .left{
+        width: 100%;
+    }
+    .service-details .details {
+        width: 100%;
+    }
+    
+}
+
+@media(max-width:503px){
+    .service-details .details .header{
+        display: flex;
+        align-items: center;
+    }.repaired span{
+        display: none;
+        font-size: 17px;
+    }.views span{
+        display: none;
+        font-size: 17px;
+    }
+}
+
+@media(max-width:1113px){
+    .tabs {
+        font-size: 16px;
+    }
+    .tabs .tab {
+        padding: 20px 20px;
+    }
+    .tabs .tab.active {
+        font-size: 17px;
+        margin: 0 10px;
+    }
+}
+
+@media(max-width:953px){
+    .container-description {
+        display: flex;
+        flex-direction: column;
+    }
+    .review-summary {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+ 
+    }
+    .review-summary .rating {
+        padding: 45px 15px;
+    }
+
+    .review-summary .rating-breakdown {
+        width: 100%;
+    }
+
+    .tab-content{
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-y: auto;
+        height: 100%;
+    }
+    .tabs {
+        display: none;
+    }
+    
+}
+
+
+@media(max-width:627px){
+    .tabs {
+        font-size: 15px;
+    }
+    .tabs .tab {
+        padding: 15px 10px;
+    }
+    .tabs .tab.active {
+        font-size: 16px;
+        margin: 0 10px;
+    }
+}
+
+@media(max-width:450px){
+    .review-summary {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .review-summary .rating {
+        padding: 0 0;
+    }
 }

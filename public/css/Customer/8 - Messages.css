@@ -220,3 +220,17 @@
     font-weight: 500;
     color: #c0c0c0;
 }
+
+@media(max-width:1825px){
+    .chat-container {
+        padding: 40px 10%;
+    }
+    
+}
+
+@media(max-width:1496px){
+    .chat-container {
+        padding: 40px 5%;
+    }
+    
+}
