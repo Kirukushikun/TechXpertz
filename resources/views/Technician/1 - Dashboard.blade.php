@@ -11,10 +11,31 @@
     <link rel="stylesheet" href="{{asset('css/Technician/technician-sidebar.css')}}">
     <link rel="stylesheet" href="{{asset('css/Technician/technician-modal.css')}}">
     <link rel="stylesheet" href="{{asset('css/Technician/1 - Dashboard.css')}}">
+    <link rel="stylesheet" href="{{asset('css/Technician/technician-notification.css')}}">
     
 </head>
 <body>
     <div class="dashboard">
+
+        @if(session()->has('error'))
+            <div class="push-notification danger active">
+                <i class="fa-solid fa-bell danger"></i>
+                <div class="notification-message">
+                    <h4>{{session('error')}}</h4>
+                    <p>{{session('error_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @elseif(session()->has('success'))
+            <div class="push-notification success active">
+                <i class="fa-solid fa-bell success"></i>
+                <div class="notification-message">
+                    <h4>{{session('success')}}</h4>
+                    <p>{{session('success_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @endif
 
         <div class="modal" id="modal">
         </div>
@@ -24,6 +45,12 @@
         <main class="main-content">
             <header>
                 <h1>Dashboard</h1>
+                <div class="technician-name">
+                    @php
+                        $technician = Auth::guard('technician')->user();
+                    @endphp
+                    <h3>Hi, <span>{{$technician->firstname}}.</span></h3>
+                </div>
             </header>
 
             <section class="stats">
@@ -33,8 +60,10 @@
                         <h2>P{{$revenue}}</h2>
                     </div>
                     <div class="progress revenue">
-                        <h4 class="percentage">+22%</h4>
-                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <h4 class="percentage">
+                            {{ $revenuePercentage >= 0 ? '+' : '-' }} {{ $revenuePercentage }}%
+                        </h4>
+                        {!! $revenuePercentage >= 0 ? '<i class="fa-solid fa-arrow-trend-up"></i>' : '<i class="fa-solid fa-arrow-trend-down"></i>' !!}
                     </div>
                 </div>
                 <div class="stat repairs-card">
@@ -43,8 +72,10 @@
                         <h2>{{count($totalRepairs)}}</h2>
                     </div>
                     <div class="progress repairs">
-                        <h4 class="percentage">-25%</h4>
-                        <i class="fa-solid fa-arrow-trend-down"></i>
+                        <h4 class="percentage">
+                            {{ $repairedPercentage >= 0 ? '+' : '-' }} {{ $repairedPercentage }}%
+                        </h4>
+                        {!! $repairedPercentage >= 0 ? '<i class="fa-solid fa-arrow-trend-up"></i>' : '<i class="fa-solid fa-arrow-trend-down"></i>' !!}
                     </div>
                 </div>
                 <div class="stat visitors-card">
@@ -64,8 +95,10 @@
                         
                     </div>
                     <div class="progress reviews">
-                        <h4 class="percentage">+1.9%</h4>
-                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <h4 class="percentage">
+                            {{ $reviewPercentage >= 0 ? '+' : '-' }} {{ $reviewPercentage }}%
+                        </h4>
+                        {!! $reviewPercentage >= 0 ? '<i class="fa-solid fa-arrow-trend-up"></i>' : '<i class="fa-solid fa-arrow-trend-down"></i>' !!}
                     </div>
                 </div>
             </section>
@@ -115,14 +148,14 @@
                         <div class="summary-card">
                             <div class="info">
                                 <p>Upcoming</p>
-                                <h2>{{count($upcomingAppointments)}}</h2>                                
+                                <h2>{{$upcomingAppointmentsCount}}</h2>                                
                             </div>
                             <i class="fa-solid fa-calendar-day upcoming"></i>
                         </div>
                         <div class="summary-card">
                             <div class="info">
                                 <p>Requests</p>
-                                <h2>{{count($requestedAppointments)}}</h2>                                
+                                <h2>{{$requestedAppointmentsCount}}</h2>                                
                             </div>
                             <i class="fa-solid fa-calendar-plus request"></i>
                         </div>
@@ -179,8 +212,8 @@
                                     <td>{{$upcoming->formatted_time}}</td>
                                     <td><button class="view-details" data-appointment-id="{{$upcoming->id}}">View</button></td>
                                     <td>
-                                        <a class="appointment-btn" data-appointment-id="{{$upcoming->id}}" data-appointment-status="cancel" style="color:red;"><i class="fa-regular fa-calendar-xmark"></i></a>
-                                        <a class="appointment-btn" data-appointment-id="{{$upcoming->id}}" data-appointment-status="repair" data-customer-id="{{$upcoming->id}}" ><i class="fa-solid fa-screwdriver-wrench chat"></i></a>
+                                        <a class="appointment-btn icon-danger" data-appointment-id="{{$upcoming->id}}" data-appointment-status="cancel" style="color:red;"><i class="fa-regular fa-calendar-xmark"></i></a>
+                                        <a class="appointment-btn icon-primary" data-appointment-id="{{$upcoming->id}}" data-appointment-status="repair" data-customer-id="{{$upcoming->customer_id}}" ><i class="fa-solid fa-screwdriver-wrench chat"></i></a>
                                     </td>
                                 </tr>                            
                             @endforeach

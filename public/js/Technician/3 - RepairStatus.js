@@ -1,20 +1,3 @@
-//TAB FUNCTION
-const tabs = document.querySelectorAll('.tab-link');
-const contents = document.querySelectorAll('.tab-content-item');
-
-tabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-        // Remove active class from all tabs and contents
-        tabs.forEach(t => t.classList.remove('active'));
-        contents.forEach(c => c.classList.remove('active'));
-        
-        // Add active class to the clicked tab and corresponding content
-        this.classList.add('active');
-        document.getElementById(this.dataset.tab).classList.add('active');
-    });
-});
-
-
 //UPDATE BUTTON FUNCTION
 const updateStatusButtons = document.querySelectorAll('a.update-btn');
         
@@ -43,17 +26,18 @@ function fetchRepairData(repairID, customerID){
 
 }
 
-function updateStatusForm(data, repairID, customerID){
+function updateStatusForm(data, repairID){
     const modal = document.getElementById('modal');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const action = 'Update';
 
     modal.innerHTML = `
-    <form  action="/technician/repairstatus/update/${repairID}/${customerID}/${action}" method="POST">
+    <form  action="/technician/repairstatus/update/${repairID}/${action}" method="POST">
     <input type="hidden" name="_token" value="${csrfToken}">
     <input type="hidden" name="_method" value="PATCH">
 
         <div class="modal-verification">
+            <i class="fa-solid fa-xmark close icon-close"></i>
             <div class="update-content">
                 <div class="header">
                     <h2>Payment Information </h2>
@@ -102,8 +86,8 @@ function updateStatusForm(data, repairID, customerID){
             </div>
 
             <div class="update-action">
-                <button type="submit" class="submit">Confirm Repair Update</button>
-                <button type="button" class="normal"><b>Dismiss</b></button>
+                <button type="submit" class="btn-primary">Confirm Repair Update</button>
+                <button type="button" class="close btn-normal"><b>Dismiss</b></button>
             </div>
 
             <div class="reminder">
@@ -114,11 +98,14 @@ function updateStatusForm(data, repairID, customerID){
     `;
 
     // Show the modal
-    modal.classList.add("active");          
+    modal.classList.add("active");
+
     // Close modal when 'X' is clicked
-    document.querySelector('.normal').onclick = function () {
-        modal.classList.remove("active");
-    };
+    document.querySelectorAll('.close').forEach(button => {
+        button.onclick = function () {
+            modal.classList.remove("active");
+        };
+    });
 
     //Run or access these functions upon opening the update modal
     populateSelectInputs();
@@ -129,6 +116,357 @@ function updateStatusForm(data, repairID, customerID){
         generateMessages(data.repairstatus);
     }
 }
+
+//TERMINATE BUTTON FUNCTION
+
+//TERMINATE BUTTON FUNCATION
+const terminateButtons = document.querySelectorAll('a.terminate-btn');
+
+terminateButtons.forEach(button =>{
+    button.addEventListener('click', function(){
+        const repairID = this.getAttribute('data-repair-id');
+
+        verifyTermination(repairID);
+        console.log('button is working', repairID);
+    });
+});
+
+function verifyTermination(repairID){
+    const modal = document.getElementById('modal');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const action = "Terminate";
+
+    modal.innerHTML = `
+    <form action="/technician/repairstatus/update/${repairID}/${action}" method="POST">
+        <input type="hidden" name="_token" value="${csrfToken}">
+        <input type="hidden" name="_method" value="PATCH">
+
+        <div class="modal-verification">
+            <i class="fa-solid fa-xmark close icon-close"></i>
+            <i class="fa-solid fa-screwdriver-wrench sign-danger"></i>
+            <div class="verification-message">
+                <h2>Terminate Repair</h2>
+                <p>Are you sure you want to Terminate this repair? <br> This action cannot be undone.</p>                        
+            </div>
+            <div class="form-group">
+                <label for="terminate_message" class="terminate_message">Termination notify message:</label>
+                <textarea name="terminate_message" id="terminate_message" class="terminate_message">We regret to inform you that we are unable to proceed with the repair of your device due to unforeseen complications. Please arrange to collect your device at your earliest convenience, and feel free to reach out if you need further assistance.</textarea>
+            </div>
+            <div class="verification-action">
+                <button type="submit" class="btn-danger">Terminate</button>
+                <button type="button" class="close btn-normal"><b>Dismiss</b></button>
+            </div>
+        </div>                 
+    </form>
+    `;
+
+    // Show the modal
+    modal.classList.add("active");
+
+    // Close modal when 'X' is clicked
+    document.querySelectorAll('.close').forEach(button => {
+        button.onclick = function () {
+            modal.classList.remove("active");
+        };
+    });
+}
+
+//ADD WALKINS BUTTONS
+const addrepairBtn = document.querySelector('a.add-repair');
+
+addrepairBtn.addEventListener('click', function(e){
+    e.preventDefault();
+
+    const modal = document.getElementById('modal');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    console.log('button is working');
+
+    modal.innerHTML = `
+    <form action="/technician/repairstatus/create/walk-ins" method="POST" class="modal-content" id="modal-content">
+        <input type="hidden" name="_token" value="${csrfToken}">
+
+        <div class="modal-body">
+            <div class="left">
+                <div class="form-section">
+                    <h2>Customer Details</h2>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="fullname">Full Name</label>
+                            <input type="text" id="fullname" name="fullname" required>
+                        </div>                                
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact">Mobile Phone Number</label>
+                            <input type="tel" id="contact" name="contact" required> 
+                        </div>                                
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Payment Information</h2>
+
+                    <div class="form-group">
+                        <label for="payment-status">Payment Status</label>
+                        <select id="payment-status" name="payment-status">
+                            <option value="Unpaid">Unpaid</option>
+                            <option value="Initially Paid">Initially Paid</option>
+                            <option value="Fully Paid">Fully Paid</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="revenue">Repair Cost</label>
+                            <input type="number" id="revenue" name="revenue">
+                        </div>
+                        <div class="form-group">
+                            <label for="expenses">Expenses</label>
+                            <input type="number" id="expenses" name="expenses">
+                        </div>                                
+                    </div>
+
+                </div>  
+
+                <div class="form-section">
+                    <h2>Device Information</h2>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="device-type">Device Type</label>
+                            <select type="text" id="device-type" name="device-type" required>
+                                <option value="Smartphone">Smartphone</option>
+                                <option value="Tablet">Tablet</option>
+                                <option value="Desktop">Desktop</option>
+                                <option value="Laptop">Laptop</option>
+                                <option value="Smartwatch">Smartwatch</option>
+                                <option value="Camera">Camera</option>
+                                <option value="Printer">Printer</option>
+                                <option value="Speaker">Speaker</option>
+                                <option value="Drone">Drone</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="device-brand">Device Brand</label>
+                            <input type="text" id="device-brand" name="device-brand" required>
+                        </div>                                
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="device-model">Device Model</label>
+                            <input type="text" id="device-model" name="device-model" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="serial-number">Serial Number</label>
+                            <input type="text" id="serial-number" name="serial-number">
+                        </div>                                
+                    </div>
+                </div> 
+            </div>
+
+            <div class="right">
+                <div class="form-section excluded">
+                    <h2>Device Issue</h2>
+                    <div class="form-group-excluded">
+                        <label for="issue-description">Description of Issue</label>
+                        <textarea id="issue-description" name="issue-description"></textarea>
+                    </div>
+                    <div class="form-group-excluded">
+                        <label for="error-message">Error Messages</label>
+                        <textarea id="error-message" name="error-message"></textarea>
+                    </div>
+                    <div class="form-group-excluded">
+                        <label for="previous-steps">Previous Repair Attempts</label>
+                        <textarea id="previous-steps" name="previous-steps"></textarea>
+                    </div>
+                    <div class="form-group-excluded">
+                        <label for="recent-events">Recent Changes or Events</label>
+                        <textarea id="recent-events" name="recent-events"></textarea>
+                    </div>
+                    <div class="form-group-excluded">
+                        <label for="prepared-parts">Parts Prepared for Repair</label>
+                        <textarea id="prepared-parts" name="prepared-parts"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-action">
+            <button type="submit" class="submit btn-primary">Add Repair</button>
+            <button type="button" class="close btn-normal">Close</button>
+        </div>
+    </form>
+    `;
+
+    // Show the modal
+    modal.classList.add("active");          
+    // Close modal when 'X' is clicked
+    document.querySelector('.close').onclick = function () {
+        modal.classList.remove("active");
+    };
+
+});
+
+
+//VIEW DETAIL BUTTON
+//getting all view buttons
+const viewDetails = document.querySelectorAll('button.view-details');
+
+//Then for each buttons we will give them onclick functions that will pass on the id on a specific function
+viewDetails.forEach(button => {
+    button.addEventListener('click', function (){
+        const appointmentID = this.getAttribute('data-appointment-id');
+        fetchAppointmentDetails(appointmentID);
+        console.log('button is working', appointmentID);
+    });
+});
+
+// Fetch appointment details from the given id
+function fetchAppointmentDetails(appointmentID) {
+    try {
+        // Insert repairID dynamically into the URL
+        fetch(`/technician/appointment/details/${appointmentID}`)
+            .then(response => response.json())
+            .then(data => {
+                displayModal(data);
+            })
+    } catch (error) {
+        // Catch any errors (network, HTTP errors, etc.)
+        console.error('Error:', error);
+    }
+}
+
+// After successfully fetching we will display those data
+function displayModal(data){
+    const modal = document.getElementById('modal');
+
+    modal.innerHTML = `
+    <div class="modal-content" id="modal-content">
+        <div class="modal-body">
+            <div class="left">
+                <div class="form-section">
+                    <h2>Customer Details</h2>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="first-name">ID</label>
+                            <input type="text" id="first-name" name="first-name" value="${data.ID}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Full Name</label>
+                            <input type="text" id="last-name" name="last-name" value="${data.fullname}" disabled>
+                        </div>                                
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" value="${data.email}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Mobile Phone Number</label>
+                            <input type="tel" id="phone" name="phone" value="${data.contact}" disabled> 
+                        </div>                                
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Device Information</h2>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="device-type">Device Type</label>
+                            <input type="text" id="device-type" name="device-type" value="${data.device_type}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="brand">Brand</label>
+                            <input type="text" id="brand" name="brand" value="${data.device_brand}" disabled>
+                        </div>                                
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="device-model">Device Model</label>
+                            <input type="text" id="device-model" name="device-model" value="${data.device_model}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="serial-number">Serial Number</label>
+                            <input type="text" id="serial-number" name="serial-number" value="${data.device_serial}" disabled>
+                        </div>                                
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Appointment Schedule</h2>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="appointment-date">Select Date</label>
+                            <input type="text" id="appointment-date" name="appointment-date" value="${data.formatted_date}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointment-time">Select Time</label>
+                            <input type="text" id="appointment-time" name="appointment-time" value="${data.formatted_time}" disabled>
+                        </div>                                
+                    </div>
+
+                    <div class="form-group">
+                        <label for="urgency-level">Urgency Level</label>
+                        <input type="text" id="urgency-level" name="urgency-level" value="${data.appointment_urgency}" disabled>
+                    </div>
+                </div>   
+            </div>
+
+            <div class="right">
+                <div class="form-section excluded">
+                    <h2>Device Issue</h2>
+                    <div class="form-group-excluded">
+                        <label for="issue-description">Description of Issue</label>
+                        <textarea id="issue-description" name="issue-description" disabled>${data.issue_description}</textarea>
+                    </div>
+                    <div class="form-group-excluded">
+                        <label for="error-message">Error Messages</label>
+                        <textarea id="error-message" name="error-message" disabled>${data.error_message}</textarea>
+                    </div>
+                    <div class="form-group-excluded">
+                        <label for="previous-steps">Previous Repair Attempts</label>
+                        <textarea id="previous-steps" name="previous-steps" disabled>${data.repair_attempts}</textarea>
+                    </div>
+                    <div class="form-group-excluded">
+                        <label for="issue-duration">Recent Changes or Events</label>
+                        <textarea id="issue-duration" name="issue-duration" disabled>${data.recent_events}</textarea>
+                    </div>
+                    <div class="form-group-excluded">
+                        <label for="additional-info">Parts Prepared for Repair</label>
+                        <textarea id="additional-info" name="additional-info" disabled>${data.prepared_parts}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-action">
+            <button class="close">Close</button>
+        </div>
+    </div>
+    `;
+
+    // Show the modal
+    modal.classList.add("active");
+
+    // Close modal when 'X' is clicked
+    document.querySelectorAll('.close').forEach(button => {
+        button.onclick = function () {
+            modal.classList.remove("active");
+        };
+    });
+}
+
+
+
+
+
+
+
+
+
 
 //POPULATE FUNCTIONS
 // Function to populate select inputs with options
@@ -285,339 +623,5 @@ function conditionalMessages(conditionalStatus){
     conditionalMessage.value = messages[conditionalStatus] || '';
 }
 
-//TERMINATE BUTTON FUNCATION
-const terminateButtons = document.querySelectorAll('a.terminate-btn');
-
-terminateButtons.forEach(button =>{
-    button.addEventListener('click', function(){
-        const repairID = this.getAttribute('data-repair-id');
-        const customerID = this.getAttribute('data-customer-id');
-
-        verifyTermination(repairID, customerID);
-        console.log('button is working', repairID);
-    });
-});
-
-function verifyTermination(repairID, customerID){
-    const modal = document.getElementById('modal');
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const action = "Terminate";
-
-    modal.innerHTML = `
-    <form action="/technician/repairstatus/update/${repairID}/${customerID}/${action}" method="POST">
-        <input type="hidden" name="_token" value="${csrfToken}">
-        <input type="hidden" name="_method" value="PATCH">
-
-        <div class="modal-verification">
-            <i class="fa-solid fa-screwdriver-wrench" id="exclamation"></i>
-            <div class="verification-message">
-                <h2>Terminate Repair</h2>
-                <p>Are you sure you want to Terminate this repair? <br> This action cannot be undone.</p>                        
-            </div>
-            <div class="form-group">
-                <label for="terminate_message" class="terminate_message">Termination notify message:</label>
-                <textarea name="terminate_message" id="terminate_message" class="terminate_message">We regret to inform you that we are unable to proceed with the repair of your device due to unforeseen complications. Please arrange to collect your device at your earliest convenience, and feel free to reach out if you need further assistance.</textarea>
-            </div>
-            <div class="verification-action">
-                <button type="submit" class="danger">Terminate</button>
-                <button type="button" class="close"><b>Dismiss</b></button>
-            </div>
-        </div>                 
-    </form>
-    `;
-
-    // Show the modal
-    modal.classList.add("active");
-
-    // Close modal when 'X' is clicked
-    document.querySelector('.close').onclick = function () {
-        modal.classList.remove("active");
-    };
-}
-
-//ADD WALKINS BUTTONS
-const addrepairBtn = document.querySelector('a.add-repair');
-
-addrepairBtn.addEventListener('click', function(e){
-    e.preventDefault();
-
-    const modal = document.getElementById('modal');
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    console.log('button is working');
-
-    modal.innerHTML = `
-    <form action="/technician/repairstatus/create/walk-ins" method="POST" class="modal-content" id="modal-content">
-        <input type="hidden" name="_token" value="${csrfToken}">
-
-        <div class="modal-body">
-            <div class="left">
-                <div class="form-section">
-                    <h2>Customer Details</h2>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="fullname">Full Name</label>
-                            <input type="text" id="fullname" name="fullname" required>
-                        </div>                                
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="contact">Mobile Phone Number</label>
-                            <input type="tel" id="contact" name="contact" required> 
-                        </div>                                
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h2>Payment Information</h2>
-
-                    <div class="form-group">
-                        <label for="payment-status">Payment Status</label>
-                        <select id="payment-status" name="payment-status">
-                            <option value="Unpaid">Unpaid</option>
-                            <option value="Initially Paid">Initially Paid</option>
-                            <option value="Fully Paid">Fully Paid</option>
-                        </select>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="revenue">Repair Cost</label>
-                            <input type="number" id="revenue" name="revenue">
-                        </div>
-                        <div class="form-group">
-                            <label for="expenses">Expenses</label>
-                            <input type="number" id="expenses" name="expenses">
-                        </div>                                
-                    </div>
 
 
-                </div>  
-
-                <div class="form-section">
-                    <h2>Device Information</h2>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="device-type">Device Type</label>
-                            <select type="text" id="device-type" name="device-type" required>
-                                <option value="Smartphone">Smartphone</option>
-                                <option value="Tablet">Tablet</option>
-                                <option value="Desktop">Desktop</option>
-                                <option value="Laptop">Laptop</option>
-                                <option value="Smartwatch">Smartwatch</option>
-                                <option value="Camera">Camera</option>
-                                <option value="Printer">Printer</option>
-                                <option value="Speaker">Speaker</option>
-                                <option value="Drone">Drone</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="device-brand">Device Brand</label>
-                            <input type="text" id="device-brand" name="device-brand" required>
-                        </div>                                
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="device-model">Device Model</label>
-                            <input type="text" id="device-model" name="device-model" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="serial-number">Serial Number</label>
-                            <input type="text" id="serial-number" name="serial-number">
-                        </div>                                
-                    </div>
-                </div> 
-            </div>
-
-            <div class="right">
-                <div class="form-section excluded">
-                    <h2>Device Issue</h2>
-                    <div class="form-group-excluded">
-                        <label for="issue-description">Description of Issue</label>
-                        <textarea id="issue-description" name="issue-description"></textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="error-message">Error Messages</label>
-                        <textarea id="error-message" name="error-message"></textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="previous-steps">Previous Repair Attempts</label>
-                        <textarea id="previous-steps" name="previous-steps"></textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="recent-events">Recent Changes or Events</label>
-                        <textarea id="recent-events" name="recent-events"></textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="prepared-parts">Parts Prepared for Repair</label>
-                        <textarea id="prepared-parts" name="prepared-parts"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-action">
-            <button type="submit" class="submit">Add Repair</button>
-            <button type="button" class="close">Close</button>
-        </div>
-    </form>
-    `;
-
-    // Show the modal
-    modal.classList.add("active");          
-    // Close modal when 'X' is clicked
-    document.querySelector('.close').onclick = function () {
-        modal.classList.remove("active");
-    };
-
-});
-
-
-//VIEW DETAIL BUTTON
-//getting all view buttons
-const viewDetails = document.querySelectorAll('button.view-details');
-
-//Then for each buttons we will give them onclick functions that will pass on the id on a specific function
-viewDetails.forEach(button => {
-    button.addEventListener('click', function (){
-        const appointmentID = this.getAttribute('data-appointment-id');
-        fetchAppointmentDetails(appointmentID);
-        console.log('button is working', appointmentID);
-    });
-});
-
-// Fetch appointment details from the given id
-function fetchAppointmentDetails(appointmentID) {
-    try {
-        // Insert repairID dynamically into the URL
-        fetch(`/technician/appointment/details/${appointmentID}`)
-            .then(response => response.json())
-            .then(data => {
-                displayModal(data);
-            })
-    } catch (error) {
-        // Catch any errors (network, HTTP errors, etc.)
-        console.error('Error:', error);
-    }
-}
-
-// After successfully fetching we will display those data
-function displayModal(data){
-    const modal = document.getElementById('modal');
-
-    modal.innerHTML = `
-    <div class="modal-content" id="modal-content">
-        <div class="modal-body">
-            <div class="left">
-                <div class="form-section">
-                    <h2>Customer Details</h2>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="first-name">ID</label>
-                            <input type="text" id="first-name" name="first-name" value="${data.ID}" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="last-name">Full Name</label>
-                            <input type="text" id="last-name" name="last-name" value="${data.fullname}" disabled>
-                        </div>                                
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" value="${data.email}" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Mobile Phone Number</label>
-                            <input type="tel" id="phone" name="phone" value="${data.contact}" disabled> 
-                        </div>                                
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h2>Device Information</h2>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="device-type">Device Type</label>
-                            <input type="text" id="device-type" name="device-type" value="${data.device_type}" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="brand">Brand</label>
-                            <input type="text" id="brand" name="brand" value="${data.device_brand}" disabled>
-                        </div>                                
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="device-model">Device Model</label>
-                            <input type="text" id="device-model" name="device-model" value="${data.device_model}" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="serial-number">Serial Number</label>
-                            <input type="text" id="serial-number" name="serial-number" value="${data.device_serial}" disabled>
-                        </div>                                
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h2>Appointment Schedule</h2>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="appointment-date">Select Date</label>
-                            <input type="text" id="appointment-date" name="appointment-date" value="${data.formatted_date}" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="appointment-time">Select Time</label>
-                            <input type="text" id="appointment-time" name="appointment-time" value="${data.formatted_time}" disabled>
-                        </div>                                
-                    </div>
-
-                    <div class="form-group">
-                        <label for="urgency-level">Urgency Level</label>
-                        <input type="text" id="urgency-level" name="urgency-level" value="${data.appointment_urgency}" disabled>
-                    </div>
-                </div>   
-            </div>
-
-            <div class="right">
-                <div class="form-section excluded">
-                    <h2>Device Issue</h2>
-                    <div class="form-group-excluded">
-                        <label for="issue-description">Description of Issue</label>
-                        <textarea id="issue-description" name="issue-description" disabled>${data.issue_description}</textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="error-message">Error Messages</label>
-                        <textarea id="error-message" name="error-message" disabled>${data.error_message}</textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="previous-steps">Previous Repair Attempts</label>
-                        <textarea id="previous-steps" name="previous-steps" disabled>${data.repair_attempts}</textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="issue-duration">Recent Changes or Events</label>
-                        <textarea id="issue-duration" name="issue-duration" disabled>${data.recent_events}</textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="additional-info">Parts Prepared for Repair</label>
-                        <textarea id="additional-info" name="additional-info" disabled>${data.prepared_parts}</textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-action">
-            <button class="close">Close</button>
-        </div>
-    </div>
-    `;
-
-    // Show the modal
-    modal.classList.add("active");
-
-    // Close modal when 'X' is clicked
-    document.querySelector('.close').onclick = function () {
-        modal.classList.remove("active");
-    };
-}

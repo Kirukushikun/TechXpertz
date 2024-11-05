@@ -18,7 +18,7 @@
         
         <div class="loading-screen">
             <div class="loader"></div>
-        </div>
+        </div> 
 
         @yield('header')
         
@@ -149,83 +149,111 @@
                 </div>
             </div>
 
-            @if(count($repairshops) === 0)
-                <p class="no-shop">
-                    <i class="fa-solid fa-shop-slash"></i>
-                    <span>No Shops Available</span>
-                </p>
-            @endif
+            <div class="shop-category active">
+                @if(count($repairshops) === 0)
+                    <p class="no-shop">
+                        <i class="fa-solid fa-shop-slash"></i>
+                        <span>No Shops Available</span>
+                    </p>
+                @endif
 
-            <div class="best-shops shop-container active">
-                @php
-                    $itemsPerPage = 4; // Define items per page
-                @endphp
-             
-                @foreach($repairshops as $index => $repairshop)
-                    @php
-                        // Calculate the page number based on the index and items per page
-                        $pageNumber = floor($index / $itemsPerPage) + 1;
-                    @endphp
-                    <div class="shop" data-page="{{ $pageNumber }}">
-                        <div class="shop-image" style="background-image: url('{{ asset($repairshop['repairshopImage']) }}');"></div>
+                <div class="best-shops shop-container">
+                
+                    @foreach($repairshops as $index => $repairshop)
+                        <div class="shop">
+                            <div class="shop-image" style="background-image: url('{{ asset($repairshop['repairshopImage']) }}');"></div>
 
-                        <div class="shop-details">
-                            <div class="shop-name">
-                                <h3>{{$repairshop['repairshopName']}}</h3>
-                                <img src="{{ asset('images/' . $repairshop['repairshopMastery'] . '.png') }}">
-                            </div>
-                            
-                            <div class="shop-location">
-                                <p>{{$repairshop['repairshopAddress']}}, Barangay {{$repairshop['repairshopBarangay']}}, {{$repairshop['repairshopCity']}} {{$repairshop['repairshopProvince']}}</p>
-                            </div>
-                            
-                            <div class="shop-schedule">
-                                <p>+63 {{$repairshop['repairshopContact']}}</p>
-                                <h4>{{ $repairshop['formattedDays'] }}</h4>              
-                            </div>
-        
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge1'] }}</li>
-                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge2'] }}</li>
-                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge3'] }}</li>
-                                <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge4'] }}</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="shop-footer">
-                            <div class="rating">
-                                <div class="stars">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= floor($repairshop['averageRating']))
-                                            
-                                            <i class="fas fa-star"></i>
-                                        @elseif ($i == ceil($repairshop['averageRating']) && fmod($repairshop['averageRating'], 1) != 0)
-                                            
-                                            <i class="fa-solid fa-star-half-stroke"></i>
-                                        @else
-                                            
-                                            <i class="fa-regular fa-star"></i>
-                                        @endif
-                                    @endfor
+                            <div class="shop-details">
+                                <div class="shop-name">
+                                    <h3>{{$repairshop['repairshopName']}}</h3>
+                                    <img src="{{ asset('images/' . $repairshop['repairshopMastery'] . '.png') }}">
                                 </div>
-                                <p>{{ $repairshop['totalReviews']}} Reviews</p>
+                                
+                                <div class="shop-location">
+                                    <p>{{$repairshop['repairshopAddress']}}, Barangay {{$repairshop['repairshopBarangay']}}, {{$repairshop['repairshopCity']}} {{$repairshop['repairshopProvince']}}</p>
+                                </div>
+                                
+                                <div class="shop-schedule">
+                                    <p>+63 {{$repairshop['repairshopContact']}}</p>
+                                    <h4>{{ $repairshop['formattedDays'] }}</h4>              
+                                </div>
+            
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge1'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge2'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge3'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $repairshop['repairshopBadge4'] }}</li>
+                                </ul>
                             </div>
-                            <div class="actions">
-                                <button class="favorite" ><i class="fa-regular fa-heart"></i></button>
-                                <button class="view load" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                            
+                            <div class="shop-footer">
+                                <div class="rating">
+                                    <div class="stars">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= floor($repairshop['averageRating']))
+                                                
+                                                <i class="fas fa-star"></i>
+                                            @elseif ($i == ceil($repairshop['averageRating']) && fmod($repairshop['averageRating'], 1) != 0)
+                                                
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                            @else
+                                                
+                                                <i class="fa-regular fa-star"></i>
+                                            @endif
+                                        @endfor
+                                    </div>
+                                    <p>{{ $repairshop['totalReviews']}} Reviews</p>
+                                </div>
+                                <div class="actions">
+                                    <button class="favorite" ><i class="fa-regular fa-heart"></i></button>
+                                    <button class="view load" onclick="window.location.href='{{ route('viewshop', ['id'=>$repairshop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                                </div>
                             </div>
-                        </div>
-                    </div>                    
-                @endforeach     
+                        </div>                    
+                    @endforeach
+                    
+                </div>
+
+                @if(count($repairshops) > 4)
+                    <div class="pagination"></div>
+                @endif
             </div>
 
-            <div class="recommended shop-container"></div>
 
-            <div class="topRated shop-container"></div>
-            
-            @if(count($repairshops) > 4)
-                <div class="pagination"></div>
-            @endif
+            <div class="shop-category">
+                @if(count($repairshops) === 0)
+                    <p class="no-shop">
+                        <i class="fa-solid fa-shop-slash"></i>
+                        <span>No Shops Available</span>
+                    </p>
+                @endif
+
+                <div class="recommended shop-container">
+
+                </div>  
+
+                @if(count($repairshops) > 4)
+                    <div class="pagination"></div>
+                @endif           
+            </div>
+
+
+            <div class="shop-category">
+                @if(count($repairshops) === 0)
+                    <p class="no-shop">
+                        <i class="fa-solid fa-shop-slash"></i>
+                        <span>No Shops Available</span>
+                    </p>
+                @endif
+
+                <div class="topRated shop-container">
+                    
+                </div>
+                
+                @if(count($repairshops) > 4)
+                    <div class="pagination"></div>
+                @endif                
+            </div>
         </div>
 
         @yield('footer')

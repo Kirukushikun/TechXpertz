@@ -39,6 +39,10 @@
             </div>
         @endif
 
+        <div class="loading-screen">
+            <div class="loader"></div>
+        </div>
+
         <div class="modal" id="modal">
 
         </div>
@@ -46,7 +50,6 @@
         @yield('header')    
 
         <div class="account-form">
-
             <div class="right">
                 <div class="upper">
                     <div class="profile-navigation">
@@ -62,6 +65,39 @@
                 </div>
 
                 <button class="logout-button" onclick="window.location.href='{{route('customer.logoutCustomer')}}'">LOG OUT</button>
+            </div>
+
+            <div class="right-collapse">
+                <div class="profile-detail">
+                    @if($customerData->image_profile)
+                        <div class="image" style="background-image: url('{{ asset($customerData->image_profile) }}');"></div>
+                    @else
+                        <div class="image"></div>
+                    @endif
+                    <div class="details">
+                        <h3>{{$customerData->firstname}} {{$customerData->lastname}}</h3>
+                        <p>{{$customerData->email}}</p>                                
+                    </div>
+                </div>
+                <div class="profile-navigation">
+                    <ul>
+                        <li>
+                            <a href="#" data-target="account-settings" class="active"><i class="fa-solid fa-user-gear"></i><p>Account Settings</p></a>
+                        </li>
+                        <li>
+                            <a href="#" data-target="notifications"><i class="fa-solid fa-bell"></i><p>Account Notifications</p></a>
+                        </li>
+                        <li>
+                            <a href="#" data-target="privacy-policy"><i class="fa-solid fa-user-shield"></i><p>Privacy Policy</p></a>
+                        </li>
+                        <li>
+                            <a href="#" data-target="terms-of-service"><i class="fa-solid fa-file-circle-check"></i><p>Terms of Service</p></a>
+                        </li>
+                        <li>
+                            <a href="#" data-target="delete-account"><i class="fa-solid fa-user-minus"></i><p>Delete Account</p></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         
             <div class="left">
@@ -142,7 +178,6 @@
                     
                 </form>
 
-                <!-- Notifications Section -->
                 <div id="notifications" class="form-section">
                     <h2>Notifications</h2>
 
@@ -195,7 +230,6 @@
                     @endif
                 </div>
 
-                <!-- Privacy Section -->
                 <div id="privacy-policy" class="form-section">
                     <h2>Privacy Policy</h2>
                     <div class="section">
@@ -480,11 +514,12 @@
                     </div>
 
                     <div class="delete-action" id="delete-action">
-                        <button class="submit-btn danger">DELETE ACCOUNT</button>
+                        <button class="submit-btn danger" id="delete-account-btn" data-customer-id="{{Auth::user()->id}}">DELETE ACCOUNT</button>
                     </div>
                 </div>
             </div>
         </div>
+
 
         @yield('footer')
 
@@ -492,4 +527,6 @@
 
     <script src="{{asset('js/Customer/6 - Account.js')}}" defer></script>
     <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
+    <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
+    <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
 </html>

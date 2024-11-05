@@ -129,7 +129,7 @@ function displayModal(data){
                 </div>
             </div>
             <div class="modal-action">
-                <button class="close">Close</button>
+                <button class="close btn-normal">Close</button>
             </div>
         </div>
     `;
@@ -138,9 +138,11 @@ function displayModal(data){
     modal.classList.add("active");
 
     // Close modal when 'X' is clicked
-    document.querySelector('.close').onclick = function () {
-        modal.classList.remove("active");
-    };
+    document.querySelectorAll('.close').forEach(button => {
+        button.onclick = function () {
+            modal.classList.remove("active");
+        };
+    });
 }
 
 
@@ -150,14 +152,13 @@ const appointmentActions = document.querySelectorAll('a.appointment-btn');
 appointmentActions.forEach(button => {
     button.addEventListener('click', function (){
         const appointmentID = this.getAttribute('data-appointment-id');
-        const customerID = this.getAttribute('data-customer-id');
         const appointmentSTATUS = this.getAttribute('data-appointment-status');
-        verifyChanges(appointmentID, appointmentSTATUS, customerID);
+        verifyChanges(appointmentID, appointmentSTATUS);
         console.log('button is working', appointmentID, appointmentSTATUS);
     });
 });
 
-function verifyChanges(appointmentID, appointmentSTATUS, customerID){
+function verifyChanges(appointmentID, appointmentSTATUS){
     const modal = document.getElementById('modal');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -168,24 +169,26 @@ function verifyChanges(appointmentID, appointmentSTATUS, customerID){
                 <input type="hidden" name="_method" value="PATCH">
 
                 <div class="modal-verification">
-                    <i class="fa-solid fa-triangle-exclamation" id="exclamation"></i>
-                    <div class="verification-message">
+                    <i class="fa-solid fa-xmark close icon-close"></i>
+                    <i class="fa-solid fa-triangle-exclamation sign-danger"></i>
+                    <div class="verification-message"> 
                         <h2>Cancel Appointment</h2>
                         <p>Are you sure you want to Cancel this appointment?</p>                        
                     </div>
                     <div class="verification-action">
-                        <button type="submit" class="danger">Confirm Cancellation</button>
-                        <button type="button" class="normal"><b>Dismiss</b></button>
+                        <button type="submit" class="danger btn-danger">Confirm Cancellation</button>
+                        <button type="button" class="close btn-normal"><b>Dismiss</b></button>
                     </div>
                 </div>                 
             </form>
         `;   
     }else if(appointmentSTATUS === "repair"){
         modal.innerHTML = `
-            <form action="/technician/repairstatus/create/${appointmentID}/${customerID}" method="POST">
+            <form action="/technician/repairstatus/create/${appointmentID}" method="POST">
                 <input type="hidden" name="_token" value="${csrfToken}">
                 <div class="modal-verification">
-                    <i class="fa-solid fa-screwdriver-wrench" id="repair"></i>
+                    <i class="fa-solid fa-xmark close icon-close"></i>
+                    <i class="fa-solid fa-screwdriver-wrench sign-primary"></i>
                     <div class="verification-message">
                         <h2>Start Repair</h2>
                         <p>Are you sure you want to start the repair for this appointment?</p>             
@@ -216,8 +219,8 @@ function verifyChanges(appointmentID, appointmentSTATUS, customerID){
                     </div>
 
                     <div class="verification-action">
-                        <button type="submit" class="submit">Confirm Start</button>
-                        <button type="button" class="normal"><b>Dismiss</b></button>
+                        <button type="submit" class="submit btn-primary">Confirm Start</button>
+                        <button type="button" class="close btn-normal"><b>Dismiss</b></button>
                     </div>
 
                     <p class="note"><b>Note: </b>Do not start the repair unless the device has been dropped off.<br>Starting the repair will automatically notify the customer that the device has been received.</p>   
@@ -230,7 +233,9 @@ function verifyChanges(appointmentID, appointmentSTATUS, customerID){
     modal.classList.add("active");
 
     // Close modal when 'X' is clicked
-    document.querySelector('.normal').onclick = function () {
-        modal.classList.remove("active");
-    };
+    document.querySelectorAll('.close').forEach(button => {
+        button.onclick = function () {
+            modal.classList.remove("active");
+        };
+    });
 }

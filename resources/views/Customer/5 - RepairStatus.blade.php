@@ -24,7 +24,7 @@
             <div class="push-notification danger active">
                 <i class="fa-solid fa-bell danger"></i>
                 <div class="notification-message">
-                    <h4>Appointment Booked</h4>
+                    <h4>{{session('error_message')}}</h4>
                     <p>{{session('error')}}</p>
                 </div>
                 <i class="fa-solid fa-xmark" id="close-notification"></i>
@@ -33,8 +33,8 @@
             <div class="push-notification success active">
                 <i class="fa-solid fa-bell success"></i>
                 <div class="notification-message">
-                    <h4>Appointment Booked</h4>
-                    <p>{{session('success')}}</p>
+                    <h4>{{session('success')}}</h4>
+                    <p>{{session('success_message')}}</p>
                 </div>
                 <i class="fa-solid fa-xmark" id="close-notification"></i>
             </div>
@@ -165,4 +165,5 @@
     <script src="{{asset('js/Customer/5 - RepairStatus.js')}}" defer></script>
     <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
     <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
+    <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
 </html>

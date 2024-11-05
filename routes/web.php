@@ -47,6 +47,7 @@ Route::patch('/bookappointment/cancel/{repairID}', [CustomerController::class, '
 Route::get('/customer/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
 Route::patch('/customer/myaccount/{actionType}/{customerID}', [CustomerController::class, 'myaccountUpdate'])->name('customer.updateprofile');
 Route::patch('/customer/myaccount/notification/update/{notificationID}',  [CustomerController::class, 'notificationUpdate']);
+Route::patch('/customer/myaccount/{customerID}', [CustomerController::class, 'myaccountDelete'])->name('customer.deleteprofile');
 
 Route::get('/repairlist', [CustomerController::class, 'viewrepairlist'])->name('viewrepairlist');
 
@@ -77,22 +78,26 @@ Route::middleware('technician.auth')->group(function(){
         Route::patch('/technician/notifications/update/{id}', [TechnicianController::class, 'isRead'])->name('notifications.isread');   
 
     Route::get('/technician/appointment', [TechnicianController::class, 'appointment'])->name('technician.appointment');
+        Route::post('/technician/appointment/create/walk-ins', [TechnicianController::class, 'appointmentCreate']);
 
     Route::get('/technician/repairstatus', [TechnicianController::class, 'repairstatus'])->name('technician.repairstatus');
         Route::delete('/technician/repairstatus/delete/{repairID}', [TechnicianController::class, 'repairstatusDelete']);
-        Route::post('/technician/repairstatus/create/{appointmentID}/{customerID}', [TechnicianController::class, 'repairstatusCreate']);
+        Route::post('/technician/repairstatus/create/{appointmentID}', [TechnicianController::class, 'repairstatusCreate']);
         Route::get('/technician/repairstatus/details/{repairID}', [TechnicianController::class, 'repairstatusDetails']);
-        Route::patch('/technician/repairstatus/update/{repairID}/{customerID}/{action}', [TechnicianController::class, 'repairstatusUpdate']);
+        Route::patch('/technician/repairstatus/update/{repairID}/{action}', [TechnicianController::class, 'repairstatusUpdate']);
         Route::post('/technician/repairstatus/create/walk-ins', [TechnicianController::class, 'repairstatusCreateWalkIn']);
 
     Route::get('/technician/messages', [TechnicianController::class, 'messages'])->name('technician.messages');
-        Route::get('/technician/messages/{customerID}', [TechnicianController::class, 'messageCustomer']);
+        Route::get('/technician/messages/{customerID}', [TechnicianController::class, 'messageCustomer'])->name('messageCustomer');
 
     Route::get('/technician/shopreviews', [TechnicianController::class, 'shopreviews'])->name('technician.shopreviews');
 
     Route::get('/technician/profile', [TechnicianController::class, 'profile'])->name('technician.profile');
         Route::post('/technician/profile', [TechnicianController::class, 'updateProfile'])->name('technician.updateProfile');
-        Route::patch('/technician/profile/{technicianID}/{imageType}', [TechnicianController::class, 'updateImage']);
+        Route::patch('/technician/profile/update/{technicianID}/{imageType}', [TechnicianController::class, 'updateImage']);
+        Route::patch('/technician/profile/delete/{technicianID}/{imageType}', [TechnicianController::class, 'deleteImage']);
+        Route::patch('/technician/{technicianID}/social-link', [TechnicianController::class, 'updateLink']);
+        Route::patch('/technician/{technicianID}/{social}', [TechnicianController::class, 'deleteLink']);
 });
 
 

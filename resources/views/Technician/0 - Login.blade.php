@@ -34,7 +34,7 @@
                             <a href="#">Forgot password?</a>
                         </div>
                         <button type="submit">Sign in</button>
-                    </form>
+                    </form> 
                 </div>
             </div>
         </div>

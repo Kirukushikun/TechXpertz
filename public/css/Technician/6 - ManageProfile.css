@@ -17,6 +17,17 @@
 header {
     width: 100%;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-transform: capitalize;
+}
+.technician-name{
+    font-size: 20px;
+}.technician-name h3{
+    color: var(--primary-color);
+}.technician-name span{
+    color: var(--text-color);
 }
 
 /* ---------------------------- */
@@ -191,7 +202,7 @@ form h3{
 }
 
 
- table td{
+table td{
     padding-bottom: 20px;
 } table td, label{
     font-weight: 500;
@@ -324,7 +335,7 @@ form h3{
     overflow: hidden;
     position: relative;
 
-    color: #cacaca;
+    color: white;
 
     display: flex;
     flex-direction: column;
@@ -333,6 +344,7 @@ form h3{
     font-weight: 600;
     gap: 10px;
     letter-spacing: 1px;
+    cursor: pointer;
 } .image-container:hover .images {
     transition: 0.3s ease;
     transform: scale(105%);
@@ -461,23 +473,26 @@ form h3{
     align-items: center;
     justify-content: center;
 
-    padding: 60px 80px;
+    padding: 40px;
     background-color: white;
 
     border-radius: 10px;
-    gap: 30px;
 
     width: fit-content;
+    position: relative;
+}
+.modal-upload h2{
+    margin-bottom: 50px;
 }
 .image-upload {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 2px dashed #ddd;
-    padding: 40px;
+    /* border: 2px dashed #ddd; */
     border-radius: 10px;
     cursor: pointer;
+    position: relative;
 }
 
 .upload-label {
@@ -485,14 +500,22 @@ form h3{
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+
 }
 
+#upload-icon{
+    z-index: 5;
+    position: absolute;
+    width: 100px;
+    top: -50px;
+}
 #preview {
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 310px;
     object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 15px;
+    background-color: #f8f8f8;
+    border: 2px dashed #888;
 }
 
 .upload-text {
@@ -502,6 +525,34 @@ form h3{
 
 input[type="file"] {
     display: none;
+}
+.upload-action{
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    margin-top: 20px;
+}
+.upload-action button{
+    padding: 10px 20px;  
+    border-radius: 7px;  
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+}
+
+.image-preview-container{
+    width: 80%; 
+    height: 80vh;
+    margin: auto;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    position: relative;
+
+    border-radius: 7px;
 }
 
 .empty{
@@ -519,4 +570,102 @@ input[type="file"] {
 
 .empty img{
     width: 80px;
+}
+
+
+
+.social-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.social-container .form-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    font-size: 15px;
+    border-radius: 7px;
+    border: 2px solid #D9D9D9;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+/* Hide the default radio button */
+.social-container .form-details input[type="radio"] {
+    display: none;
+}
+
+.social-container .form-details i {
+    font-size: 18px;
+    color: var(--primary-color);
+}
+
+.social-container .form-details p {
+    margin: 0;
+    color: #333; /* Adjust text color as needed */
+    text-transform: capitalize;
+}
+
+/* Style for the active (selected) radio button */
+.social-container .form-details.active {
+    border-color: var(--primary-color);
+    border-width: 3px;
+    font-weight: 700;
+    background-color: rgba(150, 0, 255, 0.1); /* Light background color for active state */
+    color: var(--primary-color); /* Ensure text color matches active state */
+}
+
+.social-container .form-details:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Additional button styling */
+.social-container button {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    border-radius: 7px;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+}
+
+.social-container button:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.link-container input{
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.addlink-action{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+    gap: 10px;
+}
+.addlink-action button{
+    padding: 10px 25px;
+    border-radius: 7px;
+    border-width: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
 }

@@ -24,7 +24,7 @@
         
         <div class="container-3">
 
-            <div class="banner">
+            <div class="banner" style="background-image: url('{{ asset('images/' . $category . '-bg.png') }}');">
                 <h1>{{$category}} Category</h1>
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Provident, soluta!</p>
             </div>
@@ -112,9 +112,12 @@
                         </div>
                     </div>                   
                 @endforeach
+
             </div>
 
-            <div class="pagination"></div>
+            @if(count($repairshops) > 8)
+                <div class="pagination"></div>
+            @endif
         </div>
 
         @yield('footer')

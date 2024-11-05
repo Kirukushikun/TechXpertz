@@ -34,3 +34,24 @@ if (messageContainer) {
 
 // Ensure that it scrolls to the bottom on page load
 scrollToBottom();
+
+// // Select all contact elements, the chat area, and the sidebar
+// let contacts = document.querySelectorAll('.contact');
+// let chatArea = document.querySelector('.chat-area');
+// let sidebar = document.querySelector('.sidebar');
+
+// // Event listener for each contact
+// contacts.forEach(contact => {
+//     contact.addEventListener('click', function() {
+//         // Hide the sidebar and show the chat area
+//         sidebar.classList.add('hidden');
+//         chatArea.classList.remove('hidden');
+//     });
+// });
+
+// // Event listener for the back button
+// document.querySelector('.back-btn').addEventListener('click', function() {
+//     // Show the sidebar and hide the chat area
+//     chatArea.classList.add('hidden');
+//     sidebar.classList.remove('hidden');
+// });

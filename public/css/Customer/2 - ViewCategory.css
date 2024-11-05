@@ -1,22 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-:root{
-    --highlight: #9147F2;
-    --primary-color: #7B5CAD;
-    --secondary-color: #EEE3FF;
-    --dark-grey: #666666;
-    --light-grey: #f0f0f0;
-    --white: #FFFFFF;
-
-    --text-color: #383838;
-    --lighted-text-color: #999999;
-}
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins";
+    transition: 0.3s ease;
 }
 
 .container-3 {
@@ -33,6 +22,10 @@
     flex-direction: column;
     align-items: start;
     justify-content: center;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 
     padding: 40px;
 }.banner h1{
@@ -53,7 +46,7 @@
 }
 .header nav a {
     text-decoration: none;
-    color: var(--lighted-text-color);
+    color: var(--text-color-lighted);
     font-size: 20px;
     font-weight: 600;
 }
@@ -92,7 +85,7 @@
     width: 100%;
     font-size: 17px;
     font-weight: 500;
-    color: var(--lighted-text-color);
+    color: var(--text-color-lighted);
     background-color: #f0f0f0;
     border-radius: 10px;
     text-align: center;
@@ -109,15 +102,11 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     overflow: hidden;
-    margin-bottom: 40px;
-}
-.shop.hidden{
-    display: none;
 }
 
 .shop-image {
     height: 280px;
-    background-color: var(--lighted-text-color);
+    background-color: var(--text-color-lighted);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -162,7 +151,7 @@
     background: #f1f1f1; /* Background of the scrollbar track */
     border-radius: 5px;
 }.shop-location p::-webkit-scrollbar-thumb {
-    background: var(--lighted-text-color); /* Color of the scrollbar thumb */
+    background: var(--text-color-lighted); /* Color of the scrollbar thumb */
     border-radius: 5px;
 }.shop-location p::-webkit-scrollbar-thumb:hover {
     background: #555; /* Color of the scrollbar thumb when hovered */
@@ -200,8 +189,8 @@
     padding: 15px 20px;
 
     border-top: solid;
-    border-width: 3px;
-    border-color: var(--light-grey);
+    border-width: 2px;
+    border-color: var(--gray-light-background);
 }
 
 .shop-footer .rating .stars {
@@ -223,14 +212,20 @@
 }
 
 .shop-footer .actions .favorite{
-    border-color: #e4e4e4;
+    border-color: var(--border-color);
     background-color: white;
     color: var(--highlight);
+}.shop-footer .actions .favorite:hover{
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
 }
 .shop-footer .actions .view{
     border-color: var(--primary-color);
     background-color: var(--primary-color);
-    color: var(--white);
+    color: var(--text-color-white);
+}.shop-footer .actions .view:hover{
+    background-color: var(--primary-hover-color);
 }
 
 .pagination{
@@ -242,8 +237,8 @@
     margin-top: 20px;
 }
 .pagination a{
-    color: var(--primary-color);
-    background-color: var(--secondary-color);
+    color: #7B5CAD;
+    background-color: #EEE3FF;
     font-size: 14px;
     font-weight: 600;
     width: 40px;
@@ -256,8 +251,12 @@
     
     border-radius: 7px;
 }.pagination a.active{
-    color: var(--white);
-    background-color: var(--primary-color);
+    color: var(--text-color-white);
+    background-color: #7B5CAD;
+    transform: scale(1.1);
+}
+.pagination a:hover{
+    transform: scale(1.2);
 }
 
 @media(max-width:1825px){
@@ -314,6 +313,15 @@
         flex-direction: column;
         justify-content: center;
         margin-bottom: 20px;
+    }
+
+    .header nav{
+        background-color: var(--gray-light-background);
+        text-align: center;
+        width: 100%;
+        padding: 30px;
+        border-radius: 7px;
+        margin-bottom: 10px;
     }
     .header nav a.active {
         font-size: 25px;

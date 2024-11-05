@@ -284,7 +284,7 @@ class AdminController extends Controller
 
             $review->update([
                 'status' => $request->input('status'), // Access 'status' from the request body
-            ]);
+            ]); 
 
             return response()->json(['message' => 'Review updated successfully'], 200);
         }   

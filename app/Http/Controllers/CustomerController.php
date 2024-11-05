@@ -297,123 +297,145 @@ class CustomerController extends Controller
 
     }
 
-    public function myaccountUpdate(Request $request, $actionType, $customerID){
-        $customer = Customer::find($customerID);
-        
-        if($actionType == 'upload'){
-            $request->validate([
-                'image' => 'required|mimes:png,jpg,jpeg,webp'
-            ]);
+        public function myaccountUpdate(Request $request, $actionType, $customerID){
+            $customer = Customer::find($customerID);
             
-            if($request->hasFile('image')) {  // Check if a new image is uploaded
-                // Get the new file and extension
-                $file = $request->file('image');
-                $extension = $file->getClientOriginalExtension(); 
-                
-                // Define the new filename and path
-                $filename = time() . '.' . $extension;  
-                $path = 'uploads/customer/';
-                
-                // Check if the customer has an existing image and delete it
-                if($customer->image_profile) {
-                    $oldImagePath = public_path($customer->image_profile);
-                    
-                    if(File::exists($oldImagePath)) {
-                        File::delete($oldImagePath); // Delete the old image
-                    }
-                }
-                
-                // Move the new file to the directory and append filename to the path
-                $file->move($path, $filename);
-                
-                // Full path to be stored in the database
-                $imagePath = $path . $filename;
-            
-                // Update the customer's profile with the new image
-                $customer->update([
-                    'image_profile' => $imagePath,
+            if($actionType == 'upload'){
+                $request->validate([
+                    'image' => 'required|mimes:png,jpg,jpeg,webp'
                 ]);
-            }
-        }elseif($actionType == 'delete'){
-                // Check if the customer has an existing image and delete it
-                if($customer->image_profile) {
-                    $oldImagePath = public_path($customer->image_profile);
+                
+                if($request->hasFile('image')) {  // Check if a new image is uploaded
+                    // Get the new file and extension
+                    $file = $request->file('image');
+                    $extension = $file->getClientOriginalExtension(); 
                     
-                    if(File::exists($oldImagePath)) {
-                        File::delete($oldImagePath); // Delete the old image
+                    // Define the new filename and path
+                    $filename = time() . '.' . $extension;  
+                    $path = 'uploads/customer/';
+                    
+                    // Check if the customer has an existing image and delete it
+                    if($customer->image_profile) {
+                        $oldImagePath = public_path($customer->image_profile);
+                        
+                        if(File::exists($oldImagePath)) {
+                            File::delete($oldImagePath); // Delete the old image
+                        }
                     }
+                    
+                    // Move the new file to the directory and append filename to the path
+                    $file->move($path, $filename);
+                    
+                    // Full path to be stored in the database
+                    $imagePath = $path . $filename;
+                
+                    // Update the customer's profile with the new image
+                    $customer->update([
+                        'image_profile' => $imagePath,
+                    ]);
+                }
+            }elseif($actionType == 'delete'){
+                    // Check if the customer has an existing image and delete it
+                    if($customer->image_profile) {
+                        $oldImagePath = public_path($customer->image_profile);
+                        
+                        if(File::exists($oldImagePath)) {
+                            File::delete($oldImagePath); // Delete the old image
+                        }
+                    }
+
+                    // Update the customer's profile with the new image
+                    $customer->update([
+                        'image_profile' => null,
+                    ]);
+            }elseif($actionType == 'update'){
+
+                if($request->current_password){
+                    // Custom validation messages
+                    $messages = [
+                        'new_password.required' => 'Please enter a new password.',
+                        'new_password.min' => 'The new password must be at least 8 characters long.',
+                        'new_password.confirmed' => 'The new password and confirmation password do not match.',
+                        'current_password.required' => 'Please enter your current password.',
+                    ];
+
+                    // Validation with custom messages
+                    $validator = Validator::make($request->all(), [
+                        'current_password' => 'required',
+                        'new_password' => 'required|min:8|confirmed', // confirmed ensures the password confirmation matches
+                    ], $messages);
+
+                    // Check if validation fails
+                    if ($validator->fails()) {
+                        return back()->with('error', 'Password Change Failed')
+                                    ->with('error_message', $validator->errors()->first()); // Send the first validation error
+                    }
+
+                    // Check if the current password is correct
+                    if (!Hash::check($request->current_password, $customer->password)) {
+                        return back()->with('error', 'Password Change Failed')->with('error_message', 'The current password you entered is incorrect. Please try again.');
+                    }
+
+                    // Ensure the new password is different from the current password
+                    if (Hash::check($request->current_password, $customer->password)) {
+                        return back()->with('error', 'Password Change Failed')->with('error_message', 'The new password cannot be the same as the current password.');
+                    }
+
+                    // Update password in a transaction for data integrity
+                    DB::transaction(function () use ($customer, $request) {
+                        $customer->password = Hash::make($request->new_password);
+                        $customer->save();
+                    });
+
+                    // Redirect with success message
+                    return back()->with('success', 'Password Changed')->with('success_message', 'Your password has been changed successfully.');
+
                 }
 
-                // Update the customer's profile with the new image
-                $customer->update([
-                    'image_profile' => null,
+                // If confirm and new password has value but the current password do not. Return error
+                if($request->new_password || $request->new_password_confirmation && $request->current_password == null){
+                    return back()->with('error', 'Password Change Failed')->with('error_message', 'Please ensure you entered your current password.');
+                }
+
+                $validatedData = $request->validate([
+                    'first_name' => 'required|string|max:255',
+                    'last_name' => 'required|string|max:255',
+                    'email' => 'required|string|email|max:255',
                 ]);
-        }elseif($actionType == 'update'){
 
-            if($request->current_password){
-                // Custom validation messages
-                $messages = [
-                    'new_password.required' => 'Please enter a new password.',
-                    'new_password.min' => 'The new password must be at least 8 characters long.',
-                    'new_password.confirmed' => 'The new password and confirmation password do not match.',
-                    'current_password.required' => 'Please enter your current password.',
-                ];
-
-                // Validation with custom messages
-                $validator = Validator::make($request->all(), [
-                    'current_password' => 'required',
-                    'new_password' => 'required|min:8|confirmed', // confirmed ensures the password confirmation matches
-                ], $messages);
-
-                // Check if validation fails
-                if ($validator->fails()) {
-                    return back()->with('error', 'Password Change Failed')
-                                ->with('error_message', $validator->errors()->first()); // Send the first validation error
-                }
-
-                // Check if the current password is correct
-                if (!Hash::check($request->current_password, $customer->password)) {
-                    return back()->with('error', 'Password Change Failed')->with('error_message', 'The current password you entered is incorrect. Please try again.');
-                }
-
-                // Ensure the new password is different from the current password
-                if (Hash::check($request->current_password, $customer->password)) {
-                    return back()->with('error', 'Password Change Failed')->with('error_message', 'The new password cannot be the same as the current password.');
-                }
-
-                // Update password in a transaction for data integrity
-                DB::transaction(function () use ($customer, $request) {
-                    $customer->password = Hash::make($request->new_password);
-                    $customer->save();
-                });
-
-                // Redirect with success message
-                return back()->with('success', 'Password Changed')->with('success_message', 'Your password has been changed successfully.');
+                $customer->update([
+                    'firstname' => $validatedData['first_name'],
+                    'lastname' => $validatedData['last_name'],
+                    'email' => $validatedData['email']
+                ]);
 
             }
 
-            // If confirm and new password has value but the current password do not. Return error
-            if($request->new_password || $request->new_password_confirmation && $request->current_password == null){
-                return back()->with('error', 'Password Change Failed')->with('error_message', 'Please ensure you entered your current password.');
-            }
-
-            $validatedData = $request->validate([
-                'first_name' => 'required|string|max:255',
-                'last_name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-            ]);
-
-            $customer->update([
-                'firstname' => $validatedData['first_name'],
-                'lastname' => $validatedData['last_name'],
-                'email' => $validatedData['email']
-            ]);
+            return back()->with('success', 'Profile Updated')->with('success_message', 'Your profile information has been successfully updated.');
 
         }
 
-        return back()->with('success', 'Profile Updated')->with('success_message', 'Your profile information has been successfully updated.');
+        public function myaccountDelete($customerID){
+            $customer = Customer::find($customerID);
 
-    }
+            if(!$customer){
+                return back()->with('error', 'Deletion Failed')
+                ->with('error_message', 'Customer not found.');
+            }
+            
+            $repairExist = RepairShop_RepairStatus::where('customer_id', $customer->id)
+                ->where('status', 'in progress')
+                ->exists();
+            $appointmentExist = RepairShop_Appointments::where('customer_id', $customer->id)
+                ->whereIn('status', ['requested', 'confirmed', 'completed'])
+                ->exists();
+
+            if($repairExist || $appointmentExist){
+                return back()->with('error', 'Deletion Failed')->with('error_message', 'Your account cannot be deleted at this time due to pending appointments or ongoing repairs. Please complete or cancel any active engagements before proceeding with account deletion.');
+            }
+
+            return back()->with('success', 'Account Deleted Successfully')->with("success_message", "Your account has been successfully deleted. We're sorry to see you go and hope to serve you again in the future.");
+        }
 
     public function notificationUpdate($notificationID){
         $notification = Customer_Notifications::find($notificationID);
@@ -446,6 +468,7 @@ class CustomerController extends Controller
             }
 
             return view('Customer.8 - Messages');
+            
         }
         return redirect()->route('customer.loginCustomer');
     }

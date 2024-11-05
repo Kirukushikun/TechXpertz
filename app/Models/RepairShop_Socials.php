@@ -30,7 +30,7 @@ class RepairShop_Socials extends Authenticatable
         'linkedin',
         'twitter',
         'facebook',
-        'messenger',
+        'telegram',
     ];
 
     public function technician()

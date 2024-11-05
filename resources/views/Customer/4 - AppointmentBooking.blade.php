@@ -41,6 +41,10 @@
             </div>
         @endif
 
+        <div class="loading-screen">
+            <div class="loader"></div>
+        </div>
+
         @yield('header')
         
         <form class="appointment-form" action="{{ route('bookappointment', ['id' => $technicianID]) }}" method="POST">
@@ -247,5 +251,6 @@
         <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
         <script src="{{asset('js/Customer/4 - AppointmentBooking.js')}}" defer></script>
         <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
+        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
     </body>
 </html>

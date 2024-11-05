@@ -65,8 +65,15 @@ class TechnicianController extends Controller
         $repairshop = Technician::find($technician->id);
 
         $appointments = Repairshop_Appointments::where('technician_id', $technician->id)->get();
-        $upcomingAppointments = $appointments->where('status', 'confirmed');
-        $requestedAppointments = $appointments->where('status', 'requested');
+        $upcomingAppointments = $appointments->where('status', 'confirmed')
+            ->sortBy('created_at')  // Use sortBy on collections
+            ->take(10);
+        $upcomingAppointmentsCount = $appointments->where('status', 'confirmed')->count();
+
+        $requestedAppointments = $appointments->where('status', 'requested')
+            ->sortBy('created_at')  // Use sortBy on collections
+            ->take(4);
+        $requestedAppointmentsCount = $appointments->where('status', 'requested')->count();
 
         // Format the date for each appointments
         foreach ($appointments as $appointment) {
@@ -84,11 +91,35 @@ class TechnicianController extends Controller
         $totalRepairs = $repairstatus->where('repairstatus', 'Device Collected');
         $revenue = $this->formatMoney($totalRepairs->sum('revenue'));
 
+        //------------------------------------------------------------------------------------------------
+        $currentRevenueCount =  $repairstatus->where('repairstatus', 'Device Collected')
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->sum('revenue');
+
+        $previousRevenueCount = $repairstatus->where('repairstatus', 'Device Collected')
+            ->whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->sum('revenue');
+
+        // Calculate the percentage change in revenue
+        $revenuePercentage = $this->calculatePercentageChange($currentRevenueCount, $previousRevenueCount);
+
+        $currentRepairedCount = $totalRepairs->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->sum('revenue');
+        $previousRepairedCount = $totalRepairs->whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->sum('revenue');
+
+        $repairedPercentage = $this->calculatePercentageChange($currentRepairedCount, $previousRevenueCount);
+
+        $currentReviewCount = $reviews->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
+        $previousReviewCount = $reviews->whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->count();
+
+        $reviewPercentage = $this->calculatePercentageChange($currentReviewCount, $previousReviewCount);
+        //------------------------------------------------------------------------------------------------
+
         return view('Technician.1 - Dashboard', [
             'repairshop' => $repairshop,
 
             'upcomingAppointments' => $upcomingAppointments,
+            'upcomingAppointmentsCount' => $upcomingAppointmentsCount,
+            
             'requestedAppointments' => $requestedAppointments,
+            'requestedAppointmentsCount' => $requestedAppointmentsCount,
 
             'pendingStatus' => $pendingStatus,
             'completedStatus' => $completedStatus,
@@ -96,6 +127,10 @@ class TechnicianController extends Controller
 
             'reviews' => $reviews,
             'totalRepairs' => $totalRepairs,
+
+            'revenuePercentage' => $revenuePercentage,
+            'repairedPercentage' => $repairedPercentage,
+            'reviewPercentage' => $reviewPercentage,
         ]);
     }
 
@@ -161,6 +196,7 @@ class TechnicianController extends Controller
         $rejectedAppointmentsData = $rejectedAppointments->map(function ($appointment) {
             return [
                 'ID' => $appointment->id,
+                'customer_id' => $appointment->customer_id,
                 'fullname' => $appointment->fullname,
                 'email' => $appointment->email,
                 'contact' => $appointment->contact_no,
@@ -260,6 +296,100 @@ class TechnicianController extends Controller
 
         }
 
+        public function appointmentCreate(Request $request){
+            $technician = Auth::guard('technician')->user();
+            try {
+                $validatedData = $request->validate([
+                    //Customer Details
+                    'firstname' => 'required|string|max:255',
+                    'lastname' => 'required|string|max:255',
+                    'email' => 'required|string|email|max:255',
+                    'contact_no' => 'required|string|max:255',
+        
+                    //Device Information
+                    'device_type' => 'required|string|max:255',
+                    'device_brand' => 'required|string|max:255',
+                    'device_model' => 'required|string|max:255',
+                    'device_serial' => 'nullable|string|max:255',
+        
+                    //Device Issue
+                    'issue_descriptions' => 'nullable|string|max:255',
+                    'error_messages' => 'nullable|string|max:255',
+                    'repair_attempts' => 'nullable|string|max:255',
+                    'recent_events' => 'nullable|string|max:255',
+                    'prepared_parts' => 'nullable|string|max:255',   
+                    
+                    //Appointment Schedule
+                    'appointment_date' => 'required|date',
+                    'appointment_time' => 'required|date_format:H:i',
+                    'appointment_urgency' => 'nullable|string|max:255',
+                ]);
+        
+                // Concatenate the first name and last name to create the fullname
+                $fullname = $validatedData['firstname'] . " " . $validatedData['lastname'];
+        
+                // Create a new appointment request
+                $repairshopAppointments = RepairShop_Appointments::create([
+                    'technician_id' => $technician->id,
+                    'status' => 'confirmed',
+        
+                    // Customer Details
+                    'fullname' => $fullname,
+                    'email' => $validatedData['email'],
+                    'contact_no' => $validatedData['contact_no'],
+        
+                    // Device Information
+                    'device_type' => $validatedData['device_type'],
+                    'device_brand' => $validatedData['device_brand'],
+                    'device_model' => $validatedData['device_model'],
+                    'device_serial' => $validatedData['device_serial'],
+        
+                    // Device Issue
+                    'issue_descriptions' => $validatedData['issue_descriptions'],
+                    'error_message' => $validatedData['error_messages'],
+                    'repair_attempts' => $validatedData['repair_attempts'],
+                    'recent_events' => $validatedData['recent_events'],
+                    'prepared_parts' => $validatedData['prepared_parts'],   
+        
+                    // Appointment Schedule
+                    'appointment_date' => $validatedData['appointment_date'],
+                    'appointment_time' => $validatedData['appointment_time'],
+                    'appointment_urgency' => $validatedData['appointment_urgency'],
+                ]);
+    
+                $repairshopRepairstatus = RepairShop_RepairStatus::create([
+                    'technician_id' => $technician->id,
+                    'appointment_id' => $repairshopAppointments->id,
+                    'customer_fullname' => $fullname,
+    
+                    'status' => 'pending',
+                    'repairstatus' => 'Appointment Confirmed',
+    
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+    
+                Customer_RepairStatus::create([
+                    'technician_id' => $technician->id,
+                    'repair_id' => $repairshopRepairstatus->id,
+    
+                    'repairstatus' => 'Appointment Settled',
+                    'repairstatus_message' => 'Your appointment has been settled! Please drop off your device at the scheduled time.',
+    
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+    
+        
+                return back()->with('success', 'Success! Your appointment has been successfully booked.');
+            } catch (\Exception $e) {
+                return back()->with('error', 'Failed to book appointment: ' . $e->getMessage());
+                // return back()->with('error', 'Failed to book appointment. Please try again.');
+            }
+
+        }
+
+
     public function repairstatus(){
         $technician = Auth::guard('technician')->user();
         $repairStatus = RepairShop_RepairStatus::where('technician_id', $technician->id)->get();
@@ -299,6 +429,7 @@ class TechnicianController extends Controller
 
             return [
                 'repairID' => $repairdata->id,
+                'customerID' => $repairdata->customer_id,
                 'appointment_id' => $repairdata->appointment_id,
                 'customer_name' => $repairdata->customer_fullname,
                 'revenue' => $formatedRevenue,
@@ -318,6 +449,7 @@ class TechnicianController extends Controller
 
             return [
                 'repairID' => $repairdata->id,
+                'customerID' => $repairdata->customer_id,
                 'appointment_id' => $repairdata->appointment_id,
                 'customer_name' => $repairdata->customer_fullname,
                 'revenue' => $formatedRevenue,
@@ -356,7 +488,7 @@ class TechnicianController extends Controller
             ]);
         }   
 
-        public function repairstatusCreate(Request $request, $appointmentID, $customerID){
+        public function repairstatusCreate(Request $request, $appointmentID){
             $technician = Auth::guard('technician')->user();
             $appointment = RepairShop_Appointments::find($appointmentID);
             $repairstatus = RepairShop_RepairStatus::where('appointment_id', $appointmentID)->first();
@@ -382,7 +514,7 @@ class TechnicianController extends Controller
             Customer_RepairStatus::create([
                 'technician_id' => $technician->id,
                 'repair_id' => $repairstatus->id,
-                'customer_id' => $repairstatus->customer_id,
+                'customer_id' => $repairstatus->customer_id ?? null,
                 'repairstatus' => 'Device Dropped Off',
                 'repairstatus_message' => 'We’ve received your device at our repair shop. We are now preparing to begin the diagnostic process to determine the necessary repairs.',
 
@@ -393,7 +525,7 @@ class TechnicianController extends Controller
             return back()->with('success', 'Repair Started')->with('success_message', 'Repair process started. The customer has been notified that the device is being repaired.');
         }
 
-        public function repairstatusUpdate(Request $request, $repairID, $customerID, $action){
+        public function repairstatusUpdate(Request $request, $repairID, $action){
             $technician = Auth::guard('technician')->user();
             $repairstatus = Repairshop_RepairStatus::find($repairID);
 
@@ -407,7 +539,7 @@ class TechnicianController extends Controller
                 Customer_RepairStatus::create([
                     'technician_id' => $technician->id,
                     'repair_id' => $repairID,
-                    'customer_id' => $customerID,
+                    'customer_id' => $repairstatus->customer_id ?? null,
 
                     'repairstatus' => 'Repair Terminated',
                     'repairstatus_message' => $request->terminate_message,    
@@ -442,7 +574,7 @@ class TechnicianController extends Controller
                 Customer_RepairStatus::create([
                     'technician_id' => $technician->id,
                     'repair_id' => $repairID,
-                    'customer_id' => $customerID,
+                    'customer_id' => $repairstatus->customer_id,
 
                     'repairstatus' => $repairStatus,
                     'repairstatus_message' => $request->repairstatus_message,    
@@ -453,7 +585,7 @@ class TechnicianController extends Controller
 
                 Customer_Notifications::create([
                     'target_type' => 'customer',
-                    'target_id' => $customerID,
+                    'target_id' => $repairstatus->customer_id,
                     'title' => 'Repair Status Updated',
                     'message' => 'Your device repair status has been updated. Please check your device repair status section for the latest details on the progress of your repair.',
                     'created_at' => now(),
@@ -585,6 +717,7 @@ class TechnicianController extends Controller
         $technicianSchedules = $technicianInfo->repairshopSchedules;
         $technicianProfile = $technicianInfo->repairshopProfile;
         $technicianImages = $technicianInfo->repairshopImages;
+        $technicianSocials = $technicianInfo->repairshopSocials;
 
         $daysOfWeek = [
             1 => 'monday',
@@ -618,6 +751,8 @@ class TechnicianController extends Controller
                 'close' => $formatedClosing,
             ];
         }
+
+        
     
         // // Check the array content
         // dd($formattedTimes);
@@ -632,8 +767,10 @@ class TechnicianController extends Controller
             'formattedTimes' => $formattedTimes,
             'technicianProfile' => $technicianProfile,
             'technicianImages' => $technicianImages,
+            'technicianSocials' => $technicianSocials,
         ]);
     }
+
         public function updateProfile(Request $request){
             $technician = Auth::guard('technician')->user();
             $technicianInfo = Technician::find($technician->id);
@@ -706,21 +843,24 @@ class TechnicianController extends Controller
             // Iterate over the provided services
             if($request->input('service')){
                 foreach ($request->input('service') as $index => $service) {
-                    if (!empty($service)) {
-                        // Check if the service already exists (based on ID or any other unique attribute)
-                        $existingService = $existingServices->get($index);
-
-                        // Update the existing service or create a new one
-                        RepairShop_Services::updateOrCreate(
-                            [
-                                'id' => $existingService->id ?? null, // Use the existing ID if available
-                                'technician_id' => $technician->id,
-                            ],
-                            [
-                                'service' => $service,
-                            ]
-                        );
+                    // Check if the service is empty, if so return an error
+                    if (!$service) {
+                        return back()->with('error', 'Profile Update Unsuccessful')->with('error_message', 'Shop service is missing a value.');
                     }
+
+                    // Check if the service already exists (based on ID or any other unique attribute)
+                    $existingService = $existingServices->get($index);
+
+                    // Update the existing service or create a new one
+                    RepairShop_Services::updateOrCreate(
+                        [
+                            'id' => $existingService->id ?? null, // Use the existing ID if available
+                            'technician_id' => $technician->id,
+                        ],
+                        [
+                            'service' => $service,
+                        ]
+                    );
                 }
 
                 // If there are fewer services in the request than in the database, remove the extra ones
@@ -775,22 +915,18 @@ class TechnicianController extends Controller
 
             //--------------------------------------------------------------------------
 
+            // Profile Validation
             $validatedAbout = $request->validate([
                 'header' => 'nullable|string|max:255',
                 'description' => 'nullable|string',
-            ]);            
+            ]);
 
-            $technician->repairshopProfile()->updateOrCreate(
-                // The "search" array - this is where you define how to find an existing record
-                [
-                    'technician_id' => $technician->id, // You may not need this if the relationship is defined correctly
-                ],
-                // The "update" array - this is where you define what to update or insert
-                [
-                    'header' => $validatedAbout['header'],
-                    'description' => $validatedAbout['description'],
-                ]
-            );
+            if (!RepairShop_Profiles::updateOrCreate(
+                ['technician_id' => $technician->id],
+                ['header' => $validatedAbout['header'], 'description' => $validatedAbout['description']]
+            )) {
+                return back()->withErrors(['error' => 'Failed to update or create profile details.']);
+            }
 
             // --------------------------------------------------------------------------
 
@@ -824,10 +960,19 @@ class TechnicianController extends Controller
         public function updateImage(Request $request, $technicianID, $imageType) {
             $technician = RepairShop_Images::find($technicianID);
         
-            // Validate the image type to ensure it's a recognized field
+            // Define valid image types
             $validImageTypes = ['image_profile', 'image_2', 'image_3', 'image_4', 'image_5'];
+
+            // Normalize the case of the image type to ensure case-insensitive matching
+            $imageType = strtolower($imageType);
+
+            // Validate the image type
             if (!in_array($imageType, $validImageTypes)) {
-                return back()->withErrors(['Invalid image type specified']);
+                // Log the error for debugging
+                \Log::error("Invalid image type: $imageType");
+
+                return back()->with('error', 'Upload Error')
+                            ->with('error_message', 'The selected file is not a supported image type. Please upload a valid image format (e.g., JPG, PNG, or WEBP).');
             }
         
             $request->validate([
@@ -861,53 +1006,122 @@ class TechnicianController extends Controller
                 ]);
             }
         
-            return back()->with('success', 'Profile Updated')->with('success_message', 'Your profile has been updated successfully');
+            return back()->with('success', 'Profile Updated')->with('success_message', 'Your profile has been updated successfully.');
         }
 
-    private function reviewSystem($id){
-        $ratings = RepairShop_Reviews::where('technician_id', $id)->where('status', 'Approved')->pluck('rating')->toArray();
+        public function deleteImage($technicianID, $imageType){
+            $technician = RepairShop_Images::where('technician_id', $technicianID)->first();
+            $technician->update([
+                $imageType => null
+            ]);
+            return back()->with('success', 'Deletion Successful')->with('success_message', 'The image has been successfully deleted from your profile.');
+        }
 
-        // Calculate total number of reviews
-        $totalReviews = count($ratings);
+        public function updateLink(Request $request, $technicianID){
+            // Validate the request data
+            $request->validate([
+                'link' => 'required|url',
+            ]);
 
-        // Calculate the average rating
-        $averageRating = $totalReviews > 0 ? round(array_sum($ratings) / $totalReviews, 1) : 0;
-
-        // Count the number of each rating (1-5 stars)
-        $ratingCounts = array_count_values($ratings);
-
-        // Ensure all star levels (1 to 5) are accounted for, even if they have 0 ratings
-        for ($i = 1; $i <= 5; $i++) {
-            if (!isset($ratingCounts[$i])) {
-                $ratingCounts[$i] = 0;
+            // Determine the selected platform
+            $platform = null;
+            if ($request->has('youtube')) {
+                $platform = 'youtube';
+            } elseif ($request->has('linkedin')) {
+                $platform = 'linkedin';
+            } elseif ($request->has('twitter')) {
+                $platform = 'twitter';
+            } elseif ($request->has('facebook')) {
+                $platform = 'facebook';
+            } elseif ($request->has('telegram')) {
+                $platform = 'telegram';
             }
+
+            // Ensure a platform is selected
+            if (!$platform) {
+                return redirect()->back()->withErrors(['platform' => 'Please select a social media platform.']);
+            }
+
+            // Use updateOrCreate to set the link for the selected platform
+            RepairShop_Socials::updateOrCreate(
+                ['technician_id' => $technicianID],  // Find by technician_id
+                [
+                    'technician_id' => $technicianID, // Ensure technician_id is set
+                    $platform => $request->input('link'), // Update the selected platform with the new link
+                ]
+            );
+
+            return back()->with('success', 'Saved successfully')->with('success_message', 'Changes to the profile has been saved successfully.');
         }
 
-        // Calculate the percentage for each rating
-        $ratingPercentages = [];
-        foreach ($ratingCounts as $stars => $count) {
-            $ratingPercentages[$stars] = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
+        public function deleteLink($technicianID, $social){
+            $technicianSocials = RepairShop_Socials::where('technicianID', $technicianID)->first();
+
+            $technicianSocials->update([
+                $social => null,
+            ]);
+
+            return response()->json(['message' => 'Link deleted successfully'], 200);
         }
 
-        // Return the calculated data as an associative array
-        return [
-            'totalReviews' => $totalReviews,
-            'averageRating' => $averageRating,
-            'ratingCounts' => $ratingCounts,
-            'ratingPercentages' => $ratingPercentages,
-        ];
+        private function reviewSystem($id){
+            $ratings = RepairShop_Reviews::where('technician_id', $id)->where('status', 'Approved')->pluck('rating')->toArray();
 
-    }
+            // Calculate total number of reviews
+            $totalReviews = count($ratings);
 
-    public function formatMoney($number){
-        if ($number >= 1000) {
-            // Convert number to K notation
-            $formatted = number_format($number / 1000, ($number % 1000 === 0 ? 0 : 1)) . 'k';
-        } else {
-            // If number is below 1000, just return the number as it is
-            $formatted = $number;
+            // Calculate the average rating
+            $averageRating = $totalReviews > 0 ? round(array_sum($ratings) / $totalReviews, 1) : 0;
+
+            // Count the number of each rating (1-5 stars)
+            $ratingCounts = array_count_values($ratings);
+
+            // Ensure all star levels (1 to 5) are accounted for, even if they have 0 ratings
+            for ($i = 1; $i <= 5; $i++) {
+                if (!isset($ratingCounts[$i])) {
+                    $ratingCounts[$i] = 0;
+                }
+            }
+
+            // Calculate the percentage for each rating
+            $ratingPercentages = [];
+            foreach ($ratingCounts as $stars => $count) {
+                $ratingPercentages[$stars] = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
+            }
+
+            // Return the calculated data as an associative array
+            return [
+                'totalReviews' => $totalReviews,
+                'averageRating' => $averageRating,
+                'ratingCounts' => $ratingCounts,
+                'ratingPercentages' => $ratingPercentages,
+            ];
+
         }
-        
-        return $formatted;
+
+        public function formatMoney($number){
+            if ($number >= 1000) {
+                // Convert number to K notation
+                $formatted = number_format($number / 1000, ($number % 1000 === 0 ? 0 : 1)) . 'k';
+            } else {
+                // If number is below 1000, just return the number as it is
+                $formatted = $number;
+            }
+            
+            return $formatted;
+        }
+
+    public function calculatePercentageChange($currentCount, $previousCount) {
+        // Check if previous count is 0 to avoid division by zero
+        if ($previousCount == 0) {
+            // If no previous count, consider it as 100% increase if there is a current count
+            return $currentCount > 0 ? 100 : 0;
+        }
+    
+        // Calculate the percentage change
+        $percentageChange = (($currentCount - $previousCount) / $previousCount) * 100;
+    
+        // Return the formatted percentage change (rounded)
+        return round($percentageChange, 2); // e.g., "12.34"%
     }
 }

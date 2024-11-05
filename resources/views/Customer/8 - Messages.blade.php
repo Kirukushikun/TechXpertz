@@ -22,6 +22,10 @@
 
         <div class="modal" id="modal">
         </div>
+        
+        <div class="loading-screen">
+            <div class="loader"></div>
+        </div>
 
         @yield('header')    
 
@@ -32,7 +36,8 @@
         @livewireScripts
 
         <script src="{{asset('js/Customer/8 - Messages.js')}}" defer></script>
-
+        <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
+        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
     </body>
 
 </html>

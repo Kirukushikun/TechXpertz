@@ -3,12 +3,7 @@
         @if($conversations->isNotEmpty())
             <header class="chat-header">
                 @php 
-                    $customerData = null;
-                    if ($activeConversation) {
-                        $customerData = $activeConversation->sender_type == 'customer' ? 
-                            App\Models\Customer::find($activeConversation->sender_id) : 
-                            App\Models\Customer::find($activeConversation->receiver_id);
-                    }
+                    $customerData = App\Models\Customer::find($activeConversation->sender_id);
                 @endphp
 
                 @if($customerData)
@@ -69,14 +64,13 @@
             @if($conversations)
                 @foreach($conversations as $conversation)
                     @php
-                        $customer = $conversation->sender_type == 'customer' ? 
-                            App\Models\Customer::find($conversation->sender_id) : 
-                            App\Models\Customer::find($conversation->receiver_id);
+                        $customer = App\Models\Customer::find($conversation->sender_id);
 
                         $recentMessage = App\Models\Message::where('conversation_id', $conversation->id)
                             ->orderBy('created_at', 'desc')
                             ->first();
                     @endphp
+                    
                     <div class="contact {{ $conversation->id == $activeConversation->id ? 'active' : '' }}" 
                         wire:click="setActiveConversation({{ $conversation->id }})">
                         @if($customer && $customer->image_profile)
@@ -87,7 +81,9 @@
                         <div class="contact-info">
                             <div class="name">
                                 <h4>{{ $customer->firstname }} {{ $customer->middlename ?? '' }} {{ $customer->lastname }}</h4>
-                                <span class="time">{{ $conversation->updated_at->format('H:i') }}</span>
+                                @if($recentMessage)
+                                <span class="time">{{$recentMessage->created_at->format('H:i')}}</span>
+                                @endif
                             </div>
                             <div class="recent-chat">
                                 @if($recentMessage)

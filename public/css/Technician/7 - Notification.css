@@ -13,7 +13,19 @@
 header {
     width: 100%;
     margin-bottom: 10px;
-}.repair-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-transform: capitalize;
+}
+.technician-name{
+    font-size: 20px;
+}.technician-name h3{
+    color: var(--primary-color);
+}.technician-name span{
+    color: var(--text-color);
+}
+.repair-navigation {
     width: 100%;
     margin-bottom: 30px;
 }

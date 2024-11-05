@@ -129,10 +129,12 @@ addServiceButton.addEventListener('click', function() {
         newTextarea.type = 'text';
         newTextarea.id = `service${newServiceCount}`;
         newTextarea.name = `service[]`; // Use an array name to handle multiple inputs in backend
+        newTextarea.required = true;
         newFormGroup.appendChild(newTextarea);
 
         // Append the new form group to the form details
-        formDetails.insertBefore(newFormGroup, addServiceButton);                    
+        formDetails.insertBefore(newFormGroup, addServiceButton);  
+        showButtons();                  
     }
 
 });
@@ -176,14 +178,15 @@ function verifySaveChanges(){
     modal.innerHTML = `
     <div class="form">
         <div class="modal-verification">
-            <i class="fa-solid fa-circle-check" id="repair"></i>
+            <i class="fa-solid fa-xmark close icon-close"></i>
+            <i class="fa-solid fa-circle-check sign-primary"></i>
             <div class="verification-message">
                 <h2>Confirm Save Changes</h2>
                 <p>Are you sure you want to save these changes?</p>
             </div>
             <div class="verification-action">
-                <button type="submit" class="submit" id="save-changes">Save Changes</button>
-                <button type="button" class="normal"><b>Dismiss</b></button>
+                <button type="submit" class="submit btn-primary" id="save-changes">Save Changes</button>
+                <button type="button" class="close btn-normal"><b>Dismiss</b></button>
             </div>
         </div>                
     </div>
@@ -197,9 +200,11 @@ function verifySaveChanges(){
     modal.classList.add("active");
 
     // Close modal when 'X' is clicked
-    document.querySelector('.normal').onclick = function () {
-        modal.classList.remove("active");
-    };
+    document.querySelectorAll('.close').forEach(button => {
+        button.onclick = function () {
+            modal.classList.remove("active");
+        };
+    });
 }
 
 
@@ -219,45 +224,54 @@ function addImage(technicianID, imageType){
     let modal = document.getElementById('modal');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+
     modal.innerHTML = `
-        <form action="/technician/profile/${technicianID}/${imageType}" class="modal-upload" method="POST" enctype="multipart/form-data">
+        <form action="/technician/profile/update/${technicianID}/${imageType}" class="modal-upload" method="POST" enctype="multipart/form-data">
 
             <input type="hidden" name="_token" value="${csrfToken}">
             <input type="hidden" name="_method" value="PATCH">
-
+            
+            <i class="fa-solid fa-xmark close icon-close"></i>
             <h2>Upload Your Image</h2>
             <div class="image-upload">
+                <img id="upload-icon" src="/images/image-upload-primary.png">
                 <label for="file-input" class="upload-label">
-                    <img id="preview" src="https://via.placeholder.com/150" alt="Image Preview">
-                    <div class="upload-text">Click to Upload Image</div>
+                    <img id="preview">
+                    <!-- <div class="upload-text">Click to Upload Image</div> -->
                 </label>
                 <input id="file-input" type="file" name="image" onchange="previewImage(event)" />
             </div>
-            <div class="modal-action">
-                <button type="submit" class="submit">Save</button>  
-                <button type="button" class="close normal">Dismiss</button> 
+            <div class="upload-action">
+                <button type="submit" class="submit btn-primary">Save</button>  
+                <!-- <button type="button" class="close">Dismiss</button>  -->
             </div>
         </form>
     `;
 
     modal.classList.add('active');
 
-    document.querySelector('.close').onclick = function () {
-        modal.classList.remove('active');
-    };
+    // Close modal when 'X' is clicked
+    document.querySelectorAll('.close').forEach(button => {
+        button.onclick = function () {
+            modal.classList.remove("active");
+        };
+    });
 }
 
 //Preview Image upon upload
 function previewImage(event) {
     const preview = document.getElementById('preview');
     const file = event.target.files[0];
+    const uploadIcon = document.getElementById('upload-icon');
 
     if (file) {
+        uploadIcon.style.display = "None";
         const reader = new FileReader();
         reader.onload = function(e) {
             preview.src = e.target.result;
         };
         reader.readAsDataURL(file);
+
     }
 }
 
@@ -295,34 +309,161 @@ function showButtons(){
     });
 }
 
+let deleteImage = document.getElementsByClassName('delete-image');
 
-//ADD LINK FUNCTION
-// Function to add a new link
-document.querySelector('.add-link').addEventListener('click', function () {
-    const shopLinks = document.querySelector('.shop-links');
+Array.from(deleteImage).forEach(button => {
+    button.addEventListener('click', function(){
+        let technicianID = this.getAttribute('data-technician-id');
+        let imageType = this.getAttribute('data-image');
+        verifyDeleteImage(technicianID, imageType);
+    });
+});
 
-    // Create a new link div
-    const newLink = document.createElement('div');
-    newLink.classList.add('link');
+function verifyDeleteImage(technicianID, imageType){
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const modal = document.getElementById('modal');
 
-    // Add the inner HTML for the new link
-    newLink.innerHTML = `
-        <p><i class="fa-brands fa-youtube link-icon"></i><span>: https://www.w3.org/Provider/Style/dummy.html</span></p>
-        <i class="fa-regular fa-trash-can delete"></i>
+    modal.innerHTML = `
+    <form action="/technician/profile/delete/${technicianID}/${imageType}" method="POST">
+        <input type="hidden" name="_token" value="${csrfToken}">
+        <input type="hidden" name="_method" value="PATCH">
+
+        <div class="modal-verification">
+            <i class="fa-solid fa-xmark close icon-close"></i>
+            <i class="fa-solid fa-trash sign-danger"></i>
+            <div class="verification-message">
+                <h2>Confirm Delete Image</h2>
+                <p>Are you sure you want to delete this image?</p>
+            </div>
+            <div class="verification-action">
+                <button type="submit" class="submit btn-danger">Save Changes</button>
+                <button type="button" class="close btn-normal"><b>Dismiss</b></button>
+            </div>
+        </div>                
+    </form>
     `;
 
-    // Append the new link to the container
-    shopLinks.appendChild(newLink);
+    // Show the modal
+    modal.classList.add("active");
 
-    // Add event listener to the delete icon for the newly created link
-    newLink.querySelector('.delete').addEventListener('click', function () {
-        newLink.remove();
+    // Close modal when 'X' is clicked
+    document.querySelectorAll('.close').forEach(button => {
+        button.onclick = function () {
+            modal.classList.remove("active");
+        };
+    });
+}
+
+// ADD LINK FUNCTION
+// Function to add a new link
+document.querySelector('.add-link').addEventListener('click', function () {
+    // const shopLinks = document.querySelector('.shop-links');
+
+    // // Create a new link div
+    // const newLink = document.createElement('div');
+    // newLink.classList.add('link');
+
+    // // Add the inner HTML for the new link
+    // newLink.innerHTML = `
+    //     <p><i class="fa-brands fa-youtube link-icon"></i><span>: https://www.w3.org/Provider/Style/dummy.html</span></p>
+    //     <i class="fa-regular fa-trash-can delete"></i>
+    // `;
+
+    // // Append the new link to the container
+    // shopLinks.appendChild(newLink);
+
+    // // Add event listener to the delete icon for the newly created link
+    // newLink.querySelector('.delete').addEventListener('click', function () {
+    //     newLink.remove();
+    // });
+
+    const technicianID = this.getAttribute('data-technician-id');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const modal = document.getElementById('modal');
+
+    modal.innerHTML = `
+        <form action="/technician/${technicianID}/social-link" method="POST">
+            <input type="hidden" name="_token" value="${csrfToken}">
+            <input type="hidden" name="_method" value="PATCH">
+
+            <div class="modal-verification">
+                <i class="fa-solid fa-xmark close icon-close"></i>
+                <div class="social-container">
+                    <label class="form-details" onclick=" setActive('youtube')">
+                        <input type="radio" class="youtube" name="youtube" id="youtube" value="youtube" hidden>
+                        <i class="fa-brands fa-youtube"></i>
+                        <p>youtube</p>
+                    </label>
+                    <label class="form-details" onclick=" setActive('linkedin')">
+                        <input type="radio" class="linkedin" name="linkedin" id="linkedin" value="linkedin" hidden>
+                        <i class="fa-brands fa-linkedin"></i>
+                        <p>linkedIn</p>
+                    </label>
+                    <label class="form-details" onclick=" setActive('twitter')">
+                        <input type="radio" class="twitter" name="twitter" id="twitter" value="twitter" hidden>
+                        <i class="fa-brands fa-twitter"></i>
+                        <p>twitter</p>
+                    </label>
+                    <label class="form-details" onclick=" setActive('facebook')">
+                        <input type="radio" class="facebook" name="facebook" id="facebook" value="facebook" hidden>
+                        <i class="fa-brands fa-facebook"></i>
+                        <p>facebook</p>
+                    </label>
+                    <label class="form-details" onclick=" setActive('telegram')">
+                        <input type="radio" class="telegram" name="telegram" id="telegram" value="telegram" hidden>
+                        <i class="fa-brands fa-telegram"></i>
+                        <p>telegram</p>
+                    </label>
+                </div>
+
+                <div class="link-container">
+                    <input type="text" class="link" name="link" placeholder="https://example.com">
+                </div>
+                <div class="addlink-action">
+                    <button type="submit" class="btn-primary">Save</button>
+                    <button type="button" class="close btn-normal"><b>Dismiss</b></button>
+                </div>
+            </div>                 
+        </form>
+    `;
+
+    // Show the modal
+    modal.classList.add("active");
+
+    // Close modal when 'X' is clicked
+    document.querySelectorAll('.close').forEach(button => {
+        button.onclick = function () {
+            modal.classList.remove("active");
+        };
     });
 });
 
 // Function to delete a link
 document.querySelectorAll('.delete').forEach(deleteBtn => {
     deleteBtn.addEventListener('click', function () {
+        let technicianID = this.getAttribute('data-technician-id');
+        let social = this.getAttribute('data-social');
+        deleteLink(technicianID, social);
         this.parentElement.remove();
     });
 });
+
+function deleteLink(technicianID, social){
+    fetch(`/technician/${technicianID}/${social}`, {
+        method: 'PATCH', // You can use 'PUT' or 'PATCH' depending on your API design
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Link Deletion Successfully');
+        } else {
+            console.log('Link Deletion Unsuccessful');
+        }
+    })
+    .catch(error => {
+        console.log('There was an error with the request:', error);
+    });
+}

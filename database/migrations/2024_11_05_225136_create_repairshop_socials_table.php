@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('linkedin')->nullable();
             $table->string('twitter')->nullable();
             $table->string('facebook')->nullable();
-            $table->string('messenger')->nullable();
+            $table->string('telegram')->nullable();
+
             $table->timestamps();
         });
     }

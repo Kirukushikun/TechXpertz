@@ -1,21 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-:root{
-    --highlight: #9147F2;
-    --primary-color: #7B5CAD;
-    --dark-grey: #666666;
-    --light-grey: #f0f0f0;
-    --white: #FFFFFF;
-
-    --text-color: #383838;
-    --lighted-text-color: #999999;
-}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins";
+    transition: 0.3s ease;
 }
 
 .container-1 {
@@ -49,22 +40,22 @@
     margin-bottom: 30px;
 }
 .text-content h1 {
-    font-size: 47px;
+    font-size: var(--font-h1);
     font-weight: 600;
 }
 .text-content p {
     margin-top: -10px;
-    font-size: 18px;
+    font-size: var(--font-paragraph);
     font-weight: 500;
 }
 
 .learn-more-btn {
     background-color: #fff;
     color: #333;
-    border: 3px solid #ccc;
+    border: 3px solid var(--border-color);
     border-radius: 5px;
     padding: 10px 50px;
-    font-size: 16px;
+    font-size: var(--font-paragraph);
     cursor: pointer;
 }
 
@@ -86,15 +77,14 @@
 }
 
 @media(max-width:1200px){
+    :root{
+        --font-h1: 40px;
+    }
     .container-1 {
         height: fit-content;
     }
-
     .text-content {
-        max-width: 60%;
-    }
-    .text-content h1 {
-        font-size: 40px;
+        max-width: 70%;
     }
     .learn-more-btn {
         margin-bottom: 30px;
@@ -105,9 +95,6 @@
     .text-content {
         max-width: 80%;
     }
-    .text-content h1 {
-        font-size: 40px;
-    }
 }
 
 @media(max-width:799px){
@@ -117,19 +104,12 @@
 }
 
 @media(max-width:710px){
-    .text-content {
-        max-width: 90%;
+    :root{
+        --font-paragraph: 15px;
+        --font-h1: 30px;
     }
-    .text-content h1 {
-        font-size: 30px;
-    }
-    .text-content p {
-        font-size: 15px;
-    }
-
     .learn-more-btn {
         padding: 10px 40px;
-        font-size: 13px;
         cursor: pointer;
     }
 }
@@ -137,18 +117,6 @@
 @media(max-width:548px){
     .text-content {
         max-width: 100%;
-    }
-    .text-content h1 {
-        font-size: 25px;
-    }
-    .text-content p {
-        font-size: 13px;
-    }
-
-    .learn-more-btn {
-        padding: 10px 30px;
-        font-size: 13px;
-        cursor: pointer;
     }
 }
 
@@ -189,7 +157,7 @@
     background: #f1f1f1; /* Background of the scrollbar track */
     border-radius: 5px;
 }.categories-2::-webkit-scrollbar-thumb {
-    background: var(--lighted-text-color); /* Color of the scrollbar thumb */
+    background: var(--text-color-lighted); /* Color of the scrollbar thumb */
     border-radius: 5px;
 }.categories-2::-webkit-scrollbar-thumb:hover {
     background: #555; /* Color of the scrollbar thumb when hovered */
@@ -202,6 +170,8 @@
     border-radius: 8px;
     padding: 15px;
     cursor: pointer;
+}.category:hover {
+    background-color: #dddddd;
 }
 
 .icon {
@@ -209,27 +179,27 @@
     align-items: center;
     justify-content: center;
 
-    color: var(--primary-color);
-    background-color: var(--white);
+    background-color: white;
     border-radius: 8px;
     margin-right: 15px;
 
     height: 50px;
     width: 50px;
 }.icon img {
-    width: 30px;
+    width: var(--font-icon-large);
 }
 
 .text h3 {
     margin: 0;
-    font-size: 19px;
-    color: #333;
+    font-size: var(--font-label);
+    color: var(--text-color);
 }
 
 .text p {
     margin:0;
-    font-size: 15px;
-    color: #666;
+    font-size: var(--font-paragraph);
+    color: var(--text-color-lighted);
+    font-weight:500;
 }
 
 @media(max-width:1825px){
@@ -267,6 +237,7 @@
 
     .category{
         width: 200px;
+        padding: 10px;
     }
 
     .icon {
@@ -282,16 +253,10 @@
         font-size: 15px;
     }
     
-    .text p {
-        font-size: 12px;
-    }
-    .text-content-2{
-        display: flex;
-        justify-content: center;
-    }
     .text-content-2 h2{
         font-size: 20px;
     }
+
 }
 
 
@@ -339,10 +304,14 @@
     color: var(--primary-color);
 }
 
-.shop-container {
+.shop-category{
     display: none;
+}.shop-category.active{
+    display: flex;
+    flex-direction: column;
 }
-.shop-container.active {
+
+.shop-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-areas: none;
@@ -377,13 +346,10 @@
     box-sizing: border-box;
     overflow: hidden;
 }
-.shop.hidden{
-    display: none;
-}
 
 .shop-image {
     height: 280px;
-    background-color: var(--lighted-text-color);
+    background-color: var(--text-color-lighted);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -466,8 +432,8 @@
     padding: 15px 20px;
 
     border-top: solid;
-    border-width: 3px;
-    border-color: var(--light-grey);
+    border-width: 2px;
+    border-color: var(--gray-light-background);
 }
 
 .shop-footer .rating .stars {
@@ -489,14 +455,20 @@
 }
 
 .shop-footer .actions .favorite{
-    border-color: #e4e4e4;
+    border-color: var(--border-color);
     background-color: white;
     color: var(--highlight);
+}.shop-footer .actions .favorite:hover{
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
 }
 .shop-footer .actions .view{
     border-color: var(--primary-color);
     background-color: var(--primary-color);
-    color: var(--white);
+    color: var(--text-color-white);
+}.shop-footer .actions .view:hover{
+    background-color: var(--primary-hover-color);
 }
 
 .pagination{
@@ -508,8 +480,8 @@
     margin-top: 20px;
 }
 .pagination a{
-    color: var(--primary-color);
-    background-color: var(--secondary-color);
+    color: #7B5CAD;
+    background-color: #EEE3FF;
     font-size: 14px;
     font-weight: 600;
     width: 40px;
@@ -522,12 +494,13 @@
     
     border-radius: 7px;
 }.pagination a.active{
-    color: var(--white);
-    background-color: var(--primary-color);
-}.pagination a i{
-    font-size: 20px;
+    color: var(--text-color-white);
+    background-color: #7B5CAD;
+    transform: scale(1.1);
 }
-
+.pagination a:hover{
+    transform: scale(1.2);
+}
 
 @media(max-width:1825px){
     .container-3 {
@@ -542,7 +515,7 @@
 }
 
 @media(max-width:1236px){
-    .shop-container.active{
+    .shop-container{
         grid-template-columns: 1fr 1fr 1fr;
     }
 
@@ -552,7 +525,7 @@
 }
 
 @media(max-width:1052px){
-    .shop-container.active{
+    .shop-container{
         grid-template-columns: 1fr 1fr;
     }
 
@@ -562,7 +535,7 @@
 }
 
 @media(max-width:700px){
-    .shop-container.active{
+    .shop-container{
         grid-template-columns: 1fr;
     }
 

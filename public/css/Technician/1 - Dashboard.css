@@ -11,6 +11,16 @@
 
 header {
     width: 100%;    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.technician-name{
+    font-size: 20px;
+}.technician-name h3{
+    color: var(--primary-color);
+}.technician-name span{
+    color: var(--text-color);
 }
 
 .card{
@@ -52,14 +62,19 @@ header {
     border-radius: 7px;
     color: white;
     padding: 8px 15px;
-    font-weight: 300;
+    font-weight: 500;
     cursor: pointer;
     background-color: var(--primary-color);
-}.card table td a{
+}
+.card table td a{
     text-decoration: none;
-    color: var(--text-color);
     margin-right: 10px;
-    font-size: 20px;
+    font-size: 22px;
+    cursor: pointer; 
+    
+}.card table td a:hover i{
+    transform: scale(1.3);
+    transition: 0.3s ease;
 }
 
 

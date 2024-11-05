@@ -19,6 +19,12 @@
         <main class="main-content">
             <header>
                 <h1>Notifications</h1>
+                <div class="technician-name">
+                    @php
+                        $technician = Auth::guard('technician')->user();
+                    @endphp
+                    <h3>Hi, <span>{{$technician->firstname}}.</span></h3>
+                </div>
             </header>
 
             

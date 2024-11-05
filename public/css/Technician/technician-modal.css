@@ -166,25 +166,10 @@
 .modal-verification{
     background-color: white;
     text-align: center;
-    padding: 40px 50px;
+    padding: 60px 40px;
     border-radius: 8px;
-
+    position: relative;
 }
-    .modal-verification i{
-        font-size: 30px;    
-        padding: 12px;
-        border-radius: 10px;
-
-    }.modal-verification #exclamation{
-        color: var(--danger);
-        background-color: #ffdcd8;
-    }.modal-verification #check{
-        color: var(--success);
-        background-color: #cffdda;
-    }.modal-verification #repair{
-        color: var(--primary-color);
-        background-color: #f3eaff;
-    }
     .modal-verification .form-group{
         display: flex;
         flex-direction: column;
@@ -238,28 +223,6 @@
     cursor: pointer;
     width: 100%;
 }
-
-.submit{
-    background-color: var(--primary-color);
-    border: solid 2px var(--primary-color);
-
-    color: white;
-} .danger{
-    background-color: var(--danger);
-    border: solid 2px var(--danger);
-
-    color: white;
-} .success{
-    background-color: var(--success);
-    border: solid 2px var(--success);
-
-    color: white;
-} .normal, .close{
-    background-color: transparent;
-    border: solid 2px var(--lighted-text-color);
-    color: var(--text-color);
-}
-
 
 
 .verification-content{
@@ -366,4 +329,137 @@
     border-top: 2px solid #D9D9D9;
     color: var(--lighted-text-color);
     padding: 10px 0 0;
+}
+
+/* BUTTON COLORS */
+.btn-primary{
+    background-color: var(--primary-color);
+    border: solid 2px var(--primary-color);
+
+    color: white;
+}
+.btn-danger{
+    background-color: var(--danger);
+    border: solid 2px var(--danger);
+
+    color: white;
+}
+.btn-success{
+    background-color: var(--success);
+    border: solid 2px var(--success);
+
+    color: white;
+}
+.btn-normal{
+    background-color: transparent;
+    border: solid 2px var(--lighted-text-color);
+    color: var(--text-color);
+}
+
+/* ACTION COLORS */
+.action-primary{
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 7px;
+    padding: 5px 10px;
+}
+.action-danger{
+    color: var(--danger);
+    border: 2px solid var(--danger);
+    border-radius: 7px;
+    padding: 5px 10px;
+}
+.action-success{
+    color: var(--success);
+    border: 2px solid var(--success);
+    border-radius: 7px;
+    padding: 5px 10px;
+}
+.action-info{
+    color: #64aae0;
+    border: 2px solid #64aae0;
+    border-radius: 7px;
+    padding: 5px 10px;
+
+}
+
+.action-primary:hover{
+    color: white;
+    background-color: var(--primary-color);
+    transition: 0.5s ease;
+}
+.action-danger:hover{
+    color: white;
+    background-color: var(--danger);
+    transition: 0.3s ease;
+}
+.action-success:hover{
+    color: white;
+    background-color: var(--success);
+    transition: 0.3s ease;
+}
+.action-info:hover{
+    color: white;
+    border: 2px solid white;
+    border-radius: 7px;
+    padding: 5px 10px;
+}
+
+/* ICON COLORS */
+.icon-primary{
+   color: var(--primary-color);
+}
+.icon-danger{
+   color: var(--danger);
+}
+.icon-success{
+    color: var(--success);
+}
+.icon-normal{
+    color: var(--text-color);
+}
+.icon-info{
+    color:#64aae0;
+}
+.icon-disabled{
+    color: #555;
+}
+
+/* SIGN COLORS */
+.sign-primary{
+    color: var(--primary-color);
+    background-color: #f3eaff;
+    font-size: 30px;    
+    padding: 12px;
+    border-radius: 10px;font-size: 30px;
+    
+}.sign-danger{
+    color: var(--danger);
+    background-color: #ffdcd8;
+    font-size: 30px;    
+    padding: 12px;
+    border-radius: 10px;
+}.sign-success{
+    color: var(--success);
+    background-color: #cffdda;
+    font-size: 30px;    
+    padding: 12px;
+    border-radius: 10px;
+}
+
+/* CLOSE BUTTON */
+.icon-close{
+    top: 20px;
+    right: 20px;
+    font-size: 25px;
+    position: absolute;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-color);
+}
+
+.note {
+    margin-top: 20px;
+    color: #aaaaaa;
+    width: 100%;
 }

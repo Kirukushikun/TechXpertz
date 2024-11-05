@@ -118,6 +118,11 @@
     box-shadow: rgba(190, 197, 204, 0.2) 0px 8px 24px;
     background-color: #fff;
 
+}.chat-area .chat-header .back-btn{
+    color: var(--primary-color);
+    font-size: 18px;
+    margin-right: 20px;
+    margin-left: 15px;
 }
 
 .chat-header span {
@@ -233,4 +238,22 @@
         padding: 40px 5%;
     }
     
+}
+
+@media(max-width:779px){
+    /* .chat-container .sidebar {
+        width: 100%;
+    } */
+    /* .sidebar.hidden {
+        display: none;
+    }
+
+    .chat-area.hidden{
+        display: none;
+    } */
+    
+
+    .chat-container{
+        overflow-y: scroll;
+    }
 }

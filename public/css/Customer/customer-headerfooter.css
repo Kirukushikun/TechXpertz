@@ -3,16 +3,33 @@
 :root {
     --highlight: #9147F2;
     --primary-color: #7B5CAD;
-    --secondary-color: #EEE3FF;
-    --dark-grey: #666666;
-    --light-grey: #f0f0f0;
-    --white: #FFFFFF;
+    --primary-hover-color: #6238a7;
 
-    --text-color: #383838;
-    --lighted-text-color: #999999;
+    --white-background: #ffffff;
 
-    --danger: #EB4335;
-    --success: #34A853;
+    --gray-light-background: #f5f5f5;
+    --gray-dark-background: #dddddd;
+
+    --text-color-black: #1E1E1E;
+    --text-color-white: white;
+    --text-color-lighted: #666;
+
+    --text-color-danger: #EB4335;
+    --background-color-danger: #fde7e7;
+
+    --text-color-success: #3dce3d;
+    --background-color-success: #ebfde7;
+
+    --border-color: #ccc;
+
+    --font-logo: 34px;
+    --font-label:18px;
+    --font-paragraph: 16px;
+    --font-h1: 45px;
+
+    --font-icon-small:18px;
+    --font-icon-medium:24px;
+    --font-icon-large:33px;
 }
 
 * {
@@ -70,7 +87,7 @@
     cursor: pointer;
 }
 .collapse-header .logo{
-    font-size: 28px;
+    font-size: var(--font-logo);
     font-weight: bold;
     color: var(--text-color);
     cursor: pointer;
@@ -91,14 +108,14 @@
     background: none;
     outline: none;
     padding: 10px;
-    font-size: 14px;
+    font-size: var(--font-paragraph);
     width: 100%;
 }
 .navbar-collapse .search-bar button {
     background: none;
     border: none;
     color: var(--primary-color);
-    font-size: 18px;
+    font-size: var(--font-icon-small);
     cursor: pointer;
     margin-right: 10px;
 }
@@ -139,7 +156,7 @@
     border-radius: 6px;
     padding: 15px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: var(--font-paragraph);
 }.collapse-footer .account-button i{
     margin-right: 15px;
 }
@@ -148,7 +165,7 @@
 
 
 .navbar .logo {
-    font-size: 34px;
+    font-size: var(--font-logo);
     font-weight: bold;
     color: var(--text-color);
     cursor: pointer;
@@ -170,14 +187,14 @@
     background: none;
     outline: none;
     padding: 10px;
-    font-size: 16px;
+    font-size: var(--font-paragraph);
     width: 100%;
 }
 .navbar .search-bar button {
     background: none;
     border: none;
     color: var(--primary-color);
-    font-size: 18px;
+    font-size: var(--font-icon-small);
     cursor: pointer;
     margin-right: 10px;
 }
@@ -187,9 +204,12 @@
     gap: 20px;
 }
 .navbar .icons i {
-    font-size: 20px;
+    font-size: var(--font-icon-medium);
     color: var(--text-color);
     cursor: pointer;
+    transition: 0.3s ease;
+}.navbar .icons i:hover {
+    transform: scale(1.2);
 }
 
 .navbar .account-button {
@@ -202,8 +222,15 @@
     border-radius: 6px;
     padding: 15px 30px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: var(--font-paragraph);
+    transition: 0.3s ease;
 }
+
+.navbar .account-button:hover {
+    background: #6238a7;
+}
+
+
 .navbar .account-button i{
     margin-right: 20px;
     color: white;
@@ -220,7 +247,7 @@
     text-decoration: none;
     color: var(--text-color);
     font-weight: 400;
-    font-size: 100%;
+    font-size: var(--font-paragraph);
 }
 
 
@@ -235,7 +262,7 @@
 }
 
 .footer-container .footer-logo{
-    font-size: 15px;
+    font-size: var(--font-paragraph);
 }.footer-container .footer-logo .description{
     width: 400px;
 }
@@ -244,12 +271,12 @@
     display: flex;
     align-items: center;
     gap: 20px;
-    margin-top: 25px;
-    width: 350px;
+    margin-top: 20px;
+    width: 370px;
 }
 .footer-container .contact-info i{
     color: var(--text-color);
-    font-size: 35px;
+    font-size: var(--font-icon-large);
 }
 .footer-container .contact-info a{
     text-decoration: none;
@@ -284,8 +311,8 @@
 }
 .social-icons a{
     color: #a8a8a8;
-    background-color: #f3f3f3;
-    font-size: 20px;
+    background-color: var(--gray-light-background);
+    font-size: var(--font-icon-small);
     width: 40px;
     height: 40px;
 
@@ -299,7 +326,7 @@
 
 .footer-bottom{
     padding: 20px 15%;
-    font-size: 15px;
+    font-size: var(--font-paragraph);
     background-color: #515151;
     color: #eeeeee;
     font-weight: 300;
@@ -307,7 +334,7 @@
 }
 
 footer .logo {
-    font-size: 34px;
+    font-size: var(--font-logo);
     font-weight: bold;
     color: var(--text-color);
     cursor: pointer;
@@ -335,9 +362,6 @@ footer span {
     .categories {
         padding: 10px 5%;
     }
-    .categories a {
-        font-size: 90%;
-    }
 }
 
 @media(max-width:1328px){
@@ -345,12 +369,15 @@ footer span {
         gap: 30px;
     }
     .categories a {
-        font-size: 500;
         font-size: 80%;
     }
 }
 
 @media(max-width:1116px){
+    :root{
+        --font-h1: 37px;
+
+    }
     .navbar {
         display: none;
         padding: 15px 45px;
@@ -368,7 +395,7 @@ footer span {
         width: 100px;
     }
     .navbar .icons i{
-        font-size: 23px;
+        font-size: var(--font-icon-medium);
     }
 
     .navbar-collapse.active{
@@ -379,27 +406,33 @@ footer span {
 }
 
 @media(max-width:456px){
-    .navbar .logo {
-        font-size: 29px;
+    :root{
+        --font-logo: 29px;
+        --font-label:15px;
+        --font-paragraph: 14px;
+        --font-h1: 35px;
+    
+        --font-icon-small:15px;
+        --font-icon-medium:19px;
+        --font-icon-large:29px;
     }
 
     .navbar.collapse {
         display: flex;
         padding: 15px 25px;
     }
-
-    .navbar .icons i {
-        font-size: 18px;
-    }
 }
 
 @media(max-width:379px){
-    .navbar .logo {
-        font-size: 22px;
-    }
-
-    .navbar .icons i {
-        font-size: 18px;
+    :root{
+        --font-logo: 23px;
+        --font-paragraph: 13px;
+        --font-label:14px;
+        --font-h1: 33px;
+    
+        --font-icon-small:14px;
+        --font-icon-medium:17px;
+        --font-icon-large:27px;
     }
 }
 
@@ -441,22 +474,20 @@ footer span {
     .footer-container .footer-logo{
         width: 100%;
     }.footer-container .footer-logo .description{
-        width: 400px;
-    }
-    
-    .footer-container .contact-info{
+        width: unset;
+        
+    }    
+
+    .footer-container .contact-info {
         display: flex;
         align-items: center;
         gap: 20px;
         margin-top: 25px;
-        width: 350px;
+        width: 400px;
     }
 }
 
 @media(max-width:468px){
-    footer .logo {
-        font-size: 29px;
-    }
     .footer-container .footer-logo{
         width: 100%;
         text-align: center;
@@ -487,10 +518,6 @@ footer span {
 
 
 @media(max-width:379px){
-    footer .logo {
-        font-size: 22px;
-    }
-
     .footer-container .contact-info{
         display: flex;
         flex-direction: column;
@@ -499,27 +526,47 @@ footer span {
 
 
 @media(max-height:705px){
-    .collapse-categories a{
-        font-size: 15px;
+
+    :root{
+        --font-logo: 29px;
+        --font-label:15px;
+        --font-paragraph: 14px;
+        --font-h1: 35px;
+    
+        --font-icon-small:15px;
+        --font-icon-medium:18px;
+        --font-icon-large:29px;
     }
+    
     .collapse-footer{
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: end;
-    }
-    .collapse-footer .account-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--primary-color);
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        padding: 12px;
-        cursor: pointer;
-        font-size: 14px;
     }.collapse-footer .account-button i{
         margin-right: 13px;
     }
 }
+
+@media(max-height:672px){
+    :root{
+        --font-logo: 25px;
+        --font-label:14px;
+        --font-paragraph: 13px;
+        --font-h1: 33px;
+    
+        --font-icon-small:15px;
+        --font-icon-medium:18px;
+        --font-icon-large:29px;
+    }
+    .collapse-categories a{
+        font-size: var(--font-paragraph);
+        padding: 7px 11px;
+    }
+    .collapse-footer .account-button {
+        font-size: var(--font-paragraph);
+    }.collapse-footer .account-button i{
+        margin-right: 13px;
+    }
+}
+

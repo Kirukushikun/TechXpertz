@@ -10,7 +10,6 @@
     --white: #FFFFFF;
 
     --text-color: #383838;
-    --lighted-text-color: #999999;
 }
 
 * {
@@ -18,7 +17,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins";
-    color: var(--text-color);
+   
 }
 
 .upper {
@@ -33,28 +32,6 @@
 
 }
 
-.upper .header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    text-align: center;
-    padding: 40px;
-    margin-bottom: 20px;
-}
-
-.upper .header h1 {
-    color: var(--white);
-    font-size: 40px;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-
-.upper .header p {
-    color: var(--lighted-text-color);
-    width: 55%;
-}
-
 
 
 /* Search Box */
@@ -63,6 +40,7 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
+    color: var(--text-color-black);
 }
 
 .repair-card{
@@ -78,7 +56,7 @@
     justify-content: center;
     width: 50%;
     border-radius: 8px 0 0 8px;
-    background-color: #7B5CAD;
+    background-color: var(--primary-color);
     background-position:center;
 } .repair-card .img img{
     width: 180px;
@@ -98,6 +76,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+}.left-details p, .right-details p, .left-details li{
+    font-size: var(--font-paragraph);
 }
 .right-details{
     display: flex;
@@ -107,19 +87,19 @@
 }
 
 .left-details .device-details p{
-    color: var(--lighted-text-color);
+    color: var(--text-color-lighted);
     font-weight: 500;
 }.left-details .device-details .repair-status{
-    border: solid 2px #d9d9d9;
+    border: solid 2px var(--border-color);
     padding: 5px 15px;
     border-radius: 7px;
     width:fit-content;
-    color: var(--dark-grey);
+    color: var(--text-color-black);
     font-weight: 500;
 }
 
 .left-details .repairshop-details p{
-    color: var(--lighted-text-color);
+    color: var(--text-color-lighted);
     font-weight: 500;
 }.left-details .repairshop-details h3{
     color: var(--h);
@@ -132,16 +112,17 @@
 }
 
 .right-details .repair-payment-status p{
-    color: var(--lighted-text-color);
+    color: var(--text-color-lighted);
     font-weight: 500;
 }
 .right-details .repair-payment-cost p{
-    color: var(--lighted-text-color);
+    color: var(--text-color-lighted);
     font-weight: 500;
 }.right-details .repair-payment-cost h1{
     color: var(--primary-color);
+    font-size: var(--font-logo);
 }.right-details .repair-payment-cost button{
-    font-size: 20px;
+    font-size: var(--font-label);
     font-weight: 600;
     border: none;
     background-color: #f2e747;
@@ -150,12 +131,13 @@
     border-radius: 5px;
     padding: 8px;
     cursor: pointer;
+    font-size: var(--font-paragraph);
 }.right-details .repair-payment-cost button i{
-    color: white;
+    color: var(--text-color-white);
 }
 
 .repair-buttons button{
-    font-size: 18px;
+    font-size: var(--font-label);
     font-weight: 500;
     letter-spacing: 1px;
     padding: 10px 20px;
@@ -164,13 +146,13 @@
 }.repair-buttons .repair-view-details{
     border: 2px solid var(--primary-color);
     background-color: var(--primary-color);
-    color: white;
+    color: var(--text-color-white);
 }.repair-buttons .repair-chat{
     border: 2px solid #d9d9d9;
     background-color: transparent;
 }.repair-buttons .repair-chat i{
     color: var(--primary-color);
-    font-size: 15px;
+    font-size: var(--font-paragraph);
 }
 
 .repair-payment-status{
@@ -195,15 +177,16 @@
 }
 
 .upper .header h1 {
-    color: var(--white);
-    font-size: 40px;
+    color: var(--text-color-white);
     font-weight: 600;
     margin-bottom: 10px;
+    font-size: var(--font-h1) ;
 }
 
 .upper .header p {
-    color: var(--lighted-text-color);
+    color: #999999;
     width: 55%;
+    font-size: var(--font-paragraph);
 }
 
 /* Search Box */
@@ -215,7 +198,7 @@
     gap: 20px;
 
     width: 55%;
-    background-color: white;
+    background-color: var(--white-background);
     border-radius: 10px;
     padding: 50px 70px;
 
@@ -225,21 +208,35 @@
     transform: translate(-50%, -50%);
 
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-}.upper .search-box input{
-    flex: 3;
-    padding: 12px;
-    font-size: 15px;
+}.upper .search-box .search-input{
+    display: flex;
+    align-items: center;
+    border: solid var(--border-color) 2px;
     border-radius: 7px;
-    border: solid #D9D9D9 2px;
     width: 100%;
-}.upper .search-box button{
+    flex: 3;
+}
+.upper .search-box .search-input input{
+    width: 100%;
+    padding: 12px;
+    font-size: var(--font-paragraph);
+    border: none;
+    outline: none;
+}
+.upper .search-box .search-input i{
+    padding: 12px;
+    font-size: var(--font-paragraph);
+    color: var(--primary-color);
+    display: none;
+}
+.upper .search-box button{
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 1px;
     padding: 15px 30px;
     border: none;
     border-radius: 5px;
-    color: var(--white);
+    color: var(--white-background);
     background-color: var(--primary-color);
     cursor: pointer;
 }
@@ -275,11 +272,28 @@ input::-webkit-inner-spin-button {
 }
 
 @media(max-width:894px){
-    /* .repair-card .img{
+    .repair-card .img{
         display: none;
-    }  */
+    } 
     .upper .search-box {
         width: 90%;
+    }
+    
+}
+
+@media(max-width:700px){
+    .upper .header {
+        padding: 20px 10px;
+    }
+
+    .upper .search-box {
+        flex-direction: column;
+    }
+    .upper .search-box button {
+        display: none;
+    }
+    .upper .search-box .search-input i{
+        display: block;
     }
 
     .repair-card .repair-info{
@@ -296,13 +310,12 @@ input::-webkit-inner-spin-button {
         display: flex;
         justify-content: end;
     }
-    
-}
 
-@media(max-width:700px){
-    .upper .search-box {
-        flex-direction: column;
+    .repair-card .repair-info {
+        gap: 20px;
     }
+
+
 }
 
 @media(max-width:656px){

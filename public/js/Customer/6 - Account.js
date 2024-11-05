@@ -1,32 +1,68 @@
-//SIDEBAR FUNCTION
-const links = document.querySelectorAll('.profile-navigation a');
-const sections = document.querySelectorAll('.left .form-section');
+// Select navigation links and sections from both navigation types
+const mainLinks = document.querySelectorAll('.right .profile-navigation a');
+const collapseLinks = document.querySelectorAll('.right-collapse .profile-navigation a');
+const sections = document.querySelectorAll('.account-form .form-section');
 
-// Add event listeners to each navigation link
-links.forEach(link => {
+// Function to handle the display of sections
+function displaySection(sectionId) {
+    // Hide all sections
+    sections.forEach(section => section.style.display = 'none');
+
+    // Show the selected section
+    const targetSection = document.querySelector(`.account-form .form-section#${sectionId}`);
+    if (targetSection) {
+        targetSection.style.display = 'flex';
+    }
+}
+
+// Function to handle link activation
+function activateLink(linkElement) {
+    // Remove the 'active' class from all links in both navigation types
+    mainLinks.forEach(link => link.classList.remove('active'));
+    collapseLinks.forEach(link => link.classList.remove('active'));
+
+    // Add 'active' class to the clicked link and its counterpart in both navigation types
+    const targetSelector = linkElement.getAttribute('data-target');
+    
+    // Activate the clicked link
+    linkElement.classList.add('active');
+    
+    // Find the corresponding link in the other navigation and activate it
+    const correspondingLinkInMain = Array.from(mainLinks).find(link => link.getAttribute('data-target') === targetSelector);
+    const correspondingLinkInCollapse = Array.from(collapseLinks).find(link => link.getAttribute('data-target') === targetSelector);
+    
+    if (correspondingLinkInMain) {
+        correspondingLinkInMain.classList.add('active');
+    }
+    if (correspondingLinkInCollapse) {
+        correspondingLinkInCollapse.classList.add('active');
+    }
+}
+
+// Add event listeners to each link in both navigation types
+[...mainLinks, ...collapseLinks].forEach(link => {
     link.addEventListener('click', function (event) {
         event.preventDefault();
 
-        // Remove the 'active' class from all links
-        links.forEach(link => link.classList.remove('active'));
-
-        // Add the 'active' class to the clicked link
-        this.classList.add('active');
-
-        // Hide all sections
-        sections.forEach(section => section.style.display = 'none');
-
-        // Show the corresponding section
+        // Get the target section ID and display the section
         const sectionId = this.getAttribute('data-target');
-        document.getElementById(sectionId).style.display = 'flex';
+        displaySection(sectionId);
+
+        // Activate the clicked link in both navigation types
+        activateLink(this);
     });
 });
 
 // Display the first section by default
-sections[0].style.display = 'flex';
+if (sections.length > 0) {
+    displaySection(sections[0].id);
+}
 
 
-
+// Display the first section by default
+if (sections.length > 0) {
+    displaySection(sections[0].id);
+}
 
 //PREVIEW IMAGE FUNCTION
 function previewImage(event) {
@@ -172,3 +208,35 @@ function updateNotification(notificationID) {
     }
 
 }
+
+//DELETE ACCOUNT FUNCTION
+let deleteBtn = document.getElementById('delete-account-btn');
+deleteBtn.addEventListener('click', function(){
+    let customerID = this.getAttribute('data-customer-id');
+    modal.innerHTML = `
+        <form action="/customer/myaccount/${customerID}" method="POST">
+            <input type="hidden" name="_token" value="${csrfToken}">
+            <input type="hidden" name="_method" value="PATCH">
+            
+            <div class="modal-verification">
+                <i class="fa-solid fa-triangle-exclamation" id="exclamation"></i>
+                
+                <div class="verification-message">
+                    <h2>Delete Account</h2>
+                    <p>Are you sure you want to permanently delete your account? <br>This action cannot be undone.</p>                        
+                </div>
+                
+                <div class="verification-action">
+                    <button type="submit" class="danger">Confirm Account Deletion</button>
+                    <button type="button" class="close normal"><b>Dismiss</b></button>
+                </div>
+            </div>                 
+        </form>
+    `;
+
+    modal.classList.add('active');
+
+    document.querySelector('.close').onclick = function () {
+        modal.classList.remove('active');
+    };
+});

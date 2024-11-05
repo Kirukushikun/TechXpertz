@@ -34,7 +34,9 @@
                         <div class="contact-info">
                             <div class="name">
                                 <h4>{{$technician->shop_name}}</h4>
-                                <span class="time">{{$conversation->updated_at->format('H:i')}}</span>
+                                @if($recentMessage)
+                                    <span class="time">{{$recentMessage->created_at->format('H:i')}}</span>
+                                @endif
                             </div>
                             <div class="recent-chat">
                                 @if($recentMessage)
@@ -62,6 +64,7 @@
     <main class="chat-area">
         @if($conversations->isNotEmpty())
             <header class="chat-header">
+                <!-- <i class="fa-solid fa-arrow-left back-btn"></i> -->
                 @if($technicianProfile->image_profile)
                     <span id="image" style="background-image: url('{{ asset($technicianProfile->image_profile) }}');"></span>
                 @else

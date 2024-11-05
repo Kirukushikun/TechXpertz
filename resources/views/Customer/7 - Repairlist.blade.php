@@ -29,7 +29,10 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
             </div>
             <form class="search-box">
-                <input type="number" id="repairId" name="repairId" placeholder="Please enter your repair ID here" required>
+                <div class="search-input">
+                    <input type="number" id="repairId" name="repairId" placeholder="Please enter your repair ID here" required>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
                 <button type="submit" id="repairBtn">Track Repair Status</button>
             </form>
         </div>
@@ -93,6 +96,7 @@
         @yield('footer')
         
         <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+        <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
     </body>
     
 </html>

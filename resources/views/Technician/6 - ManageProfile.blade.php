@@ -73,7 +73,7 @@
 
         <!-- PUSH NOTIFICATION -->
         @if(session()->has('error'))
-            <div class="push-notification danger active">
+            <div class="push-notification danger">
                 <i class="fa-solid fa-bell danger"></i>
                 <div class="notification-message">
                     <h4>{{session('error')}}</h4>
@@ -82,7 +82,7 @@
                 <i class="fa-solid fa-xmark" id="close-notification"></i>
             </div>
         @elseif(session()->has('success'))
-            <div class="push-notification success active">
+            <div class="push-notification success">
                 <i class="fa-solid fa-bell success"></i>
                 <div class="notification-message">
                     <h4>{{session('success')}}</h4>
@@ -102,6 +102,12 @@
 
             <header>
                 <h1>Manage Profile</h1>
+                <div class="technician-name">
+                    @php
+                        $technician = Auth::guard('technician')->user();
+                    @endphp
+                    <h3>Hi, <span>{{$technician->firstname}}.</span></h3>
+                </div>
             </header>
 
             <form class="manage-profile" id="manage-profile" action="{{route('technician.updateProfile')}}" method="POST" enctype="multipart/form-data">
@@ -115,9 +121,9 @@
                             <div class="image-container img1">
                                 <div class="images" style="background-image: url('{{ asset($technicianImages->image_profile) }}');"></div>                                   
                                 <div class="image-action">
-                                    <i class="fa-solid fa-eye"></i>
+                                    <i class="fa-solid fa-eye preview-image" data-image-url="{{ asset($technicianImages->image_profile) }}"></i>
                                     <i class="fa-solid fa-pen-to-square upload" data-image="image_profile" data-technician-id="{{$technicianImages->technician_id}}"></i>
-                                    <i class="fa-solid fa-trash"></i>
+                                    <i class="fa-solid fa-trash delete-image" data-image="image_profile" data-technician-id="{{$technicianImages->technician_id}}"></i>
                                 </div>
                             </div>
                         @else
@@ -132,9 +138,9 @@
                                 <div class="image-container img{{$image}}">
                                     <div class="images" style="background-image: url('{{ asset($technicianImages->{'image_' .$image}) }}');"></div> 
                                     <div class="image-action">
-                                        <i class="fa-solid fa-eye"></i>
+                                        <i class="fa-solid fa-eye preview-image" data-image-url="{{ asset($technicianImages->{'image_' . $image}) }}"></i>
                                         <i class="fa-solid fa-pen-to-square upload" data-image="image_{{$image}}" data-technician-id="{{$technicianImages->technician_id}}"></i>
-                                        <i class="fa-solid fa-trash"></i>
+                                        <i class="fa-solid fa-trash delete-image" data-image="image_{{$image}}" data-technician-id="{{$technicianImages->technician_id}}"></i>
                                     </div>
                                 </div>
                             @else
@@ -148,10 +154,16 @@
                     <br>
                     <h3>Shop Links<img src="{{asset('images/link.png')}}"></h3>
                     <div class="shop-links">
-
+                        @foreach(['youtube', 'linkedin', 'twitter', 'facebook', 'telegram'] as $link)
+                            @if($technicianSocials && $technicianSocials->$link)
+                            <div class="link">
+                                <p><i class="fa-brands fa-{{$link}} link-icon"></i><span>: {{$technicianSocials->$link}}</span></p>
+                                <i class="fa-regular fa-trash-can delete" data-social="{{$link}}" data-technician-id="{{$technician->id}}"></i>
+                            </div>
+                            @endif
+                        @endforeach
                     </div>
-
-                    <button class="add-link" type="button">Add Link<i class="fa-solid fa-plus"></i></button>
+                    <button class="add-link" data-technician-id="{{$technician->id}}" type="button">Add Link<i class="fa-solid fa-plus"></i></button>
                 </div>
 
                 <div class="right-content">
@@ -361,9 +373,56 @@
                 
             </form>
 
+
         </main>
     </div>
     
+    <script>
+        // Function to open modal with the image view
+        function viewImage(imageUrl) {
+            const modal = document.getElementById('modal');
+
+            // Set the modal content to display the image with a close button
+            modal.innerHTML = `
+                <div class="image-preview-container" style="background-image: url('${imageUrl}');">
+                    <i class="fa-solid fa-xmark close icon-close"></i>
+
+                </div>
+            `;
+
+            // Show the modal
+            modal.classList.add("active");
+
+            // Close modal when 'X' is clicked
+            document.querySelectorAll('.close').forEach(button => {
+                button.onclick = function () {
+                    modal.classList.remove("active");
+                };
+            });
+        }
+
+        // Attach event listeners to the "eye" icons
+        document.querySelectorAll('.preview-image').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const imageUrl = this.getAttribute('data-image-url');
+                viewImage(imageUrl);
+            });
+        });
+    </script>
+
+    <script>
+        function setActive(selectedItem) {
+            // Remove 'active' class from all radio buttons
+            document.querySelectorAll('.form-details').forEach(item => item.classList.remove('active'));
+
+            // Add 'active' class to the selected radio button container
+            const selectedElement = document.getElementById(selectedItem).parentElement;
+            selectedElement.classList.add('active');
+
+            // Set the radio button as checked
+            document.getElementById(selectedItem).checked = true;
+        }
+    </script>
     <script src="{{asset('js/Technician/6 - ManageProfile.js')}}" defer></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}" defer></script>
     <script src="{{asset('js/Technician/technician-notification.js')}}" defer></script>
