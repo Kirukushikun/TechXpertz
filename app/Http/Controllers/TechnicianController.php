@@ -1055,7 +1055,7 @@ class TechnicianController extends Controller
         }
 
         public function deleteLink($technicianID, $social){
-            $technicianSocials = RepairShop_Socials::where('technicianID', $technicianID)->first();
+            $technicianSocials = RepairShop_Socials::where('technician_id', $technicianID)->first();
 
             $technicianSocials->update([
                 $social => null,

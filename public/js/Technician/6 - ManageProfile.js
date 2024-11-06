@@ -449,11 +449,13 @@ document.querySelectorAll('.delete').forEach(deleteBtn => {
 });
 
 function deleteLink(technicianID, social){
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
     fetch(`/technician/${technicianID}/${social}`, {
         method: 'PATCH', // You can use 'PUT' or 'PATCH' depending on your API design
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'X-CSRF-TOKEN': csrfToken,
         }
     })
     .then(response => {

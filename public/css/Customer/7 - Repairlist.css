@@ -247,6 +247,37 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+.pagination{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    margin-top: 20px;
+}
+.pagination a{
+    color: #7B5CAD;
+    background-color: #EEE3FF;
+    font-size: 14px;
+    font-weight: 600;
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    
+    border-radius: 7px;
+}.pagination a.active{
+    color: white;
+    background-color: #7B5CAD;
+    transform: scale(1.1);
+}
+.pagination a:hover{
+    transform: scale(1.2);
+}
+
 @media(max-width:1825px){
     .repair-list-container{
         margin: 125px 10% 55px;
