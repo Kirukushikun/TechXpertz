@@ -13,7 +13,7 @@
 <div class="form-container">
     <h1>Reset <span>Password</span></h1>
     <p>Enter a new password below to change your password</p>
-    <form action="{{route('customer.reset.update')}}" method="POST">
+    <form action="{{route('technician.reset.update')}}" method="POST">
         @if(session()->has('error'))
             <p class="error-message">{{session('error')}}</p>
         @endif

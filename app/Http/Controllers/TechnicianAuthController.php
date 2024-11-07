@@ -174,4 +174,26 @@ class TechnicianAuthController extends Controller
         return view('Technician.0 - ResetPassword');
     }
 
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:8',
+            'token' => 'required'
+        ]);
+
+        $status = Password::broker('technicians')->reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => bcrypt($password)
+                ])->save();
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('technician.login')->with('success', __($status))
+            : back()->withErrors(['error' => __($status)]);
+    }
+
 }

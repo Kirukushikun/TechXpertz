@@ -162,7 +162,7 @@ class CustomerAuthController extends Controller
 
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('customer.login')->with('success', __($status))
-            : back()->withErrors(['email' => __($status)]);
+            : back()->withErrors(['error' => __($status)]);
     }
 
     public function verify(Request $request, $id, $hash)
