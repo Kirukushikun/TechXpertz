@@ -26,7 +26,7 @@
         <div class="upper">
             <div class="header">
                 <h1>Track Your Repair Status</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                <p>Stay updated on the progress of your device repair. Check real-time updates to know exactly when your device will be ready for pickup or delivery.</p>
             </div>
             <form class="search-box">
                 <div class="search-input">

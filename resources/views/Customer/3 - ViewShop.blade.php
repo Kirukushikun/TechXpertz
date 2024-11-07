@@ -16,6 +16,9 @@
     </head>
     <body>
 
+        <div class="modal" id="modal">
+        </div>
+
         <div class="loading-screen">
             <div class="loader"></div>
         </div>
@@ -29,12 +32,12 @@
             <div class="service-details">
                 <div class="left">
                     <div class="image-gallery">
-                        <span style="background-image: url('{{ asset($repairshopImages->image_profile) }}');"></span>
+                        <span class="preview-image" data-image-url="{{ asset($repairshopImages->image_profile) }}" style="background-image: url('{{ asset($repairshopImages->image_profile) }}');"></span>
                         <div class="thumbnails">
-                            <span style="background-image: url('{{ asset($repairshopImages->image_2) }}');"></span>
-                            <span style="background-image: url('{{ asset($repairshopImages->image_3) }}');"></span>
-                            <span style="background-image: url('{{ asset($repairshopImages->image_4) }}');"></span>
-                            <span style="background-image: url('{{ asset($repairshopImages->image_5) }}');"></span>
+                            <span class="preview-image" data-image-url="{{ asset($repairshopImages->image_2) }}" style="background-image: url('{{ asset($repairshopImages->image_2) }}');"></span>
+                            <span class="preview-image" data-image-url="{{ asset($repairshopImages->image_3) }}" style="background-image: url('{{ asset($repairshopImages->image_3) }}');"></span>
+                            <span class="preview-image" data-image-url="{{ asset($repairshopImages->image_4) }}" style="background-image: url('{{ asset($repairshopImages->image_4) }}');"></span>
+                            <span class="preview-image" data-image-url="{{ asset($repairshopImages->image_5) }}" style="background-image: url('{{ asset($repairshopImages->image_5) }}');"></span>
                         </div>
                     </div>
                     <div class="social-icons">
@@ -225,6 +228,40 @@
         </div>
 
         @yield('footer')
+
+        <script>
+            // Function to open modal with the image view
+            function viewImage(imageUrl) {
+                const modal = document.getElementById('modal');
+
+                // Set the modal content to display the image with a close button
+                modal.innerHTML = `
+                    <div class="image-preview-container" style="background-image: url('${imageUrl}');">
+                        <i class="fa-solid fa-xmark close icon-close"></i>
+                    </div>
+                `;
+
+                // Show the modal
+                modal.classList.add("active");
+
+                // Close modal when 'X' is clicked
+                document.querySelectorAll('.close').forEach(button => {
+                    button.onclick = function () {
+                        modal.classList.remove("active");
+                    };
+                });
+            }
+
+            // Attach event listeners to the "eye" icons
+            document.querySelectorAll('.preview-image').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    const imageUrl = this.getAttribute('data-image-url');
+                    if(imageUrl != "http://127.0.0.1:8000/"){
+                        viewImage(imageUrl);
+                    }
+                });
+            });
+        </script>
         <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
         <script src="{{asset('js/Customer/3 - ViewShop.js')}}" defer></script>
         <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>

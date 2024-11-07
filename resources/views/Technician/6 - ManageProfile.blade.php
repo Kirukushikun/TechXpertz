@@ -386,7 +386,6 @@
             modal.innerHTML = `
                 <div class="image-preview-container" style="background-image: url('${imageUrl}');">
                     <i class="fa-solid fa-xmark close icon-close"></i>
-
                 </div>
             `;
 

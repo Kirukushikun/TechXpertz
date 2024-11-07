@@ -145,8 +145,8 @@
                             <input type="email" id="email" name="email" value="{{$customerData->email}}" required>
                         </div>
                         <div class="form-group">
-                            <label for="phone">Mobile Phone Number</label>
-                            <input type="tel" id="phone" name="phone">
+                            <label for="contact">Mobile Phone Number</label>
+                            <input type="tel" id="contact" name="contact" value="{{$customerData->contact}}" required>
                         </div>                        
                     </div>
 

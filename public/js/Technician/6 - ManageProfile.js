@@ -357,26 +357,7 @@ function verifyDeleteImage(technicianID, imageType){
 // ADD LINK FUNCTION
 // Function to add a new link
 document.querySelector('.add-link').addEventListener('click', function () {
-    // const shopLinks = document.querySelector('.shop-links');
-
-    // // Create a new link div
-    // const newLink = document.createElement('div');
-    // newLink.classList.add('link');
-
-    // // Add the inner HTML for the new link
-    // newLink.innerHTML = `
-    //     <p><i class="fa-brands fa-youtube link-icon"></i><span>: https://www.w3.org/Provider/Style/dummy.html</span></p>
-    //     <i class="fa-regular fa-trash-can delete"></i>
-    // `;
-
-    // // Append the new link to the container
-    // shopLinks.appendChild(newLink);
-
-    // // Add event listener to the delete icon for the newly created link
-    // newLink.querySelector('.delete').addEventListener('click', function () {
-    //     newLink.remove();
-    // });
-
+    
     const technicianID = this.getAttribute('data-technician-id');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const modal = document.getElementById('modal');

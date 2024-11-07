@@ -17,19 +17,18 @@ class CustomerTableSeeder extends Seeder
      */
     public function run(): void
     {   
-        if(Customer::count() <= 1){
-            $faker = Faker::create();
-            foreach (range(1, 100) as $index) {
-                Customer::create([ // Add the leading backslash here
-                    'profile_status' => 'verified',
-                    'image_profile' => null,
-                    'image_status' => 'active',
-                    'firstname' => $faker->firstName, // Change name to firstName for better accuracy
-                    'lastname' => $faker->lastName,
-                    'email' => $faker->unique()->safeEmail,
-                    'password' => bcrypt('password'),
-                ]);
-            }
+        $faker = Faker::create();
+        foreach (range(1, 200) as $index) {
+            Customer::create([ // Add the leading backslash here
+                'profile_status' => 'verified',
+                'image_profile' => null,
+                'image_status' => 'active',
+                'firstname' => $faker->firstName, // Change name to firstName for better accuracy
+                'lastname' => $faker->lastName,
+                'email' => $faker->unique()->safeEmail,
+                'contact' => $faker->phoneNumber,
+                'password' => bcrypt('password'),
+            ]);
         }
     }
 }

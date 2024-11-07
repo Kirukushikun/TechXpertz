@@ -21,6 +21,7 @@
             <input type="text" name="firstname" id="firstname" placeholder="First Name" required>
             <input type="text" name="lastname" id="lastname" placeholder="Last Name" required>
         </div>
+        <input type="text" name="contact" id="contact" placeholder="Contact Number" required />
         <input type="email" name="email" id="email" placeholder="Email Address" required />
         <input type="password" name="password" placeholder="Password" required />
         <input type="password" name="cpassword" placeholder="Confirm Password" required />

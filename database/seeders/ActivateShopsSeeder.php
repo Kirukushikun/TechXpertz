@@ -66,7 +66,7 @@ class ActivateShopsSeeder extends Seeder
                 'description' => $faker->sentence(20),
             ]);
 
-            RepairShop_Mastery::create([
+            $repairshopMastery = RepairShop_Mastery::create([
                 'technician_id' => $technician->id,
                 'main_mastery' => Arr::random($masteries),
                 'Smartphone' => Arr::random([1, 0]),
@@ -79,6 +79,19 @@ class ActivateShopsSeeder extends Seeder
                 'Speaker' => Arr::random([1, 0]),
                 'Drone' => Arr::random([1, 0]),
                 'All-In-One' => Arr::random([1, 0]),
+            ]);
+
+            $randomNumber = Arr::random([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+            $imagePath = 'ShopImageSample/' . $repairshopMastery->main_mastery . '-' . $randomNumber . '.png';
+
+            RepairShop_Images::create([
+                'technician_id' => $technician->id,
+                'gallery_status' => 'Active',
+                'image_profile' => $imagePath,
+                'image_2' => null,
+                'image_3' => null,
+                'image_4' => null,
+                'image_5' => null,
             ]);
 
             RepairShop_Badges::create([
@@ -104,7 +117,7 @@ class ActivateShopsSeeder extends Seeder
                 ]);
             }
 
-            foreach(range(1, 50) as $appointment){
+            foreach(range(1, 100) as $appointment){
                 $selectedCustomer = Customer::find($customer->random()->id);
                 $appointment = RepairShop_Appointments::create([
                     'technician_id' => $technician->id,
@@ -157,7 +170,7 @@ class ActivateShopsSeeder extends Seeder
                     'customer_fullname' => $selectedCustomer->firstname . '' . $selectedCustomer->lastname,
                     'rating' => Arr::random($ratings),
                     'review_comment' => $faker->sentence(30),
-                    'status' => Arr::random([1, 2]),
+                    'status' => Arr::random([2, 1, 2]),
                 ]);
             }
         }

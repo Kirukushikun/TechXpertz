@@ -31,6 +31,10 @@
 }.banner h1{
     font-size: 40px;
     font-weight: 700;
+}.banner p{
+    width: 60%;
+    font-weight: 500;
+    color: var(--text-color-lighted);
 }
 
 .header {
@@ -99,17 +103,18 @@
     flex-direction: column;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     overflow: hidden;
 }
 
 .shop-image {
     height: 280px;
-    background-color: var(--text-color-lighted);
+    background-color: #dddddd;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    border: 1px solid #dddddd;
 }
 
 .shop-details {
@@ -151,11 +156,12 @@
     background: #f1f1f1; /* Background of the scrollbar track */
     border-radius: 5px;
 }.shop-location p::-webkit-scrollbar-thumb {
-    background: var(--text-color-lighted); /* Color of the scrollbar thumb */
+    background: #b9b9b9; /* Color of the scrollbar thumb */
     border-radius: 5px;
-}.shop-location p::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Color of the scrollbar thumb when hovered */
 }
+/* .shop-location p::-webkit-scrollbar-thumb:hover {
+    background: #dddddd; 
+} */
 
 .shop-schedule{
     display: flex;
@@ -216,8 +222,6 @@
     background-color: white;
     color: var(--highlight);
 }.shop-footer .actions .favorite:hover{
-    background-color: var(--primary-color);
-    color: white;
     border-color: var(--primary-color);
 }
 .shop-footer .actions .view{

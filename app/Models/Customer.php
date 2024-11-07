@@ -28,6 +28,7 @@ class Customer extends Authenticatable
         'firstname',
         'lastname',
         'email',
+        'contact',
         'password',
         'profile_status',
         'role',

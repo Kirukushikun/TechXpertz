@@ -23,10 +23,9 @@
         @yield('header')
         
         <div class="container-3">
-
             <div class="banner" style="background-image: url('{{ asset('images/' . $category . '-bg.png') }}');">
                 <h1>{{$category}} Category</h1>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Provident, soluta!</p>
+                <p>Explore trusted repair services in the {{$category}} category. From quick fixes to specialized repairs, find a repair shop that meets your device needs.</p>
             </div>
 
             <div class="header">
@@ -62,7 +61,7 @@
                         $pageNumber = floor($index / $itemsPerPage) + 1;
                     @endphp
                     <div class="shop" data-page="{{ $pageNumber }}">
-                        <div class="shop-image" style="background-image: url('batz-logo.png');"></div>
+                        <div class="shop-image" style="background-image: url('{{ asset($repairshop['repairshopImage']) }}');"></div>
 
                         <div class="shop-details">
                             <div class="shop-name">

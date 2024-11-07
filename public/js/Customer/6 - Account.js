@@ -94,23 +94,25 @@ uploadImage.forEach(button => {
         
         if(actionType == 'upload'){
             modal.innerHTML = `                    
-                <form class="modal-content" action="/customer/myaccount/${actionType}/${customerID}"  method="POST" enctype="multipart/form-data">
+                <form class="modal-upload" action="/customer/myaccount/${actionType}/${customerID}"  method="POST" enctype="multipart/form-data">
 
                     <input type="hidden" name="_token" value="${csrfToken}">
                     <input type="hidden" name="_method" value="PATCH">
 
                     
+                    <i class="fa-solid fa-xmark close icon-close"></i>
+                    <h2>Upload Your Image</h2>
                     <div class="image-upload">
-                        <h2>Upload Your Image</h2>
+                        <img id="upload-icon" src="/images/image-upload-primary.png">
                         <label for="file-input" class="upload-label">
-                            <img id="preview" src="{{ asset('images/image-upload.png') }}" alt="Image Preview">
-                            
+                            <img id="preview">
+                            <!-- <div class="upload-text">Click to Upload Image</div> -->
                         </label>
                         <input id="file-input" type="file" name="image" onchange="previewImage(event)" />
                     </div>
-                    <div class="modal-action">
-                        <button type="submit" class="submit">Save</button>  
-                        <button type="button" class="close normal">Dismiss</button> 
+                    <div class="upload-action">
+                        <button type="submit" class="submit btn-primary">Save</button>  
+                        <!-- <button type="button" class="close">Dismiss</button>  -->
                     </div>
                 </form>
             `;                    
