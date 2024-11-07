@@ -35,7 +35,7 @@
                                 <p>Remember Me</p>
                             </label>
                             
-                            <a href="#">Forgot password?</a>
+                            <a href="/customer/password/forgot">Forgot password?</a>
                         </div>
                         <button type="submit" id="submit" class="load">Sign in</button>
                     </form>

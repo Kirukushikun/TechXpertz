@@ -31,6 +31,13 @@ Route::get('/customer/logout', [CustomerAuthController::class, 'logoutCustomer']
 Route::get('/customer/signup', [CustomerAuthController::class, 'signup'])->name('customer.signup');
 Route::post('/customer/signup', [CustomerAuthController::class, 'signupCustomer'])->name('customer.signupCustomer');
 
+Route::get('/customer/password/forgot', [CustomerAuthController::class, 'forgot'])->name('customer.forgot');
+Route::post('/customer/password/email', [CustomerAuthController::class, 'sendResetLinkEmail'])->name('customer.sendResetLinkEmail');
+
+//customer.reset
+Route::get('/customer/password/reset/{token}', [CustomerAuthController::class, 'resetForm'])->name('customer.reset');
+Route::post('/customer/password/reset', [CustomerAuthController::class, 'resetPassword'])->name('customer.reset.update');
+
 // ----------------------------------------------------------------------------
 
 Route::get('/', [CustomerController::class, 'welcome'])->name('welcome');
@@ -64,6 +71,13 @@ Route::get('/technician/logout', [TechnicianAuthController::class, 'logoutTechni
 
 Route::get('/technician/signup', [TechnicianAuthController::class, 'signup'])->name('technician.signup');
 Route::post('/technician/signup', [TechnicianAuthController::class, 'signupTechnician'])->name('technician.signupTechnician');
+
+//technician.reset
+Route::get('/technician/password/forgot', [TechnicianAuthController::class, 'forgot'])->name('technician.forgot');
+Route::post('/technician/password/email', [TechnicianAuthController::class, 'sendResetLinkEmail'])->name('technician.sendResetLinkEmail');
+
+Route::get('/technician/password/reset/{token}', [TechnicianAuthController::class, 'resetForm'])->name('technician.reset');
+Route::post('/technician/password/reset', [TechnicianAuthController::class, 'resetPassword'])->name('technician.reset.update');
 
 // -----------------------------------------------------------------------------
 

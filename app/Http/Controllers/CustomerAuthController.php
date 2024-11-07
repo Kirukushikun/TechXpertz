@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\Verified;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -19,23 +21,25 @@ class CustomerAuthController extends Controller
         return view('Customer.0 - Login');
     }
     public function loginCustomer(Request $request){
-        // $credentials = $request->only('email', 'password');
-        // if(Auth::attempt($credentials)){
-        //     return redirect()->route('welcome');
-        // }else{
-        //     return redirect(route('customer.login'))->with("error", "Incorrect email or password.");
-        // }
+
+        // Validate the request data
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
         $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember_me'); // Check if 'Remember Me' is checked
+        $remember = $request->filled('remember_me');
 
-        if (Auth::attempt($credentials, $remember)) {
+        // Attempt to log in with the given credentials and remember option
+        if (Auth::guard('web')->attempt($credentials, $remember)) {
             return redirect()->intended(route('welcome'));
-        } else {
-            // Authentication failed, redirect back with an error message
-            return back()->with('error', 'Incorrect email or password.');
         }
+
+        // Authentication failed, redirect back with an error message
+        return back()->with('error', 'Incorrect email or password.');
     }
+
     function logoutCustomer(){
         Session::flush();
         Auth::logout();
@@ -111,5 +115,79 @@ class CustomerAuthController extends Controller
         return back()->with('status', 'Password changed successfully.');
     }
     
+    public function forgot(){
+        return view('Customer.0 - Forgot');
+    }
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $email = $request->validate(['email' => 'required|email']);
+
+        // Check if the email exists in the customers table
+        $isEmailExist = Customer::where('email', $email['email'])->exists();
+        if (!$isEmailExist) {
+            return back()->with('error', 'Email not yet registered');
+        }
+
+        // Send the reset link to the given email
+        $status = Password::broker('customers')->sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+    }
+
+    public function resetForm(){
+        return view('Customer.0 - ResetPassword');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:8',
+            'token' => 'required'
+        ]);
+
+        $status = Password::broker('customers')->reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => bcrypt($password)
+                ])->save();
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('customer.login')->with('success', __($status))
+            : back()->withErrors(['email' => __($status)]);
+    }
+
+    public function verify(Request $request, $id, $hash)
+    {
+        $user = Customer::findOrFail($id);
+
+        if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
+            return redirect('/')->withErrors(['error' => 'Invalid verification link.']);
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect('/')->with('status', 'Email already verified.');
+        }
+
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+        }
+
+        return redirect('/')->with('status', 'Email verified!');
+    }
+
+    public function resend(Request $request)
+    {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('status', 'Verification link sent!');
+    }
 
 }

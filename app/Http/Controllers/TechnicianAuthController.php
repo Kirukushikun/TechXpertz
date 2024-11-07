@@ -9,9 +9,15 @@ use App\Models\RepairShop_Credentials;
 use App\Models\RepairShop_Schedules;
 use App\Models\RepairShop_Images;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\Verified;
+
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class TechnicianAuthController extends Controller
 {
@@ -31,7 +37,7 @@ class TechnicianAuthController extends Controller
 
     function logoutTechnician(){
         Session::flush();
-        Auth::logout();
+        Auth::guard('technician')->logout();
         return redirect()->route('technician.login');
     }
 
@@ -138,4 +144,34 @@ class TechnicianAuthController extends Controller
             return redirect()->route('technician.signup')->with("error", "Error Occurred")->with('error_message', 'An error occurred while processing your request. Please try again');
         }
     }   
+
+
+    public function forgot(){
+        return view('Technician.0 - Forgot');
+    }
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $email = $request->validate(['email' => 'required|email']);
+
+        // Check if the email exists in the customers table
+        $isEmailExist = Technician::where('email', $email['email'])->exists();
+        if (!$isEmailExist) {
+            return back()->with('error', 'Email not yet registered');
+        }
+
+        // Send the reset link to the given email
+        $status = Password::broker('technicians')->sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+    }
+
+    public function resetForm(){
+        return view('Technician.0 - ResetPassword');
+    }
+
 }
