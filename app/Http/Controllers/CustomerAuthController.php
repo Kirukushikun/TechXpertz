@@ -41,8 +41,8 @@ class CustomerAuthController extends Controller
     }
 
     function logoutCustomer(){
-        Session::flush();
         Auth::logout();
+        Session::flush();
         return redirect()->intended(route('customer.login'));
     }
 

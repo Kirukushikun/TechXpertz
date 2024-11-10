@@ -5,10 +5,11 @@
         <i class="fa-solid fa-bars" id="uncollapse-btn"></i>
     </div>
     
-    <div class="search-bar">
-        <input type="text" placeholder="Search here..." />
-        <button><i class="fa fa-search"></i></button>
-    </div>
+    <form class="search-bar" action="{{ route('search') }}" method="GET">
+        @csrf
+        <input type="text" name="query" class="query" id="query" placeholder="Search here..." />
+        <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
 
     <div class="collapse-categories">
         <a href="{{ route('viewcategory', ['category'=>'All']) }}" class="load">All Categories</a>
@@ -35,13 +36,15 @@
 
 <nav class="navbar">
     <div class="logo load" onclick="window.location.href='{{route('welcome')}}'">Tech<span>X</span>pertz</div>
-    <div class="search-bar">
-        <input type="text" placeholder="Search here..." />
-        <button><i class="fa fa-search"></i></button>
-    </div>
+    <form class="search-bar" action="{{ route('search') }}" method="GET">
+        @csrf
+        <input type="text" name="query" class="query" id="query" placeholder="Search here..." />
+        <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
     <div class="icons">
         <i class="fa-solid fa-screwdriver-wrench load" onclick="window.location.href='/repairlist'"></i>
         <i class="fa-solid fa-message" onclick="window.location.href='/messages'"></i>
+        <i class="fa-solid fa-heart" onclick="window.location.href='/customer/favorites'"></i>
     </div>
 
     @auth
@@ -67,12 +70,13 @@
 
 <div class="navbar collapse">
     <div class="icons">
-      <i class="fa-regular fa-user" onclick="window.location.href='/customer/myaccount'"></i>  
+        <i class="fa-solid fa-screwdriver-wrench load" onclick="window.location.href='/repairlist'"></i>
+        <i class="fa-solid fa-message" onclick="window.location.href='/messages'"></i>
     </div>
     <div class="logo load" onclick="window.location.href='{{route('welcome')}}'">Tech<span>X</span>pertz</div>
     <div class="icons">
-        <i class="fa-solid fa-screwdriver-wrench load" onclick="window.location.href='/repairlist'"></i>
-        <i class="fa-solid fa-message" onclick="window.location.href='/messages'"></i>
+        <i class="fa-solid fa-heart" onclick="window.location.href='/customer/favorites'"></i>
+        <i class="fa-regular fa-user" onclick="window.location.href='/customer/myaccount'"></i>  
         <i class="fa-solid fa-bars" id="collapse-btn"></i>
     </div>
 </div>
@@ -92,30 +96,29 @@
                     <p>Have any question?</p>
                     <p><a href="tel:+631234567890">+63 123 456 7890</a></p>
                 </div>
-                <button class="live-chat">LIVE CHAT</button>
+                <button class="live-chat">EMAIL US</button>
             </div>
         </div>
 
         <div class="links quick-links">
             <h3>QUICK LINKS</h3>
             <ul>
-                <li><a href="#">About us</a></li>
+                <li><a href="/about">About us</a></li>
                 <li><a href="#">Contact us</a></li>
-                <li><a href="#">Products</a></li>
-                <li><a href="#">Login</a></li>
-                <li><a href="#">Sign Up</a></li>
+                <li><a href="">Report</a></li>
+                <li><a href="/customer/login">Login</a></li>
+                <li><a href="/customer/signup">Sign Up</a></li>
             </ul>
         </div>
 
         <div class="links customer-area">
             <h3>CUSTOMER AREA</h3>
             <ul>
-                <li><a href="#">My Account</a></li>
-                <li><a href="#">Orders</a></li>
-                <li><a href="#">Tracking List</a></li>
+                <li><a href="/customer/myaccount">My Account</a></li>
+                <li><a href="/repairlist">Repair List</a></li>
+                <li><a href="/messages">Messages</a></li>
                 <li><a href="#">Terms</a></li>
                 <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Repair Status</a></li>
             </ul>
         </div>
 

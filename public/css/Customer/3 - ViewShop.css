@@ -197,6 +197,22 @@
         background-color: var(--primary-color);
     }
 
+    .service-details .details .buttons .favorite{
+        border-color: var(--border-color);
+        background-color: white;
+        color: var(--highlight);
+    }.service-details .details .buttons .favorite:hover{
+        border-color: var(--primary-color);
+    }
+    .service-details .details .buttons .favorite.active{
+        border-color: #7B5CAD;
+        background-color: #7B5CAD;
+        color: white;
+    }.service-details .details .buttons .favorite.active:hover{
+        border-color: var(--primary-hover-color);
+        background-color: var(--primary-hover-color);
+    }
+
 
 /* -------------------------------------------------------------------------------------------------------------------------------------------*/
 

@@ -9,7 +9,6 @@
         <!-- Crucial Part on every forms -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Crucial Part on every forms/ -->
-        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         
         <link rel="stylesheet" href="{{ asset('css/Customer/customer-headerfooter.css') }}">
@@ -28,14 +27,10 @@
         @yield('header')
         
         <div class="container-3">
-            <div class="banner" style="background-image: url('{{ asset('images/' . $category . '-bg.png') }}');">
-                <h1>{{$category}} Category</h1>
-                <p>Explore trusted repair services in the {{$category}} category. From quick fixes to specialized repairs, find a repair shop that meets your device needs.</p>
-            </div>
 
             <div class="header">
                 <nav>
-                    <a href="#" class="active">{{$category}} Repair Shops</a>
+                    <a href="#" class="active">Favorite Repair Shops</a>
                     @if(count($repairshops) != 0)
                         <p>Showing {{count($repairshops) > 8 ? '8' : count($repairshops) }} out of {{count($repairshops)}} results</p>
                     @endif
@@ -51,7 +46,7 @@
             @if(count($repairshops) === 0)
                 <p class="no-shop">
                     <i class="fa-solid fa-shop-slash"></i>
-                    <span>No Shops Available</span>
+                    <span>No Favorites Yet</span>
                 </p>
             @endif
 
@@ -130,8 +125,6 @@
 
             @if(count($repairshops) > 8)
                 <div class="pagination"></div>
-            @else 
-                <div class="pagination" style="opacity:0;"></div>
             @endif
         </div>
 
@@ -141,6 +134,5 @@
         <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
         <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
         <script src="{{asset('js/Customer/customer-favorites.js')}}" defer></script>
-
     </body>
 </html>

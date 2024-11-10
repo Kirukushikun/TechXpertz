@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Conversation extends Model
+class Customer_Favorite extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,7 @@ class Conversation extends Model
      *
      * @var string
      */
-    protected $table = 'conversations'; // Ensure this matches your table name
+    protected $table = 'customer_favorites'; // Ensure this matches your table name
 
     /**
      * The attributes that are mass assignable.
@@ -22,24 +22,13 @@ class Conversation extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        
-        'sender_id',
-        'sender_type',
-
-        'receiver_id',
-        'receiver_type',
+        'customer_id',
+        'technician_id'
     ];
 
-    public function messages(){
-        return $this->hasMany(Message::class);
-    }
 
     public function customer(){
         return $this->belongsTo(Customer::class);
     }
-
-    public function technician(){
-        return $this->belongsTo(Technician::class);
-    }
-
 }
+

@@ -378,49 +378,53 @@
     </div>
     
     <script>
-        // Function to open modal with the image view
-        function viewImage(imageUrl) {
-            const modal = document.getElementById('modal');
+        document.addEventListener('DOMContentLoaded', function(){
+            // Function to open modal with the image view
+            function viewImage(imageUrl) {
+                const modal = document.getElementById('modal');
 
-            // Set the modal content to display the image with a close button
-            modal.innerHTML = `
-                <div class="image-preview-container" style="background-image: url('${imageUrl}');">
-                    <i class="fa-solid fa-xmark close icon-close"></i>
-                </div>
-            `;
+                // Set the modal content to display the image with a close button
+                modal.innerHTML = `
+                    <div class="image-preview-container" style="background-image: url('${imageUrl}');">
+                        <i class="fa-solid fa-xmark close icon-close"></i>
+                    </div>
+                `;
 
-            // Show the modal
-            modal.classList.add("active");
+                // Show the modal
+                modal.classList.add("active");
 
-            // Close modal when 'X' is clicked
-            document.querySelectorAll('.close').forEach(button => {
-                button.onclick = function () {
-                    modal.classList.remove("active");
-                };
-            });
-        }
+                // Close modal when 'X' is clicked
+                document.querySelectorAll('.close').forEach(button => {
+                    button.onclick = function () {
+                        modal.classList.remove("active");
+                    };
+                });
+            }
 
-        // Attach event listeners to the "eye" icons
-        document.querySelectorAll('.preview-image').forEach(icon => {
-            icon.addEventListener('click', function() {
-                const imageUrl = this.getAttribute('data-image-url');
-                viewImage(imageUrl);
+            // Attach event listeners to the "eye" icons
+            document.querySelectorAll('.preview-image').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    const imageUrl = this.getAttribute('data-image-url');
+                    viewImage(imageUrl);
+                });
             });
         });
     </script>
 
     <script>
-        function setActive(selectedItem) {
-            // Remove 'active' class from all radio buttons
-            document.querySelectorAll('.form-details').forEach(item => item.classList.remove('active'));
+        document.addEventListener('DOMContentLoaded', function(){
+            function setActive(selectedItem) {
+                // Remove 'active' class from all radio buttons
+                document.querySelectorAll('.form-details').forEach(item => item.classList.remove('active'));
 
-            // Add 'active' class to the selected radio button container
-            const selectedElement = document.getElementById(selectedItem).parentElement;
-            selectedElement.classList.add('active');
+                // Add 'active' class to the selected radio button container
+                const selectedElement = document.getElementById(selectedItem).parentElement;
+                selectedElement.classList.add('active');
 
-            // Set the radio button as checked
-            document.getElementById(selectedItem).checked = true;
-        }
+                // Set the radio button as checked
+                document.getElementById(selectedItem).checked = true;
+            }
+        });
     </script>
     <script src="{{asset('js/Technician/6 - ManageProfile.js')}}" defer></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}" defer></script>

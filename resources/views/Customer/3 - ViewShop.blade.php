@@ -5,6 +5,10 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>TechXpertz</title>
+        <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
+        <!-- Crucial Part on every forms -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!-- Crucial Part on every forms/ -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         
         <link rel="stylesheet" href="{{ asset('css/Customer/customer-headerfooter.css') }}">
@@ -112,7 +116,16 @@
                     </div>
 
                     <div class="buttons">
-                        <button class="favorite"><i class="fa-regular fa-heart"></i></button>
+                        @if(Auth::check())
+                            @php 
+                                $favorite = App\Models\Customer_Favorite::where('customer_id', Auth::user()->id)
+                                    ->where('technician_id', $repairshop->id)
+                                    ->first();
+                            @endphp
+                            <button class="favorite {{$favorite ? 'active' : ''}}" data-technician-id="{{$repairshop->id}}"><i class="fa-regular fa-heart"></i></button>
+                        @else 
+                            <button class="favorite" onclick="window.location.href='/customer/login'"><i class="fa-regular fa-heart"></i></button>
+                        @endif
                         <button class="chat load" onclick="window.location.href='{{route('customer.messageRepairshop', ['repairshopID' => $repairshop->id])}}'">CHAT</button>
                         <button class="appointment highlight load" id="button" onclick="window.location.href='{{route('viewappointment', ['id' => $repairshop->id])}}'">MAKE AN APPOINTMENT</button>
                     </div>
@@ -230,40 +243,44 @@
         @yield('footer')
 
         <script>
-            // Function to open modal with the image view
-            function viewImage(imageUrl) {
-                const modal = document.getElementById('modal');
+            document.addEventListener('DOMContentLoaded', function(){
+                // Function to open modal with the image view
+                function viewImage(imageUrl) {
+                    const modal = document.getElementById('modal');
 
-                // Set the modal content to display the image with a close button
-                modal.innerHTML = `
-                    <div class="image-preview-container" style="background-image: url('${imageUrl}');">
-                        <i class="fa-solid fa-xmark close icon-close"></i>
-                    </div>
-                `;
+                    // Set the modal content to display the image with a close button
+                    modal.innerHTML = `
+                        <div class="image-preview-container" style="background-image: url('${imageUrl}');">
+                            <i class="fa-solid fa-xmark close icon-close"></i>
+                        </div>
+                    `;
 
-                // Show the modal
-                modal.classList.add("active");
+                    // Show the modal
+                    modal.classList.add("active");
 
-                // Close modal when 'X' is clicked
-                document.querySelectorAll('.close').forEach(button => {
-                    button.onclick = function () {
-                        modal.classList.remove("active");
-                    };
-                });
-            }
+                    // Close modal when 'X' is clicked
+                    document.querySelectorAll('.close').forEach(button => {
+                        button.onclick = function () {
+                            modal.classList.remove("active");
+                        };
+                    });
+                }
 
-            // Attach event listeners to the "eye" icons
-            document.querySelectorAll('.preview-image').forEach(icon => {
-                icon.addEventListener('click', function() {
-                    const imageUrl = this.getAttribute('data-image-url');
-                    if(imageUrl != "http://127.0.0.1:8000/"){
-                        viewImage(imageUrl);
-                    }
+                // Attach event listeners to the "eye" icons
+                document.querySelectorAll('.preview-image').forEach(icon => {
+                    icon.addEventListener('click', function() {
+                        const imageUrl = this.getAttribute('data-image-url');
+                        if(imageUrl != "http://127.0.0.1:8000/"){
+                            viewImage(imageUrl);
+                        }
+                    });
                 });
             });
         </script>
         <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+        <script src="{{asset('js/Customer/customer-favorites.js')}}" defer></script>
         <script src="{{asset('js/Customer/3 - ViewShop.js')}}" defer></script>
         <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
+
     </body>
 </html>

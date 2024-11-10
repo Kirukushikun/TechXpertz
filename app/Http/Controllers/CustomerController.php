@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Customer_Notifications;
 use App\Models\Customer_RepairStatus;
+use App\Models\Customer_Favorite;
 
 use App\Models\Technician;
 use App\Models\RepairShop_Credentials;
@@ -30,67 +31,160 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class CustomerController extends Controller
 {
-    public function welcome(){
+    public function welcome(){  
+        if(Auth::check()){
+            switch (Auth::user()->profile_status) {
+                case 'deleted':
+                case 'restricted':
+                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
+                    break;
+            }            
+        }
 
-        $repairshopData = $this->getRepairShopSummary();
+        try {
+            $repairshopData = $this->getRepairShopSummary();
+            return view('Customer.1 - Homepage', [
+                'repairshops' => $repairshopData,
+            ]);
+    
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in someFunction:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
 
-        return view('Customer.1 - Homepage', [
-            'repairshops' => $repairshopData,
-        ]);
+            return view('Customer.ErrorMessage');
+        }
+    
     }
 
     public function viewcategory($category){
+        if(Auth::check()){
+            switch (Auth::user()->profile_status) {
+                case 'deleted':
+                case 'restricted':
+                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
+                    break;
+            }            
+        }
 
-        $repairshopData = $this->getRepairShopSummary($category);
+        try {
+            $repairshopData = $this->getRepairShopSummary($category);
+            return view('Customer.2 - ViewCategory', [
+                'category' => $category,
+                'repairshops' => $repairshopData,
+            ]);
+    
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in someFunction:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
 
-        return view('Customer.2 - ViewCategory', [
-            'category' => $category,
-            'repairshops' => $repairshopData,
-        ]);
+            return view('Customer.ErrorMessage');
+        }
 
     }
 
     public function viewshop($id){
-        $repairshop = Technician::find($id)
-            ->with(['repairshopReviews' => function ($query) {
-                $query->orderBy('created_at', 'desc')->where('status', 'Approved');
-            }])->find($id);;
 
-        // Retrieve all services from a specific repairshop
-        $services = Repairshop_Services::where('technician_ID', $id)->get();
 
-        // Exporting ratings calculation
-        $reviewData = $this->reviewSystem($id);
+        if(Auth::check()){
+            switch (Auth::user()->profile_status) {
+                case 'deleted':
+                case 'restricted':
+                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
+                    break;
+            }            
+        }
 
-        // Get the detailed schedule
-        $detailedSchedule = $this->getDetailedSchedule($id);
+        try {
 
-        $repairshopMastery = RepairShop_Mastery::where('technician_id', $repairshop->id)->first();
-        $repairshopImages = RepairShop_Images::where('technician_id', $repairshop->id)->first();
+            $repairshop = Technician::findOrFail($id)
+                ->with(['repairshopReviews' => function ($query) {
+                    $query->orderBy('created_at', 'desc')->where('status', 'Approved');
+                }])->find($id);
 
-        return view('Customer.3 - ViewShop', [
-            'repairshop' => $repairshop,
-            'services' => $services,
-            'reviewData' => $reviewData,
-            'detailedSchedule' => $detailedSchedule,
-            'repairshopMastery' => $repairshopMastery,
-            'repairshopImages' => $repairshopImages,
-        ]);
+            if(!$repairshop){
+                return view('Customer.ErrorMessage');
+            }
+
+            // Retrieve all services from a specific repairshop
+            $services = Repairshop_Services::where('technician_ID', $id)->get();
+
+            // Exporting ratings calculation
+            $reviewData = $this->reviewSystem($id);
+
+            // Get the detailed schedule
+            $detailedSchedule = $this->getDetailedSchedule($id);
+
+            $repairshopMastery = RepairShop_Mastery::where('technician_id', $repairshop->id)->first();
+            $repairshopImages = RepairShop_Images::where('technician_id', $repairshop->id)->first();
+
+            return view('Customer.3 - ViewShop', [
+                'repairshop' => $repairshop,
+                'services' => $services,
+                'reviewData' => $reviewData,
+                'detailedSchedule' => $detailedSchedule,
+                'repairshopMastery' => $repairshopMastery,
+                'repairshopImages' => $repairshopImages,
+            ]);
+    
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in someFunction:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return view('Customer.ErrorMessage');
+        }
+
     }
 
     public function viewappointment($id)
-    {
-        $customerDetails = Auth::check() ? Customer::find(Auth::id()) : null;
-        $technicianID = $id;
+    {   
+
+        if(Auth::check()){
+            switch (Auth::user()->profile_status) {
+                case 'deleted':
+                case 'restricted':
+                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
+                    break;
+            }            
+        }
+
+        try {
+
+            $technicianExist = Technician::findOrFail($id);
+            if(!$technicianExist){
+                return view('Customer.ErrorMessage');
+            }
     
-        return view('Customer.4 - AppointmentBooking', [
-            'customerDetails' => $customerDetails,
-            'technicianID' => $technicianID,
-        ]);
+            $customerDetails = Auth::check() ? Customer::find(Auth::id()) : null;
+            $technicianID = $id;
+        
+            return view('Customer.4 - AppointmentBooking', [
+                'customerDetails' => $customerDetails,
+                'technicianID' => $technicianID,
+            ]);
+    
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in someFunction:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return view('Customer.ErrorMessage');
+        }
 
     }
 
@@ -192,31 +286,59 @@ class CustomerController extends Controller
 
     }
 
+        //Needs Attention
         public function cancelAppointment($repairID){
-            $repairstatus = RepairShop_RepairStatus::find($repairID);
-            $appointment = RepairShop_Appointments::find($repairstatus->appointment_id);
+            try {
 
-            Customer_RepairStatus::create([
-                'technician_id' => $repairstatus->technician_id,
-                'repair_id' => $repairstatus->id,
-                'customer_id' => Auth::user()->id,
-                'repairstatus' => 'Appointment Cancelled',
-                'repairstatus_message' => 'The appointment request has been successfully cancelled. The repair shop has been notified of the cancellation.'
-            ]);
-
-            $appointment->update([
-                'status' => 'cancelled',
-            ]);
-
-            $repairstatus->update([
-                'repairstatus' => 'Appointment Cancelled',
-            ]);
-
-            return back()->with('success', 'Request Cancelled')->with('success_message','You appointment request has been cancelled successfully');
+                $repairstatus = RepairShop_RepairStatus::findOrFail($repairID);
+                $appointment = RepairShop_Appointments::findOrFail($repairstatus->appointment_id);
+    
+                if(!$repairstatus || !$appointment){
+                    return view('Customer.ErrorMessage');
+                }
+    
+                Customer_RepairStatus::create([
+                    'technician_id' => $repairstatus->technician_id,
+                    'repair_id' => $repairstatus->id,
+                    'customer_id' => Auth::user()->id,
+                    'repairstatus' => 'Appointment Cancelled',
+                    'repairstatus_message' => 'The appointment request has been successfully cancelled. The repair shop has been notified of the cancellation.'
+                ]);
+    
+                $appointment->update([
+                    'status' => 'cancelled',
+                ]);
+    
+                $repairstatus->update([
+                    'repairstatus' => 'Appointment Cancelled',
+                ]);
+    
+                return back()->with('success', 'Request Cancelled')->with('success_message','You appointment request has been cancelled successfully');
+            
+        
+            } catch (\Exception $e) {
+                // Log the error for debugging
+                Log::error('Error in someFunction:', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+    
+                return view('Customer.ErrorMessage');
+            }
+    
         }
 
     public function viewrepairlist(){
         if(Auth::check()){
+            switch (Auth::user()->profile_status) {
+                case 'deleted':
+                case 'restricted':
+                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
+                    break;
+            }            
+        }
+
+        try {
 
             // Fetch repair and appointment details for the logged-in customer
             $repairDetails = RepairShop_RepairStatus::where('customer_id', Auth::user()->id)
@@ -224,33 +346,63 @@ class CustomerController extends Controller
                                 ->with(['technician.repairshopBadges'])
                                 ->orderBy('created_at', 'desc')
                                 ->get();
-    
+
             return view('Customer.7 - Repairlist', [
                 'repairDetails' => $repairDetails,
             ]);
+    
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in someFunction:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return view('Customer.ErrorMessage');
         }
-        return redirect()->route('customer.loginCustomer');
+
     }
 
     public function viewrepairstatus($id){
-        $repairstatusData = RepairShop_RepairStatus::find($id);
-
-        if($repairstatusData){
-            $repairstatusDetails = Customer_RepairStatus::where('repair_id', $id)
-                ->orderBy('created_at', 'desc')
-                ->get();
-
-            foreach ($repairstatusDetails as $repairstatusDetail) {
-                $repairstatusDetail->formatted_date = Carbon::parse($repairstatusDetail->created_at)->format('l, d M Y');
-                $repairstatusDetail->formatted_time = Carbon::parse($repairstatusDetail->created_at)->format('g:i A');
-            }
-
-            return view('Customer.5 - RepairStatus', [
-                'repairstatusData' => $repairstatusData,
-                'repairstatusDetails' => $repairstatusDetails,
-            ]);            
+        if(Auth::check()){
+            switch (Auth::user()->profile_status) {
+                case 'deleted':
+                case 'restricted':
+                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
+                    break;
+            }            
         }
-        return back()->with('error', 'The Repair ID you entered does not exist. Please double-check and try again.');
+
+        try {
+
+            $repairstatusData = RepairShop_RepairStatus::findOrFail($id);
+
+            if($repairstatusData){
+                $repairstatusDetails = Customer_RepairStatus::where('repair_id', $id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+    
+                foreach ($repairstatusDetails as $repairstatusDetail) {
+                    $repairstatusDetail->formatted_date = Carbon::parse($repairstatusDetail->created_at)->format('l, d M Y');
+                    $repairstatusDetail->formatted_time = Carbon::parse($repairstatusDetail->created_at)->format('g:i A');
+                }
+    
+                return view('Customer.5 - RepairStatus', [
+                    'repairstatusData' => $repairstatusData,
+                    'repairstatusDetails' => $repairstatusDetails,
+                ]);            
+            }
+            return back()->with('error', 'The Repair ID you entered does not exist. Please double-check and try again.');
+    
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in someFunction:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return view('Customer.ErrorMessage');
+        }
     }
 
         public function submitReview(Request $request, $technicianID){
@@ -284,22 +436,38 @@ class CustomerController extends Controller
 
     public function myaccount(){
 
-        if(Auth::check()){
+        try {
+
             $customerData = Customer::find(Auth::user()->id);
             $notifications = Customer_Notifications::where('target_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-
+    
             return view('Customer.6 - Account', [
                 'customerData' => $customerData,
                 'notifications' => $notifications,
             ]);
+    
+            return redirect()->route('customer.loginCustomer');;
+    
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in someFunction:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return view('Customer.ErrorMessage');
         }
-        return redirect()->route('customer.loginCustomer');
 
     }
 
         public function myaccountUpdate(Request $request, $actionType, $customerID){
-            $customer = Customer::find($customerID);
             
+            $customer = Customer::findOrFail($customerID);
+
+            if(!$customer){
+                return view('Customer.ErrorMessage');
+            }
+
             if($actionType == 'upload'){
                 $request->validate([
                     'image' => 'required|mimes:png,jpg,jpeg,webp'
@@ -416,7 +584,7 @@ class CustomerController extends Controller
         }
 
         public function myaccountDelete($customerID){
-            $customer = Customer::find($customerID);
+            $customer = Customer::findOrFail($customerID);
 
             if(!$customer){
                 return back()->with('error', 'Deletion Failed')
@@ -427,14 +595,18 @@ class CustomerController extends Controller
                 ->where('status', 'in progress')
                 ->exists();
             $appointmentExist = RepairShop_Appointments::where('customer_id', $customer->id)
-                ->whereIn('status', ['requested', 'confirmed', 'completed'])
+                ->whereIn('status', ['requested', 'confirmed'])
                 ->exists();
 
             if($repairExist || $appointmentExist){
                 return back()->with('error', 'Deletion Failed')->with('error_message', 'Your account cannot be deleted at this time due to pending appointments or ongoing repairs. Please complete or cancel any active engagements before proceeding with account deletion.');
             }
 
-            return back()->with('success', 'Account Deleted Successfully')->with("success_message", "Your account has been successfully deleted. We're sorry to see you go and hope to serve you again in the future.");
+            $customer->update([
+                'profile_status' => 'deleted',
+            ]);
+            
+            return redirect()->route('customer.disabledAccount', ['status' => 'deleted'])->with("message", "Your account has been successfully deleted. We're sorry to see you go and hope to serve you again in the future.");
         }
 
     public function notificationUpdate($notificationID){
@@ -447,10 +619,7 @@ class CustomerController extends Controller
     }
 
     public function messages(){
-        if(Auth::check()){
-            return view('Customer.8 - Messages');
-        }
-        return redirect()->route('customer.loginCustomer');
+        return view('Customer.8 - Messages');
     }
 
     public function messageRepairshop($repairshopID){
@@ -471,6 +640,47 @@ class CustomerController extends Controller
             
         }
         return redirect()->route('customer.loginCustomer');
+    }
+
+    public function disabledAccount($status){
+        Auth::logout();
+        return view('Customer.9 - DisabledAccount', [
+            'status' => $status
+        ]);
+    }
+
+    public function viewFavorites(){
+        $repairshopData = $this->getFavoriteShops(Auth::user()->id);
+        return view('Customer.15 - ViewFavorites', [
+            'repairshops' => $repairshopData,
+        ]);
+    }
+
+    public function favorites($technicianID){
+
+        try {
+            $favorite = Customer_Favorite::where('customer_id', Auth::user()->id)
+            ->where('technician_id', $technicianID)
+            ->first();
+        
+            if ($favorite) {
+                // If the favorite exists, delete it (remove from favorites)
+                $favorite->delete();
+                return response()->json(['message' => 'Repairshop removed from favorites'], 200);
+            } else {
+                // If the favorite does not exist, create it (add to favorites)
+                Customer_Favorite::create([
+                    'customer_id' => Auth::user()->id,
+                    'technician_id' => $technicianID
+                ]);
+                return response()->json(['message' => 'Repairshop added to favorites'], 200);
+            }
+
+            return redirect()->route('customer.loginCustomer');
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
     }
     
     // PRIVATE FUNCTIONS ---------
@@ -519,6 +729,13 @@ class CustomerController extends Controller
     
             return $repairshopData;
         } else {
+
+            foreach(['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'All-In-One'] as $existingCategory) {
+                if (!RepairShop_Mastery::where($category, $existingCategory)->exists()) {
+                    return view('Customer.ErrorMessage');
+                }
+            }
+
             //Getting all the data that has the specific category (e.g., 'Smartphones')
             $repairshopCategory = RepairShop_Mastery::where('main_mastery', $category)->get();
 
@@ -569,6 +786,114 @@ class CustomerController extends Controller
             return $repairshopData;
         }
 
+    }
+
+    private function getFavoriteShops($customerID){
+        $favorites = Customer_Favorite::where('customer_id', $customerID)->get();
+        $repairshopData = [];
+        foreach($favorites as $favorite){
+            $repairshop = Technician::find($favorite->technician_id);
+
+            // Get the formatted schedule
+            $formattedDays = $this->getFormattedSchedule($repairshop->id);
+
+            // Get review data of specific technician with needed variables
+            $reviewData[$repairshop->id] = $this->reviewSystem($repairshop->id);
+            $totalReviews = $reviewData[$repairshop->id]['totalReviews'];
+            $averageRating = $reviewData[$repairshop->id]['averageRating'];
+
+            $repairshopData[] = [
+                'repairshopID' => $repairshop->id,
+                'repairshopName' => $repairshop->repairshopCredentials->shop_name,
+                'repairshopContact' => $repairshop->repairshopCredentials->shop_contact,
+                'repairshopMMastery' => $repairshop->repairshopMastery->main_mastery,
+                'repairshopAddress' => $repairshop->repairshopCredentials->shop_address,
+                'repairshopProvince' => $repairshop->repairshopCredentials->shop_province,
+                'repairshopCity' => $repairshop->repairshopCredentials->shop_city,
+                'repairshopBarangay' => $repairshop->repairshopCredentials->shop_barangay,
+
+                'repairshopBadge1' => $repairshop->repairshopBadges->badge_1,
+                'repairshopBadge2' => $repairshop->repairshopBadges->badge_2,
+                'repairshopBadge3' => $repairshop->repairshopBadges->badge_3,
+                'repairshopBadge4' => $repairshop->repairshopBadges->badge_4,
+
+                'repairshopMastery' => $repairshop->repairshopMastery->main_mastery,
+
+                'repairshopImage' => $repairshop->repairshopImages->image_profile,
+
+                'formattedDays' => $formattedDays,
+                'totalReviews' => $totalReviews,
+                'averageRating' => $averageRating,
+            ];
+
+        }
+        return $repairshopData;
+    }
+
+    public function searchRepairShops(Request $request)
+    {
+        $query = $request->input('query');
+        $repairshopData = [];
+
+        if($query){
+            $technicians = Technician::whereHas('repairshopCredentials', function ($q) use ($query) {
+                $q->where('shop_name', 'LIKE', "%$query%")
+                  ->orWhere('shop_address', 'LIKE', "%$query%")
+                  ->orWhere('shop_province', 'LIKE', "%$query%")
+                  ->orWhere('shop_city', 'LIKE', "%$query%")
+                  ->orWhere('shop_barangay', 'LIKE', "%$query%");
+            })
+            ->orWhereHas('repairshopBadges', function ($q) use ($query) {
+                $q->where('badge_1', 'LIKE', "%$query%")
+                  ->orWhere('badge_2', 'LIKE', "%$query%")
+                  ->orWhere('badge_3', 'LIKE', "%$query%")
+                  ->orWhere('badge_4', 'LIKE', "%$query%");
+            })
+            ->orWhereHas('repairshopMastery', function ($q) use ($query) {
+                $q->where('main_mastery', 'LIKE', "%$query%");
+            })
+            ->with(['repairshopCredentials', 'repairshopBadges', 'repairshopMastery', 'repairshopImages'])
+            ->get();
+
+            foreach ($technicians as $repairshop) {
+                // Get formatted schedule data (reusing your method)
+                $formattedDays = $this->getFormattedSchedule($repairshop->id);
+
+                // Get review data
+                $reviewData = $this->reviewSystem($repairshop->id);
+                $totalReviews = $reviewData['totalReviews'];
+                $averageRating = $reviewData['averageRating'];
+
+                // Build the data array
+                $repairshopData[] = [
+                    'repairshopID' => $repairshop->id,
+                    'repairshopName' => $repairshop->repairshopCredentials->shop_name,
+                    'repairshopContact' => $repairshop->repairshopCredentials->shop_contact,
+                    'repairshopMMastery' => $repairshop->repairshopMastery->main_mastery,
+                    'repairshopAddress' => $repairshop->repairshopCredentials->shop_address,
+                    'repairshopProvince' => $repairshop->repairshopCredentials->shop_province,
+                    'repairshopCity' => $repairshop->repairshopCredentials->shop_city,
+                    'repairshopBarangay' => $repairshop->repairshopCredentials->shop_barangay,
+
+                    'repairshopBadge1' => $repairshop->repairshopBadges->badge_1,
+                    'repairshopBadge2' => $repairshop->repairshopBadges->badge_2,
+                    'repairshopBadge3' => $repairshop->repairshopBadges->badge_3,
+                    'repairshopBadge4' => $repairshop->repairshopBadges->badge_4,
+
+                    'repairshopMastery' => $repairshop->repairshopMastery->main_mastery,
+
+                    'repairshopImage' => $repairshop->repairshopImages->image_profile,
+
+                    'formattedDays' => $formattedDays,
+                    'totalReviews' => $totalReviews,
+                    'averageRating' => $averageRating,
+                ];
+            }
+        }
+
+        return view('Customer.16 - SearchResult', [
+            'repairshops' => $repairshopData,
+        ]);
     }
 
     // FORMATED SCHEDULE FUNCTIONS ---------

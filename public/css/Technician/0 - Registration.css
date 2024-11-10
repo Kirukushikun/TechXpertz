@@ -213,6 +213,13 @@ body{
     border-radius: 7px;
     border: solid #D9D9D9 2px;
     width: 100%;
+}.input-container .input-group select{
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+    width: 100%;
 }
 
 .form-step .form-navigation-buttons{

@@ -50,11 +50,11 @@
                     <ul>
                         <li class="nav-item active" data-step="1">Personal Information</li>
                         <li class="nav-item" data-step="2">Repair Shop Information</li>
-                        <li class="nav-item" data-step="3">Legal Documentation</li>
-                        <li class="nav-item" data-step="4">Proof of Ownership</li>
-                        <li class="nav-item" data-step="5">Terms and Conditions</li>
-                        <li class="nav-item" data-step="6">Privacy Policy</li>
-                        <li class="nav-item" data-step="7">Security</li>
+                        <!-- <li class="nav-item" data-step="3">Legal Documentation</li>
+                        <li class="nav-item" data-step="4">Proof of Ownership</li> -->
+                        <li class="nav-item" data-step="3">Terms and Conditions</li>
+                        <li class="nav-item" data-step="4">Privacy Policy</li>
+                        <li class="nav-item" data-step="5">Security</li>
                     </ul>
                 </div>
 
@@ -91,15 +91,21 @@
                                 </div>
                                 <div class="input-group">
                                     <label for="province">Province</label>
-                                    <input type="text" id="province" name="province" required>
+                                    <select id="province" name="province" class="province" required>
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                                 <div class="input-group">
-                                    <label for="city">City</label>
-                                    <input type="text" id="city" name="city" required>
+                                    <label for="city">City or Municipality</label>
+                                    <select id="city-municipality" name="city-municipality" class="city-municipality" required>
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                                 <div class="input-group">
                                     <label for="barangay">Barangay</label>
-                                    <input type="text" id="barangay" name="barangay" required>
+                                    <select id="barangay" name="barangay" class="barangay" required>
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                                 <div class="input-group">
                                     <label for="zip_code">ZIP Code</label>
@@ -139,15 +145,21 @@
                                 </div>
                                 <div class="input-group">
                                     <label for="shop_province">Province</label>
-                                    <input type="text" id="shop_province" name="shop_province" required>
+                                    <select id="shop_province" name="shop_province" class="shop_province" required>
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                                 <div class="input-group">
-                                    <label for="shop_city">City</label>
-                                    <input type="text" id="shop_city" name="shop_city" required>
+                                    <label for="shop_city">Province</label>
+                                    <select id="shop_city" name="shop_city" class="shop_city" required>
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                                 <div class="input-group">
-                                    <label for="shop_barangay">Barangay</label>
-                                    <input type="text" id="shop_barangay" name="shop_barangay" required>
+                                    <label for="shop_barangay">Province</label>
+                                    <select id="shop_barangay" name="shop_barangay" class="shop_barangay" required>
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                                 <div class="input-group">
                                     <label for="shop_zip_code">ZIP Code</label>
@@ -161,7 +173,7 @@
                         </div>
                     </div>
 
-                    <div class="form-step" data-step="3">
+                    <!-- <div class="form-step" data-step="3">
                         <div class="form-inputs">
                             <h2>Legal Documentation</h2>
                             <p class="info"><i class="fa-solid fa-circle-info"></i> Here are the recommended legal documents that you can submit to immediately get verified:</p>
@@ -198,7 +210,7 @@
                         </div>
                     </div>
                     
-                    <div class="form-step" data-step="4">
+                    <div class="form-step" data-step="2">
                         <div class="form-inputs">
                             <h2>Proof of Ownership</h2>
                             <p class="info"><i class="fa-solid fa-circle-info"></i> Here are the recommended proof of ownership documents that you can submit:</p>
@@ -234,9 +246,9 @@
                             <button type="button" class="prev-btn">Previous</button>
                             <button type="button" class="next-btn">Next</button>
                         </div>
-                    </div>
+                    </div> -->
                     
-                    <div class="form-step" data-step="5">
+                    <div class="form-step" data-step="3">
                         <h2>Terms and Conditions</h2>
                         <div class="terms-condition">
                             <div class="section">
@@ -378,7 +390,7 @@
                         </div>
                     </div>
 
-                    <div class="form-step" data-step="6">
+                    <div class="form-step" data-step="4">
                         <h2>Privacy Policy</h2>
                         <div class="terms-condition">
                             <div class="section">
@@ -520,7 +532,7 @@
                         </div>
                     </div>
 
-                    <div class="form-step" data-step="7">
+                    <div class="form-step" data-step="5">
                         <h2>Security</h2>
                         <div class="security">
                             <div class="input-group">
@@ -550,7 +562,224 @@
         </div>
     </div>
 
+    <!-- <script>
+        // Get the province dropdown element
+        const provinceSelect = document.getElementById('province');
+        // Get the city dropdown element
+        const citySelect = document.getElementById('city-municipality');
+        // Get the barangay dropdown element
+        const barangaySelect = document.getElementById('barangay');
+
+
+        async function fetchProvinces() {
+            try {
+                fetch('https://psgc.gitlab.io/api/provinces.json')
+                    .then(response => response.json())
+                    .then(data => populateProvinces(data))
+                    .catch(error => console.error('Error:', error));
+            } catch (error) {
+                console.error("Error loading provinces:", error);
+            }
+        }
+
+        function populateProvinces(data){
+            const provinces = data || [];
+
+            // Populate the dropdown
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.code; // Use the code as the option value
+                option.textContent = province.name; // Use the name as the display text
+                provinceSelect.appendChild(option);
+            });
+        }
+
+        // Call the function when the page loads or when needed
+        fetchProvinces(); 
+
+        let allCitiesMunicipalities = [];
+
+        async function fetchCitiesMunicipalities() {
+            try {
+                fetch('https://psgc.gitlab.io/api/cities-municipalities.json')
+                    .then(response => response.json())
+                    .then(data => allCitiesMunicipalities = data)
+                    .catch(error => console.error('Error:', error));
+            } catch (error) {
+                console.error("Error loading provinces:", error);
+            }
+        }
+
+        provinceSelect.addEventListener('change', function() {
+            const selectedProvinceCode = this.value;
+            filterCitiesByProvince(selectedProvinceCode);
+        });
+
+        // Call this function once on page load to fetch all cities
+        fetchCitiesMunicipalities();
+
+        function filterCitiesByProvince(provinceCode) {
+            // Filter cities based on the selected province code
+            const filteredCities = allCitiesMunicipalities.filter(city => city.provinceCode === provinceCode);
+
+            // Clear the city dropdown
+            citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+
+            // Clear the barangay dropdown
+            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+            // Populate the city dropdown with filtered cities
+            filteredCities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city.code; // Use the city code as the option value
+                option.textContent = city.name; // Use the city name as the display text
+                citySelect.appendChild(option);
+            });
+        }
+
+        let allBarangays = [];
+
+        async function fetchBarangays() {
+            try {
+                fetch('https://psgc.gitlab.io/api/barangays.json')
+                    .then(response => response.json())
+                    .then(data => allBarangays = data)
+                    .catch(error => console.error('Error:', error));
+            } catch (error) {
+                console.error("Error loading provinces:", error);
+            }
+        }
+
+        fetchBarangays();
+
+        citySelect.addEventListener('change', function() {
+            const selectedCityMunicipalityCode = this.value;
+            filterBarangays(selectedCityMunicipalityCode);
+        });
+
+        function filterBarangays(cityMunicipalityCode){
+            const filteredBarangays = allBarangays.filter(barangay => barangay.cityCode === cityMunicipalityCode || barangay.municipalityCode === cityMunicipalityCode);
     
+            // Clear the barangay dropdown
+            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+            // Populate the barangay dropdown with filtered cities
+            filteredBarangays.forEach(barangay => {
+                const option = document.createElement('option');
+                option.value = barangay.code; // Use the city code as the option value
+                option.textContent = barangay.name; // Use the city name as the display text
+                barangaySelect.appendChild(option);
+            });
+        }
+    </script> -->
+
+    <script>
+        // User location dropdown elements
+        const provinceSelect = document.getElementById('province');
+        const citySelect = document.getElementById('city-municipality');
+        const barangaySelect = document.getElementById('barangay');
+
+        // Shop location dropdown elements
+        const shopProvinceSelect = document.getElementById('shop_province');
+        const shopCitySelect = document.getElementById('shop_city');
+        const shopBarangaySelect = document.getElementById('shop_barangay');
+
+        let allCitiesMunicipalities = [];
+        let allBarangays = [];
+
+        // Fetch and populate provinces for both user and shop
+        async function fetchProvinces() {
+            try {
+                const response = await fetch('https://psgc.gitlab.io/api/provinces.json');
+                const provinces = await response.json();
+                populateProvinces(provinces, provinceSelect);
+                populateProvinces(provinces, shopProvinceSelect);
+            } catch (error) {
+                console.error("Error loading provinces:", error);
+            }
+        }
+
+        // Populate provinces in a given select element
+        function populateProvinces(provinces, selectElement) {
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.code;
+                option.textContent = province.name;
+                selectElement.appendChild(option);
+            });
+        }
+
+        // Fetch and store cities/municipalities data
+        async function fetchCitiesMunicipalities() {
+            try {
+                const response = await fetch('https://psgc.gitlab.io/api/cities-municipalities.json');
+                allCitiesMunicipalities = await response.json();
+            } catch (error) {
+                console.error("Error loading cities:", error);
+            }
+        }
+
+        // Filter and display cities based on selected province in the specified city dropdown
+        function filterCitiesByProvince(provinceCode, citySelect, barangaySelect) {
+            const filteredCities = allCitiesMunicipalities.filter(city => city.provinceCode === provinceCode);
+            citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+            barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // Reset barangays
+
+            filteredCities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city.code;
+                option.textContent = city.name;
+                citySelect.appendChild(option);
+            });
+        }
+
+        // Fetch and store barangays data
+        async function fetchBarangays() {
+            try {
+                const response = await fetch('https://psgc.gitlab.io/api/barangays.json');
+                allBarangays = await response.json();
+            } catch (error) {
+                console.error("Error loading barangays:", error);
+            }
+        }
+
+        // Filter and display barangays based on selected city/municipality in the specified barangay dropdown
+        function filterBarangays(cityMunicipalityCode, barangaySelect) {
+            const filteredBarangays = allBarangays.filter(barangay =>
+                barangay.cityCode === cityMunicipalityCode || barangay.municipalityCode === cityMunicipalityCode
+            );
+            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+            filteredBarangays.forEach(barangay => {
+                const option = document.createElement('option');
+                option.value = barangay.code;
+                option.textContent = barangay.name;
+                barangaySelect.appendChild(option);
+            });
+        }
+
+        // Event Listeners for user location
+        provinceSelect.addEventListener('change', function () {
+            filterCitiesByProvince(this.value, citySelect, barangaySelect);
+        });
+        citySelect.addEventListener('change', function () {
+            filterBarangays(this.value, barangaySelect);
+        });
+
+        // Event Listeners for shop location
+        shopProvinceSelect.addEventListener('change', function () {
+            filterCitiesByProvince(this.value, shopCitySelect, shopBarangaySelect);
+        });
+        shopCitySelect.addEventListener('change', function () {
+            filterBarangays(this.value, shopBarangaySelect);
+        });
+
+        // Initial fetch calls
+        fetchProvinces();
+        fetchCitiesMunicipalities();
+        fetchBarangays();
+    </script>
+
     <script src="{{asset('js/Technician/0 - Registration.js')}}" defer></script>
     <script src="{{asset('js/Technician/technician-notification.js')}}" defer></script>
 </body>

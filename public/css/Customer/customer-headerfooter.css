@@ -401,7 +401,7 @@ footer span {
     .navbar-collapse.active{
         opacity: 1;
         right: 0;
-        z-index: 1;
+        z-index: 100;
     }
 }
 

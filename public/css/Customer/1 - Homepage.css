@@ -463,11 +463,20 @@
 }.shop-footer .actions .favorite:hover{
     border-color: var(--primary-color);
 }
+.shop-footer .actions .favorite.active{
+    border-color: #7B5CAD;
+    background-color: #7B5CAD;
+    color: white;
+}.shop-footer .actions .favorite.active:hover{
+    border-color: var(--primary-hover-color);
+    background-color: var(--primary-hover-color);
+}
 .shop-footer .actions .view{
     border-color: var(--primary-color);
     background-color: var(--primary-color);
     color: var(--text-color-white);
 }.shop-footer .actions .view:hover{
+    border-color: var(--primary-hover-color);
     background-color: var(--primary-hover-color);
 }
 

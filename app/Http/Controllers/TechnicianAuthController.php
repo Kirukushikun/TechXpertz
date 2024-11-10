@@ -56,7 +56,7 @@ class TechnicianAuthController extends Controller
             'date_of_birth' => 'required|date',
 
             'province' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
+            'city-municipality' => 'required|string|max:255',
             'barangay' => 'required|string|max:255',
             'zip_code' => 'required|string|max:255',
             

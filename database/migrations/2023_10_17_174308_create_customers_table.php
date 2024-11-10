@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->string('role')->default('Customer');
-            $table->enum('profile_status', ['flagged', 'pending' ,'verified', 'restricted'])->default('verified');
+            $table->enum('profile_status', ['flagged', 'pending' ,'verified', 'restricted', 'deleted'])->default('verified');
 
             $table->string('image_profile')->nullable();
             $table->enum('image_status', ['pending', 'active', 'deleted'])->default('active');

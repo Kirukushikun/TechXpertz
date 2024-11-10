@@ -48,21 +48,40 @@ Route::get('/repairshop/{id}', [CustomerController::class, 'viewshop'])->name('v
 
 Route::get('/bookappointment/{id}', [CustomerController::class, 'viewappointment'])->name('viewappointment');
 Route::post('/bookappointment/{id}', [CustomerController::class, 'bookappointment'])->name('bookappointment');
-Route::patch('/bookappointment/cancel/{repairID}', [CustomerController::class, 'cancelAppointment']);
+
+Route::get('/search', [CustomerController::class, 'searchRepairShops'])->name('search');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/customer/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
+    Route::patch('/customer/myaccount/{actionType}/{customerID}', [CustomerController::class, 'myaccountUpdate'])->name('customer.updateprofile');
+    Route::patch('/customer/myaccount/notification/update/{notificationID}',  [CustomerController::class, 'notificationUpdate']);
+    Route::patch('/customer/myaccount/{customerID}', [CustomerController::class, 'myaccountDelete'])->name('customer.deleteprofile');
+
+    Route::patch('/bookappointment/cancel/{repairID}', [CustomerController::class, 'cancelAppointment']);
+
+    Route::get('/repairlist', [CustomerController::class, 'viewrepairlist'])->name('viewrepairlist');
+
+    Route::get('/repairstatus/{id}', [CustomerController::class, 'viewrepairstatus'])->name('viewrepairstatus');
+    Route::post('/review/{technicianID}', [CustomerController::class, 'submitReview']);
+
+    Route::get('/messages', [CustomerController::class, 'messages'])->name('customer.messages');
+    Route::get('/message/repairshop/{repairshopID}', [CustomerController::class, 'messageRepairshop'])->name('customer.messageRepairshop');
+
+    Route::get('/customer/account/{status}', [CustomerController::class, 'disabledAccount'])->name('customer.disabledAccount');
+
+    Route::get('/customer/favorites', [CustomerController::class, 'viewFavorites']);
+    Route::post('/customer/favorites/{technicianID}', [CustomerController::class, 'favorites']);
+});
+
+Route::get('/about', function () {
+    return view('Customer.10 - AboutUs');
+});
+
+Route::get('/contact-us', function () {
+    return view('Customer.11 - ContactUs');
+});
 
 
-Route::get('/customer/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
-Route::patch('/customer/myaccount/{actionType}/{customerID}', [CustomerController::class, 'myaccountUpdate'])->name('customer.updateprofile');
-Route::patch('/customer/myaccount/notification/update/{notificationID}',  [CustomerController::class, 'notificationUpdate']);
-Route::patch('/customer/myaccount/{customerID}', [CustomerController::class, 'myaccountDelete'])->name('customer.deleteprofile');
-
-Route::get('/repairlist', [CustomerController::class, 'viewrepairlist'])->name('viewrepairlist');
-
-Route::get('/repairstatus/{id}', [CustomerController::class, 'viewrepairstatus'])->name('viewrepairstatus');
-Route::post('/review/{technicianID}', [CustomerController::class, 'submitReview']);
-
-Route::get('/messages', [CustomerController::class, 'messages'])->name('customer.messages');
-Route::get('/message/repairshop/{repairshopID}', [CustomerController::class, 'messageRepairshop'])->name('customer.messageRepairshop');
 // TECHNICIAN AUTH---------------------------------------------------------------
 
 Route::get('/technician/login', [TechnicianAuthController::class, 'login'])->name('technician.login');
