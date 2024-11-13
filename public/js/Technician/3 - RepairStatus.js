@@ -310,7 +310,6 @@ addrepairBtn.addEventListener('click', function(e){
 
 });
 
-
 //VIEW DETAIL BUTTON
 //getting all view buttons
 const viewDetails = document.querySelectorAll('button.view-details');

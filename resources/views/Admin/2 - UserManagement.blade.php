@@ -34,7 +34,7 @@
                     
                     <div class="tab-filters">
                         <li><button><i class="fa-solid fa-filter"></i>Filter</button></li>
-                        <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
+                        <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" id="search-input" placeholder="search"></li>
 
                         <a class="add-repair"><i class="fa-solid fa-plus" id="add-appointment"></i></a>
                     </div>
@@ -42,9 +42,9 @@
                 <div class="body">
                     <ul class="tabs">
                         <div class="tab-navigation">
-                            <li class="tab-link active" data-tab="all-users">All Users</li>
-                            <li class="tab-link" data-tab="user-customer">Customers</li>
-                            <li class="tab-link" data-tab="user-technician">Technicians</li>
+                            <li class="tab-link active" data-tab="all-users" data-table="all-users-table">All Users</li>
+                            <li class="tab-link" data-tab="user-customer" data-table="user-customer-table">Customers</li>
+                            <li class="tab-link" data-tab="user-technician" data-table="user-technician-table">Technicians</li>
                         </div>
 
                         <div class="tab-summary">
@@ -56,7 +56,7 @@
 
                     <div class="tab-content">
                         <div id="all-users" class="tab-content-item card active">
-                            <table>
+                            <table id="all-users-table">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -86,10 +86,13 @@
                                     @endforeach
                                 </tbody>
                             </table>
+
+                            <div class="pagination">
+                            </div>   
                         </div>                        
 
                         <div id="user-customer" class="tab-content-item card">
-                            <table>
+                            <table id="user-customer-table">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -119,18 +122,12 @@
                             </table>
 
                             <div class="pagination">
-                                <a href="#"><i class="fa-solid fa-caret-left"></i></a>
-                                <a href="#" class="active">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#">...</a>
-                                <a href="#"><i class="fa-solid fa-caret-right"></i></a>
                             </div>                            
                         </div>
 
 
                         <div id="user-technician" class="tab-content-item card">
-                            <table>
+                            <table id="user-technician-table">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -158,6 +155,8 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div class="pagination">
+                            </div>  
                         </div>
                     </div>
 
@@ -166,8 +165,8 @@
         </main>
     </div>
 
-    <script src="{{ asset('js/Admin/2 - UserManagement.js') }}"></script>
-    <script src="{{ asset('js/Admin/admin-navbars.js') }}"></script>
-    <script src="{{ asset('js/Admin/admin-modal.js') }}"></script>
+    <script src="{{ asset('js/Admin/2 - UserManagement.js') }}" defer></script>
+    <script src="{{ asset('js/Admin/admin-navbars.js') }}" defer></script>
+    <script src="{{ asset('js/Admin/admin-modal.js') }}" defer></script>
 </body>
 </html>

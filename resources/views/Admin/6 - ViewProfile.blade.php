@@ -33,11 +33,6 @@
             </div>
             
             <div class="body">
-                <!-- <div class="header">
-                    <h1>View Profile</h1>
-                </div> -->
-                <!-- <div class="content">
-                </div> -->
                 <div class="content">
                     <div class="left">
                         <div class="upper">
@@ -46,7 +41,7 @@
                                 <ul>
                                     <li><a href="#" data-target="technician-details" class="active">Technician Details</a></li>
                                     <li><a href="#" data-target="repair-shop-profile">Repair Shop Profile</a></li>
-                                    <li><a href="#" data-target="compliance-documents">Compliance & Documentation</a></li>
+                                    <li><a href="#" data-target="compliance-documents">Uploads</a></li>
                                     <li><a href="#" data-target="repair-monitoring">Repair Monitoring</a></li>
                                     <li><a href="#" data-target="appointment-monitoring">Appointment Monitoring</a></li>
                                     <li><a href="#" data-target="ratings-feedback">Ratings & Feedback</a></li>
@@ -282,17 +277,16 @@
 
                         <div id="compliance-documents" class="form-container">
                             <div class="form-header">
-                                <h2>Image & Documentation</h2>
+                                <h2>Image Uploads</h2>
                             </div>
 
                             <div class="form-body">
-                                <div class="compliance-card">
+                                <!-- <div class="compliance-card">
                                     <div class="card-header">
                                         <h3>Certification of Technical Competence</h3>
                                         <span class="status pending">Pending Review</span>
                                     </div>
                                     <div class="card-body">
-                                        <!-- <p><strong>Uploaded By:</strong> Technician Name</p> -->
                                         <p><strong>Date Submitted:</strong> 2024-10-10</p>
                                         <p><strong>Description:</strong> A certification that proves the technician's expertise in repair services.</p>
                                         <a href="#" class="btn view-document">View Document</a>
@@ -302,25 +296,13 @@
                                         <button class="btn reject">Reject</button>
                                         <button class="btn request-resubmission">Resubmit</button>
                                     </div>
-                                </div>
-
-                                <div class="compliance-card">
-                                    <div class="card-header">
-                                        <h3>Certification of Technical Competence</h3>
-                                        <span class="status pending">Pending Review</span>
-                                    </div>
-                                    <div class="card-body">
-                                        <!-- <p><strong>Uploaded By:</strong> Technician Name</p> -->
-                                        <p><strong>Date Submitted:</strong> 2024-10-10</p>
-                                        <p><strong>Description:</strong> A certification that proves the technician's expertise in repair services.</p>
-                                        <a href="#" class="btn view-document">View Document</a>
-                                    </div>
-                                    <div class="card-footer">
-                                        <button class="btn approve">Approve</button>
-                                        <button class="btn reject">Reject</button>
-                                        <button class="btn request-resubmission">Resubmit</button>
-                                    </div>
-                                </div>
+                                </div> -->
+                                @foreach(['image_profile', 'image_2', 'image_3', 'image_4', 'image_5'] as $image)         
+                                    @if($technician->repairshopImages && $technician->repairshopImages->$image)
+                                        <div class="compliance-card" style="background-image: url('{{ asset($technician->repairshopImages->$image) }}');">
+                                        </div>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
 
@@ -343,10 +325,9 @@
                                         <th>Repair Status</th>
                                         <th>Revenue</th>
                                         <th>Date Updated</th>
-                                        <th>Details</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody> 
                                         @foreach($technician->repairshopRepairStatus as $repairdata)
                                         <tr>
                                             <td>{{$repairdata->id}}</td>
@@ -355,7 +336,6 @@
                                             <td>{{$repairdata->repairstatus}}</td>
                                             <td>{{$repairdata->revenue}}</td>
                                             <td>{{$repairdata->updated_at->format('M d, Y, h:i A')}}</td>
-                                            <td><button class="view-details" data-appointment-id="{{$repairdata->appointment_id ?? ''}}">View</button></td>
                                         </tr>
                                         @endforeach
                                 </tbody>
@@ -380,7 +360,6 @@
                                         <th>Date Requested</th>
                                         <th>Time Requested</th>
                                         <th>Date Updated</th>
-                                        <th>Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -392,7 +371,6 @@
                                             <td>{{$appointmentData->appointment_date->format('M d, Y')}}</td>
                                             <td>{{$appointmentData->appointment_time->format('h:i A')}}</td>
                                             <td>{{$appointmentData->updated_at->format('M d, Y, h:i A')}}</td>
-                                            <td><button class="view-details" data-appointment-id="">View</button></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -420,17 +398,25 @@
                                         <div class="reviewer-info">
                                             <span class="reviewer-avatar">AK</span>
                                             <div class="reviewer-details">
-                                                <span class="reviewer-name">Alex K.</span>
+                                                <span class="reviewer-name">{{$review->customer_fullname}}</span>
                                                 
                                             </div>
                                         </div>
                                         <p class="review-text">
-                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo est modi, vitae tempore quia asperiores tenetur facilis, ipsam temporibus mollitia nihil suscipit vero necessitatibus porro nostrum error. Corrupti, nulla voluptatibus!
+                                            {{$review->review_comment}}
                                         </p>
                                         @if($review->status == "Pending")
                                             <div class="review-action">
-                                                <button class="Approve" button-action="Approve" data-review-id="{{$review->id}}">Approve</button>
-                                                <button class="Reject" button-action="Reject" data-review-id="{{$review->id}}">Reject</button>
+                                                <button class="Approve" button-action="Approve" data-review-id="{{$review->id}}">APPROVE</button>
+                                                <button class="Reject" button-action="Reject" data-review-id="{{$review->id}}">REJECT</button>
+                                            </div>
+                                        @elseif($review->status == "Approved")
+                                            <div class="review-action">
+                                                <button class="Reject" button-action="Reject" data-review-id="{{$review->id}}">REJECT</button>
+                                            </div>
+                                        @elseif($review->status == "Rejected")
+                                            <div class="review-action">
+                                                <button class="Approve" button-action="Approve" data-review-id="{{$review->id}}">APPROVE</button>
                                             </div>
                                         @endif
                                     </div>
@@ -441,45 +427,80 @@
                         <div id="disciplinary-records" class="form-container">
                             <div class="form-header">
                                 <h2>Disciplinary Records</h2>
+                                <button class="disiplinary-btn btn-normal" data-technician-id="{{$technician->id}}">Add Record</button>
                             </div>
+                            @foreach($disciplinaryRecords as $disciplinaryRecord)
+                            <div class="disciplinary-card">
+                                <div class="card-header">
+                                    <div class="title">
+                                        <h3>Violation: {{$disciplinaryRecord->violation_header}}</h3>
+                                        <p><strong>Date of Incident:</strong> {{$disciplinaryRecord->date_of_incident->format('M d, Y')}}</p>    
+                                    </div>
+                                    <div class="card-status">
+                                        @php 
+                                            $offense = "";  // Initialize $offense variable
+                                            $level = "";   // Initialize $status variable
 
-                            <div class="disciplinary-card">
-                                <div class="card-header">
-                                    <div class="title">
-                                        <h3>Violation: Missed Appointment</h3>
-                                        <p><strong>Date of Incident:</strong> October 5, 2023</p>    
+                                            switch($disciplinaryRecord->violation_offense) {
+                                                case "first offense":
+                                                    $offense = "status-soft";
+                                                    break;
+                                                case "second offense":
+                                                    $offense = "status-mild";
+                                                    break;
+
+                                                case "third offense":
+                                                    $offense = "status-moderate";
+                                                    break;
+
+                                                case "fourth offense":
+                                                    $offense = "status-high";
+                                                    break;
+
+                                                case "fifth offense":
+                                                    $offense = "status-severe";
+                                                    break;
+                                            }
+
+                                            switch($disciplinaryRecord->violation_level) {
+                                                case "Minor":
+                                                    $level = "status-soft";
+                                                    break;
+                                                case "Moderate":
+                                                    $level = "status-mild";
+                                                    break;
+                                                case "Critical":
+                                                    $level = "status-high";
+                                                    break;
+                                                case "Severe":
+                                                    $level = "status-severe";
+                                                    break;
+                                            }
+                                        @endphp
+                                        
+                                        <span class="{{$offense}}">{{$disciplinaryRecord->violation_offense}}</span> 
+                                        <span class="{{$level}}">{{$disciplinaryRecord->violation_level}}</span>
                                     </div>
-                                    <span>Resolved</span>
                                 </div>
                                 <div class="card-body">
-                                    
                                     <!-- <p><strong>Technician:</strong> John Doe</p> -->
-                                    <p><strong>Violation Level:</strong> Minor</p>
-                                    <p><strong>Description:</strong> Technician failed to upload the necessary documents for the completed repair of a customer’s device, leading to a delay in approval.</p>
-                                    <p><strong>Action Taken:</strong> Formal warning issued, with a requirement to complete documentation by a set deadline.</p>
+                                    <p><strong>Violation Status: </strong>{{$disciplinaryRecord->status}}</p>
+                                    <p><strong>Violation Description: </strong>{{$disciplinaryRecord->violation_description}}</p>
+                                    <!-- <p><strong>Action Taken: </strong> Formal warning issued, with a requirement to complete documentation by a set deadline.</p> -->
                                 </div>
                                 <div class="card-footer">
-                                    <p><strong>Resolution Date:</strong> October 1, 2023</p>
-                                </div>
-                            </div>
-                            <div class="disciplinary-card">
-                                <div class="card-header">
-                                    <div class="title">
-                                        <h3>Violation: Missed Appointment</h3>
-                                        <p><strong>Date of Incident:</strong> October 5, 2023</p>                                        
+                                    @if($disciplinaryRecord->resolution_date)
+                                        <p><strong>Resolution Date:</strong> October 1, 2023</p>
+                                    @endif
+                                    <div class="card-footer-action">
+                                        <button class="update-record-btn btn-primary" data-technician-id="{{$technician->id}}" data-action-type="update">UPDATE</button>
+                                        <button class="update-record-btn btn-success" data-technician-id="{{$technician->id}}" data-action-type="resolve">MARK AS RESOLVED</button>
                                     </div>
-                                    <span>Pending Review</span>
-                                </div>
-                                <div class="card-body">
-                                    <!-- <p><strong>Technician:</strong> Jane Smith</p> -->
-                                    <p><strong>Violation Level:</strong> Moderate</p>
-                                    <p><strong>Description:</strong> Technician did not show up for a scheduled customer appointment, causing customer dissatisfaction.</p>
-                                    <p><strong>Action Taken:</strong> Technician was suspended for two days and required to undergo customer service training.</p>
-                                </div>
-                                <div class="card-footer">
                                     
                                 </div>
                             </div>
+                            @endforeach
+                            
                         </div>
 
                         <div id="access-logs" class="form-container">
@@ -490,11 +511,11 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Date of Login</th>
-                                        <th>IP Address</th>
+                                        <th>Timestamp</th>
+                                        <th>Action</th>
+                                        <th>Description</th>
                                         <th>Status</th>
-                                        <th>Browser Information</th>
-                                        <th>Last Password Reset (date)</th>
+                                        <th>IP Address</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -513,8 +534,9 @@
                     <div id="admin-actions" class="admin-actions">
                         <h3>Actions</h3>
                         <div class="admin-buttons">
-                           <button id="complete" data-user-role="technician" data-user-id="{{$technician->id}}" data-button-type="verify">VERIFY ACCOUNT</button>   
-                           <button id="restricted" data-user-role="technician" data-user-id="{{$technician->id}}" data-button-type="restrict">RESTRICT ACCOUNT</button> 
+                           <button class="btn-success" data-user-role="technician" data-user-id="{{$technician->id}}" data-button-type="verify">VERIFY ACCOUNT</button>   
+                           <button class="btn-danger" data-user-role="technician" data-user-id="{{$technician->id}}" data-button-type="restrict">RESTRICT ACCOUNT</button> 
+                           <button class="btn-warning">TERMINATE ACCOUNT</button>
                            <!-- <button class="delete" data-user-role="technician" data-user-id="{{$technician->id}}" data-button-type="delete">DELETE ACCOUNT</button>      -->
                         </div>         
                     </div>
@@ -524,121 +546,9 @@
         </main>
     </div>
 
-    <script src="{{ asset('js/Admin/2 - UserManagement.js') }}"></script>
-    <script src="{{ asset('js/Admin/admin-navbars.js') }}"></script>
-    <script src="{{ asset('js/Admin/admin-modal.js') }}"></script>
-
-    <script>
-        let modal = document.getElementById('modal');
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        let adminActions = document.getElementById('admin-actions');
-        let adminButtons = adminActions.querySelectorAll('button');
-
-        adminButtons.forEach(button => {
-            button.addEventListener('click', function(){
-                let userID = this.getAttribute('data-user-id');
-                let userType = this.getAttribute('data-user-role');
-                let actionType = this.getAttribute('data-button-type');
-                verifyAction(userType, userID, actionType);
-            });
-        });
-
-        function verifyAction(userType, userID, actionType){
-
-            if(actionType == "verify"){
-                modal.innerHTML = `
-                    <form action="/admin/viewprofile/${userType}/${userID}/${actionType}" method="POST">
-                        <input type="hidden" name="_token" value="${csrfToken}">
-                        <input type="hidden" name="_method" value="PATCH">
-                        
-                        <div class="modal-verification">
-                            <i class="fa-solid fa-user-check" id="check"></i>
-                            <div class="verification-message">
-                                <h2>Verify Account</h2>
-                                <p>Are you sure you want to verify this technician?</p>
-                            </div>
-                            <div class="verification-action">
-                                <button type="submit" class="success">Verify</button>
-                                <button type="button" class="normal"><b>Dismiss</b></button>
-                            </div>
-                        </div>                
-                    </form>
-                `;                
-            } else if (actionType == "restrict"){
-                modal.innerHTML = `
-                    <form action="/admin/viewprofile/${userType}/${userID}/${actionType}" method="POST">
-                        <input type="hidden" name="_token" value="${csrfToken}">
-                        <input type="hidden" name="_method" value="PATCH">
-
-                        <div class="modal-verification">
-                            <i class="fa-solid fa-user-xmark" id="exclamation"></i>
-                            <div class="verification-message">
-                                <h2>Restrict Account</h2>
-                                <p>Are you sure you want to Restrict this technician?</p>                        
-                            </div>
-                            <div class="verification-action">
-                                <button type="submit" class="danger">Restrict</button>
-                                <button type="button" class="normal"><b>Dismiss</b></button>
-                            </div>
-                        </div>                 
-                    </form>
-                `;   
-            } else if (actionType == "delete"){
-                modal.innerHTML = `
-                   <form method="POST">
-                        <input type="hidden" name="_token" value="${csrfToken}">
-                        <input type="hidden" name="_method" value="PATCH">
-
-                        <div class="modal-verification">
-                            <i class="fa-solid fa-user-minus" id="exclamation"></i>
-                            <div class="verification-message">
-                                <h2>Delete Account</h2>
-                                <p>Are you sure you want to Delete this Account?</p>                        
-                            </div>
-                            <div class="verification-action">
-                                <button type="submit" class="danger">Delete</button>
-                                <button type="button" class="normal"><b>Dismiss</b></button>
-                            </div>
-                        </div>                 
-                    </form>
-                `;   
-            }
-
-            // Close modal when 'X' is clicked
-            document.querySelector('.normal').onclick = function () {
-                modal.classList.remove("active");
-            };
-
-            modal.classList.add('active');
-        }
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const links = document.querySelectorAll('.profile-navigation a');
-            const sections = document.querySelectorAll('.right .form-container');
-
-            // Add event listeners to each navigation link
-            links.forEach(link => {
-                link.addEventListener('click', function (event) {
-                    event.preventDefault();
-
-                    // Remove the 'active' class from all links
-                    links.forEach(link => link.classList.remove('active'));
-
-                    // Add the 'active' class to the clicked link
-                    this.classList.add('active');
-
-                    // Hide all sections
-                    sections.forEach(section => section.classList.remove("active"));
-
-                    // Show the corresponding section
-                    const sectionId = this.getAttribute('data-target');
-                    document.getElementById(sectionId).classList.add("active");
-                });
-            });
-        });
-    </script>
+    <script src="{{ asset('js/Admin/6 - ViewProfile.js') }}" defer></script>
+    <script src="{{ asset('js/Admin/admin-navbars.js') }}" defer></script>
+    <script src="{{ asset('js/Admin/admin-modal.js') }}" defer></script>
 
     <script>
         //Notes

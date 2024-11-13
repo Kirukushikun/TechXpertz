@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Dashboard</title>
+    <title>TechXpertz</title>
+    <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <link rel="stylesheet" href="{{asset('css/Technician/technician-sidebar.css')}}">
@@ -61,7 +62,7 @@
                     </div>
                     <div class="progress revenue">
                         <h4 class="percentage">
-                            {{ $revenuePercentage >= 0 ? '+' : '-' }} {{ $revenuePercentage }}%
+                            {{ $revenuePercentage >= 0 ? '+' : '' }} {{ $revenuePercentage }}%
                         </h4>
                         {!! $revenuePercentage >= 0 ? '<i class="fa-solid fa-arrow-trend-up"></i>' : '<i class="fa-solid fa-arrow-trend-down"></i>' !!}
                     </div>
@@ -73,7 +74,7 @@
                     </div>
                     <div class="progress repairs">
                         <h4 class="percentage">
-                            {{ $repairedPercentage >= 0 ? '+' : '-' }} {{ $repairedPercentage }}%
+                            {{ $repairedPercentage >= 0 ? '+' : '' }} {{ $repairedPercentage }}%
                         </h4>
                         {!! $repairedPercentage >= 0 ? '<i class="fa-solid fa-arrow-trend-up"></i>' : '<i class="fa-solid fa-arrow-trend-down"></i>' !!}
                     </div>
@@ -96,7 +97,7 @@
                     </div>
                     <div class="progress reviews">
                         <h4 class="percentage">
-                            {{ $reviewPercentage >= 0 ? '+' : '-' }} {{ $reviewPercentage }}%
+                            {{ $reviewPercentage >= 0 ? '+' : '' }} {{ $reviewPercentage }}%
                         </h4>
                         {!! $reviewPercentage >= 0 ? '<i class="fa-solid fa-arrow-trend-up"></i>' : '<i class="fa-solid fa-arrow-trend-down"></i>' !!}
                     </div>

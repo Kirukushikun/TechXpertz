@@ -23,6 +23,7 @@ use App\Models\RepairShop_Badges;
 
 use App\Models\Admin_NotificationHistory;
 use App\Models\Admin_ReportManagement;
+use App\Models\Admin_Disciplinary;
 
 use Carbon\Carbon;
 
@@ -123,12 +124,18 @@ class AdminController extends Controller
                     ->with('repairshopServices')
                     ->with('repairshopSchedules')
                     ->with('repairshopProfile')
-                    ->with('repairshopRepairStatus')
+                    ->with(['repairshopRepairStatus' => function($query) {
+                        $query->where('status', 'in progress');
+                    }])
                     ->with('repairshopAppointments')
+                    ->with('repairshopImages')
                     ->find($userID);
+                
+                $disciplinaryRecords = Admin_Disciplinary::where('technician_id', $userID)->get();
 
                 return view('Admin.6 - ViewProfile', [
                     'technician' => $technician,
+                    'disciplinaryRecords' => $disciplinaryRecords,
                 ]);
 
             }elseif($userRole == 'Customer'){
@@ -156,8 +163,36 @@ class AdminController extends Controller
 
     public function notificationcenter(){
         $notificationHistory = Admin_NotificationHistory::orderBy('created_at', 'desc')->get();
+
+        // Get all technicians and map them to a standardized structure
+        $technicians = Technician::all()->map(function ($technician) {
+            return [
+                'id' => $technician->id,
+                'fullname' => $technician->firstname . ' ' . $technician->lastname,
+                'email' => $technician->email,
+                'role' => 'Technician',
+            ];
+        });
+
+        // Get all customers and map them to the same standardized structure
+        $customers = Customer::all()->map(function ($customer) {
+            return [
+                'id' => $customer->id,
+                'fullname' => $customer->firstname . ' ' . $customer->lastname,
+                'email' => $customer->email,
+                'role' => 'Customer',
+            ];
+        });
+
+        // Merge both collections
+        $allUsers = $technicians->merge($customers);
+
+        // Sort the merged collection by creation date
+        $allUsers = $allUsers->sortBy('created_at')->values();
+
         return view('Admin.3 - NotificationCenter', [
             'notificationHistory' => $notificationHistory,
+            'allUsers' => $allUsers,
         ]);
     }
         public function notificationcreate(Request $request, $targetType){
@@ -246,9 +281,9 @@ class AdminController extends Controller
                 'user_name' => $reportdetails->user_name,
                 'user_email' => $reportdetails->user_email,
 
-                'report_status' => $reportdetails->report_status,
-                'report_issue' => $reportdetails->report_issue,
-                'report_description' => $reportdetails->report_description,
+                'category' => $reportdetails->category,
+                'sub_category' => $reportdetails->sub_category,
+                'description' => $reportdetails->description,
             ]);
         }
         public function reportupdate(Request $request, $reportID) {
@@ -265,7 +300,8 @@ class AdminController extends Controller
         $reviewData = RepairShop_Reviews::orderBy('created_at', 'desc')
             ->with('customer')
             ->with('technician')
-            ->get();
+            ->get()
+            ->take(200);
 
         $pendingReviews = $reviewData->where('status', 'Pending');
         $approvedReviews = $reviewData->where('status', 'Approved');
@@ -288,6 +324,23 @@ class AdminController extends Controller
 
             return response()->json(['message' => 'Review updated successfully'], 200);
         }   
+
+    public function disciplinaryAction(Request $request ,$technicianID){
+        If(!$request->violation_header == "" || !$request->violation_header == null){
+            Admin_Disciplinary::create([
+                'technician_id' => $technicianID,
+                'violation_level' => $request->violation_level,
+                'violation_status' => $request->violation_status,
+                'violation_header' => $request->violation_header,
+                'violation_description' => $request->violation_description,
+                'date_of_incident' => $request->date_of_incident,
+                'resolution_date' => $request->resolution_date,
+            ]);
+            return back()->with('success', 'Disciplinary Recorded');
+        }
+
+        return back()->with('error', 'Please provide necessary information');
+    }
 
 
     //EXTERNAL FUNCTIONS

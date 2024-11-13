@@ -7,7 +7,8 @@
     <!-- Crucial Part on every forms -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Crucial Part on every forms/ -->
-    <title>Appointment</title>
+    <title>TechXpertz</title>
+    <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{asset('css/Technician/technician-sidebar.css')}}">
 
@@ -16,68 +17,7 @@
     <link rel="stylesheet" href="{{asset('css/Technician/technician-notification.css')}}">
 
     <style>
-        /* Container for Filter Button and Panel */
-        .filter-container {
-            position: relative;
-            display: inline-block;
-        }
 
-        /* Filter Button */
-        .filter-btn {
-            padding: 5px 15px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-
-            border-radius: 7px;
-            border: solid #D9D9D9 2px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .filter-btn i {
-            margin-right: 8px;
-        }
-
-        /* Filter Panel (hidden by default) */
-        .filter-panel {
-        display: none; /* Hidden initially */
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 200px;
-        padding: 10px;
-        z-index: 1000;
-        }
-
-        .filter-panel h3 {
-        margin: 0;
-        font-size: 18px;
-        color: #333;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #ddd;
-        }
-
-        .filter-option {
-        margin: 8px 0;
-        }
-
-        .apply-filter-btn {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 4px;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 10px;
-        }
     </style>
 </head>
 <body>
@@ -130,29 +70,61 @@
                     </div>
 
                     <div class="tab-filters">
-                        <!-- <li><button><i class="fa-solid fa-filter"></i> Filter</button></li> -->
                         <div class="filter-container">
-                            <!-- Filter Button -->
                             <button class="filter-btn" id="filter-btn">
                                 <i class="fa-solid fa-filter"></i> Filter
                             </button>
-                            
-                            <!-- Filter Panel (hidden by default) -->
-                            <div class="filter-panel" id="filter-panel">                                
-                                <h3>Filter by Date</h3>
-                                <label>From: <input type="date" id="filter-date-from"></label>
-                                <label>To: <input type="date" id="filter-date-to"></label>
+                            <div class="filter-panel" id="filter-panel"> 
+                                <p>Filter by name</p>  
+                                <div class="name-filter">
+                                    <select id="alphabetical-order">
+                                        <option value="">Select Order</option>
+                                        <option value="ascending">Ascending</option>
+                                        <option value="descending">Descending</option>
+                                    </select>
+                                </div>
+                                <p>Filter by month</p>                               
+                                <select id="month-filter">
+                                    <option value="">Select Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">Febuary</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                    <!-- Other months here -->
+                                </select>
+                                <p>Filter by day</p>  
+                                <select id="day-of-week-filter">
+                                    <option value="">Select Day of the Week</option>
+                                    <option value="0">Sunday</option>
+                                    <option value="1">Monday</option>
+                                    <option value="2">Tuesday</option>
+                                    <option value="3">Wednesday</option>
+                                    <option value="4">Thursday</option>
+                                    <option value="5">Friday</option>
+                                    <option value="6">Saturday</option>
+                                    <!-- Other days here -->
+                                </select>
+                                <p>Filter by time</p>  
+                                <div class="time-filter">
+                                    <label for="filter-time-from">Time From:</label>
+                                    <input type="time" id="filter-time-from" name="dateFrom">
+                                    
+                                    <label for="filter-time-to">Time To:</label>
+                                    <input type="time" id="filter-time-to" name="dateTo">                                    
+                                </div>
                                 
-                                <h3>Filter by Time</h3>
-                                <label>From: <input type="time" id="filter-time-from"></label>
-                                <label>To: <input type="time" id="filter-time-to"></label>
-
-                                <button class="apply-filter-btn">Apply Filters</button>
+                                <button class="apply-filter-btn" onclick="applyFilters()">Apply Filters</button>
                             </div>
                         </div>
-
                         <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" id="search-input" placeholder="search"></li>
-
                         <a class="add-appointment"><i class="fa-solid fa-plus" id="add-appointment"></i></a>
                     </div>
                 </ul>
@@ -161,10 +133,10 @@
             <div class="tab-content">
                 <div id="request" class="tab-content-item card active">
                     @if(count($requestedAppointments) === 0)
-                    <div class="empty-message">
-                        <img src="{{asset('images/no-appointments.png')}}">
-                        <p>No appointment requests at the moment.</p>                            
-                    </div>
+                        <div class="empty-message">
+                            <img src="{{asset('images/no-appointments.png')}}">
+                            <p>No appointment requests at the moment.</p>                            
+                        </div>
                     @else
                     <table id="request-table">
                         <thead>
@@ -181,11 +153,11 @@
                         <tbody>
                             @foreach($requestedAppointments as $request)
                             <tr>    
-                                <td>{{$request['fullname']}}</td>
+                                <td class="name-column">{{$request['fullname']}}</td>
                                 <td>{{$request['email']}}</td>
                                 <td>{{$request['contact']}}</td>
-                                <td>{{$request['formatted_date']}}</td>
-                                <td>{{$request['formatted_time']}}</td>
+                                <td class="month-column" data-month="{{$request['js_month']}}" data-day="{{$request['js_day']}}">{{$request['formatted_date']}}</td>
+                                <td class="time-column" data-time="{{$request['js_time']}}">{{$request['formatted_time']}}</td>
                                 <td><button class="view-details" data-appointment-id="{{$request['ID']}}" data-appointment-status="request">View</button></td>
                                 <td style="user-select: none;">
                                     <a class="appointment-btn" data-appointment-id="{{$request['ID']}}" data-appointment-status="reject"><i class="fa-regular fa-calendar-xmark icon-danger"></i></a>
@@ -209,7 +181,8 @@
                         <div class="pagination" style="display:none;">
                         </div>
                     @endif
-                </div>                
+                </div>   
+                
                 <div id="upcoming" class="tab-content-item card">
                     @if(count($confirmedAppointments) === 0)
                         <div class="empty-message">
@@ -232,11 +205,11 @@
                             <tbody>
                                 @foreach($confirmedAppointments as $confirmed)
                                     <tr>
-                                        <td>{{$confirmed['fullname']}}</td>
+                                        <td class="name-column">{{$confirmed['fullname']}}</td>
                                         <td>{{$confirmed['email']}}</td>
                                         <td>{{$confirmed['contact']}}</td>
-                                        <td>{{$confirmed['formatted_date']}}</td>
-                                        <td>{{$confirmed['formatted_time']}}</td>
+                                        <td class="month-column" data-month="{{$confirmed['js_month']}}" data-day="{{$confirmed['js_day']}}">{{$confirmed['formatted_date']}}</td>
+                                        <td class="time-column" data-time="{{$confirmed['js_time']}}">{{$confirmed['formatted_time']}}</td>
                                         <td><button class="view-details" data-appointment-id="{{$confirmed['ID']}}">View</button></td>
                                         <td style="user-select: none;">
                                             <a class="appointment-btn" data-appointment-id="{{$confirmed['ID']}}" data-appointment-status="cancel"><i class="fa-regular fa-calendar-xmark icon-danger"></i></a>
@@ -284,11 +257,11 @@
                         <tbody>
                             @foreach($rejectedAppointments as $rejected)
                                 <tr>
-                                    <td>{{$rejected['fullname']}}</td>
+                                    <td class="name-column">{{$rejected['fullname']}}</td>
                                     <td>{{$rejected['email']}}</td>
                                     <td>{{$rejected['contact']}}</td>
-                                    <td>{{$rejected['formatted_date']}}</td>
-                                    <td>{{$rejected['formatted_time']}}</td>
+                                    <td class="month-column" data-month="{{$rejected['js_month']}}" data-day="{{$rejected['js_day']}}">{{$rejected['formatted_date']}}</td>
+                                    <td class="time-column" data-time="{{$rejected['js_time']}}">{{$rejected['formatted_time']}}</td>
                                     <td><button class="view-details" data-appointment-id="{{$rejected['ID']}}">View</button></td>
                                     <td class="table-action" style="user-select: none;">
                                     @if($rejected['customer_id'])
@@ -312,162 +285,8 @@
                     @endif
                 </div>
             </div>
-
-            <!-- <div class="tab-content">
-                <div id="upcoming" class="tab-content-item card active">
-                    
-                    <table id="upcoming-table">
-                        <thead>
-                            <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Contact</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Details</th>
-                            <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for($i = 0; $i < 100; $i++)
-                            <tr>
-                                <td>{{$i}}</td>
-                                <td>johndoe@example.com</td>
-                                <td>+123-456-7890</td>
-                                <td>2023-11-01</td>
-                                <td>10:00 AM</td>
-                                <td><button class="view-details" data-appointment-id="123">View</button></td>
-                                <td>
-                                    <a class="appointment-btn" data-appointment-id="123" data-appointment-status="cancel"><i class="fa-regular fa-calendar-xmark icon-danger"></i></a>
-                                    <a class="appointment-btn" data-appointment-id="123" data-customer-id="456" data-appointment-status="repair"><i class="fa-solid fa-screwdriver-wrench icon-primary"></i></a>
-                                    <a href="{{ route('messageCustomer', ['customerID' => 456]) }}"><i class="fa-solid fa-comment icon-info"></i></a>
-                                </td>
-                            </tr>
-                            @endfor
-                        </tbody>
-                    </table>
-
-                    <div class="pagination">
-                    </div>
-                </div>
-                <div id="request" class="tab-content-item card">
-                    <table id="request-table">
-                        <thead>
-                            <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Contact</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Details</th>
-                            <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for($i = 0; $i < 81; $i++)
-                                <tr>
-                                    <td>{{$i}}</td>
-                                    @if($i == 67)
-                                        <td>ishirobles@example.com</td>
-                                    @elseif($i == 80) 
-                                        <td>iversoncraigg@example.com</td>
-                                    @else
-                                    <td>johndoe@example.com</td>
-                                    @endif
-                                    <td>+123-456-7890</td>
-                                    <td>2023-11-01</td>
-                                    <td>10:00 AM</td>
-                                    <td><button class="view-details" data-appointment-id="123">View</button></td>
-                                    <td>
-                                        <a class="appointment-btn" data-appointment-id="123" data-appointment-status="cancel"><i class="fa-regular fa-calendar-xmark icon-danger"></i></a>
-                                        <a class="appointment-btn" data-appointment-id="123" data-customer-id="456" data-appointment-status="repair"><i class="fa-solid fa-screwdriver-wrench icon-primary"></i></a>
-                                        <a href="{{ route('messageCustomer', ['customerID' => 456]) }}"><i class="fa-solid fa-comment icon-info"></i></a>
-                                    </td>
-                                </tr>
-                            @endfor
-                        </tbody>
-                    </table>
-                
-                    <div class="pagination">
-                    </div>
-                </div>
-                <div id="rejected" class="tab-content-item card">
-                    <table id="rejected-table">
-                        <thead>
-                            <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Contact</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Details</th>
-                            <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for($i = 0; $i < 7; $i++)
-                            <tr>
-                                <td>{{$i}}</td>
-                                <td>johndoe@example.com</td>
-                                <td>+123-456-7890</td>
-                                <td>2023-11-01</td>
-                                <td>10:00 AM</td>
-                                <td><button class="view-details" data-appointment-id="123">View</button></td>
-                                <td>
-                                    <a class="appointment-btn" data-appointment-id="123" data-appointment-status="cancel"><i class="fa-regular fa-calendar-xmark icon-danger"></i></a>
-                                    <a class="appointment-btn" data-appointment-id="123" data-customer-id="456" data-appointment-status="repair"><i class="fa-solid fa-screwdriver-wrench icon-primary"></i></a>
-                                    <a href="{{ route('messageCustomer', ['customerID' => 456]) }}"><i class="fa-solid fa-comment icon-info"></i></a>
-                                </td>
-                            </tr>
-                            @endfor
-                        </tbody>
-                    </table>
-                    <div class="pagination">
-                    </div>
-                </div>
-            </div> -->
         </main>
     </div> 
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const filterPanel = document.getElementById('filter-panel');
-        const filterBtn = document.getElementById('filter-btn');
-        const rows = document.querySelectorAll('.appointment-row'); // Select rows by class for flexibility
-
-        // Toggle filter panel visibility
-        filterBtn.addEventListener('click', function () {
-            filterPanel.style.display = filterPanel.style.display === 'block' ? 'none' : 'block';
-        });
-
-        // Apply filters when there's a change in filter options
-        filterPanel.addEventListener('change', applyFilters);
-
-        function applyFilters() {
-            const dateFrom = document.getElementById('filter-date-from').value;
-            const dateTo = document.getElementById('filter-date-to').value;
-            const timeFrom = document.getElementById('filter-time-from').value;
-            const timeTo = document.getElementById('filter-time-to').value;
-
-            rows.forEach(row => {
-                const rowDate = row.getAttribute('data-appointment-date');
-                const rowTime = row.getAttribute('data-appointment-time');
-
-                // Date filter check
-                const dateMatch = (!dateFrom || rowDate >= dateFrom) && (!dateTo || rowDate <= dateTo);
-
-                // Time filter check
-                const timeMatch = (!timeFrom || rowTime >= timeFrom) && (!timeTo || rowTime <= timeTo);
-
-                // Show or hide row based on date and time conditions
-                if (dateMatch && timeMatch) {
-                    row.style.display = ''; // Show row
-                } else {
-                    row.style.display = 'none'; // Hide row
-                }
-            });
-        }
-    });
-    </script>
     <script src="{{asset('js/Technician/2 - Appointment.js')}}" defer></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}" defer></script>
     <script src="{{asset('js/Technician/technician-notification.js')}}" defer></script>

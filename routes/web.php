@@ -81,6 +81,21 @@ Route::get('/contact-us', function () {
     return view('Customer.11 - ContactUs');
 });
 
+Route::get('/report', function () {
+    return view('Customer.12 - ReportPage');
+});
+
+Route::get('/terms-of-service', function () {
+    return view('Customer.13 - TermsAndCondition');
+});
+
+
+Route::get('/privacy-policy', function () {
+    return view('Customer.14 - PrivacyAndPolicy');
+});
+
+
+
 
 // TECHNICIAN AUTH---------------------------------------------------------------
 
@@ -130,7 +145,15 @@ Route::middleware('technician.auth')->group(function(){
         Route::patch('/technician/profile/update/{technicianID}/{imageType}', [TechnicianController::class, 'updateImage']);
         Route::patch('/technician/profile/delete/{technicianID}/{imageType}', [TechnicianController::class, 'deleteImage']);
         Route::patch('/technician/{technicianID}/social-link', [TechnicianController::class, 'updateLink']);
-        Route::patch('/technician/{technicianID}/{social}', [TechnicianController::class, 'deleteLink']);
+        Route::patch('/technician/{technicianID}/social-link/remove/{social}', [TechnicianController::class, 'deleteLink']);
+
+    Route::get('/technician/account', [TechnicianController::class, 'accountSettings']);
+    Route::patch('/technician/account/update', [TechnicianController::class, 'accountUpdate']);
+    Route::patch('/technician/account/password/change', [TechnicianController::class, 'accountPasswordChange']);
+    
+    Route::post('/technician/submit/report', [TechnicianController::class, 'submitReport']);
+
+
 });
 
 
@@ -161,6 +184,8 @@ Route::middleware('admin.auth')->group(function(){
 
     Route::get('/admin/reviewsmanagement', [AdminController::class, 'reviewsmanagement'])->name('admin.reviewsmanagement');
     Route::patch('/admin/reviewsmanagement/{reviewID}', [AdminController::class, 'reviewupdate']);
+
+    Route::post('/admin/viewprofile/discipline/{technicianID}', [AdminController::class, 'disciplinaryAction']);
     
 });
 

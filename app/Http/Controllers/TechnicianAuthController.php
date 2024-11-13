@@ -27,8 +27,10 @@ class TechnicianAuthController extends Controller
 
     public function loginTechnician(Request $request){
         $credentials = $request->only('email', 'password');
+        $remember = $request->filled('remember_me');
 
-        if(Auth::guard('technician')->attempt($credentials)){
+
+        if(Auth::guard('technician')->attempt($credentials, $remember)){
             return redirect()->route('technician.dashboard');
         } else {
             return redirect()->route('technician.login')->with("error", "Invalid email or password. Please re-enter.");

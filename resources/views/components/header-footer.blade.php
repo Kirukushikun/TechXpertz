@@ -89,7 +89,7 @@
         
         <div class="footer-logo">
             <div class="logo" onclick="window.location.href='{{route('welcome')}}'">Tech<span>X</span>pertz</div>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut</p>
+            <p class="description">TechXpertz connects you with trusted tech repair experts, offering quick, reliable service for all your device needs.</p>
             <div class="contact-info">
                 <i class="fa-solid fa-headset"></i>
                 <div>
@@ -104,8 +104,8 @@
             <h3>QUICK LINKS</h3>
             <ul>
                 <li><a href="/about">About us</a></li>
-                <li><a href="#">Contact us</a></li>
-                <li><a href="">Report</a></li>
+                <li><a href="/contact-us">Contact us</a></li>
+                <li><a href="/report">Report</a></li>
                 <li><a href="/customer/login">Login</a></li>
                 <li><a href="/customer/signup">Sign Up</a></li>
             </ul>
@@ -117,8 +117,8 @@
                 <li><a href="/customer/myaccount">My Account</a></li>
                 <li><a href="/repairlist">Repair List</a></li>
                 <li><a href="/messages">Messages</a></li>
-                <li><a href="#">Terms</a></li>
-                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="/terms-of-service">Terms</a></li>
+                <li><a href="/privacy-policy">Privacy Policy</a></li>
             </ul>
         </div>
 

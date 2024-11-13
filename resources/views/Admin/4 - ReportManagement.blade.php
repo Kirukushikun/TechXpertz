@@ -39,7 +39,7 @@
                     
                     <div class="tab-filters">
                         <li><button><i class="fa-solid fa-filter"></i>Filter</button></li>
-                        <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
+                        <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" id="search-input" placeholder="search"></li>
                         <a class="add-repair"><i class="fa-solid fa-plus" id="add-appointment"></i></a>
                     </div>
                 </div>
@@ -60,9 +60,9 @@
                 <div class="body">
                     <ul class="tabs">
                         <div class="tab-navigation">
-                            <li class="tab-link active" data-tab="all-users">All Users</li>
-                            <li class="tab-link" data-tab="user-customer">Customers</li>
-                            <li class="tab-link" data-tab="user-technician">Technicians</li>
+                            <li class="tab-link active" data-tab="all-users" data-table="all-users-table">All Users</li>
+                            <li class="tab-link" data-tab="user-customer" data-table="user-customer-table">Customers</li>
+                            <li class="tab-link" data-tab="user-technician" data-table="user-technician-table">Technicians</li>
                         </div>
 
                         @php
@@ -82,7 +82,7 @@
                     <div class="tab-content">
                         <!-- All Users -->
                         <div id="all-users" class="tab-content-item card active">
-                            <table>
+                            <table id="all-users-table">
                                 <thead>
                                     <tr>
                                         <th>Report ID</th>
@@ -101,7 +101,7 @@
                                         <td>{{$report->user_name}}</td>
                                         <td>{{$report->user_role}}</td>
                                         <td>
-                                            {{$report->report_issue}}
+                                            {{$report->category}}
                                         </td>
                                         <td>
                                             <input type="text" value="{{$report->report_status}}">
@@ -116,11 +116,14 @@
                                     @endforeach
                                 </tbody>
                             </table>
+
+                            <div class="pagination">
+                            </div> 
                         </div>
 
                         <!-- Customers -->
                         <div id="user-customer" class="tab-content-item card">
-                            <table>
+                            <table id="user-customer-table">
                                 <thead>
                                     <tr>
                                         <th>Report ID</th>
@@ -154,18 +157,12 @@
                             </table>
 
                             <div class="pagination">
-                                <a href="#"><i class="fa-solid fa-caret-left"></i></a>
-                                <a href="#" class="active">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#">...</a>
-                                <a href="#"><i class="fa-solid fa-caret-right"></i></a>
                             </div>                            
                         </div>
 
                         <!-- Technician -->
                         <div id="user-technician" class="tab-content-item card">
-                            <table>
+                            <table id="user-customer-table">
                                 <thead>
                                     <tr>
                                         <th>Report ID</th>
@@ -182,7 +179,7 @@
                                         <td>{{$treport->id}}</td>
                                         <td>{{$treport->user_name}}</td>
                                         <td>
-                                            {{$treport->report_issue}}
+                                            {{$treport->category}}
                                         </td>
                                         <td>
                                             <input type="text" value="{{$treport->report_status}}">
@@ -197,6 +194,9 @@
                                     @endforeach
                                 </tbody>
                             </table>
+
+                            <div class="pagination">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -204,7 +204,7 @@
         </main>
     </div>
 
-    <script src="{{ asset('js/Admin/2 - UserManagement.js') }}"></script>
+    <script src="{{ asset('js/Admin/4 - ReportManagement.js') }}" defer></script>
     <script src="{{ asset('js/Admin/admin-navbars.js') }}"></script>
     <script>
         const modal = document.getElementById('modal');
@@ -268,13 +268,19 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="report_issue">Report Issue</label>
-                                <input type="text" id="report_issue" name="report_issue" value="${data.report_issue}" readonly>
+                                <label for="report_issue">Category</label>
+                                <input type="text" id="report_issue" name="report_issue" value="${data.category}" readonly>
+                            </div>
+
+                            
+                            <div class="form-group">
+                                <label for="report_issue">Sub-Category</label>
+                                <input type="text" id="report_issue" name="report_issue" value="${data.sub_category}" readonly>
                             </div>
 
                             <div class="form-group">
                                 <label for="report_description">Report Description</label>
-                                <textarea type="text" id="report_description" name="report_description" readonly>${data.report_description}</textarea>
+                                <textarea type="text" id="report_description" name="report_description" readonly>${data.description}</textarea>
                             </div>
                         </div>
                         

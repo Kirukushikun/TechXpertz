@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>TechXpertz</title>
+        <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
         <link rel="stylesheet" href="{{asset('css/Technician/0 - Login.css')}}" />
     </head>
     <body>
@@ -26,7 +27,7 @@
                         <div class="remember-me">
                             <label>
                                 <label class="switch">
-                                    <input type="checkbox" id="dark-mode-toggle">
+                                    <input type="checkbox" name="remember_me" id="dark-mode-toggle">
                                     <span class="slider round"></span>
                                 </label>         
                                 Remember Me

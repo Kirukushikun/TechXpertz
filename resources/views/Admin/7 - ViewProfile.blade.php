@@ -41,8 +41,7 @@
                             <div class="profile-navigation">
                                 <h2>Customer Profile</h2>
                                 <ul>
-                                    <li><a href="#" data-target="technician-details" class="active">Technician Details</a></li>
-                                    <li><a href="#" data-target="repair-shop-profile">Repair Shop Profile</a></li>
+                                    <li><a href="#" data-target="customer-details" class="active">Customer Details</a></li>
                                     <li><a href="#" data-target="compliance-documents">Compliance & Documentation</a></li>
                                     <li><a href="#" data-target="repair-monitoring">Repair Monitoring</a></li>
                                     <li><a href="#" data-target="appointment-monitoring">Appointment Monitoring</a></li>
@@ -55,7 +54,7 @@
                     </div>
 
                     <div class="right">
-                        <div id="technician-details" class="form-container active">
+                        <div id="customer-details" class="form-container active">
                             <div class="form-header">
                                 <div class="profile-detail">
                                     <div class="image"></div>
@@ -98,28 +97,7 @@
                                     <label for="contact-no">Contact No.</label>
                                     <input type="text" id="contact-no" name="contact-no" value="" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="educational-bg">Educational Background</label>
-                                    <input type="text" id="educational-bg" name="educational-bg" value="" required>
-                                </div>
 
-                                <div class="form-group">
-                                    <label for="province">Province</label>
-                                    <input type="text" id="province" name="province" value="" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="city">City</label>
-                                    <input type="text" id="city" name="city" value="" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="barangay">Barangay</label>
-                                    <input type="text" id="barangay" name="barangay" value="" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="ZIP-code">ZIP Code</label>
-                                    <input type="text" id="ZIP-code" name="ZIP-code" value="" required>
-                                </div>
                             </div>
                         </div>
 

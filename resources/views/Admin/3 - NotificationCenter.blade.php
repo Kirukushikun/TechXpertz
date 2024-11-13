@@ -85,10 +85,10 @@
 
                         <div class="tab-filters">
                             <li><button><i class="fa-solid fa-filter"></i> Filter</button></li>
-                            <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
+                            <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input id="search-input" type="text" placeholder="search"></li>
                         </div>
 
-                        <table>
+                        <table id="users-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -98,19 +98,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>#1234</td>
-                                    <td>Iverson Craig Guno</td>
-                                    <td>
-                                        Iversoncraigg@gmail.com
-                                    </td>
-                                    <td>
-                                        Technician
-                                    </td>
-                                </tr>
-                                
+                                @foreach($allUsers as $user)
+                                    <tr>
+                                        <td>{{$user['id']}}</td>
+                                        <td>{{$user['fullname']}}</td>
+                                        <td>
+                                            {{$user['email']}}
+                                        </td>
+                                        <td>
+                                            {{$user['role']}}
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
+
+                        <div id="pagination" class="pagination">
+                        </div>
                     </div>
 
                 </div>
@@ -351,6 +355,97 @@
             }
             inputTargetID.value = "";
         })
+
+    </script>
+
+    <script>
+        // Configuration Variables
+        const tableId = "users-table"; // ID of the table
+        const paginationContainerId = "pagination"; // ID of the pagination container
+        const searchInputId = "search-input"; // ID of the search input
+        const itemsPerPage = 6; // Items per page
+
+        let currentPage = 1; // Initial page number
+
+        // Function to display items for the table
+        function displayTableContent(page = 1, search = "") {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+
+            const rows = Array.from(table.querySelector("tbody").rows);
+            const filteredRows = search
+                ? rows.filter(row => row.textContent.toLowerCase().includes(search.toLowerCase()))
+                : rows;
+
+            const totalItems = filteredRows.length;
+            const start = (page - 1) * itemsPerPage;
+            const end = page * itemsPerPage;
+
+            // Hide all rows and show only the filtered rows for the current page
+            rows.forEach(row => (row.style.display = "none"));
+            filteredRows.slice(start, end).forEach(row => (row.style.display = ""));
+
+            // Update pagination controls
+            renderPagination(page, Math.ceil(totalItems / itemsPerPage));
+        }
+
+        // Function to render pagination
+        function renderPagination(currentPage, totalPages) {
+            const paginationContainer = document.getElementById(paginationContainerId);
+            paginationContainer.innerHTML = "";
+
+            const maxPagesToShow = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+            let endPage = startPage + maxPagesToShow - 1;
+
+            if (endPage > totalPages) {
+                endPage = totalPages;
+                startPage = Math.max(1, endPage - maxPagesToShow + 1);
+            }
+
+            // Create "Previous" button
+            if (currentPage > 1) {
+                const prevButton = document.createElement("button");
+                prevButton.innerHTML = '<i class="fa-solid fa-caret-left"></i>';
+                prevButton.addEventListener("click", () => {
+                    currentPage -= 1;
+                    displayTableContent(currentPage, document.getElementById(searchInputId).value.trim());
+                });
+                paginationContainer.appendChild(prevButton);
+            }
+
+            // Create page number buttons
+            for (let i = startPage; i <= endPage; i++) {
+                const pageButton = document.createElement("button");
+                pageButton.textContent = i;
+                pageButton.classList.toggle("active", i === currentPage);
+                pageButton.addEventListener("click", () => {
+                    currentPage = i;
+                    displayTableContent(currentPage, document.getElementById(searchInputId).value.trim());
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+
+            // Create "Next" button
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement("button");
+                nextButton.innerHTML = '<i class="fa-solid fa-caret-right"></i>';
+                nextButton.addEventListener("click", () => {
+                    currentPage += 1;
+                    displayTableContent(currentPage, document.getElementById(searchInputId).value.trim());
+                });
+                paginationContainer.appendChild(nextButton);
+            }
+        }
+
+        // Search input event listener
+        document.getElementById(searchInputId).addEventListener("input", () => {
+            currentPage = 1;
+            displayTableContent(currentPage, document.getElementById(searchInputId).value.trim());
+        });
+
+        // Initial display for the table
+        displayTableContent(currentPage);
 
     </script>
 </body>

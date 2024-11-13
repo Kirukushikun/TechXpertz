@@ -5,32 +5,77 @@ const itemsPerPage = 8; // Define how many items per page
 let currentPage = 1; // Initial page number
 let activeTab = "request"; // Default active tab
 
-// Function to display items for a specific tab and page
-function displayTabContent(tab, page = 1, search = "") {
+const filterPanel = document.getElementById('filter-panel');
+const filterBtn = document.getElementById('filter-btn');
+const rows = document.querySelectorAll('.appointment-row'); // Select rows by class for flexibility
+
+// Toggle filter panel visibility
+filterBtn.addEventListener('click', function () {
+    filterPanel.style.display = filterPanel.style.display === 'block' ? 'none' : 'block';
+});
+
+// Function to display items for a specific tab and page with filters applied
+function displayTabContent(tab, page = 1, search = "", filters = {}) {
     const table = document.getElementById(`${tab}-table`);
-    if (!table) return; // Add this line to prevent errors if the table is missing
+    if (!table) return;
 
     const rows = Array.from(table.querySelector("tbody").rows);
-    const filteredRows = search
+
+    // Apply search filter
+    let filteredRows = search
         ? rows.filter(row => row.textContent.toLowerCase().includes(search.toLowerCase()))
         : rows;
 
+    // Apply sorting filter if applicable, only to rows with .name-column
+    if (filters.order) {
+        filteredRows = filteredRows.filter(row => row.querySelector(".name-column")); // Keep rows with .name-column
+        filteredRows.sort((a, b) => {
+            const nameA = a.querySelector(".name-column").textContent.trim().toLowerCase();
+            const nameB = b.querySelector(".name-column").textContent.trim().toLowerCase();
+            return filters.order === "ascending" ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+        });
+    }
+
+    // Filter by month if a month filter is provided
+    if (filters.month) {
+        filteredRows = filteredRows.filter(row => {
+            const rowMonth = row.querySelector(".month-column")?.dataset.month.split("-")[1]; // Extract month part
+            return rowMonth === filters.month;
+        });
+    }
+
+    // Filter by day if a day filter is provided
+    if (filters.day !== undefined && filters.day !== "") {
+        filteredRows = filteredRows.filter(row => {
+            const day = new Date(row.querySelector(".month-column")?.dataset.day).getDay();
+            return day.toString() === filters.day;
+        });
+    }
+
+    // Filter by time range if both timeFrom and timeTo filters are provided
+    if (filters.timeFrom && filters.timeTo) {
+        filteredRows = filteredRows.filter(row => {
+            const time = row.querySelector(".time-column")?.dataset.time;
+            return time >= filters.timeFrom && time <= filters.timeTo;
+        });
+    }
+
+    // Pagination logic
     const totalItems = filteredRows.length;
     const start = (page - 1) * itemsPerPage;
     const end = page * itemsPerPage;
-    
-    // Hide all rows and show only the filtered rows for the current page
+
+    // Hide all rows initially, then show only rows in the current page's range
     rows.forEach(row => row.style.display = "none");
     filteredRows.slice(start, end).forEach(row => row.style.display = "");
 
-    // Update pagination controls
+    // Update pagination controls with the current page and total pages
     renderPagination(tab, page, Math.ceil(totalItems / itemsPerPage));
 }
 
 
 // Function to switch active tab
 function switchTab(tab) {
-    // Update active tab
     activeTab = tab;
     currentPage = 1; // Reset page to the first page
 
@@ -39,7 +84,7 @@ function switchTab(tab) {
     tabContentItems.forEach(content => content.classList.toggle("active", content.id === tab));
 
     // Display content for the current tab
-    displayTabContent(tab, currentPage, searchInput.value.trim());
+    displayTabContent(tab, currentPage, searchInput.value.trim(), getFilterValues());
 }
 
 // Function to render pagination
@@ -47,50 +92,62 @@ function renderPagination(tab, currentPage, totalPages) {
     const paginationContainer = document.querySelector(`#${tab} .pagination`);
     paginationContainer.innerHTML = "";
 
-    // Calculate the range of page numbers to display
     const maxPagesToShow = 5;
     let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
     let endPage = startPage + maxPagesToShow - 1;
 
-    // Adjust if we're near the beginning or end of the page range
     if (endPage > totalPages) {
         endPage = totalPages;
         startPage = Math.max(1, endPage - maxPagesToShow + 1);
     }
 
-    // Create "Previous" button
     if (currentPage > 1) {
         const prevButton = document.createElement("button");
         prevButton.innerHTML = '<i class="fa-solid fa-caret-left"></i>';
         prevButton.addEventListener("click", () => {
             currentPage -= 1;
-            displayTabContent(tab, currentPage, searchInput.value.trim());
+            displayTabContent(tab, currentPage, searchInput.value.trim(), getFilterValues());
         });
         paginationContainer.appendChild(prevButton);
     }
 
-    // Create page number buttons within the calculated range
     for (let i = startPage; i <= endPage; i++) {
         const pageButton = document.createElement("button");
         pageButton.textContent = i;
         pageButton.classList.toggle("active", i === currentPage);
         pageButton.addEventListener("click", () => {
             currentPage = i;
-            displayTabContent(tab, currentPage, searchInput.value.trim());
+            displayTabContent(tab, currentPage, searchInput.value.trim(), getFilterValues());
         });
         paginationContainer.appendChild(pageButton);
     }
 
-    // Create "Next" button
     if (currentPage < totalPages) {
         const nextButton = document.createElement("button");
         nextButton.innerHTML = '<i class="fa-solid fa-caret-right"></i>';
         nextButton.addEventListener("click", () => {
             currentPage += 1;
-            displayTabContent(tab, currentPage, searchInput.value.trim());
+            displayTabContent(tab, currentPage, searchInput.value.trim(), getFilterValues());
         });
         paginationContainer.appendChild(nextButton);
     }
+}
+
+// Function to get values from filters
+function getFilterValues() {
+    return {
+        order: document.getElementById("alphabetical-order").value,
+        month: document.getElementById("month-filter").value,
+        day: document.getElementById("day-of-week-filter").value,
+        timeFrom: document.getElementById("filter-time-from").value,
+        timeTo: document.getElementById("filter-time-to").value,
+    };
+}
+
+// Apply filter button event
+function applyFilters() {
+    currentPage = 1;
+    displayTabContent(activeTab, currentPage, searchInput.value.trim(), getFilterValues());
 }
 
 // Tab click event listener
@@ -100,8 +157,8 @@ tabs.forEach(tab => {
 
 // Search input event listener
 searchInput.addEventListener("input", () => {
-    currentPage = 1; // Reset to the first page when searching
-    displayTabContent(activeTab, currentPage, searchInput.value.trim());
+    currentPage = 1;
+    displayTabContent(activeTab, currentPage, searchInput.value.trim(), getFilterValues());
 });
 
 // Initialize display for the default tab

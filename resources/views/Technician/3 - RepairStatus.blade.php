@@ -7,7 +7,8 @@
     <!-- Crucial Part on every forms -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Crucial Part on every forms/ -->
-    <title>Dashboard</title>
+    <title>TechXpertz</title>
+    <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{asset('css/Technician/technician-sidebar.css')}}">
 
@@ -339,7 +340,6 @@
 
         // Initialize display for the default tab
         switchTab(activeTab);
-
     </script>
     <script src="{{asset('js/Technician/3 - RepairStatus.js')}}" defer></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}" defer></script>

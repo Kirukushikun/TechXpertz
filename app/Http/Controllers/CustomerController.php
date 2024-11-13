@@ -545,7 +545,7 @@ class CustomerController extends Controller
                     }
 
                     // Ensure the new password is different from the current password
-                    if (Hash::check($request->current_password, $customer->password)) {
+                    if (Hash::check($request->new_password, $customer->password)) {
                         return back()->with('error', 'Password Change Failed')->with('error_message', 'The new password cannot be the same as the current password.');
                     }
 

@@ -14,7 +14,7 @@
             <li><a href="/technician/messages"><i class="fa-solid fa-message"></i>Messages</a></li>
             <li><a href="/technician/shopreviews"><i class="fas fa-star"></i>Shop Reviews</a></li>
             <li><a href="/technician/profile"><i class="fas fa-user-cog"></i>Manage Profile</a></li>
-            <!-- <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li> -->
+            <li><a href="/technician/account"><i class="fas fa-cog"></i>Account Settings</a></li>
         </ul>
     </nav>
 

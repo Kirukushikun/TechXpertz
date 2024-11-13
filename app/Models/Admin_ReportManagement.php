@@ -28,7 +28,8 @@ class Admin_ReportManagement extends Model
         'user_email',
 
         'report_status',
-        'report_issue',
-        'report_description',
+        'category',
+        'sub_category',
+        'description',
     ];
 }

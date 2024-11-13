@@ -1,7 +1,33 @@
+.main-content {
+    display: flex;
+    flex-direction: column;
 
 
-.body{
-    height: 80%;
+    width: 100%;
+    height: 100vh;
+
+    padding: 40px 30px;
+    margin-left: 270px;
+
+    background-color: #f8f8f8;
+    /* background-color: #666666; */
+    color: var(--text-color);
+}
+
+header {
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-transform: capitalize;
+}
+.technician-name{
+    font-size: 20px;
+}.technician-name h3{
+    color: var(--primary-color);
+}.technician-name span{
+    color: var(--text-color);
 }
 
 .content{
@@ -21,10 +47,14 @@
     width: 20%;
     border-radius: 7px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+    background-color: white;
 }
 .right{
+
+    background-color: white;
     padding: 40px 20px 40px 40px;
-    width: 75%;
+    width: 80%;
     height: 100%;
 
     overflow: hidden;
@@ -33,7 +63,6 @@
     border-radius: 7px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
-
 
 .left h2{
     padding: 10px 40px 30px;
@@ -120,20 +149,19 @@
     width: 100%;
 }
 
-
-
-
-.left .form-container .form-group label {
+.right .form-container .form-group label {
     font-weight: 500;
     margin-bottom: 10px;
 }
 
 .right .form-container .form-group input,
-.right .form-container .form-group select {
+.right .form-container .form-group select,
+.right .form-container .form-group textarea {
     padding: 12px;
     font-size: 15px;
     border-radius: 7px;
     border: solid #d3d3d3 2px;
+    resize: none;
 }
 
 .right .form-header{
@@ -324,101 +352,6 @@ table td a{
     padding: 5px 10px;
 }
 
-.review {
-    border-radius: 7px;
-    border: 2px solid #e4e4e4;
-    padding: 30px;
-}.review.Approved{
-    border: 3px solid var(--success);
-}.review.Rejected{
-    border: 3px solid var(--danger);
-}
-
-.review .review-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-
-}.review-header .review-date {
-    color: #666666;
-    font-size: 14px;
-    font-weight: 500;
-
-}.review-header .stars{
-    font-size: 18px;
-    color: #f7e700;
-    user-select: none;
-} .review-header .status{
-    padding: 5px 20px;
-    border: 2px solid var(--success);
-    color: var(--success);
-    border-radius: 7px;
-    font-weight: 600;
-}
-
-.review .review-body {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-}
-.review-body .reviewer-info {
-    display: flex;
-    align-items: center;
-
-}.reviewer-info .reviewer-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #cccccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 18px;
-    margin-right: 15px;
-
-}.reviewer-info .reviewer-details {
-    display: flex;
-    flex-direction: column;
-
-}.reviewer-info .reviewer-name {
-    font-weight: bold;
-
-}.reviewer-info .reviewer-title {
-    color: #666666;
-    font-size: 14px;
-
-}
-
-.review-body .review-action{
-    display: flex;
-    justify-content: end;
-    gap: 15px;
-    margin-top: 10px;
-}.review-body .review-action button{
-    display: flex;
-    justify-content: end;
-    border-radius: 7px;
-    border: none;
-    padding: 7px 20px;
-    gap: 10px;
-    cursor: pointer;
-    font-weight: 500;
-    color: white;
-}.review-action button.Approve{
-    background-color: var(--success);
-}.review-action button.Reject{
-    background-color: var(--danger);
-}
-
-#disciplinary-records button{
-    padding: 7px 17px;
-    font-weight: 600;
-    border-radius: 7px;
-    cursor: pointer;
-}
 
 .disciplinary-card{
     border-radius: 7px;
@@ -434,17 +367,13 @@ table td a{
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-.disciplinary-card .card-status{
-    display: flex;
-    gap: 10px;
-    text-transform: capitalize;
-    user-select: none;
-}
-.disciplinary-card .card-status span{
+}.disciplinary-card .card-header span{
     padding: 5px 20px;
+    border: 2px solid var(--success);
+    color: var(--success);
     border-radius: 7px;
     width: fit-content;
+    margin-top: 5px;
     font-weight: 600;
     align-items: center;
     justify-content: space-between;
@@ -456,27 +385,11 @@ table td a{
     grid-template-areas: none;
     gap: 30px;
 }
-.disciplinary-card .card-footer{
-    display: flex;
-    flex-direction: column;
-}.disciplinary-card .card-footer-action{
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    gap: 10px;
-}.disciplinary-card .card-footer button{
-    width: fit-content;
-}
 
 .compliance-card{
     border-radius: 7px;
     border: 2px solid #e4e4e4;
     padding: 30px;
-    height: 300px;
-
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
 
     display: flex;
     flex-direction: column;
@@ -532,35 +445,53 @@ table td a{
     width: 25px;
 }
 
-.admin-actions{
-    padding: 25px 30px;
+
+
+#change-password.active{
     display: flex;
     flex-direction: column;
-    gap: 10px;
-
-
-    width: 300px;
-
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    align-items: center;
+    justify-content: center;
 }
 
-.admin-buttons{
+#change-password form{
+    width: 60%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: 100%;
 }
 
-.admin-buttons button{
-    padding: 7px 10px;
-    border-radius: 7px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    /* background-color: transparent; */
+#change-password form a{
+    margin-left: auto;
 }
 
+#report.active{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
+#report form{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+#delete-account.active .form{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+#delete-account.active .form ul{
+    margin-left: 40px;
+}
+#delete-account.active .form ul li{
+    margin-top: 10px;
+}
+#delete-account.active .form .form-action{
+    margin-top: auto;
+}
 
 
 #complete{
@@ -583,12 +514,4 @@ table td a{
     color: var(--lighted-text-color);
 }
 
-span.primary{
-    color: var(--success);
-    background-color: #cffdda;
-}
 
-span.danger{
-    color: #8D6E63;
-    background-color: #f3e6e0;
-}

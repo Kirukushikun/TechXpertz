@@ -113,7 +113,8 @@ class ActivateShopsSeeder extends Seeder
             foreach($schedules as $schedule){
                 $schedule->update([
                     'status' => 'open',
-                    'opening_time' => $faker->time()
+                    'opening_time' => $faker->time(),
+                    'closing_time' => $faker->time()
                 ]);
             }
 

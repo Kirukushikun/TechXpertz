@@ -136,20 +136,37 @@
 
 .pagination{
     display: flex;
+    align-items: center;
     justify-content: end;
-    gap: 10px;
+    gap: 15px;
+
+    margin-top: 20px;
 }
-.pagination a{
-    padding: 5px 12px;
-    border: solid 2px var(--primary-color);
-    border-radius: 8px;
-    text-decoration: none;
+
+.pagination button{
     color: var(--primary-color);
-    font-weight: 700;
-    font-size: 13px;
-}.pagination a.active{
+    background-color: var(--secondary-color);
+    font-size: 14px;
+    font-weight: 600;
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}.pagination button.active{
+    color: var(--white);
     background-color: var(--primary-color);
-    color: white;
+    transform: scale(1.1);
+}
+.pagination button:hover{
+    transform: scale(1.2);
 }
 
 .tab-summary{

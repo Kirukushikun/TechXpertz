@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admin_reportmanagement', function (Blueprint $table) {
+        Schema::create('admin_activitylogs', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
-            $table->string('user_role');
-            $table->string('user_name');
-            $table->string('user_email');
-            
-            $table->string('report_status');
-            $table->string('category');
-            $table->string('sub_category');
+            $table->unsignedBigInteger('technician_id')->nullable();
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->string('action');
             $table->text('description');
+            $table->string('status')->default('success');
+            $table->string('ip_address');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admin_reportmanagement');
+        Schema::dropIfExists('admin_activitylogs');
     }
 };

@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Profile</title>
+    <title>TechXpertz</title>
+    <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
     <!-- Crucial Part on every forms -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Crucial Part on every forms/ -->
@@ -15,58 +16,6 @@
     <link rel="stylesheet" href="{{asset('css/Technician/technician-modal.css')}}">
     <link rel="stylesheet" href="{{asset('css/Technician/technician-notification.css')}}">
 
-    <!-- <style>
-        .shop-images-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-            align-items: center;
-            padding: 20px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 600px;
-            margin: 20px auto;
-        }
-
-        .main-image, .additional-images {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 45%;
-            padding: 10px;
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .upload-label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        #main-image-preview, #additional-images-preview {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .upload-text {
-            font-size: 14px;
-            color: #888;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-    </style> -->
 </head>
 <body>
     <div class="dashboard">
@@ -376,56 +325,7 @@
 
         </main>
     </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function(){
-            // Function to open modal with the image view
-            function viewImage(imageUrl) {
-                const modal = document.getElementById('modal');
 
-                // Set the modal content to display the image with a close button
-                modal.innerHTML = `
-                    <div class="image-preview-container" style="background-image: url('${imageUrl}');">
-                        <i class="fa-solid fa-xmark close icon-close"></i>
-                    </div>
-                `;
-
-                // Show the modal
-                modal.classList.add("active");
-
-                // Close modal when 'X' is clicked
-                document.querySelectorAll('.close').forEach(button => {
-                    button.onclick = function () {
-                        modal.classList.remove("active");
-                    };
-                });
-            }
-
-            // Attach event listeners to the "eye" icons
-            document.querySelectorAll('.preview-image').forEach(icon => {
-                icon.addEventListener('click', function() {
-                    const imageUrl = this.getAttribute('data-image-url');
-                    viewImage(imageUrl);
-                });
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function(){
-            function setActive(selectedItem) {
-                // Remove 'active' class from all radio buttons
-                document.querySelectorAll('.form-details').forEach(item => item.classList.remove('active'));
-
-                // Add 'active' class to the selected radio button container
-                const selectedElement = document.getElementById(selectedItem).parentElement;
-                selectedElement.classList.add('active');
-
-                // Set the radio button as checked
-                document.getElementById(selectedItem).checked = true;
-            }
-        });
-    </script>
     <script src="{{asset('js/Technician/6 - ManageProfile.js')}}" defer></script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}" defer></script>
     <script src="{{asset('js/Technician/technician-notification.js')}}" defer></script>

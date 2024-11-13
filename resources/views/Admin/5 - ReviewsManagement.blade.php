@@ -32,7 +32,7 @@
                     
                     <div class="tab-filters">
                         <li><button><i class="fa-solid fa-filter"></i>Filter</button></li>
-                        <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
+                        <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input id="search-input" type="text" placeholder="search"></li>
 
                         <a class="add-repair"><i class="fa-solid fa-plus" id="add-appointment"></i></a>
                     </div>
@@ -41,9 +41,9 @@
                 <div class="content">
                     <ul class="tabs">
                         <div class="tab-navigation">
-                            <li class="tab-link active" data-tab="pending-reviews">Pending</li>
-                            <li class="tab-link" data-tab="approved-reviews">Approved</li>
-                            <li class="tab-link" data-tab="rejected-reviews">Rejected</li>
+                            <li class="tab-link active" data-tab="pending-reviews" data-container="pending-reviews-container">Pending</li>
+                            <li class="tab-link" data-tab="approved-reviews" data-container="approved-reviews-container">Approved</li>
+                            <li class="tab-link" data-tab="rejected-reviews" data-container="pending-reviews-container">Rejected</li>
                         </div>
 
                         <div class="tab-summary">
@@ -55,6 +55,8 @@
                     </ul>
 
                     <div id="pending-reviews" class="tab-content-item active">
+                        <div class="pagination"></div>
+                        
                         @foreach($pendingReviews as $pending)
                             <div class="review-item active" id="{{$pending->id}}">
                                 <div class="left">
@@ -95,10 +97,14 @@
                                     <button class="reviewbtn exclamation" data-review-status="Rejected" data-review-id="{{$pending->id}}"><i class="fa-solid fa-xmark"></i></button>
                                 </div>
                             </div>
-                        @endforeach                        
+                        @endforeach  
+                        
+
                     </div>
 
                     <div id="approved-reviews" class="tab-content-item">
+                        <div class="pagination"></div>
+                        
                         @foreach($approvedReviews as $approved)
                             <div class="review-item active" id="{{$approved->id}}">
                                 <div class="left">
@@ -140,9 +146,13 @@
                                 </div>
                             </div>
                         @endforeach 
+
+
                     </div>
 
                     <div id="rejected-reviews" class="tab-content-item">
+                        <div class="pagination"></div>
+                        
                         @foreach($rejectedReviews as $rejected)
                             <div class="review-item active" id="{{$rejected->id}}">
                                 <div class="left">
@@ -184,6 +194,8 @@
                                 </div>
                             </div>
                         @endforeach 
+
+
                     </div>
 
                     <!-- <div class="review-item">
@@ -265,22 +277,121 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.tab-link');
-            const contents = document.querySelectorAll('.tab-content-item');
+        // Configuration Variables
+        const tabs = document.querySelectorAll(".tab-link"); // Tab buttons
+        const tabContentItems = document.querySelectorAll(".tab-content-item"); // Content areas for each tab
+        const searchInput = document.getElementById("search-input"); // Search input box
+        const itemsPerPage = 5; // Items per page
 
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    contents.forEach(c => c.classList.remove('active'));
-                    
-                    // Add active class to the clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById(this.dataset.tab).classList.add('active');
+        let currentPage = 1; // Initial page number
+        let activeTab = "pending-reviews"; // Default active tab
+
+        // Function to display items for a specific tab and page
+        function displayTabContent(tab, page = 1, search = "") {
+            const container = document.getElementById(`${tab}`);
+            if (!container) return; // Prevent errors if the container is missing
+
+            const items = Array.from(container.getElementsByClassName("review-item"));
+            const filteredItems = search
+                ? items.filter(item => {
+                    // Filter items based on search query and specific attributes
+                    return ["data-review-title", "data-review-ratings", "data-date"].some(attr => {
+                        const attrValue = item.getAttribute(attr);
+                        return attrValue && attrValue.toLowerCase().includes(search.toLowerCase());
+                    });
+                })
+                : items;
+
+            const totalItems = filteredItems.length;
+            const start = (page - 1) * itemsPerPage;
+            const end = page * itemsPerPage;
+
+            // Hide all items and show only filtered items for the current page
+            items.forEach(item => (item.style.display = "none"));
+            filteredItems.slice(start, end).forEach(item => (item.style.display = ""));
+
+            // Update pagination controls
+            renderPagination(tab, page, Math.ceil(totalItems / itemsPerPage));
+        }
+
+        // Function to switch active tab
+        function switchTab(tab) {
+            activeTab = tab; // Set active tab
+            currentPage = 1; // Reset page to the first
+
+            // Toggle active class for tabs and tab content
+            tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
+            tabContentItems.forEach(content => content.classList.toggle("active", content.id === tab));
+
+            // Display content for the current tab
+            displayTabContent(tab, currentPage, searchInput.value.trim());
+        }
+
+        // Function to render pagination
+        function renderPagination(tab, currentPage, totalPages) {
+            const paginationContainer = document.querySelector(`#${tab} .pagination`);
+            if (!paginationContainer) return;
+
+            paginationContainer.innerHTML = "";
+
+            const maxPagesToShow = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+            let endPage = startPage + maxPagesToShow - 1;
+
+            if (endPage > totalPages) {
+                endPage = totalPages;
+                startPage = Math.max(1, endPage - maxPagesToShow + 1);
+            }
+
+            // Create "Previous" button
+            if (currentPage > 1) {
+                const prevButton = document.createElement("button");
+                prevButton.innerHTML = '<i class="fa-solid fa-caret-left"></i>';
+                prevButton.addEventListener("click", () => {
+                    currentPage -= 1;
+                    displayTabContent(tab, currentPage, searchInput.value.trim());
                 });
-            });
+                paginationContainer.appendChild(prevButton);
+            }
+
+            // Create page number buttons
+            for (let i = startPage; i <= endPage; i++) {
+                const pageButton = document.createElement("button");
+                pageButton.textContent = i;
+                pageButton.classList.toggle("active", i === currentPage);
+                pageButton.addEventListener("click", () => {
+                    currentPage = i;
+                    displayTabContent(tab, currentPage, searchInput.value.trim());
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+
+            // Create "Next" button
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement("button");
+                nextButton.innerHTML = '<i class="fa-solid fa-caret-right"></i>';
+                nextButton.addEventListener("click", () => {
+                    currentPage += 1;
+                    displayTabContent(tab, currentPage, searchInput.value.trim());
+                });
+                paginationContainer.appendChild(nextButton);
+            }
+        }
+
+        // Tab click event listener
+        tabs.forEach(tab => {
+            tab.addEventListener("click", () => switchTab(tab.dataset.tab));
         });
+
+        // Search input event listener
+        searchInput.addEventListener("input", () => {
+            currentPage = 1; // Reset to first page on search
+            displayTabContent(activeTab, currentPage, searchInput.value.trim());
+        });
+
+        // Initialize display for the default tab
+        switchTab(activeTab);
+
     </script>
 </body>
 </html>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin_ReportManagement;
+
 use App\Models\Customer;
 use App\Models\Customer_RepairStatus;
 use App\Models\Customer_Notifications;
@@ -28,7 +30,10 @@ use Illuminate\Support\Facades\File;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TechnicianController extends Controller
 {   
@@ -143,11 +148,15 @@ class TechnicianController extends Controller
 
         // Format the date for each appointments
         foreach ($appointments as $appointment) {
-            $appointment->formatted_date = Carbon::parse($appointment->appointment_date)->format('M d, Y');
+            $appointment->formatted_date = Carbon::parse($appointment->appointment_date)->format('D, M d, Y');
             $appointment->formatted_time = Carbon::parse($appointment->appointment_time)->format('g:i A');
 
             $appointment->updated_date = Carbon::parse($appointment->updated_at)->format('M d, Y');
             $appointment->updated_time = Carbon::parse($appointment->updated_at)->format('g:i A');
+
+            $appointment->js_month = Carbon::parse($appointment->appointment_date)->format('Y-m');
+            $appointment->js_day = Carbon::parse($appointment->appointment_date)->format('Y-m-d');
+            $appointment->js_time = Carbon::parse($appointment->appointment_time)->format('H:i');
         }
     
         // Group appointments by status
@@ -166,6 +175,10 @@ class TechnicianController extends Controller
                 'contact' => $appointment->contact_no,
                 'formatted_date' => $appointment->formatted_date,
                 'formatted_time' => $appointment->formatted_time,
+                
+                'js_month' => $appointment->js_month,
+                'js_day' => $appointment->js_day,
+                'js_time' => $appointment->js_time,
             ];
         })->toArray();
     
@@ -178,6 +191,10 @@ class TechnicianController extends Controller
                 'contact' => $appointment->contact_no,
                 'formatted_date' => $appointment->formatted_date,
                 'formatted_time' => $appointment->formatted_time,
+
+                'js_month' => $appointment->js_month,
+                'js_day' => $appointment->js_day,
+                'js_time' => $appointment->js_time,
             ];
         })->toArray();
     
@@ -190,6 +207,10 @@ class TechnicianController extends Controller
                 'contact' => $appointment->contact_no,
                 'formatted_date' => $appointment->formatted_date,
                 'formatted_time' => $appointment->formatted_time,
+
+                'js_month' => $appointment->js_month,
+                'js_day' => $appointment->js_day,
+                'js_time' => $appointment->js_time,
             ];
         })->toArray();
 
@@ -202,6 +223,10 @@ class TechnicianController extends Controller
                 'contact' => $appointment->contact_no,
                 'formatted_date' => $appointment->updated_date,
                 'formatted_time' => $appointment->updated_time,
+
+                'js_month' => $appointment->js_month,
+                'js_day' => $appointment->js_day,
+                'js_time' => $appointment->js_time,
             ];
         })->toArray();
     
@@ -1062,6 +1087,113 @@ class TechnicianController extends Controller
             ]);
 
             return response()->json(['message' => 'Link deleted successfully'], 200);
+        }
+    
+    public function accountSettings(){
+        $technicianID = Auth::guard('technician')->user()->id;
+
+        return view('Technician.8 - AccountSettings');
+    }
+        public function accountUpdate(Request $request){
+            $validatedData = $request->validate([
+                //Customer Details
+                'firstname' => 'required|string|max:255',
+                'middlename' => 'required|string|max:255',
+                'lastname' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'contact_no' => 'required|string|max:255',
+                'educational_background' => 'required|string|max:255',
+
+                //Device Information
+                'province' => 'required|string|max:255',
+                'city' => 'required|string|max:255',
+                'barangay' => 'required|string|max:255',
+                'zip_code' => 'nullable|string|max:255',  
+                
+                //Appointment Schedule
+                'date_of_birth' => 'required|date',
+            ]);
+
+            $technician = Technician::find(Auth::guard('technician')->user()->id);
+            $technician->update([
+                'firstname' => $validatedData['firstname'],
+                'middlename' => $validatedData['middlename'],
+                'lastname' => $validatedData['lastname'],
+                'email' => $validatedData['email'],
+                'contact_no' => $validatedData['contact_no'],
+                'educational_background' => $validatedData['educational_background'],
+
+                'province' => $validatedData['province'],
+
+                'city' => $validatedData['city'],
+                'barangay' => $validatedData['barangay'],
+                'zip_code' => $validatedData['zip_code'],
+                'date_of_birth' => $validatedData['date_of_birth'],
+            ]);
+
+            return back()->with('success', 'Account Updated')->with('success_message', 'Account updated successfully');
+
+        }
+
+        public function accountPasswordChange(Request $request){
+            $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
+            
+            if($request->current_password){
+                // Custom validation messages
+                $messages = [
+                    'new_password.required' => 'Please enter a new password.',
+                    'new_password.min' => 'The new password must be at least 8 characters long.',
+                    'new_password.confirmed' => 'The new password and confirmation password do not match.',
+                    'current_password.required' => 'Please enter your current password.',
+                ];
+
+                // Validation with custom messages
+                $validator = Validator::make($request->all(), [
+                    'current_password' => 'required',
+                    'new_password' => 'required|min:8|confirmed', // confirmed ensures the password confirmation matches
+                ], $messages);
+
+                // Check if validation fails
+                if ($validator->fails()) {
+                    return back()->with('error', 'Password Change Failed')
+                                ->with('error_message', $validator->errors()->first()); // Send the first validation error
+                }
+
+                // Check if the current password is correct
+                if (!Hash::check($request->current_password, $technician->password)) {
+                    return back()->with('error', 'Password Change Failed')->with('error_message', 'The current password you entered is incorrect. Please try again.');
+                }
+
+                // Ensure the new password is different from the current password
+                if (Hash::check($request->new_password, $technician->password)) {
+                    return back()->with('error', 'Password Change Failed')->with('error_message', 'The new password cannot be the same as the current password.');
+                }
+
+                // Update password in a transaction for data integrity
+                DB::transaction(function () use ($technician, $request) {
+                    $technician->password = Hash::make($request->new_password);
+                    $technician->save();
+                });
+
+                // Redirect with success message
+                return back()->with('success', 'Password Changed')->with('success_message', 'Your password has been changed successfully.');
+            }
+        }
+
+
+        public function submitReport(Request $request){
+            Admin_ReportManagement::create([
+                'user_id' => Auth::guard('technician')->user()->id,
+                'user_role' => 'Technician',
+                'user_name' => $request->firstname . ' ' . $request->lastname,
+                'user_email' => $request->email,
+                'report_status' => 'Pending',
+                'category' => $request->category,
+                'sub_category' => $request->sub_category,
+                'description' => $request->description
+            ]);
+
+            return back()->with('success', 'Report Submitted')->with('success_message', 'Your report has been submitted successfully.');
         }
 
         private function reviewSystem($id){
