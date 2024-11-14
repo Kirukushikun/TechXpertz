@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+
+use App\Models\Admin_ActivityLogs;
+use Illuminate\Support\Facades\Request as RequestFacade;
+use Illuminate\Support\Collection;
+
 use App\Models\Customer;
 use App\Models\Technician;
 use Illuminate\Http\Request;
@@ -33,6 +38,7 @@ class CustomerAuthController extends Controller
 
         // Attempt to log in with the given credentials and remember option
         if (Auth::guard('web')->attempt($credentials, $remember)) {
+            $this->logActivity('Logged In', customerId: Auth::user()->id);
             return redirect()->intended(route('welcome'));
         }
 
@@ -41,6 +47,7 @@ class CustomerAuthController extends Controller
     }
 
     function logoutCustomer(){
+        $this->logActivity('Logged Out', customerId: Auth::user()->id);
         Auth::logout();
         Session::flush();
         return redirect()->intended(route('customer.login'));
@@ -72,6 +79,7 @@ class CustomerAuthController extends Controller
         
                 try {
                     $user = Customer::create($data);
+                    $this->logActivity('Account Created', customerId: $user->id);
                     return redirect()->intended(route('customer.login'))->with('success', 'Account created successfully.');
                 } catch (\Illuminate\Database\QueryException $exception) {
                     if ($exception->errorInfo[1] === 1062) {
@@ -113,6 +121,7 @@ class CustomerAuthController extends Controller
         });
 
         // Redirect with success message
+        $this->logActivity('Password Changed', customerId: $customer->id);
         return back()->with('status', 'Password changed successfully.');
     }
     
@@ -161,6 +170,10 @@ class CustomerAuthController extends Controller
             }
         );
 
+        if($status === Password::PASSWORD_RESET){
+            $this->logActivity('Reset Password', customerId: Auth::user()->id);
+        }
+
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('customer.login')->with('success', __($status))
             : back()->withErrors(['error' => __($status)]);
@@ -190,5 +203,39 @@ class CustomerAuthController extends Controller
         $request->user()->sendEmailVerificationNotification();
         return back()->with('status', 'Verification link sent!');
     }
+
+    function logActivity($action, $customerId = null, $status = 'success')
+    {
+        // Define a collection of actions and their descriptions
+        $actions = collect([
+            'Account Created' => 'Customer successfully created a new account.',
+            'Logged In' => 'Customer logged into their account.',
+            'Logged Out' => 'Customer logged out of their account.',
+            'Password Changed' => 'Customer updated their account password.',
+            'Reset Password' => 'Customer reset their account password.',
+            'Profile Updated' => 'Customer updated their profile information.',
+            'Account Deletion Requested' => 'Customer initiated a request to delete their account.',
+            'Account Deleted' => 'Customer\'s account was permanently deleted.',
+            'Booked An Appointment' => 'Customer booked a new appointment.',
+            'Cancelled Request Appointment' => 'Customer canceled an appointment request.',
+            'Cancelled Scheduled Appointment' => 'Customer canceled an existing appointment.',
+            'Review Submitted' => 'Customer submitted a review for a repair shop.',
+            'Report Submitted' => ' Customer reported an issue.',
+            'Initialized A Conversation' => 'Customer started a new conversation with a repair shop.',
+        ]);
+
+        // Retrieve the description based on the action
+        $description = $actions->get($action, 'Unknown action');
+
+        // Create a new activity log entry
+        Admin_ActivityLogs::create([
+            'customer_id' => $customerId,
+            'action' => $action,
+            'description' => $description,
+            'status' => $status,
+            'ip_address' => RequestFacade::ip(),
+        ]);
+    }
+    
 
 }

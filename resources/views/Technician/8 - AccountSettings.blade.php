@@ -38,7 +38,11 @@
             </div>
         @endif
 
+        <div class="modal" id="modal">
+        </div>
+
         @yield('sidebar')
+        
 
         <div class="main-content">
             <header>
@@ -60,7 +64,6 @@
                                 <li><a href="#" data-target="technician-details" class="active">Personal Information</a></li>
                                 <li><a href="#" data-target="change-password">Change Password</a></li>
                                 <li><a href="#" data-target="activity-logs">Access Logs</a></li>
-                                <li><a href="#" data-target="disciplinary-records">Disciplinary Records</a></li>
                                 <li><a href="#" data-target="terms-of-service">Terms of Service</a></li>
                                 <li><a href="#" data-target="privacy-policy">Privacy Policy</a></li>
                                 <li><a href="#" data-target="report">Report</a></li>
@@ -147,29 +150,29 @@
                     </form>
 
                     <div id="change-password" class="form-container">
-                        <form action="/technician/account/password/change" method="POST">
+                        <form action="/technician/account/password/change" id="change-password-form" method="POST">
                             @csrf
                             @method('PATCH')
                             <div class="form-group">
                                 <label for="current_password">Current Password</label>
-                                <input type="password" id="current_password" name="current_password">
+                                <input type="password" id="current_password" name="current_password" required>
                             </div>  
                             <br>           
                             <div class="form-section col-2">
                                 <div class="form-group">
                                     <label for="new_password">New Password</label>
-                                    <input type="password" id="new_password" name="new_password">
+                                    <input type="password" id="new_password" name="new_password" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="new_password_confirmation">Confirm New Password</label>
-                                    <input type="password" id="new_password_confirmation" name="new_password_confirmation">
+                                    <input type="password" id="new_password_confirmation" name="new_password_confirmation" required>
                                 </div>                        
                             </div>
                             <br>
-                            <a href="/technician/password/forgot">Forgot Password?</a>
-
+                            
                             <div class="form-action">
-                                <button class="btn-primary">Change Password</button>
+                                <a href="/technician/password/forgot">Forgot Password?</a>
+                                <button type="submit" class="btn-primary">Change Password</button>
                             </div>
                         </form>
                     </div>
@@ -190,59 +193,20 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($activityLogs as $activityLog)
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+                                            {{$activityLog->created_at->format('d M, Y')}} <br>
+                                            {{$activityLog->created_at->format('h:i A')}}
+                                        </td>
+                                        <td>{{$activityLog->action}}</td>
+                                        <td>{{$activityLog->description}}</td>
+                                        <td>{{$activityLog->status}}</td>
+                                        <td>{{$activityLog->ip_address}}</td>
                                     </tr>
+                                @endforeach
                             </tbody>
                         </table>
-                    </div>
-
-                    
-                    <div id="disciplinary-records" class="form-container">
-                        <div class="form-header">
-                            <h2>Disciplinary Records</h2>
-                        </div>
-                        <div class="disciplinary-card">
-                            <div class="card-header">
-                                <div class="title">
-                                    <h3>Violation: Missed Appointment</h3>
-                                    <p><strong>Date of Incident:</strong> October 5, 2023</p>    
-                                </div>
-                                <span>Resolved</span>
-                            </div>
-                            <div class="card-body">
-                                
-                                <!-- <p><strong>Technician:</strong> John Doe</p> -->
-                                <p><strong>Violation Level:</strong> Minor</p>
-                                <p><strong>Description:</strong> Technician failed to upload the necessary documents for the completed repair of a customer’s device, leading to a delay in approval.</p>
-                                <p><strong>Action Taken:</strong> Formal warning issued, with a requirement to complete documentation by a set deadline.</p>
-                            </div>
-                            <div class="card-footer">
-                                <p><strong>Resolution Date:</strong> October 1, 2023</p>
-                            </div>
-                        </div>
-                        <div class="disciplinary-card">
-                            <div class="card-header">
-                                <div class="title">
-                                    <h3>Violation: Missed Appointment</h3>
-                                    <p><strong>Date of Incident:</strong> October 5, 2023</p>                                        
-                                </div>
-                                <span>Pending Review</span>
-                            </div>
-                            <div class="card-body">
-                                <!-- <p><strong>Technician:</strong> Jane Smith</p> -->
-                                <p><strong>Violation Level:</strong> Moderate</p>
-                                <p><strong>Description:</strong> Technician did not show up for a scheduled customer appointment, causing customer dissatisfaction.</p>
-                                <p><strong>Action Taken:</strong> Technician was suspended for two days and required to undergo customer service training.</p>
-                            </div>
-                            <div class="card-footer">
-                                
-                            </div>
-                        </div>
                     </div>
 
                     <div id="terms-of-service" class="form-container">
@@ -254,7 +218,7 @@
                     </div>
 
                     <div id="report" class="form-container">
-                        <form action="/technician/submit/report" method="POST">
+                        <form action="/technician/submit/report" id="submit-report-form" method="POST">
                             @csrf
                             <input type="hidden" id="firstname" name="firstname" value="{{$technician->firstname}}">
                             <input type="hidden" id="lastname" name="lastname" value="{{$technician->lastname}}">
@@ -302,7 +266,7 @@
                             </ul>
 
                             <div class="form-action">
-                                <button class="btn-danger">Delete Account</button>
+                                <button class="btn-danger" id="delete-account">Delete Account</button>
                             </div>
                         </div>
                     </div>
@@ -460,6 +424,176 @@
 
         // Optionally, call the function initially to set sub-categories on page load
         populateSubCategories();
+    </script>
+
+    <script>
+        let modal = document.getElementById('modal');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        let personalInformationForm = document.getElementById('technician-details');
+        let personalInformationAction = personalInformationForm.querySelector('.form-action');
+        let personalInformationInputs = personalInformationForm.querySelectorAll('input');
+
+        personalInformationInputs.forEach(input => {
+            input.addEventListener('input', function(){
+                personalInformationAction.classList.add('active');
+            });
+        });
+
+        let personalInformationSubmitBtn = personalInformationAction.querySelector('.btn-primary');
+        personalInformationSubmitBtn.addEventListener('click', function(event){
+            event.preventDefault();
+            modal.innerHTML = 
+            `
+            <div>
+                <div class="modal-verification">
+                    <i class="fa-solid fa-xmark close icon-close"></i>
+                    <i class="fa-regular fa-calendar-check sign-primary"></i>
+                    <div class="verification-message">
+                        <h2>Confirm Appointment</h2>
+                        <p>Are you sure you want to confirm this appointment?</p>
+                    </div>
+                    <div class="verification-action">
+                        <button type="submit" class="btn-primary" id="personal-information">Confirm Appointment</button>
+                        <button type="button" class="close btn-normal"><b>Dismiss</b></button>
+                    </div>
+                </div>                
+            </div>
+            `;
+
+            document.getElementById('personal-information').addEventListener('click', function(){
+                personalInformationForm.submit();
+            });
+
+            modal.classList.add('active');
+
+            // Close modal when 'X' is clicked
+            document.querySelectorAll('.close').forEach(button => {
+                button.onclick = function () {
+                    modal.classList.remove("active");
+                };
+            });
+        });
+
+        let changePasswordForm = document.getElementById('change-password-form');
+        let changePasswordAction = changePasswordForm.querySelector('.btn-primary');
+        let changePasswordInputs = changePasswordForm.querySelectorAll('input');
+
+        changePasswordInputs.forEach(input => {
+            input.addEventListener('input', function(){
+                changePasswordAction.classList.add('active');
+            });
+        });
+
+        changePasswordAction.addEventListener('click', function(event){
+            event.preventDefault();
+            modal.innerHTML = 
+            `
+            <div>
+                <div class="modal-verification">
+                    <i class="fa-solid fa-xmark close icon-close"></i>
+                    <i class="fa-regular fa-calendar-check sign-primary"></i>
+                    <div class="verification-message">
+                        <h2>Change Password</h2>
+                        <p>Are you sure you want to change your password?</p>
+                    </div>
+                    <div class="verification-action">
+                        <button type="submit" class="btn-primary" id="change-password">Confirm Appointment</button>
+                        <button type="button" class="close btn-normal"><b>Dismiss</b></button>
+                    </div>
+                </div>                
+            </div>
+            `;
+
+            document.getElementById('change-password').addEventListener('click', function(){
+                changePasswordForm.submit();
+            });
+
+            modal.classList.add('active');
+
+            // Close modal when 'X' is clicked
+            document.querySelectorAll('.close').forEach(button => {
+                button.onclick = function () {
+                    modal.classList.remove("active");
+                };
+            });
+        });
+
+
+        let submitReportForm = document.getElementById('submit-report-form');
+        let submitReportAction = submitReportForm.querySelector('.btn-primary');
+        // let submitReportInputs = changePasswordForm.querySelectorAll('input');
+        
+        submitReportAction.addEventListener('click', function(event){
+            event.preventDefault();
+            modal.innerHTML = 
+            `
+            <div>
+                <div class="modal-verification">
+                    <i class="fa-solid fa-xmark close icon-close"></i>
+                    <i class="fa-regular fa-calendar-check sign-primary"></i>
+                    <div class="verification-message">
+                        <h2>Submit Report</h2>
+                        <p>Are you sure you want to submit your report?</p>
+                    </div>
+                    <div class="verification-action">
+                        <button type="submit" class="btn-primary" id="submit-report">Submit Report</button>
+                        <button type="button" class="close btn-normal"><b>Dismiss</b></button>
+                    </div>
+                </div>                
+            </div>
+            `;
+
+            document.getElementById('submit-report').addEventListener('click', function(){
+                submitReportForm.submit();
+            });
+
+            modal.classList.add('active');
+
+            // Close modal when 'X' is clicked
+            document.querySelectorAll('.close').forEach(button => {
+                button.onclick = function () {
+                    modal.classList.remove("active");
+                };
+            });
+        })
+
+        document.getElementById('delete-account').addEventListener('click', function(){
+            
+            modal.innerHTML = 
+            `
+            <form action="/technician/account/delete" method="POST">
+                <input type="hidden" name="_token" value="${csrfToken}">
+                <input type="hidden" name="_method" value="PATCH">
+                <div class="modal-verification">
+                    <i class="fa-solid fa-xmark close icon-close"></i>
+                    <i class="fa-regular fa-calendar-check sign-danger"></i>
+                    <div class="verification-message">
+                        <h2>Account Deletion</h2>
+                        <p>Are you sure you want to delete your account?</p>
+                    </div>
+                    <div class="verification-action">
+                        <button type="submit" class="btn-danger">Confirm Deletion</button>
+                        <button type="button" class="close btn-normal"><b>Dismiss</b></button>
+                    </div>
+                </div>                
+            </form>
+            `;
+
+            document.getElementById('change-password').addEventListener('click', function(){
+                changePasswordForm.submit();
+            });
+
+            modal.classList.add('active');
+
+            // Close modal when 'X' is clicked
+            document.querySelectorAll('.close').forEach(button => {
+                button.onclick = function () {
+                    modal.classList.remove("active");
+                };
+            });
+        });
+
     </script>
     <script src="{{asset('js/Technician/technician-sidebar.js')}}" defer></script>
     <script src="{{asset('js/Technician/technician-notification.js')}}" defer></script>

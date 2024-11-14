@@ -17,7 +17,6 @@
     <div class="dashboard">
 
         <div id="modal" class="modal">
-
         </div>
 
         @yield('sidebar')
@@ -267,11 +266,11 @@
 
                             <div class="form-group">
                                 <label for="repairshop_header">Header</label>
-                                <input type="text" id="repairshop_header" name="repairshop_header" value="{{$technician->repairshopProfile->header}}" readonly>
+                                <input type="text" id="repairshop_header" name="repairshop_header" value="{{$technician->repairshopProfile->header ?? ''}}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="repairshop_description">Description</label>
-                                <textarea type="text" id="repairshop_description" name="repairshop_description" readonly>{{$technician->repairshopProfile->description}}</textarea>
+                                <textarea type="text" id="repairshop_description" name="repairshop_description" readonly>{{$technician->repairshopProfile->description ?? ''}}</textarea>
                             </div>
                         </div>
 
@@ -281,22 +280,6 @@
                             </div>
 
                             <div class="form-body">
-                                <!-- <div class="compliance-card">
-                                    <div class="card-header">
-                                        <h3>Certification of Technical Competence</h3>
-                                        <span class="status pending">Pending Review</span>
-                                    </div>
-                                    <div class="card-body">
-                                        <p><strong>Date Submitted:</strong> 2024-10-10</p>
-                                        <p><strong>Description:</strong> A certification that proves the technician's expertise in repair services.</p>
-                                        <a href="#" class="btn view-document">View Document</a>
-                                    </div>
-                                    <div class="card-footer">
-                                        <button class="btn approve">Approve</button>
-                                        <button class="btn reject">Reject</button>
-                                        <button class="btn request-resubmission">Resubmit</button>
-                                    </div>
-                                </div> -->
                                 @foreach(['image_profile', 'image_2', 'image_3', 'image_4', 'image_5'] as $image)         
                                     @if($technician->repairshopImages && $technician->repairshopImages->$image)
                                         <div class="compliance-card" style="background-image: url('{{ asset($technician->repairshopImages->$image) }}');">
@@ -309,37 +292,41 @@
                         <div id="repair-monitoring" class="form-container">
                             <div class="form-header">
                                 <h2>Repair Monitoring</h2>
-
                                 <div class="tab-filters">
                                     <li><button><i class="fa-solid fa-filter"></i> Filter</button></li>
                                     <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
                                 </div>
                             </div>
-
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Repair ID</th>
-                                        <th>Customer Name</th>
-                                        <th>Status</th>
-                                        <th>Repair Status</th>
-                                        <th>Revenue</th>
-                                        <th>Date Updated</th>
-                                    </tr>
-                                </thead>
-                                <tbody> 
-                                        @foreach($technician->repairshopRepairStatus as $repairdata)
+                            @if(count($technician->repairshopRepairStatus) == 0)
+                                <div class="empty-container">
+                                    No current repairs at the moment
+                                </div>
+                            @else 
+                                <table>
+                                    <thead>
                                         <tr>
-                                            <td>{{$repairdata->id}}</td>
-                                            <td>{{$repairdata->customer_fullname}}</td>
-                                            <td>{{$repairdata->status}}</td>
-                                            <td>{{$repairdata->repairstatus}}</td>
-                                            <td>{{$repairdata->revenue}}</td>
-                                            <td>{{$repairdata->updated_at->format('M d, Y, h:i A')}}</td>
+                                            <th>Repair ID</th>
+                                            <th>Customer Name</th>
+                                            <th>Status</th>
+                                            <th>Repair Status</th>
+                                            <th>Revenue</th>
+                                            <th>Date Updated</th>
                                         </tr>
-                                        @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody> 
+                                            @foreach($technician->repairshopRepairStatus as $repairdata)
+                                            <tr>
+                                                <td>{{$repairdata->id}}</td>
+                                                <td>{{$repairdata->customer_fullname}}</td>
+                                                <td>{{$repairdata->status}}</td>
+                                                <td>{{$repairdata->repairstatus}}</td>
+                                                <td>{{$repairdata->revenue}}</td>
+                                                <td>{{$repairdata->updated_at->format('M d, Y, h:i A')}}</td>
+                                            </tr>
+                                            @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
                         </div>
 
                         <div id="appointment-monitoring" class="form-container">
@@ -350,38 +337,48 @@
                                     <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
                                 </div>
                             </div>
-
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Appointment ID</th>
-                                        <th>Customer Name</th>
-                                        <th>Status</th>
-                                        <th>Date Requested</th>
-                                        <th>Time Requested</th>
-                                        <th>Date Updated</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($technician->repairshopAppointments as $appointmentData)
+                            @if(count($technician->repairshopAppointments) == 0)
+                                <div class="empty-container">
+                                    No current appointments at the moment
+                                </div>
+                            @else
+                                <table>
+                                    <thead>
                                         <tr>
-                                            <td>{{$appointmentData->id}}</td>
-                                            <td>{{$appointmentData->fullname}}</td>
-                                            <td>{{$appointmentData->status}}</td>
-                                            <td>{{$appointmentData->appointment_date->format('M d, Y')}}</td>
-                                            <td>{{$appointmentData->appointment_time->format('h:i A')}}</td>
-                                            <td>{{$appointmentData->updated_at->format('M d, Y, h:i A')}}</td>
+                                            <th>Appointment ID</th>
+                                            <th>Customer Name</th>
+                                            <th>Status</th>
+                                            <th>Date Requested</th>
+                                            <th>Time Requested</th>
+                                            <th>Date Updated</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($technician->repairshopAppointments as $appointmentData)
+                                            <tr>
+                                                <td>{{$appointmentData->id}}</td>
+                                                <td>{{$appointmentData->fullname}}</td>
+                                                <td>{{$appointmentData->status}}</td>
+                                                <td>{{$appointmentData->appointment_date->format('M d, Y')}}</td>
+                                                <td>{{$appointmentData->appointment_time->format('h:i A')}}</td>
+                                                <td>{{$appointmentData->updated_at->format('M d, Y, h:i A')}}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
                         </div>
 
                         <div id="ratings-feedback" class="form-container">
                             <div class="form-header">
                                 <h2>Ratings & Feedback</h2>
                             </div>
-                             
+                            @if(count($technician->repairshopReviews) == 0)
+                                <div class="empty-container">
+                                    No current reviews at the moment
+                                </div>
+                            @endif
+
                             @foreach($technician->repairshopReviews as $review)
                                 <div class="review {{$review->status}}">
                                     <div class="review-header">
@@ -429,8 +426,14 @@
                                 <h2>Disciplinary Records</h2>
                                 <button class="disiplinary-btn btn-normal" data-technician-id="{{$technician->id}}">Add Record</button>
                             </div>
+                            @if(count($disciplinaryRecords) == 0)
+                                <div class="empty-container">
+                                    No current records at the moment
+                                </div>
+                            @endif
+                            
                             @foreach($disciplinaryRecords as $disciplinaryRecord)
-                            <div class="disciplinary-card">
+                            <div class="disciplinary-card {{$disciplinaryRecord->status == 'Solved' ? 'solved' : ''}}">
                                 <div class="card-header">
                                     <div class="title">
                                         <h3>Violation: {{$disciplinaryRecord->violation_header}}</h3>
@@ -442,22 +445,22 @@
                                             $level = "";   // Initialize $status variable
 
                                             switch($disciplinaryRecord->violation_offense) {
-                                                case "first offense":
+                                                case "First Offense":
                                                     $offense = "status-soft";
                                                     break;
-                                                case "second offense":
+                                                case "Second Offense":
                                                     $offense = "status-mild";
                                                     break;
 
-                                                case "third offense":
+                                                case "Third Offense":
                                                     $offense = "status-moderate";
                                                     break;
 
-                                                case "fourth offense":
+                                                case "Fourth Offense":
                                                     $offense = "status-high";
                                                     break;
 
-                                                case "fifth offense":
+                                                case "Fifth Offense":
                                                     $offense = "status-severe";
                                                     break;
                                             }
@@ -468,6 +471,9 @@
                                                     break;
                                                 case "Moderate":
                                                     $level = "status-mild";
+                                                    break;
+                                                case "Urgent":
+                                                    $level = "status-moderate";
                                                     break;
                                                 case "Critical":
                                                     $level = "status-high";
@@ -486,21 +492,24 @@
                                     <!-- <p><strong>Technician:</strong> John Doe</p> -->
                                     <p><strong>Violation Status: </strong>{{$disciplinaryRecord->status}}</p>
                                     <p><strong>Violation Description: </strong>{{$disciplinaryRecord->violation_description}}</p>
-                                    <!-- <p><strong>Action Taken: </strong> Formal warning issued, with a requirement to complete documentation by a set deadline.</p> -->
+                                    @if($disciplinaryRecord->action_taken)
+                                        <p><strong>Action Taken: </strong> {{$disciplinaryRecord->action_taken}}</p>
+                                    @endif
                                 </div>
                                 <div class="card-footer">
                                     @if($disciplinaryRecord->resolution_date)
-                                        <p><strong>Resolution Date:</strong> October 1, 2023</p>
+                                        <p><strong>Resolution Date:</strong> {{$disciplinaryRecord->resolution_date->format('M d, Y')}}</p>
                                     @endif
-                                    <div class="card-footer-action">
-                                        <button class="update-record-btn btn-primary" data-technician-id="{{$technician->id}}" data-action-type="update">UPDATE</button>
-                                        <button class="update-record-btn btn-success" data-technician-id="{{$technician->id}}" data-action-type="resolve">MARK AS RESOLVED</button>
-                                    </div>
                                     
+                                    @if($disciplinaryRecord->status != "Solved")
+                                        <div class="card-footer-action">
+                                            <button class="update-record-btn btn-primary" data-record-id="{{$disciplinaryRecord->id}}" data-technician-id="{{$technician->id}}" data-action-type="update">UPDATE</button>
+                                            <button class="update-record-btn btn-success" data-record-id="{{$disciplinaryRecord->id}}" data-technician-id="{{$technician->id}}" data-action-type="resolve">MARK AS RESOLVED</button>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             @endforeach
-                            
                         </div>
 
                         <div id="access-logs" class="form-container">
@@ -519,13 +528,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($activityLogs as $activityLog)
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td>
+                                                {{$activityLog->created_at->format('M d, Y')}} <br>
+                                                {{$activityLog->created_at->format('h:i A')}}   
+                                            </td>
+                                            <td>{{$activityLog->action}}</td>
+                                            <td>{{$activityLog->description}}</td>
+                                            <td>{{$activityLog->status}}</td>
+                                            <td>{{$activityLog->ip_address}}</td>
                                         </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

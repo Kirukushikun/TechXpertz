@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Admin_ActivityLogs;
+
 use App\Models\Customer;
 use App\Models\Customer_Notifications;
 use App\Models\Customer_RepairStatus;
@@ -32,6 +35,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request as RequestFacade;
+use Illuminate\Support\Collection;
 
 
 class CustomerController extends Controller
@@ -115,6 +120,18 @@ class CustomerController extends Controller
             if(!$repairshop){
                 return view('Customer.ErrorMessage');
             }
+
+            // View Counter
+            $sessionKey = 'shop_' . $id . '_viewed';
+            $shopCredentials = RepairShop_Credentials::where('technician_id', $id)->first();
+            if (!session()->has($sessionKey)) {
+                // Increment the views count
+                $shopCredentials->increment('shop_views');
+        
+                // Store in session to prevent counting again during this session
+                session([$sessionKey => true]);
+            }
+            // ---------------------------------------------------------------------
 
             // Retrieve all services from a specific repairshop
             $services = Repairshop_Services::where('technician_ID', $id)->get();
@@ -276,7 +293,7 @@ class CustomerController extends Controller
                 'updated_at' => now(),
             ]);
 
-    
+            $this->logActivity('Booked An Appointment', customerId: Auth::user()->id);
             return back()->with('success', 'Success! Your appointment has been successfully booked.');
         } catch (\Exception $e) {
             // return back()->with('error', 'Failed to book appointment: ' . $e->getMessage());
@@ -312,7 +329,8 @@ class CustomerController extends Controller
                 $repairstatus->update([
                     'repairstatus' => 'Appointment Cancelled',
                 ]);
-    
+
+                $this->logActivity('Canceled Request Appointment', customerId: Auth::user()->id);
                 return back()->with('success', 'Request Cancelled')->with('success_message','You appointment request has been cancelled successfully');
             
         
@@ -427,6 +445,7 @@ class CustomerController extends Controller
                     'repairstatus' => 'Review Submitted',
                     'repairstatus_message' => 'Thank you for taking the time to rate and review the repair shop! Your feedback helps both the shop and future customers. We truly appreciate your input and support!',
                 ]);
+                $this->logActivity('Review Submitted', customerId: Auth::user()->id);
                 return back()->with('success', 'Review submmited successfully');
             }
 
@@ -556,6 +575,7 @@ class CustomerController extends Controller
                     });
 
                     // Redirect with success message
+                    $this->logActivity('Password Changed', customerId: Auth::user()->id);
                     return back()->with('success', 'Password Changed')->with('success_message', 'Your password has been changed successfully.');
 
                 }
@@ -579,6 +599,7 @@ class CustomerController extends Controller
 
             }
 
+            $this->logActivity('Profile Updated', customerId: Auth::user()->id);
             return back()->with('success', 'Profile Updated')->with('success_message', 'Your profile information has been successfully updated.');
 
         }
@@ -599,6 +620,7 @@ class CustomerController extends Controller
                 ->exists();
 
             if($repairExist || $appointmentExist){
+                $this->logActivity('Account Deletion Requested', customerId: Auth::user()->id);
                 return back()->with('error', 'Deletion Failed')->with('error_message', 'Your account cannot be deleted at this time due to pending appointments or ongoing repairs. Please complete or cancel any active engagements before proceeding with account deletion.');
             }
 
@@ -606,6 +628,7 @@ class CustomerController extends Controller
                 'profile_status' => 'deleted',
             ]);
             
+            $this->logActivity('Account Deleted', customerId: Auth::user()->id);
             return redirect()->route('customer.disabledAccount', ['status' => 'deleted'])->with("message", "Your account has been successfully deleted. We're sorry to see you go and hope to serve you again in the future.");
         }
 
@@ -634,8 +657,9 @@ class CustomerController extends Controller
                     'receiver_id' => $repairshopID,
                     'receiver_type' => 'technician'
                 ]); 
+                $this->logActivity('Initialized A Conversation', customerId: Auth::user()->id);
             }
-
+            
             return view('Customer.8 - Messages');
             
         }
@@ -1113,5 +1137,38 @@ class CustomerController extends Controller
         }
     
         return $result;
+    }
+
+    function logActivity($action, $customerId = null, $status = 'success')
+    {
+        // Define a collection of actions and their descriptions
+        $actions = collect([
+            'Account Created' => 'Customer successfully created a new account.',
+            'Logged In' => 'Customer logged into their account.',
+            'Logged Out' => 'Customer logged out of their account.',
+            'Password Changed' => 'Customer updated their account password.',
+            'Reset Password' => 'Customer reset their account password.',
+            'Profile Updated' => 'Customer updated their profile information.',
+            'Account Deletion Requested' => 'Customer initiated a request to delete their account.',
+            'Account Deleted' => 'Customer\'s account was permanently deleted.',
+            'Booked An Appointment' => 'Customer booked a new appointment.',
+            'Cancelled Request Appointment' => 'Customer canceled an appointment request.',
+            'Cancelled Scheduled Appointment' => 'Customer canceled an existing appointment.',
+            'Review Submitted' => 'Customer submitted a review for a repair shop.',
+            'Report Submitted' => ' Customer reported an issue.',
+            'Initialized A Conversation' => 'Customer started a new conversation with a repair shop.',
+        ]);
+
+        // Retrieve the description based on the action
+        $description = $actions->get($action, 'Unknown action');
+
+        // Create a new activity log entry
+        Admin_ActivityLogs::create([
+            'customer_id' => $customerId,
+            'action' => $action,
+            'description' => $description,
+            'status' => $status,
+            'ip_address' => RequestFacade::ip(),
+        ]);
     }
 }

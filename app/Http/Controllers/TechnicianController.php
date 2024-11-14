@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Admin_ReportManagement;
+use App\Models\Admin_ActivityLogs;
+use Illuminate\Support\Facades\Request as RequestFacade;
+use Illuminate\Support\Collection;
 
 use App\Models\Customer;
 use App\Models\Customer_RepairStatus;
@@ -97,28 +101,36 @@ class TechnicianController extends Controller
         $revenue = $this->formatMoney($totalRepairs->sum('revenue'));
 
         //------------------------------------------------------------------------------------------------
-        $currentRevenueCount =  $repairstatus->where('repairstatus', 'Device Collected')
-            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->sum('revenue');
+        // Calculate the revenue percentage change
+        $currentRevenueCount = $repairstatus->where('repairstatus', 'Device Collected')
+        ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->sum('revenue');
 
         $previousRevenueCount = $repairstatus->where('repairstatus', 'Device Collected')
-            ->whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->sum('revenue');
+        ->whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->sum('revenue');
 
-        // Calculate the percentage change in revenue
         $revenuePercentage = $this->calculatePercentageChange($currentRevenueCount, $previousRevenueCount);
 
-        $currentRepairedCount = $totalRepairs->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->sum('revenue');
-        $previousRepairedCount = $totalRepairs->whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->sum('revenue');
+        // Calculate the total repairs percentage change
+        $currentRepairedCount = $totalRepairs->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
+        $previousRepairedCount = $totalRepairs->whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->count();
 
-        $repairedPercentage = $this->calculatePercentageChange($currentRepairedCount, $previousRevenueCount);
+        $repairedPercentage = $this->calculatePercentageChange($currentRepairedCount, $previousRepairedCount);
 
+        // Calculate the review percentage change
         $currentReviewCount = $reviews->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
         $previousReviewCount = $reviews->whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->count();
 
         $reviewPercentage = $this->calculatePercentageChange($currentReviewCount, $previousReviewCount);
+
         //------------------------------------------------------------------------------------------------
+
+        $repairshopCredentials = RepairShop_Credentials::where('technician_id', $technician->id)->first();
+
+        //-----------------------------------------------------------------------------------------------
 
         return view('Technician.1 - Dashboard', [
             'repairshop' => $repairshop,
+            'repairshopCredentials' => $repairshopCredentials,
 
             'upcomingAppointments' => $upcomingAppointments,
             'upcomingAppointmentsCount' => $upcomingAppointmentsCount,
@@ -301,6 +313,7 @@ class TechnicianController extends Controller
                     'repairstatus' => 'Appointment Confirmed',
                 ]);
 
+                $this->logActivity('Appointment Accepted', technicianId: Auth::guard('technician')->user()->id);
                 return back()->with('success', 'Appointment Confirmed')->with('success_message', 'Appointment confirmed successfully. The customer has been notified.');
 
             } elseif( $appointmentSTATUS === "reject"){
@@ -308,17 +321,16 @@ class TechnicianController extends Controller
                     'status' => 'rejected'
                 ]);
 
+                $this->logActivity('Rejected Request Appointment', technicianId: Auth::guard('technician')->user()->id);
                 return back()->with('success', 'Appointment Rejected')->with('success_message', 'Appointment request rejected. The customer has been informed.');
             } elseif($appointmentSTATUS === "cancel"){
                 $appointment->update([
                     'status' => 'rejected'
                 ]);
 
+                $this->logActivity('Cancelled Scheduled Appointment', technicianId: Auth::guard('technician')->user()->id);
                 return back()->with('success', 'Appointment Canceled')->with('success_message', 'Appointment canceled. The customer will be notified.');
             }
-
-
-
         }
 
         public function appointmentCreate(Request $request){
@@ -405,7 +417,7 @@ class TechnicianController extends Controller
                     'updated_at' => now(),
                 ]);
     
-        
+                $this->logActivity('Created An Appointment', technicianId: Auth::guard('technician')->user()->id);
                 return back()->with('success', 'Success! Your appointment has been successfully booked.');
             } catch (\Exception $e) {
                 return back()->with('error', 'Failed to book appointment: ' . $e->getMessage());
@@ -452,6 +464,10 @@ class TechnicianController extends Controller
             $repairdata->formatted_date = Carbon::parse($repairdata->updated_at)->format('M d, Y');
             $repairdata->formatted_time = Carbon::parse($repairdata->updated_at)->format('g:i A');
 
+            $repairdata->js_month = Carbon::parse($repairdata->updated_at)->format('Y-m');
+            $repairdata->js_day = Carbon::parse($repairdata->updated_at)->format('Y-m-d');
+            $repairdata->js_time = Carbon::parse($repairdata->updated_at)->format('H:i');
+
             return [
                 'repairID' => $repairdata->id,
                 'customerID' => $repairdata->customer_id,
@@ -461,6 +477,10 @@ class TechnicianController extends Controller
                 'expenses' => $formatedExpense,
                 'date' => $repairdata->formatted_date,
                 'time' => $repairdata->formatted_time,
+
+                'js_month' => $repairdata->js_month,
+                'js_day' => $repairdata->js_day,
+                'js_time' => $repairdata->js_time,
             ];
         })->toArray();
 
@@ -472,6 +492,10 @@ class TechnicianController extends Controller
             $repairdata->formatted_date = Carbon::parse($repairdata->updated_at)->format('M d, Y');
             $repairdata->formatted_time = Carbon::parse($repairdata->updated_at)->format('g:i A');
 
+            $repairdata->js_month = Carbon::parse($repairdata->updated_at)->format('Y-m');
+            $repairdata->js_day = Carbon::parse($repairdata->updated_at)->format('Y-m-d');
+            $repairdata->js_time = Carbon::parse($repairdata->updated_at)->format('H:i');
+
             return [
                 'repairID' => $repairdata->id,
                 'customerID' => $repairdata->customer_id,
@@ -481,6 +505,10 @@ class TechnicianController extends Controller
                 'expenses' => $formatedExpense,
                 'date' => $repairdata->formatted_date,
                 'time' => $repairdata->formatted_time,
+
+                'js_month' => $repairdata->js_month,
+                'js_day' => $repairdata->js_day,
+                'js_time' => $repairdata->js_time,
             ];
         })->toArray();
 
@@ -546,7 +574,8 @@ class TechnicianController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-    
+
+            $this->logActivity('Started A Repair', technicianId: Auth::guard('technician')->user()->id);
             return back()->with('success', 'Repair Started')->with('success_message', 'Repair process started. The customer has been notified that the device is being repaired.');
         }
 
@@ -573,6 +602,7 @@ class TechnicianController extends Controller
                     'updated_at' => now(),
                 ]);
 
+                $this->logActivity('Repair terminated', technicianId: Auth::guard('technician')->user()->id);
                 return back()->with('success', 'Repair Terminated')->with('success_message', 'Repair terminated successfully. The customer has been notified of the termination.');
                 
             }elseif($action === 'Update'){
@@ -617,6 +647,7 @@ class TechnicianController extends Controller
                     'updated_at' => now(),
                 ]);
 
+                $this->logActivity('Repair Updated', technicianId: Auth::guard('technician')->user()->id);
                 return back()->with('success', 'Repair Status Updated')->with('success_message', 'Repair status updated successfully. The customer has been notified of the progress.');
                 
             }
@@ -624,67 +655,82 @@ class TechnicianController extends Controller
             
         }
 
-        public function repairstatusCreateWalkIn(Request $request){
-            $technician = Auth::guard('technician')->user();
+        public function repairstatusCreateWalkIn(Request $request)
+        {
+            try {
+                $technician = Auth::guard('technician')->user();
 
-            $validatedData = $request->validate([
-                'fullname' => 'required|string|max:255',
-                'email' => 'required|string|max:255',
-                'contact' => 'required|string|max:255',
+                $validatedData = $request->validate([
+                    'fullname' => 'required|string|max:255',
+                    'email' => 'required|string|max:255',
+                    'contact' => 'required|string|max:255',
 
-                'device-type' => 'string|max:255',
-                'device-brand' => 'string|max:255',
-                'device-model' => 'string|max:255',
-                'serial-number' => 'nullable|string|max:255',
+                    'device_type' => 'string|max:255',
+                    'device_brand' => 'string|max:255',
+                    'device_model' => 'string|max:255',
+                    'serial_number' => 'nullable|string|max:255',
 
-                'revenue' => 'nullable|integer',
-                'expenses' => 'nullable|integer',
-                'payment-status' => 'string|max:255',
+                    'revenue' => 'nullable|integer',
+                    'expenses' => 'nullable|integer',
+                    'payment_status' => 'string|max:255',
 
-                'issue-description' => 'nullable|string|max:255',
-                'error-message' => 'nullable|string|max:255',
-                'previous-steps' => 'nullable|string|max:255',
-                'recent-events' => 'nullable|string|max:255',
-                'prepared-parts' => 'nullable|string|max:255',
-            ]);
+                    'issue_description' => 'nullable|string|max:255',
+                    'error_message' => 'nullable|string|max:255',
+                    'previous_steps' => 'nullable|string|max:255',
+                    'recent_events' => 'nullable|string|max:255',
+                    'prepared_parts' => 'nullable|string|max:255',
+                ]);
 
-            $appointment = Repairshop_Appointments::create([
-                'technician_id' => $technician->id,
-                'status' => 'completed',
+                $appointment = Repairshop_Appointments::create([
+                    'technician_id' => $technician->id,
+                    'status' => 'completed',
 
-                'fullname' => $validatedData['fullname'],
-                'email' => $validatedData['email'],
-                'contact_no' => $validatedData['contact'],
+                    'fullname' => $validatedData['fullname'],
+                    'email' => $validatedData['email'],
+                    'contact_no' => $validatedData['contact'],
 
-                'device_type' => $validatedData['device-type'],
-                'device_brand' => $validatedData['device-brand'],
-                'device_model' => $validatedData['device-model'],
-                'device_serial' => $validatedData['serial-number'],
+                    'device_type' => $validatedData['device_type'],
+                    'device_brand' => $validatedData['device_brand'],
+                    'device_model' => $validatedData['device_model'],
+                    'device_serial' => $validatedData['serial_number'],
 
-                'issue_descriptions' => $validatedData['issue-description'],
-                'error_message' => $validatedData['error-message'],
-                'repair_attempts' => $validatedData['previous-steps'],
-                'recent_events' => $validatedData['recent-events'],
-                'prepared_parts' => $validatedData['prepared-parts'],
+                    'issue_descriptions' => $validatedData['issue_description'],
+                    'error_message' => $validatedData['error_message'],
+                    'repair_attempts' => $validatedData['previous_steps'],
+                    'recent_events' => $validatedData['recent_events'],
+                    'prepared_parts' => $validatedData['prepared_parts'],
 
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            Repairshop_RepairStatus::create([
-                'technician_id' => $technician->id,
-                'customer_fullname' => $validatedData['fullname'],
-                'appointment_id' => $appointment->id,
-                'status' => 'pending',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
 
-                'paid_status' => $validatedData['payment-status'],
-                'revenue' => $validatedData['revenue'],
-                'expenses' => $validatedData['expenses'],
+                Repairshop_RepairStatus::create([
+                    'technician_id' => $technician->id,
+                    'customer_fullname' => $validatedData['fullname'],
+                    'appointment_id' => $appointment->id,
+                    'status' => 'in progress',
 
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            return back()->with('success', 'Repair added successfully');
+                    'paid_status' => $validatedData['payment_status'],
+                    'revenue' => $validatedData['revenue'],
+                    'expenses' => $validatedData['expenses'],
+                    'repairstatus' => 'Device Dropped Off',
+
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+
+                // $this->logActivity('Repair Created', technicianId: Auth::guard('technician')->user()->id);
+                return back()->with('success', 'Repair added successfully');
+            } catch (\Exception $e) {
+                // Log the error message for debugging
+                \Log::error('Error in repairstatusCreateWalkIn: ' . $e->getMessage());
+
+                // Return with an error message
+                return back()->withErrors(['error' => 'There was an issue creating the repair. Please try again later.']);
+            }
         }
+
 
     public function messages(){
         return view('Technician.4 - Messages');
@@ -701,6 +747,7 @@ class TechnicianController extends Controller
                     'receiver_id' => Auth::guard('technician')->user()->id,
                     'receiver_type' => 'technician'
                 ]); 
+                $this->logActivity('Initialized A Conversation', technicianId: Auth::guard('technician')->user()->id);
             }
             return view('Technician.4 - Messages');
         }
@@ -831,6 +878,15 @@ class TechnicianController extends Controller
                 'shop_barangay' => 'required|string|max:255',
                 'shop_address' => 'required|string|max:255',
             ]);
+
+            $existsInCustomer = Customer::where('email', $validatedCredentials['shop_email'])->exists();
+            $existsInTechnician = Technician::where('email', $validatedCredentials['shop_email'])->exists();
+            $existsInAdmin = Admin::where('email', $validatedCredentials['shop_email'])->exists();
+            
+            if($existsInCustomer || $existsInTechnician || $existsInAdmin){
+                return back()->with('error', 'Error Profile Update')->with('error_message', 'The email entered is already in use.');
+            }
+
             $technician->repairshopCredentials()->update([
                 'shop_name' => $validatedCredentials['shop_name'],
                 'shop_contact' => $validatedCredentials['shop_contact'],
@@ -897,6 +953,22 @@ class TechnicianController extends Controller
                 }
             }
 
+            // // --------------------------------------------------------------------------
+
+            // Profile Validation
+            $validatedAbout = $request->validate([
+                'header' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
+            ]);
+
+            if (!RepairShop_Profiles::updateOrCreate(
+                ['technician_id' => $technician->id],
+                ['header' => $validatedAbout['header'], 'description' => $validatedAbout['description']]
+            )) {
+                return back()->withErrors(['error' => 'Failed to update or create profile details.']);
+            }
+
+        
             //--------------------------------------------------------------------------
 
             // Define the days of the week in numeric form
@@ -920,65 +992,27 @@ class TechnicianController extends Controller
                 $closingTime = $status === 'open' ? $request->input("{$day}-close-time") : null;
                 
                 
-                if($status === 'open' && !$openingTime && !$closingTime){
-                    return back()->with('error', 'Error Profile Update')->with('error_message', 'You must specify your opening time and closing time');
-                }
-                
-                // Update or create the schedule for this day
-                RepairShop_Schedules::updateOrCreate(
-                    [
-                        'technician_id' => $technician->id,
-                        'day' => $dayNumber,
-                    ],
-                    [
-                        'status' => $status,
-                        'opening_time' => $openingTime,
-                        'closing_time' => $closingTime,
-                    ]
-                );
+                if($status === 'open'){
+                    if(!$openingTime || !$closingTime){
+                        return back()->with('error', 'Error Profile Update')->with('error_message', 'You must specify your opening time and closing time');
+                    }else{
+                        // Update or create the schedule for this day
+                        RepairShop_Schedules::updateOrCreate(
+                            [
+                                'technician_id' => $technician->id,
+                                'day' => $dayNumber,
+                            ],
+                            [
+                                'status' => $status,
+                                'opening_time' => $openingTime,
+                                'closing_time' => $closingTime,
+                            ]
+                        );
+                    }
+                }       
             }
 
-            //--------------------------------------------------------------------------
-
-            // Profile Validation
-            $validatedAbout = $request->validate([
-                'header' => 'nullable|string|max:255',
-                'description' => 'nullable|string',
-            ]);
-
-            if (!RepairShop_Profiles::updateOrCreate(
-                ['technician_id' => $technician->id],
-                ['header' => $validatedAbout['header'], 'description' => $validatedAbout['description']]
-            )) {
-                return back()->withErrors(['error' => 'Failed to update or create profile details.']);
-            }
-
-            // --------------------------------------------------------------------------
-
-            $request->validate([
-                'profile_image' => 'required|mimes:png,jpg,jpeg,webp'
-            ]);
-
-            if($request->hasFile('profile_image')) {  // Better check for uploaded file
-                $file = $request->file('profile_image');
-                $extension = $file->getClientOriginalExtension();  // Corrected typo: $extension
-            
-                $filename = time() . '.' . $extension;  // Use correct variable
-                $path = 'uploads/technician/';
-            
-                // Move the file to the directory and append filename to the path
-                $file->move($path, $filename);
-            
-                // Full path to be stored in the database
-                $imagePath = $path . $filename;
-            
-                // Save the image in the database
-                RepairShop_Images::create([
-                    'technician_id' => $technician->id,
-                    'image_path' => $imagePath,  // Store the full image path
-                ]);
-            }
-
+            $this->logActivity('Repairshop Profile Updated', technicianId: Auth::guard('technician')->user()->id);
             return back()->with('success', 'Saved successfully')->with('success_message', 'Changes to the profile has been saved successfully.');
         }
 
@@ -1031,6 +1065,7 @@ class TechnicianController extends Controller
                 ]);
             }
         
+            $this->logActivity('Repairshop Profile Updated', technicianId: Auth::guard('technician')->user()->id);
             return back()->with('success', 'Profile Updated')->with('success_message', 'Your profile has been updated successfully.');
         }
 
@@ -1039,6 +1074,7 @@ class TechnicianController extends Controller
             $technician->update([
                 $imageType => null
             ]);
+            $this->logActivity('Repairshop Profile Updated', technicianId: Auth::guard('technician')->user()->id);
             return back()->with('success', 'Deletion Successful')->with('success_message', 'The image has been successfully deleted from your profile.');
         }
 
@@ -1076,6 +1112,7 @@ class TechnicianController extends Controller
                 ]
             );
 
+            $this->logActivity('Repairshop Profile Updated', technicianId: Auth::guard('technician')->user()->id);
             return back()->with('success', 'Saved successfully')->with('success_message', 'Changes to the profile has been saved successfully.');
         }
 
@@ -1086,13 +1123,16 @@ class TechnicianController extends Controller
                 $social => null,
             ]);
 
+            $this->logActivity('Repairshop Profile Updated', technicianId: Auth::guard('technician')->user()->id);
             return response()->json(['message' => 'Link deleted successfully'], 200);
         }
     
     public function accountSettings(){
         $technicianID = Auth::guard('technician')->user()->id;
-
-        return view('Technician.8 - AccountSettings');
+        $activityLogs = Admin_ActivityLogs::where('technician_id', $technicianID)->orderBy('created_at', 'desc')->get();
+        return view('Technician.8 - AccountSettings', [
+            'activityLogs' => $activityLogs,
+        ]);
     }
         public function accountUpdate(Request $request){
             $validatedData = $request->validate([
@@ -1131,7 +1171,34 @@ class TechnicianController extends Controller
                 'date_of_birth' => $validatedData['date_of_birth'],
             ]);
 
+            $this->logActivity('Account Information Updated', technicianId: Auth::guard('technician')->user()->id);
             return back()->with('success', 'Account Updated')->with('success_message', 'Account updated successfully');
+
+        }
+
+        public function accountDelete(){
+
+            $technicianID = Auth::guard('technician')->user()->id;
+            $technician = Technician::findOrFail($technicianID);
+
+            $repairExist = RepairShop_RepairStatus::where('technician_id', $technicianID)
+                ->where('status', 'in progress')
+                ->exists();
+            $appointmentExist = RepairShop_Appointments::where('technician_id', $technicianID)
+                ->where('status', 'confirmed')
+                ->exists();
+
+            if($repairExist || $appointmentExist){
+                $this->logActivity('Account Deletion Requested', technicianId: $technicianID);
+                return back()->with('error', 'Deletion Failed')->with('error_message', 'Your account cannot be deleted at this time due to pending appointments or ongoing repairs. Please complete or cancel any active engagements before proceeding with account deletion.');
+            }
+
+            $technician->update([
+                'profile_status' => 'restricted',
+            ]);
+            
+            $this->logActivity('Account Deleted', technicianId: $technicianID);
+            return redirect()->route('customer.disabledAccount', ['status' => 'deleted'])->with("message", "Your account has been successfully deleted. We're sorry to see you go and hope to serve you again in the future.");
 
         }
 
@@ -1176,10 +1243,10 @@ class TechnicianController extends Controller
                 });
 
                 // Redirect with success message
+                $this->logActivity('Password Changed', technicianId: Auth::guard('technician')->user()->id);
                 return back()->with('success', 'Password Changed')->with('success_message', 'Your password has been changed successfully.');
             }
         }
-
 
         public function submitReport(Request $request){
             Admin_ReportManagement::create([
@@ -1193,6 +1260,7 @@ class TechnicianController extends Controller
                 'description' => $request->description
             ]);
 
+            $this->logActivity('Submitted A Report', technicianId: Auth::guard('technician')->user()->id);
             return back()->with('success', 'Report Submitted')->with('success_message', 'Your report has been submitted successfully.');
         }
 
@@ -1241,6 +1309,47 @@ class TechnicianController extends Controller
             }
             
             return $formatted;
+        }
+
+        function logActivity($action, $technicianId = null, $status = 'success'){
+            // Define a collection of actions and their descriptions for technicians
+            $actions = collect([
+                'Account Created' => 'Technician successfully created a new account.',
+                'Logged In' => 'Technician logged into their account.',
+                'Logged Out' => 'Technician logged out of their account.',
+                'Password Changed' => 'Technician updated their account password.',
+                'Reset Password' => 'Technician reset their password.',
+    
+                'Repairshop Profile Updated' => 'Technician updated their repair shop profile.',
+                'Account Information Updated' => 'Technician updated account information.',
+    
+                'Created An Appointment' => 'Technician created a new appointment.',
+                'Appointment Accepted' => 'Technician accepted a customer\'s service request.',
+                'Rejected Request Appointment' => 'Technician rejected a request appointment.',
+                'Cancelled Scheduled Appointment' => 'Technician canceled a scheduled appointment.',
+                'Completed An Appointment' => 'Technician completed an appointment.',
+    
+                'Started A Repair' => 'Technician began a repair.',
+                'Repair Created' => 'Technician created a new repair',
+                'Repair Updated' => 'Technician updated the repair status.',
+                'Repair Terminated' => 'Technician terminated a repair.',
+                'Repair Completed' => 'Technician completed a repair.',
+    
+                'Initialized A Conversation' => 'Technician started a new conversation with a customer.',
+                'Submitted A Report' => 'Technician reported an issue.'
+            ]);
+    
+            // Retrieve the description based on the action
+            $description = $actions->get($action, 'Unknown action');
+    
+            // Create a new activity log entry
+            Admin_ActivityLogs::create([
+                'technician_id' => $technicianId,
+                'action' => $action,
+                'description' => $description,
+                'status' => $status,
+                'ip_address' => RequestFacade::ip(),
+            ]);
         }
 
     public function calculatePercentageChange($currentCount, $previousCount) {

@@ -24,11 +24,14 @@ use App\Models\RepairShop_Badges;
 use App\Models\Admin_NotificationHistory;
 use App\Models\Admin_ReportManagement;
 use App\Models\Admin_Disciplinary;
+use App\Models\Admin_ActivityLogs;
 
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as RequestFacade;
 
 class AdminController extends Controller
 {
@@ -133,13 +136,19 @@ class AdminController extends Controller
                 
                 $disciplinaryRecords = Admin_Disciplinary::where('technician_id', $userID)->get();
 
+                $activityLogs = Admin_ActivityLogs::where('technician_id', $userID)->orderBy('created_at', 'desc')->get();
+
                 return view('Admin.6 - ViewProfile', [
                     'technician' => $technician,
                     'disciplinaryRecords' => $disciplinaryRecords,
+                    'activityLogs' => $activityLogs,
                 ]);
 
             }elseif($userRole == 'Customer'){
-                return view('Admin.7 - ViewProfile');
+                $customer = Customer::find($userID);
+                return view('Admin.7 - ViewProfile', [
+                    'customer' => $customer,
+                ]);
             }
         }
 
@@ -325,21 +334,76 @@ class AdminController extends Controller
             return response()->json(['message' => 'Review updated successfully'], 200);
         }   
 
-    public function disciplinaryAction(Request $request ,$technicianID){
-        If(!$request->violation_header == "" || !$request->violation_header == null){
-            Admin_Disciplinary::create([
-                'technician_id' => $technicianID,
-                'violation_level' => $request->violation_level,
-                'violation_status' => $request->violation_status,
-                'violation_header' => $request->violation_header,
-                'violation_description' => $request->violation_description,
-                'date_of_incident' => $request->date_of_incident,
-                'resolution_date' => $request->resolution_date,
-            ]);
-            return back()->with('success', 'Disciplinary Recorded');
+        public function disciplinaryAction(Request $request, $action, $technicianID){
+            if ($action == "submit") {
+                $request->validate([
+                    'violation_header' => 'required',
+                    'violation_level' => 'required',
+                    'violation_status' => 'required',
+                    'violation_description' => 'required',
+                    'date_of_incident' => 'required|date',
+                ]);
+        
+                Admin_Disciplinary::create([
+                    'technician_id' => $technicianID,
+                    'violation_level' => $request->violation_level,
+                    'status' => $request->violation_status,
+                    'violation_header' => $request->violation_header,
+                    'violation_description' => $request->violation_description,
+                    'date_of_incident' => $request->date_of_incident,
+                ]);
+        
+                return back()->with('success', 'Disciplinary Submitted');
+            } elseif ($action == "update") {
+                try {
+                    $recordID = $request->record_id;
+                    $disciplinaryRecord = Admin_Disciplinary::findOrFail($recordID);
+                    $disciplinaryRecord->update([
+                        'technician_id' => $technicianID,
+                        'violation_level' => $request->violation_level,
+                        'status' => $request->violation_status,
+                        'violation_header' => $request->violation_header,
+                        'violation_offense' => $request->offense_number,
+                        'violation_description' => $request->violation_description,
+                        'date_of_incident' => $request->date_of_incident,
+                    ]);
+        
+                    return back()->with('success', 'Disciplinary Updated');
+                } catch (\Exception $err) {
+                    return back()->with('error', 'Disciplinary Unsuccessful');
+                }
+            } elseif ($action == "resolved") {
+                $recordID = $request->record_id;
+                $disciplinaryRecord = Admin_Disciplinary::find($recordID);
+                
+                if ($disciplinaryRecord) {
+                    $disciplinaryRecord->update([
+                        'action_taken' => $request->action_taken,
+                        'resolution_date' => $request->resolution_date,
+                        'status' => 'Solved'
+                    ]);
+        
+                    return back()->with('success', 'Disciplinary Resolved');
+                } else {
+                    return back()->with('error', 'Record not found');
+                }
+            }
         }
+        
 
-        return back()->with('error', 'Please provide necessary information');
+    public function fetchDisciplinaryRecord($recordID){
+        $disciplinaryRecord = Admin_Disciplinary::findOrFail($recordID);
+        $formatedDate = $disciplinaryRecord->date_of_incident->format('Y-m-d');
+
+        return response()->json([
+            'technician_id' => $disciplinaryRecord->technician_id,
+            'violation_level' => $disciplinaryRecord->violation_level,
+            'violation_status' => $disciplinaryRecord->status,
+            'date_of_incident' => $formatedDate,
+            'violation_header' => $disciplinaryRecord->violation_header,
+            'violation_offense' => $disciplinaryRecord->violation_offense,
+            'violation_description' => $disciplinaryRecord->violation_description,            
+        ]);
     }
 
 

@@ -79,16 +79,6 @@
                         {!! $repairedPercentage >= 0 ? '<i class="fa-solid fa-arrow-trend-up"></i>' : '<i class="fa-solid fa-arrow-trend-down"></i>' !!}
                     </div>
                 </div>
-                <div class="stat visitors-card">
-                    <div class="info">
-                        <p>Visitors</p>
-                        <h2>1.5K</h2>
-                    </div>
-                    <div class="progress visitors">
-                        <h4 class="percentage">+49%</h4>
-                        <i class="fa-solid fa-arrow-trend-up"></i>
-                    </div>
-                </div>
                 <div class="stat reviews-card">
                     <div class="info">
                         <p>Reviews</p>
@@ -102,6 +92,17 @@
                         {!! $reviewPercentage >= 0 ? '<i class="fa-solid fa-arrow-trend-up"></i>' : '<i class="fa-solid fa-arrow-trend-down"></i>' !!}
                     </div>
                 </div>
+                <div class="stat visitors-card">
+                    <div class="info">
+                        <p>Visitors</p>
+                        <h2>{{$repairshopCredentials->shop_views}}</h2>
+                    </div>
+                    <div class="progress visitors">
+                        
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                </div>
+
             </section>
             
             <section class="appointments">

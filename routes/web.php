@@ -129,11 +129,10 @@ Route::middleware('technician.auth')->group(function(){
         Route::post('/technician/appointment/create/walk-ins', [TechnicianController::class, 'appointmentCreate']);
 
     Route::get('/technician/repairstatus', [TechnicianController::class, 'repairstatus'])->name('technician.repairstatus');
-        Route::delete('/technician/repairstatus/delete/{repairID}', [TechnicianController::class, 'repairstatusDelete']);
         Route::post('/technician/repairstatus/create/{appointmentID}', [TechnicianController::class, 'repairstatusCreate']);
         Route::get('/technician/repairstatus/details/{repairID}', [TechnicianController::class, 'repairstatusDetails']);
         Route::patch('/technician/repairstatus/update/{repairID}/{action}', [TechnicianController::class, 'repairstatusUpdate']);
-        Route::post('/technician/repairstatus/create/walk-ins', [TechnicianController::class, 'repairstatusCreateWalkIn']);
+        Route::post('/technician/repairstatus/create/repair/walk-ins', [TechnicianController::class, 'repairstatusCreateWalkIn']);
 
     Route::get('/technician/messages', [TechnicianController::class, 'messages'])->name('technician.messages');
         Route::get('/technician/messages/{customerID}', [TechnicianController::class, 'messageCustomer'])->name('messageCustomer');
@@ -149,6 +148,8 @@ Route::middleware('technician.auth')->group(function(){
 
     Route::get('/technician/account', [TechnicianController::class, 'accountSettings']);
     Route::patch('/technician/account/update', [TechnicianController::class, 'accountUpdate']);
+    Route::patch('/technician/account/delete', [TechnicianController::class, 'accountDelete']);
+
     Route::patch('/technician/account/password/change', [TechnicianController::class, 'accountPasswordChange']);
     
     Route::post('/technician/submit/report', [TechnicianController::class, 'submitReport']);
@@ -185,7 +186,7 @@ Route::middleware('admin.auth')->group(function(){
     Route::get('/admin/reviewsmanagement', [AdminController::class, 'reviewsmanagement'])->name('admin.reviewsmanagement');
     Route::patch('/admin/reviewsmanagement/{reviewID}', [AdminController::class, 'reviewupdate']);
 
-    Route::post('/admin/viewprofile/discipline/{technicianID}', [AdminController::class, 'disciplinaryAction']);
-    
+    Route::put('/admin/viewprofile/discipline/{action}/{technicianID}', [AdminController::class, 'disciplinaryAction']);
+    Route::get('/admin/viewprofile/fetch/discipline/record/{recordID}', [AdminController::class, 'fetchDisciplinaryRecord']);
 });
 

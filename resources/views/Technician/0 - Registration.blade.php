@@ -704,8 +704,9 @@
         function populateProvinces(provinces, selectElement) {
             provinces.forEach(province => {
                 const option = document.createElement('option');
-                option.value = province.code;
-                option.textContent = province.name;
+            option.value = province.name; // Set the province name as the value
+                option.setAttribute('data-code', province.code); // Store the province code in data-code
+                option.textContent = province.name; // Display the province name as text
                 selectElement.appendChild(option);
             });
         }
@@ -728,8 +729,9 @@
 
             filteredCities.forEach(city => {
                 const option = document.createElement('option');
-                option.value = city.code;
-                option.textContent = city.name;
+                option.value = city.name;                     // Set the city name as the value
+                option.setAttribute('data-code', city.code);  // Store the city code in data-code
+                option.textContent = city.name;               // Display the city name as text
                 citySelect.appendChild(option);
             });
         }
@@ -753,26 +755,36 @@
 
             filteredBarangays.forEach(barangay => {
                 const option = document.createElement('option');
-                option.value = barangay.code;
-                option.textContent = barangay.name;
+                option.value = barangay.name;                  // Set the barangay name as the value
+                option.setAttribute('data-code', barangay.code); // Store the barangay code in data-code
+                option.textContent = barangay.name;            // Display the barangay name as text
                 barangaySelect.appendChild(option);
             });
         }
 
         // Event Listeners for user location
         provinceSelect.addEventListener('change', function () {
-            filterCitiesByProvince(this.value, citySelect, barangaySelect);
+            // Use the data-code to filter cities
+            const selectedOption = provinceSelect.options[provinceSelect.selectedIndex];
+            const provinceCode = selectedOption.getAttribute('data-code');
+            filterCitiesByProvince(provinceCode, citySelect, barangaySelect);
         });
         citySelect.addEventListener('change', function () {
-            filterBarangays(this.value, barangaySelect);
+            const selectedOption = citySelect.options[citySelect.selectedIndex];
+            const cityCode = selectedOption.getAttribute('data-code');
+            filterBarangays(cityCode, barangaySelect);
         });
 
         // Event Listeners for shop location
         shopProvinceSelect.addEventListener('change', function () {
-            filterCitiesByProvince(this.value, shopCitySelect, shopBarangaySelect);
+            const selectedOption = shopProvinceSelect.options[shopProvinceSelect.selectedIndex];
+            const provinceCode = selectedOption.getAttribute('data-code');
+            filterCitiesByProvince(provinceCode, shopCitySelect, shopBarangaySelect);
         });
         shopCitySelect.addEventListener('change', function () {
-            filterBarangays(this.value, shopBarangaySelect);
+            const selectedOption = shopCitySelect.options[shopCitySelect.selectedIndex];
+            const cityCode = selectedOption.getAttribute('data-code');
+            filterBarangays(cityCode, shopBarangaySelect);
         });
 
         // Initial fetch calls

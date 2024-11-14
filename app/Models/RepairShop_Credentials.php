@@ -36,6 +36,7 @@ class RepairShop_Credentials extends Authenticatable
         'shop_city',
         'shop_barangay',
         'shop_zip_code',
+        'shop_views',
     ];
 
     /**
@@ -45,6 +46,7 @@ class RepairShop_Credentials extends Authenticatable
      */
     protected $casts = [
         'shop_email_verified_at' => 'datetime',
+        'shop_views' => 'integer',
     ];
 
     public function technician()

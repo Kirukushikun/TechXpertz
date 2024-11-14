@@ -15,10 +15,6 @@
     <link rel="stylesheet" href="{{asset('css/Technician/2 - Appointment.css')}}">
     <link rel="stylesheet" href="{{asset('css/Technician/technician-modal.css')}}">
     <link rel="stylesheet" href="{{asset('css/Technician/technician-notification.css')}}">
-
-    <style>
-
-    </style>
 </head>
 <body>
     <div class="dashboard">

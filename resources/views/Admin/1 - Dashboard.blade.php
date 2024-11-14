@@ -37,28 +37,28 @@
 
                 <div class="content">
                     <div class="container c1 metric">
-                        <h3>213.2k</h3>
-                        <h4>Website Visits</h4>
-                        <p>10% Increase from Last Week</p>
-                    </div>
-                    <div class="container c2 metric">
                         <h3>{{$totalUsers}}</h3>
                         <h4>Total Users</h4>
                         <p>{{ abs($totalUsersPercentageChange) }}% {{ $totalUsersPercentageChange >= 0 ? 'Increase' : 'Decrease' }} from Last Week</p>
                     </div>
-                    <div class="container c3 metric">
-                        <h3>941</h3>
-                        <h4>Active Users</h4>
-                        <p>16% Decrease from Last Week</p>
+                    <div class="container c2 metric">
+                        <h3>$54.2k</h3>
+                        <h4>New Signups</h4>
+                        <p>12% Decrease from Last Week</p>
                     </div>
-                    <div class="container c4 metric">
+                    <div class="container c3 metric">
                         <h3>{{$technicianVerified}}</h3>
                         <h4>Verified Repairshops</h4>
                         <p>{{ abs($verifiedChange) }}% {{ $verifiedChange >= 0 ? 'Increase' : 'Decrease' }} from Last Week</p>
                     </div>
+                    <div class="container c4 metric">
+                        <h3>$54.2k</h3>
+                        <h4>Reported Issues</h4>
+                        <p>12% Decrease from Last Week</p>
+                    </div>
                     <div class="container c5 metric">
                         <h3>$54.2k</h3>
-                        <h4>New Signups</h4>
+                        <h4>Pending Approvals</h4>
                         <p>12% Decrease from Last Week</p>
                     </div>
 

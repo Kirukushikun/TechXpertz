@@ -19,6 +19,10 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Admin_ActivityLogs;
+use Illuminate\Support\Facades\Request as RequestFacade;
+use Illuminate\Support\Collection;
+
 class TechnicianAuthController extends Controller
 {
     public function login(){
@@ -31,6 +35,7 @@ class TechnicianAuthController extends Controller
 
 
         if(Auth::guard('technician')->attempt($credentials, $remember)){
+            $this->logActivity('Logged In', technicianId: Auth::guard('technician')->user()->id);
             return redirect()->route('technician.dashboard');
         } else {
             return redirect()->route('technician.login')->with("error", "Invalid email or password. Please re-enter.");
@@ -38,6 +43,7 @@ class TechnicianAuthController extends Controller
     }
 
     function logoutTechnician(){
+        $this->logActivity('Logged Out', technicianId: Auth::guard('technician')->user()->id);
         Session::flush();
         Auth::guard('technician')->logout();
         return redirect()->route('technician.login');
@@ -52,7 +58,7 @@ class TechnicianAuthController extends Controller
             'firstname' => 'required|string|max:255',
             'middlename' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:technicians',
+            'email' => 'required|string|email|max:255',
             'contact_no' => 'required|string|max:255',
             'educational_background' => 'required|string|max:255',
             'date_of_birth' => 'required|date',
@@ -76,6 +82,7 @@ class TechnicianAuthController extends Controller
 
 
         try {
+
             $email = $validatedData['email'];
             $rehashed = Hash::make($validatedData['password']);
     
@@ -83,9 +90,6 @@ class TechnicianAuthController extends Controller
             $existsInCustomer = Customer::where('email', $email)->exists();
             $existsInTechnician = Technician::where('email', $email)->exists();
             $existsInAdmin = Admin::where('email', $email)->exists();
-    
-            // If email is found in any table, return with an error
-            // ($existsInCustomer || $existsInTechnician || $existsInAdmin)
             
             if ($existsInCustomer || $existsInTechnician || $existsInAdmin) {
                 return redirect()->back()->with("error", "Registration Error")->with('error_message', 'The email address you entered is already registered. Please use a different email.');
@@ -98,7 +102,7 @@ class TechnicianAuthController extends Controller
                     'contact_no' => $validatedData['contact_no'],
                     'educational_background' => $validatedData['educational_background'],
                     'province' => $validatedData['province'],
-                    'city' => $validatedData['city'],
+                    'city' => $validatedData['city-municipality'],
                     'barangay' => $validatedData['barangay'],
                     'zip_code' => $validatedData['zip_code'],
                     'date_of_birth' => $validatedData['date_of_birth'],
@@ -137,10 +141,10 @@ class TechnicianAuthController extends Controller
                     'image_4' => null,
                     'image_5' => null,
                 ]);
-    
+
+                $this->logActivity('Account Created', technicianId: $technician->id);
                 return redirect()->route('technician.login')->with('success', 'Account created successfully.');
             }
-
 
         } catch (\Illuminate\Database\QueryException $exception) {
             return redirect()->route('technician.signup')->with("error", "Error Occurred")->with('error_message', 'An error occurred while processing your request. Please try again');
@@ -193,9 +197,56 @@ class TechnicianAuthController extends Controller
             }
         );
 
+        if($status === Password::PASSWORD_RESET){
+            $this->logActivity('Reset Password', technicianId: Auth::guard('technician')->user()->id);
+        }
+        
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('technician.login')->with('success', __($status))
             : back()->withErrors(['error' => __($status)]);
+
+
+            
+    }
+
+    function logActivity($action, $technicianId = null, $status = 'success')
+    {
+        // Define a collection of actions and their descriptions for technicians
+        $actions = collect([
+            'Account Created' => 'Technician successfully created a new account.',
+            'Logged In' => 'Technician logged into their account.',
+            'Logged Out' => 'Technician logged out of their account.',
+            'Password Changed' => 'Technician updated their account password.',
+            'Reset Password' => 'Technician reset their password.',
+
+            'Repairshop Profile Updated' => 'Technician updated their repair shop profile.',
+            'Account Information Updated' => 'Technician updated account information.',
+
+            'Created An Appointment' => 'Technician created a new appointment.',
+            'Appointment Accepted' => 'Technician accepted a customer\'s service request.',
+            'Cancelled Requested Appointment' => 'Technician canceled a requested appointment.',
+            'Cancelled Scheduled Appointment' => 'Technician canceled a scheduled appointment.',
+            'Completed An Appointment' => 'Technician completed an appointment.',
+
+            'Started A Repair' => 'Technician began a repair.',
+            'Repair Updated' => 'Technician updated the repair status.',
+            'Repair Terminated' => 'Technician terminated a repair.',
+            'Repair Completed' => 'Technician completed a repair.',
+
+            'Initialized A Conversation' => 'Technician started a new conversation with a customer.',
+        ]);
+
+        // Retrieve the description based on the action
+        $description = $actions->get($action, 'Unknown action');
+
+        // Create a new activity log entry
+        Admin_ActivityLogs::create([
+            'technician_id' => $technicianId,
+            'action' => $action,
+            'description' => $description,
+            'status' => $status,
+            'ip_address' => RequestFacade::ip(),
+        ]);
     }
 
 }

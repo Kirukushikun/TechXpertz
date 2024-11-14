@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Admin_Disciplinary extends Model
 {
     use HasFactory;
-/**
+    /**
      * The table associated with the model.
      *
      * @var string
@@ -26,7 +26,8 @@ class Admin_Disciplinary extends Model
         'violation_header',
         'violation_offense',
         'violation_description',
-
+        'action_taken',
+        
         'date_of_incident',
         'resolution_date',
         'status',

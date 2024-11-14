@@ -148,6 +148,93 @@ header {
     cursor: pointer;
 }
 
+/* Container for Filter Button and Panel */
+.filter-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Filter Button */
+.filter-btn {
+    padding: 5px 15px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-btn i {
+    margin-right: 8px;
+}
+
+/* Filter Panel (hidden by default) */
+.filter-panel {
+    display: none; /* Hidden initially */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    padding: 15px;
+    z-index: 1000;
+}
+
+.filter-panel label{
+    font-size: 13px;
+    font-weight: 500;
+}
+.filter-panel p{
+    text-align: center;
+    font-weight: 500;
+    color: #999999;
+    margin-top: 5px;
+}
+
+.filter-panel input[type=text], .filter-panel input[type=time], .filter-panel select{
+    width: 100%;
+    border-radius: 5px;
+    border: solid 2px #ddd;
+    padding: 7px 10px;
+    margin-bottom: 10px;
+}
+
+.filter-panel h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.filter-option {
+margin: 8px 0;
+}
+
+.apply-filter-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+.input-group{
+    display: flex;
+}
+
 
 
 /* TABLE STYLING */
@@ -295,89 +382,3 @@ header {
     transform: scale(1.2);
 }
 
-        /* Container for Filter Button and Panel */
-        .filter-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Filter Button */
-        .filter-btn {
-            padding: 5px 15px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-
-            border-radius: 7px;
-            border: solid #D9D9D9 2px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .filter-btn i {
-            margin-right: 8px;
-        }
-
-        /* Filter Panel (hidden by default) */
-        .filter-panel {
-            display: none; /* Hidden initially */
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 250px;
-            padding: 15px;
-            z-index: 1000;
-        }
-
-        .filter-panel label{
-            font-size: 13px;
-            font-weight: 500;
-        }
-        .filter-panel p{
-            text-align: center;
-            font-weight: 500;
-            color: #999999;
-            margin-top: 5px;
-        }
-
-        .filter-panel input[type=text], .filter-panel input[type=time], .filter-panel select{
-            width: 100%;
-            border-radius: 5px;
-            border: solid 2px #ddd;
-            padding: 7px 10px;
-            margin-bottom: 10px;
-        }
-
-        .filter-panel h3 {
-            margin: 0;
-            font-size: 18px;
-            color: #333;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .filter-option {
-        margin: 8px 0;
-        }
-
-        .apply-filter-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            font-size: 15px;
-        }
-
-        .input-group{
-            display: flex;
-        }

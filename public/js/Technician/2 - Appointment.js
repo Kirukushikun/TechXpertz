@@ -73,7 +73,6 @@ function displayTabContent(tab, page = 1, search = "", filters = {}) {
     renderPagination(tab, page, Math.ceil(totalItems / itemsPerPage));
 }
 
-
 // Function to switch active tab
 function switchTab(tab) {
     activeTab = tab;

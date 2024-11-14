@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('technician_id');
             $table->string('violation_level');
             $table->string('violation_header');
-            $table->string('violation_offense')->default('first offense');
+            $table->string('violation_offense')->default('First Offense');
             $table->text('violation_description');
 
             $table->date('date_of_incident')->nullable();

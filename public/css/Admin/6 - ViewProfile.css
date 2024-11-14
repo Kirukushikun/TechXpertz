@@ -430,6 +430,10 @@ table td a{
     gap: 20px;
 }
 
+.disciplinary-card.solved{
+    border: solid 3px var(--success);
+}
+
 .disciplinary-card .card-header{
     display: flex;
     align-items: center;
@@ -561,7 +565,18 @@ table td a{
 }
 
 
+.empty-container{
+    border-radius: 7px;
+    background-color: #f0f0f0;
+    width: 100%;
+    height: 100%;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
 
 #complete{
     border: 2px solid var(--success);

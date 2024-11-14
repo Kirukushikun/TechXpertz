@@ -208,6 +208,8 @@ header {
     display: flex;
     gap: 10px;
     justify-content: end;
+    align-items: center;
+    margin-top: auto;
 }.form-action button{
     padding: 10px 20px;
     font-weight: 600;
@@ -460,9 +462,12 @@ table td a{
     flex-direction: column;
 }
 
-#change-password form a{
-    margin-left: auto;
+#change-password .form-action{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
 
 #report.active{
     display: flex;
@@ -515,3 +520,17 @@ table td a{
 }
 
 
+#technician-details .form-action{
+    display: none;
+}
+#technician-details .form-action.active{
+    display: flex;
+}
+
+#change-password .form-action .btn-primary{
+    display: none;
+}
+
+#change-password .form-action .btn-primary.active{
+    display: block;
+}

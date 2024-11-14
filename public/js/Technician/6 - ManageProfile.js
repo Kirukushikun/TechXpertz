@@ -287,7 +287,7 @@ let inputs = profileForm.querySelectorAll('input, select, textarea', 'checkbox')
 inputs.forEach(input => {
 
     // Use 'input' event for text-based inputs (text, textarea)
-    if (input.type === 'text' || input.tagName.toLowerCase() === 'textarea') {
+    if (input.type === 'text' || input.type === 'email' || input.tagName.toLowerCase() === 'textarea') {
         input.addEventListener('input', function(){
             showButtons()
         });

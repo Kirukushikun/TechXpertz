@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('shop_city');
             $table->string('shop_barangay');
             $table->string('shop_zip_code');
+
+            $table->integer('shop_views')->default(0);
             $table->timestamps();
         });
     }

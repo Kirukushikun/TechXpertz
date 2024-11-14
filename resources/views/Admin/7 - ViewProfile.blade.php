@@ -30,11 +30,6 @@
             </div>
             
             <div class="body">
-                <!-- <div class="header">
-                    <h1>View Profile</h1>
-                </div> -->
-                <!-- <div class="content">
-                </div> -->
                 <div class="content">
                     <div class="left">
                         <div class="upper">
@@ -42,7 +37,6 @@
                                 <h2>Customer Profile</h2>
                                 <ul>
                                     <li><a href="#" data-target="customer-details" class="active">Customer Details</a></li>
-                                    <li><a href="#" data-target="compliance-documents">Compliance & Documentation</a></li>
                                     <li><a href="#" data-target="repair-monitoring">Repair Monitoring</a></li>
                                     <li><a href="#" data-target="appointment-monitoring">Appointment Monitoring</a></li>
                                     <li><a href="#" data-target="ratings-feedback">Ratings & Feedback</a></li>
@@ -59,9 +53,9 @@
                                 <div class="profile-detail">
                                     <div class="image"></div>
                                     <div class="details">
-                                        <h3>Bruno Mars</h3>
-                                        <p>brunomars@gmail.com</p> 
-                                        <span>Verified</span>                               
+                                        <h3>{{$customer->firstname}} {{$customer->lastname}}</h3>
+                                        <p>{{$customer->email}}</p> 
+                                        <span id="{{$customer->profile_status}}">{{$customer->profile_status}}</span>                               
                                     </div>
                                 </div>
                                 
@@ -74,11 +68,11 @@
                             <div class="form-section col-3">
                                 <div class="form-group">
                                     <label for="user-ID">ID</label>
-                                    <input type="text" id="user-ID" name="user-ID" value="" required>
+                                    <input type="text" id="user-ID" name="user-ID" value="{{$customer->id}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="first-name">First Name</label>
-                                    <input type="text" id="first-name" name="first-name" value="" required>
+                                    <input type="text" id="first-name" name="first-name" value="{{$customer->firstname}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="middle-name">Middle Name</label>
@@ -86,22 +80,22 @@
                                 </div> 
                                 <div class="form-group">
                                     <label for="last-name">Last Name</label>
-                                    <input type="text" id="last-name" name="last-name" value="" required>
+                                    <input type="text" id="last-name" name="last-name" value="{{$customer->lastname}}" required>
                                 </div> 
 
                                 <div class="form-group">
                                     <label for="email-address">Email Address</label>
-                                    <input type="text" id="email-address" name="email-address" value="" required>
+                                    <input type="text" id="email-address" name="email-address" value="{{$customer->email}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="contact-no">Contact No.</label>
-                                    <input type="text" id="contact-no" name="contact-no" value="" required>
+                                    <input type="text" id="contact-no" name="contact-no" value="{{$customer->contact}}" required>
                                 </div>
 
                             </div>
                         </div>
 
-                        <div id="repair-shop-profile" class="form-container">
+                        <!-- <div id="repair-shop-profile" class="form-container">
                             <div class="form-header">
                                 <h2>Repair Shop Credentials</h2>
                             </div>
@@ -285,7 +279,7 @@
                                         <span class="status pending">Pending Review</span>
                                     </div>
                                     <div class="card-body">
-                                        <!-- <p><strong>Uploaded By:</strong> Technician Name</p> -->
+                                        
                                         <p><strong>Date Submitted:</strong> 2024-10-10</p>
                                         <p><strong>Description:</strong> A certification that proves the technician's expertise in repair services.</p>
                                         <a href="#" class="btn view-document">View Document</a>
@@ -303,7 +297,7 @@
                                         <span class="status pending">Pending Review</span>
                                     </div>
                                     <div class="card-body">
-                                        <!-- <p><strong>Uploaded By:</strong> Technician Name</p> -->
+                                        
                                         <p><strong>Date Submitted:</strong> 2024-10-10</p>
                                         <p><strong>Description:</strong> A certification that proves the technician's expertise in repair services.</p>
                                         <a href="#" class="btn view-document">View Document</a>
@@ -315,7 +309,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div id="repair-monitoring" class="form-container">
                             <div class="form-header">
@@ -513,7 +507,16 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>                    
+                    </div>
+                    
+                    <div id="admin-actions" class="admin-actions">
+                        <h3>Actions</h3>
+                        <div class="admin-buttons">
+                           <button class="btn-success">VERIFY ACCOUNT</button>   
+                           <button class="btn-danger">RESTRICT ACCOUNT</button> 
+                           <button class="btn-warning">TERMINATE ACCOUNT</button>
+                        </div>         
+                    </div>
                 </div>
 
             </div>

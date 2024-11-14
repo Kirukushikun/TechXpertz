@@ -182,124 +182,125 @@ addrepairBtn.addEventListener('click', function(e){
     console.log('button is working');
 
     modal.innerHTML = `
-    <form action="/technician/repairstatus/create/walk-ins" method="POST" class="modal-content" id="modal-content">
-        <input type="hidden" name="_token" value="${csrfToken}">
+        <form action="/technician/repairstatus/create/repair/walk-ins" method="POST" class="modal-content" id="modal-content">
+            <input type="hidden" name="_token" value="${csrfToken}">
 
-        <div class="modal-body">
-            <div class="left">
-                <div class="form-section">
-                    <h2>Customer Details</h2>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="fullname">Full Name</label>
-                            <input type="text" id="fullname" name="fullname" required>
-                        </div>                                
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required>
+            <div class="modal-body">
+                <div class="left">
+                    <div class="form-section">
+                        <h2>Customer Details</h2>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="fullname">Full Name</label>
+                                <input type="text" id="fullname" name="fullname" required>
+                            </div>                                
                         </div>
-                        <div class="form-group">
-                            <label for="contact">Mobile Phone Number</label>
-                            <input type="tel" id="contact" name="contact" required> 
-                        </div>                                
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h2>Payment Information</h2>
-
-                    <div class="form-group">
-                        <label for="payment-status">Payment Status</label>
-                        <select id="payment-status" name="payment-status">
-                            <option value="Unpaid">Unpaid</option>
-                            <option value="Initially Paid">Initially Paid</option>
-                            <option value="Fully Paid">Fully Paid</option>
-                        </select>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="revenue">Repair Cost</label>
-                            <input type="number" id="revenue" name="revenue">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact">Mobile Phone Number</label>
+                                <input type="tel" id="contact" name="contact" required> 
+                            </div>                                
                         </div>
-                        <div class="form-group">
-                            <label for="expenses">Expenses</label>
-                            <input type="number" id="expenses" name="expenses">
-                        </div>                                
                     </div>
 
-                </div>  
+                    <div class="form-section">
+                        <h2>Payment Information</h2>
 
-                <div class="form-section">
-                    <h2>Device Information</h2>
-                    <div class="row">
                         <div class="form-group">
-                            <label for="device-type">Device Type</label>
-                            <select type="text" id="device-type" name="device-type" required>
-                                <option value="Smartphone">Smartphone</option>
-                                <option value="Tablet">Tablet</option>
-                                <option value="Desktop">Desktop</option>
-                                <option value="Laptop">Laptop</option>
-                                <option value="Smartwatch">Smartwatch</option>
-                                <option value="Camera">Camera</option>
-                                <option value="Printer">Printer</option>
-                                <option value="Speaker">Speaker</option>
-                                <option value="Drone">Drone</option>
+                            <label for="payment_status">Payment Status</label>
+                            <select id="payment_status" name="payment_status">
+                                <option value="Unpaid">Unpaid</option>
+                                <option value="Initially Paid">Initially Paid</option>
+                                <option value="Fully Paid">Fully Paid</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="device-brand">Device Brand</label>
-                            <input type="text" id="device-brand" name="device-brand" required>
-                        </div>                                
-                    </div>
 
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="device-model">Device Model</label>
-                            <input type="text" id="device-model" name="device-model" required>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="revenue">Repair Cost</label>
+                                <input type="number" id="revenue" name="revenue">
+                            </div>
+                            <div class="form-group">
+                                <label for="expenses">Expenses</label>
+                                <input type="number" id="expenses" name="expenses">
+                            </div>                                
                         </div>
-                        <div class="form-group">
-                            <label for="serial-number">Serial Number</label>
-                            <input type="text" id="serial-number" name="serial-number">
-                        </div>                                
-                    </div>
-                </div> 
-            </div>
 
-            <div class="right">
-                <div class="form-section excluded">
-                    <h2>Device Issue</h2>
-                    <div class="form-group-excluded">
-                        <label for="issue-description">Description of Issue</label>
-                        <textarea id="issue-description" name="issue-description"></textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="error-message">Error Messages</label>
-                        <textarea id="error-message" name="error-message"></textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="previous-steps">Previous Repair Attempts</label>
-                        <textarea id="previous-steps" name="previous-steps"></textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="recent-events">Recent Changes or Events</label>
-                        <textarea id="recent-events" name="recent-events"></textarea>
-                    </div>
-                    <div class="form-group-excluded">
-                        <label for="prepared-parts">Parts Prepared for Repair</label>
-                        <textarea id="prepared-parts" name="prepared-parts"></textarea>
+                    </div>  
+
+                    <div class="form-section">
+                        <h2>Device Information</h2>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="device_type">Device Type</label>
+                                <select type="text" id="device_type" name="device_type" required>
+                                    <option value="Smartphone">Smartphone</option>
+                                    <option value="Tablet">Tablet</option>
+                                    <option value="Desktop">Desktop</option>
+                                    <option value="Laptop">Laptop</option>
+                                    <option value="Smartwatch">Smartwatch</option>
+                                    <option value="Camera">Camera</option>
+                                    <option value="Printer">Printer</option>
+                                    <option value="Speaker">Speaker</option>
+                                    <option value="Drone">Drone</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="device_brand">Device Brand</label>
+                                <input type="text" id="device_brand" name="device_brand" required>
+                            </div>                                
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="device_model">Device Model</label>
+                                <input type="text" id="device_model" name="device_model" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="serial_number">Serial Number</label>
+                                <input type="text" id="serial_number" name="serial_number">
+                            </div>                                
+                        </div>
+                    </div> 
+                </div>
+
+                <div class="right">
+                    <div class="form-section excluded">
+                        <h2>Device Issue</h2>
+                        <div class="form-group-excluded">
+                            <label for="issue_description">Description of Issue</label>
+                            <textarea id="issue_description" name="issue_description"></textarea>
+                        </div>
+                        <div class="form-group-excluded">
+                            <label for="error_message">Error Messages</label>
+                            <textarea id="error_message" name="error_message"></textarea>
+                        </div>
+                        <div class="form-group-excluded">
+                            <label for="previous_steps">Previous Repair Attempts</label>
+                            <textarea id="previous_steps" name="previous_steps"></textarea>
+                        </div>
+                        <div class="form-group-excluded">
+                            <label for="recent_events">Recent Changes or Events</label>
+                            <textarea id="recent_events" name="recent_events"></textarea>
+                        </div>
+                        <div class="form-group-excluded">
+                            <label for="prepared_parts">Parts Prepared for Repair</label>
+                            <textarea id="prepared_parts" name="prepared_parts"></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal-action">
-            <button type="submit" class="submit btn-primary">Add Repair</button>
-            <button type="button" class="close btn-normal">Close</button>
-        </div>
-    </form>
-    `;
+            <div class="modal-action">
+                <button type="submit" class="submit btn-primary">Add Repair</button>
+                <button type="button" class="close btn-normal">Close</button>
+            </div>
+        </form>
+    `
+    ;
 
     // Show the modal
     modal.classList.add("active");          
