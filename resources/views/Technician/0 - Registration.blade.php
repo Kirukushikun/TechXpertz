@@ -724,7 +724,7 @@
         // Filter and display cities based on selected province in the specified city dropdown
         function filterCitiesByProvince(provinceCode, citySelect, barangaySelect) {
             const filteredCities = allCitiesMunicipalities.filter(city => city.provinceCode === provinceCode);
-            citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+            citySelect.innerHTML = '<option value="">Select City/Municipality</option>'; // Reset Provinces
             barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // Reset barangays
 
             filteredCities.forEach(city => {

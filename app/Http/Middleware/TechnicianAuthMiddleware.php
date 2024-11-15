@@ -22,6 +22,16 @@ class TechnicianAuthMiddleware
             return redirect()->route('technician.loginTechnician');
         }
 
+        if (Auth::guard('technician')->user()->profile_status == 'deleted'){
+
+            return redirect()->route('technician.accountDisabled', ['status' => 'deleted']);
+
+        } elseif (Auth::guard('technician')->user()->profile_status == 'restricted'){
+
+            return redirect()->route('technician.accountDisabled', ['status' => 'restricted']);
+
+        }
+
         // If authenticated, allow the request to proceed
         return $next($request);
     }

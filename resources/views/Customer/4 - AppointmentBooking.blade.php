@@ -22,8 +22,9 @@
         </style>
     </head>
     <body>
+
         @if(session()->has('error'))
-            <div class="push-notification danger active">
+            <div class="push-notification danger">
                 <i class="fa-solid fa-bell danger"></i>
                 <div class="notification-message">
                     <h4>Appointment Booked</h4>
@@ -32,7 +33,7 @@
                 <i class="fa-solid fa-xmark" id="close-notification"></i>
             </div>
         @elseif(session()->has('success'))
-            <div class="push-notification success active">
+            <div class="push-notification success">
                 <i class="fa-solid fa-bell success"></i>
                 <div class="notification-message">
                     <h4>Appointment Booked</h4>
@@ -248,9 +249,9 @@
 
         @yield('footer')
 
-        <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
         <script src="{{asset('js/Customer/4 - AppointmentBooking.js')}}" defer></script>
-        <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
+        <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
         <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+        <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
     </body>
 </html>

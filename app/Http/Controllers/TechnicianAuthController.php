@@ -95,6 +95,7 @@ class TechnicianAuthController extends Controller
                 return redirect()->back()->with("error", "Registration Error")->with('error_message', 'The email address you entered is already registered. Please use a different email.');
             } else {
                 $technician = Technician::create([
+                    'profile_status' => 'inprogress',
                     'firstname' => $validatedData['firstname'],
                     'middlename' => $validatedData['middlename'],
                     'lastname' => $validatedData['lastname'],

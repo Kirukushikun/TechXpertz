@@ -37,6 +37,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    text-align: justify;
 }
 .website-message a{
     font-weight: 600;
@@ -45,14 +46,13 @@ body{
 
 .website-message h2{
     text-align: start;
-    font-weight: 600;
-    font-size: 26px;
+    font-weight: 700;
+    font-size: 27px;
 }
 
 .website-message h3{
     font-weight: 400;
-    font-size: 17px;
-    text-align: start;
+    font-size: 17px;;
 }
 
 .website-action{

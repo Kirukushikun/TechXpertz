@@ -20,6 +20,26 @@
     </head>
     <body>
 
+        @if(session()->has('error'))
+            <div class="push-notification danger">
+                <i class="fa-solid fa-bell danger"></i>
+                <div class="notification-message">
+                    <h4>{{session('error')}}</h4>
+                    <p>{{session('error_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @elseif(session()->has('success'))
+            <div class="push-notification success">
+                <i class="fa-solid fa-bell success"></i>
+                <div class="notification-message">
+                    <h4>{{session('success')}}</h4>
+                    <p>{{session('success_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @endif
+
         <div class="modal" id="modal">
         </div>
 
@@ -79,12 +99,12 @@
                         |
                         <div class="repaired">
                             <i class="fa-solid fa-screwdriver-wrench"></i>
-                            <p>320 <span>Repaired</span></p>
+                            <p>{{$shopCredentials->repairCount}} <span>Repaired</span></p>
                         </div>
                         |
                         <div class="views">
                             <i class="fa-solid fa-eye"></i>
-                            <p>1.4k <span>Viewed</span></p>
+                            <p>{{$shopCredentials->shopviews}} <span>Viewed</span></p>
                         </div>
                     </div>
                     <div class="mastery">
@@ -277,9 +297,10 @@
                 });
             });
         </script>
+        <script src="{{asset('js/Customer/3 - ViewShop.js')}}" defer></script>
+        <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
         <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
         <script src="{{asset('js/Customer/customer-favorites.js')}}" defer></script>
-        <script src="{{asset('js/Customer/3 - ViewShop.js')}}" defer></script>
         <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
 
     </body>

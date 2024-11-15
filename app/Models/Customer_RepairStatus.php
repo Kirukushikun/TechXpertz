@@ -28,9 +28,6 @@ class Customer_RepairStatus extends Model
         
         'repairstatus',
         'repairstatus_message',
-
-        'repairstatus_conditional',
-        'conditional_message',
         
     ];
 

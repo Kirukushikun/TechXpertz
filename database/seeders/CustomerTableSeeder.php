@@ -27,6 +27,9 @@ class CustomerTableSeeder extends Seeder
                 'lastname' => $faker->lastName,
                 'email' => $faker->unique()->safeEmail,
                 'contact' => $faker->phoneNumber,
+                'province' => $faker->country,
+                'city' => $faker->city,
+                'barangay' => $faker->state,
                 'password' => bcrypt('password'),
             ]);
         }

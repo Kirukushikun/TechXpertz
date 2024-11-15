@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('technicians', function (Blueprint $table) {
             $table->id();
             $table->string('role')->default('Technician');
-            $table->enum('profile_status', ['incomplete', 'pending', 'complete', 'restricted'])->default('pending');
+            $table->enum('profile_status', ['incomplete', 'pending', 'complete', 'restricted', 'deleted'])->default('pending');
 
             $table->string('firstname');
             $table->string('middlename');

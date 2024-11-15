@@ -21,7 +21,7 @@
     <body id="main-body">
 
         @if(session()->has('error'))
-            <div class="push-notification danger active">
+            <div class="push-notification danger">
                 <i class="fa-solid fa-bell danger"></i>
                 <div class="notification-message">
                     <h4>{{session('error')}}</h4>
@@ -30,7 +30,7 @@
                 <i class="fa-solid fa-xmark" id="close-notification"></i>
             </div>
         @elseif(session()->has('success'))
-            <div class="push-notification success active">
+            <div class="push-notification success">
                 <i class="fa-solid fa-bell success"></i>
                 <div class="notification-message">
                     <h4>{{session('success')}}</h4>
@@ -537,6 +537,6 @@
 
     <script src="{{asset('js/Customer/6 - Account.js')}}" defer></script>
     <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
-    <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
-    <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+        <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
 </html>

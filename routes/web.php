@@ -47,11 +47,13 @@ Route::get('/repairshops/{category}', [CustomerController::class, 'viewcategory'
 Route::get('/repairshop/{id}', [CustomerController::class, 'viewshop'])->name('viewshop');
 
 Route::get('/bookappointment/{id}', [CustomerController::class, 'viewappointment'])->name('viewappointment');
-Route::post('/bookappointment/{id}', [CustomerController::class, 'bookappointment'])->name('bookappointment');
 
 Route::get('/search', [CustomerController::class, 'searchRepairShops'])->name('search');
 
-Route::middleware('auth')->group(function () {
+Route::middleware('customer.auth')->group(function () {
+
+    Route::post('/bookappointment/{id}', [CustomerController::class, 'bookappointment'])->name('bookappointment');
+
     Route::get('/customer/myaccount', [CustomerController::class, 'myaccount'])->name('myaccount');
     Route::patch('/customer/myaccount/{actionType}/{customerID}', [CustomerController::class, 'myaccountUpdate'])->name('customer.updateprofile');
     Route::patch('/customer/myaccount/notification/update/{notificationID}',  [CustomerController::class, 'notificationUpdate']);
@@ -67,11 +69,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/messages', [CustomerController::class, 'messages'])->name('customer.messages');
     Route::get('/message/repairshop/{repairshopID}', [CustomerController::class, 'messageRepairshop'])->name('customer.messageRepairshop');
 
-    Route::get('/customer/account/{status}', [CustomerController::class, 'disabledAccount'])->name('customer.disabledAccount');
-
     Route::get('/customer/favorites', [CustomerController::class, 'viewFavorites']);
     Route::post('/customer/favorites/{technicianID}', [CustomerController::class, 'favorites']);
 });
+
+Route::get('/customer/account/{status}', [CustomerController::class, 'disabledAccount'])->name('customer.accountDisabled');
 
 Route::get('/about', function () {
     return view('Customer.10 - AboutUs');
@@ -115,61 +117,75 @@ Route::post('/technician/password/reset', [TechnicianAuthController::class, 'res
 
 // -----------------------------------------------------------------------------
 
-Route::middleware('technician.auth')->group(function(){
+Route::middleware('technician.auth')->group(function() {
 
+    // Technician Dashboard
     Route::get('/technician/dashboard', [TechnicianController::class, 'dashboard'])->name('technician.dashboard');
-        //What if the authenticated technician doesnt own the data that will be accessed? the end point must not be accessed if the data doesnt bellong to the authenticated user/technician
-        Route::get('/technician/appointment/details/{appointmentID}', [TechnicianController::class, 'appointmentDetails']);        
-        Route::patch('/technician/appointment/{status}/{appointmentID}', [TechnicianController::class, 'appointmentUpdate']);
+    
+    // Appointments
+    Route::prefix('technician/appointment')->group(function () {
+        Route::get('/', [TechnicianController::class, 'appointment'])->name('technician.appointment');
+        Route::post('/create/walk-ins', [TechnicianController::class, 'appointmentCreate']);
+        Route::get('/details/{appointmentID}', [TechnicianController::class, 'appointmentDetails']);
+        Route::patch('/{status}/{appointmentID}', [TechnicianController::class, 'appointmentUpdate']);
+    });
 
+    // Notifications
     Route::get('/technician/notifications', [TechnicianController::class, 'notifications'])->name('technician.notifications');
-        Route::patch('/technician/notifications/update/{id}', [TechnicianController::class, 'isRead'])->name('notifications.isread');   
+    Route::patch('/technician/notifications/update/{id}', [TechnicianController::class, 'isRead'])->name('notifications.isread');
 
-    Route::get('/technician/appointment', [TechnicianController::class, 'appointment'])->name('technician.appointment');
-        Route::post('/technician/appointment/create/walk-ins', [TechnicianController::class, 'appointmentCreate']);
+    // Repair Status
+    Route::prefix('technician/repairstatus')->group(function () {
+        Route::get('/', [TechnicianController::class, 'repairstatus'])->name('technician.repairstatus');
+        Route::post('/create/{appointmentID}', [TechnicianController::class, 'repairstatusCreate']);
+        Route::post('/create/repair/walk-ins', [TechnicianController::class, 'repairstatusCreateWalkIn']);
+        Route::get('/details/{repairID}', [TechnicianController::class, 'repairstatusDetails']);
+        Route::patch('/update/{repairID}/{action}', [TechnicianController::class, 'repairstatusUpdate']);
+    });
 
-    Route::get('/technician/repairstatus', [TechnicianController::class, 'repairstatus'])->name('technician.repairstatus');
-        Route::post('/technician/repairstatus/create/{appointmentID}', [TechnicianController::class, 'repairstatusCreate']);
-        Route::get('/technician/repairstatus/details/{repairID}', [TechnicianController::class, 'repairstatusDetails']);
-        Route::patch('/technician/repairstatus/update/{repairID}/{action}', [TechnicianController::class, 'repairstatusUpdate']);
-        Route::post('/technician/repairstatus/create/repair/walk-ins', [TechnicianController::class, 'repairstatusCreateWalkIn']);
+    // Messages
+    Route::prefix('technician/messages')->group(function () {
+        Route::get('/', [TechnicianController::class, 'messages'])->name('technician.messages');
+        Route::get('/{customerID}', [TechnicianController::class, 'messageCustomer'])->name('messageCustomer');
+    });
 
-    Route::get('/technician/messages', [TechnicianController::class, 'messages'])->name('technician.messages');
-        Route::get('/technician/messages/{customerID}', [TechnicianController::class, 'messageCustomer'])->name('messageCustomer');
-
+    // Shop Reviews
     Route::get('/technician/shopreviews', [TechnicianController::class, 'shopreviews'])->name('technician.shopreviews');
 
-    Route::get('/technician/profile', [TechnicianController::class, 'profile'])->name('technician.profile');
-        Route::post('/technician/profile', [TechnicianController::class, 'updateProfile'])->name('technician.updateProfile');
-        Route::patch('/technician/profile/update/{technicianID}/{imageType}', [TechnicianController::class, 'updateImage']);
-        Route::patch('/technician/profile/delete/{technicianID}/{imageType}', [TechnicianController::class, 'deleteImage']);
-        Route::patch('/technician/{technicianID}/social-link', [TechnicianController::class, 'updateLink']);
-        Route::patch('/technician/{technicianID}/social-link/remove/{social}', [TechnicianController::class, 'deleteLink']);
+    // Technician Profile
+    Route::prefix('technician/profile')->group(function () {
+        Route::get('/', [TechnicianController::class, 'profile'])->name('technician.profile');
+        Route::post('/', [TechnicianController::class, 'updateProfile'])->name('technician.updateProfile');
+        Route::patch('/update/{technicianID}/{imageType}', [TechnicianController::class, 'updateImage']);
+        Route::patch('/delete/{technicianID}/{imageType}', [TechnicianController::class, 'deleteImage']);
+        Route::patch('/{technicianID}/social-link', [TechnicianController::class, 'updateLink']);
+        Route::patch('/{technicianID}/social-link/remove/{social}', [TechnicianController::class, 'deleteLink']);
+    });
 
-    Route::get('/technician/account', [TechnicianController::class, 'accountSettings']);
-    Route::patch('/technician/account/update', [TechnicianController::class, 'accountUpdate']);
-    Route::patch('/technician/account/delete', [TechnicianController::class, 'accountDelete']);
+    // Account Settings
+    Route::prefix('technician/account')->group(function () {
+        Route::get('/', [TechnicianController::class, 'accountSettings']);
+        Route::patch('/update', [TechnicianController::class, 'accountUpdate']);
+        Route::patch('/delete', [TechnicianController::class, 'accountDelete']);
+        Route::patch('/password/change', [TechnicianController::class, 'accountPasswordChange']);
+    });
 
-    Route::patch('/technician/account/password/change', [TechnicianController::class, 'accountPasswordChange']);
-    
+    // Report Submission
     Route::post('/technician/submit/report', [TechnicianController::class, 'submitReport']);
-
-
 });
 
 
+Route::get('/technician/account/{status}', [TechnicianController::class, 'accountDisabled'])->name('technician.accountDisabled');
 // ADMIN AUTH---------------------------------------------------------------
 
-Route::get('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
-Route::post('/admin/login', [AdminAuthController::class, 'loginAdmin'])->name('admin.loginAdmin');
-Route::get('/admin/logout', [AdminAuthController::class, 'logoutAdmin'])->name('admin.logoutAdmin');
-
-Route::get('/admin/signup', [AdminAuthController::class, 'signup'])->name('admin.signup');
-Route::post('/admin/signup', [AdminAuthController::class, 'signupAdmin'])->name('admin.signupAdmin');
-
-// -----------------------------------------------------------------------------
-
 Route::middleware('admin.auth')->group(function(){
+
+    Route::get('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
+    Route::post('/admin/login', [AdminAuthController::class, 'loginAdmin'])->name('admin.loginAdmin');
+    Route::get('/admin/logout', [AdminAuthController::class, 'logoutAdmin'])->name('admin.logoutAdmin');
+
+    Route::get('/admin/signup', [AdminAuthController::class, 'signup'])->name('admin.signup');
+    Route::post('/admin/signup', [AdminAuthController::class, 'signupAdmin'])->name('admin.signupAdmin');
 
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/usermanagement', [AdminController::class, 'usermanagement'])->name('admin.usermanagement');
@@ -188,5 +204,6 @@ Route::middleware('admin.auth')->group(function(){
 
     Route::put('/admin/viewprofile/discipline/{action}/{technicianID}', [AdminController::class, 'disciplinaryAction']);
     Route::get('/admin/viewprofile/fetch/discipline/record/{recordID}', [AdminController::class, 'fetchDisciplinaryRecord']);
+
 });
 

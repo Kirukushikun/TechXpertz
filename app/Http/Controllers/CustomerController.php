@@ -46,15 +46,30 @@ class CustomerController extends Controller
             switch (Auth::user()->profile_status) {
                 case 'deleted':
                 case 'restricted':
-                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
+                    return redirect()->route('customer.accountDisabled', ['status' => Auth::user()->profile_status]);
                     break;
             }            
         }
 
         try {
             $repairshopData = $this->getRepairShopSummary();
+            $topRatedData = $this->getMostReviewedShops();
+
+            if(Auth::check()){
+                $province = Auth::user()->province;
+                $city = Auth::user()->city;
+                $barangay = Auth::user()->barangay;
+                $nearShopData = $this->getNearShops($province, $city, $barangay);
+                return view('Customer.1 - Homepage', [
+                    'repairshops' => $repairshopData,
+                    'topRatedData' => $topRatedData,
+                    'nearShopData' => $nearShopData,
+                ]);
+            }
+
             return view('Customer.1 - Homepage', [
                 'repairshops' => $repairshopData,
+                'topRatedData' => $topRatedData,
             ]);
     
         } catch (\Exception $e) {
@@ -66,7 +81,6 @@ class CustomerController extends Controller
 
             return view('Customer.ErrorMessage');
         }
-    
     }
 
     public function viewcategory($category){
@@ -74,7 +88,7 @@ class CustomerController extends Controller
             switch (Auth::user()->profile_status) {
                 case 'deleted':
                 case 'restricted':
-                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
+                    return redirect()->route('customer.accountDisabled', ['status' => Auth::user()->profile_status]);
                     break;
             }            
         }
@@ -100,18 +114,16 @@ class CustomerController extends Controller
 
     public function viewshop($id){
 
-
         if(Auth::check()){
             switch (Auth::user()->profile_status) {
                 case 'deleted':
                 case 'restricted':
-                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
+                    return redirect()->route('customer.accountDisabled', ['status' => Auth::user()->profile_status]);
                     break;
             }            
         }
 
         try {
-
             $repairshop = Technician::findOrFail($id)
                 ->with(['repairshopReviews' => function ($query) {
                     $query->orderBy('created_at', 'desc')->where('status', 'Approved');
@@ -121,6 +133,9 @@ class CustomerController extends Controller
                 return view('Customer.ErrorMessage');
             }
 
+            //Repair Counter   
+            $repairCount = RepairShop_RepairStatus::where('status', 'completed')->where('repairstatus', 'Device Collected')->count();
+            
             // View Counter
             $sessionKey = 'shop_' . $id . '_viewed';
             $shopCredentials = RepairShop_Credentials::where('technician_id', $id)->first();
@@ -131,6 +146,9 @@ class CustomerController extends Controller
                 // Store in session to prevent counting again during this session
                 session([$sessionKey => true]);
             }
+
+            $shopCredentials->shopviews = $this->formatNumber($shopCredentials->shop_views);
+            $shopCredentials->repairCount = $this->formatNumber($repairCount);
             // ---------------------------------------------------------------------
 
             // Retrieve all services from a specific repairshop
@@ -152,6 +170,7 @@ class CustomerController extends Controller
                 'detailedSchedule' => $detailedSchedule,
                 'repairshopMastery' => $repairshopMastery,
                 'repairshopImages' => $repairshopImages,
+                'shopCredentials' => $shopCredentials,
             ]);
     
         } catch (\Exception $e) {
@@ -168,12 +187,11 @@ class CustomerController extends Controller
 
     public function viewappointment($id)
     {   
-
         if(Auth::check()){
             switch (Auth::user()->profile_status) {
                 case 'deleted':
                 case 'restricted':
-                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
+                    return redirect()->route('customer.accountDisabled', ['status' => Auth::user()->profile_status]);
                     break;
             }            
         }
@@ -294,10 +312,10 @@ class CustomerController extends Controller
             ]);
 
             $this->logActivity('Booked An Appointment', customerId: Auth::user()->id);
-            return back()->with('success', 'Success! Your appointment has been successfully booked.');
+            return back()->with('success', 'Appointment Booked')->with('success_message', 'Success! Your appointment has been successfully booked.');
         } catch (\Exception $e) {
             // return back()->with('error', 'Failed to book appointment: ' . $e->getMessage());
-            return back()->with('error', 'Failed to book appointment. Please try again.');
+            return back()->with('error', 'Booking Failled')->with('error_message', "Sorry, there was a problem booking your appointment. Please try again");
         }
 
 
@@ -347,21 +365,13 @@ class CustomerController extends Controller
         }
 
     public function viewrepairlist(){
-        if(Auth::check()){
-            switch (Auth::user()->profile_status) {
-                case 'deleted':
-                case 'restricted':
-                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
-                    break;
-            }            
-        }
-
         try {
 
             // Fetch repair and appointment details for the logged-in customer
             $repairDetails = RepairShop_RepairStatus::where('customer_id', Auth::user()->id)
                                 ->with(['technician.repairshopCredentials']) // Eager load technician and repair shop details
                                 ->with(['technician.repairshopBadges'])
+                                ->with(['technician.repairshopImages'])
                                 ->orderBy('created_at', 'desc')
                                 ->get();
 
@@ -382,35 +392,36 @@ class CustomerController extends Controller
     }
 
     public function viewrepairstatus($id){
-        if(Auth::check()){
-            switch (Auth::user()->profile_status) {
-                case 'deleted':
-                case 'restricted':
-                    return redirect()->route('customer.disabledAccount', ['status' => Auth::user()->profile_status]);
-                    break;
-            }            
-        }
-
         try {
 
             $repairstatusData = RepairShop_RepairStatus::findOrFail($id);
 
-            if($repairstatusData){
+            if ($repairstatusData) {
+                // Check if the repair status is associated with a customer and if that customer matches the Auth ID
+                if ($repairstatusData->customer_id !== null && $repairstatusData->customer_id !== Auth::id()) {
+                    return back()->with('error', 'Access Denied')->with('error_message','You do not have permission to view this repair status.');
+                }
+            
+                // Fetch repair status details
                 $repairstatusDetails = Customer_RepairStatus::where('repair_id', $id)
                     ->orderBy('created_at', 'desc')
                     ->get();
-    
+            
                 foreach ($repairstatusDetails as $repairstatusDetail) {
                     $repairstatusDetail->formatted_date = Carbon::parse($repairstatusDetail->created_at)->format('l, d M Y');
                     $repairstatusDetail->formatted_time = Carbon::parse($repairstatusDetail->created_at)->format('g:i A');
                 }
-    
+            
+                // Show the view with repair status data
                 return view('Customer.5 - RepairStatus', [
                     'repairstatusData' => $repairstatusData,
                     'repairstatusDetails' => $repairstatusDetails,
-                ]);            
+                ]);
             }
-            return back()->with('error', 'The Repair ID you entered does not exist. Please double-check and try again.');
+            
+            // If the repair status ID does not exist
+            return back()->with('error', 'Invalid Repair ID')->with('The Repair ID you entered does not exist. Please double-check and try again.');
+            
     
         } catch (\Exception $e) {
             // Log the error for debugging
@@ -446,7 +457,7 @@ class CustomerController extends Controller
                     'repairstatus_message' => 'Thank you for taking the time to rate and review the repair shop! Your feedback helps both the shop and future customers. We truly appreciate your input and support!',
                 ]);
                 $this->logActivity('Review Submitted', customerId: Auth::user()->id);
-                return back()->with('success', 'Review submmited successfully');
+                return back()->with('success', 'Review submmited successfully')->with('success_message', 'Thank you for taking the time to rate and review the repair shop!');
             }
 
             return redirect()->route('customer.loginCustomer');
@@ -454,7 +465,6 @@ class CustomerController extends Controller
         }
 
     public function myaccount(){
-
         try {
 
             $customerData = Customer::find(Auth::user()->id);
@@ -609,7 +619,7 @@ class CustomerController extends Controller
 
             if(!$customer){
                 return back()->with('error', 'Deletion Failed')
-                ->with('error_message', 'Customer not found.');
+                ->with('error_message', 'Unable to delete the account. Customer account not found.');
             }
             
             $repairExist = RepairShop_RepairStatus::where('customer_id', $customer->id)
@@ -667,10 +677,13 @@ class CustomerController extends Controller
     }
 
     public function disabledAccount($status){
-        Auth::logout();
-        return view('Customer.9 - DisabledAccount', [
-            'status' => $status
-        ]);
+        if(Auth::check()){
+            Auth::logout();
+            return view('Customer.9 - DisabledAccount', [
+                'status' => $status
+            ]);            
+        }
+        return redirect()->route('customer.loginCustomer');
     }
 
     public function viewFavorites(){
@@ -813,19 +826,28 @@ class CustomerController extends Controller
     }
 
     private function getFavoriteShops($customerID){
-        $favorites = Customer_Favorite::where('customer_id', $customerID)->get();
+        // Fetch favorite technician IDs for the customer
+        $favoriteTechnicianIds = Customer_Favorite::where('customer_id', $customerID)
+            ->pluck('technician_id');
+    
+        // Fetch all favorite technicians with their related data in one query
+        $technicians = Technician::with([
+            'repairshopCredentials',
+            'repairshopMastery',
+            'repairshopBadges',
+            'repairshopImages',
+        ])->whereIn('id', $favoriteTechnicianIds)->get();
+    
         $repairshopData = [];
-        foreach($favorites as $favorite){
-            $repairshop = Technician::find($favorite->technician_id);
-
+        foreach ($technicians as $repairshop) {
             // Get the formatted schedule
             $formattedDays = $this->getFormattedSchedule($repairshop->id);
-
-            // Get review data of specific technician with needed variables
-            $reviewData[$repairshop->id] = $this->reviewSystem($repairshop->id);
-            $totalReviews = $reviewData[$repairshop->id]['totalReviews'];
-            $averageRating = $reviewData[$repairshop->id]['averageRating'];
-
+    
+            // Get review data for the specific technician
+            $reviewData = $this->reviewSystem($repairshop->id);
+            $totalReviews = $reviewData['totalReviews'];
+            $averageRating = $reviewData['averageRating'];
+    
             $repairshopData[] = [
                 'repairshopID' => $repairshop->id,
                 'repairshopName' => $repairshop->repairshopCredentials->shop_name,
@@ -835,31 +857,146 @@ class CustomerController extends Controller
                 'repairshopProvince' => $repairshop->repairshopCredentials->shop_province,
                 'repairshopCity' => $repairshop->repairshopCredentials->shop_city,
                 'repairshopBarangay' => $repairshop->repairshopCredentials->shop_barangay,
-
+    
                 'repairshopBadge1' => $repairshop->repairshopBadges->badge_1,
                 'repairshopBadge2' => $repairshop->repairshopBadges->badge_2,
                 'repairshopBadge3' => $repairshop->repairshopBadges->badge_3,
                 'repairshopBadge4' => $repairshop->repairshopBadges->badge_4,
-
+    
                 'repairshopMastery' => $repairshop->repairshopMastery->main_mastery,
-
+    
                 'repairshopImage' => $repairshop->repairshopImages->image_profile,
-
+    
                 'formattedDays' => $formattedDays,
                 'totalReviews' => $totalReviews,
                 'averageRating' => $averageRating,
             ];
-
         }
+    
+        return $repairshopData;
+    }
+    
+
+    private function getMostReviewedShops(){
+        // Fetch unique technician IDs from the reviews table
+        $reviewedTechnicians = DB::table('repairshop_reviews')
+            ->select('technician_id')
+            ->distinct()
+            ->get();
+    
+        $repairshopData = [];
+        foreach ($reviewedTechnicians as $reviewedTechnician) {
+            // Fetch the technician details
+            $technician = Technician::find($reviewedTechnician->technician_id);
+    
+            if (!$technician) {
+                continue; // Skip if technician not found
+            }
+    
+            // Get the formatted schedule
+            $formattedDays = $this->getFormattedSchedule($technician->id);
+    
+            // Get review data of specific technician using reviewSystem()
+            $reviewData = $this->reviewSystem($technician->id);
+            $totalReviews = $reviewData['totalReviews'];
+            $averageRating = $reviewData['averageRating'];
+    
+            // Define criteria for being "top-rated"
+            $isTopRated = $averageRating >= 4.5 && $totalReviews > 10;
+    
+            $repairshopData[] = [
+                'repairshopID' => $technician->id,
+                'repairshopName' => $technician->repairshopCredentials->shop_name,
+                'repairshopContact' => $technician->repairshopCredentials->shop_contact,
+                'repairshopMMastery' => $technician->repairshopMastery->main_mastery,
+                'repairshopAddress' => $technician->repairshopCredentials->shop_address,
+                'repairshopProvince' => $technician->repairshopCredentials->shop_province,
+                'repairshopCity' => $technician->repairshopCredentials->shop_city,
+                'repairshopBarangay' => $technician->repairshopCredentials->shop_barangay,
+    
+                'repairshopBadge1' => $technician->repairshopBadges->badge_1,
+                'repairshopBadge2' => $technician->repairshopBadges->badge_2,
+                'repairshopBadge3' => $technician->repairshopBadges->badge_3,
+                'repairshopBadge4' => $technician->repairshopBadges->badge_4,
+    
+                'repairshopMastery' => $technician->repairshopMastery->main_mastery,
+                'repairshopImage' => $technician->repairshopImages->image_profile,
+    
+                'formattedDays' => $formattedDays,
+                'totalReviews' => $totalReviews,
+                'averageRating' => $averageRating,
+                'isTopRated' => $isTopRated, // New flag for "top-rated"
+            ];
+        }
+    
+        // Sort repairshops by totalReviews in descending order
+        usort($repairshopData, function ($a, $b) {
+            return $b['totalReviews'] - $a['totalReviews'];
+        });
+    
+        return $repairshopData;
+    }
+    
+    private function getNearShops($province, $city, $barangay){
+        // Fetch all repair shop credentials matching the given location
+        $nearShops = RepairShop_Credentials::where('shop_province', $province)
+            ->orWhere('shop_city', $city)
+            ->orWhere('shop_barangay', $barangay)
+            ->get();
+    
+        // Fetch related technicians in one go
+        $technicianIds = $nearShops->pluck('technician_id');
+        $technicians = Technician::with([
+            'repairshopCredentials',
+            'repairshopMastery',
+            'repairshopBadges',
+            'repairshopImages',
+        ])->whereIn('id', $technicianIds)->get();
+    
+        $repairshopData = [];
+        foreach ($technicians as $repairshop) {
+            // Get the formatted schedule
+            $formattedDays = $this->getFormattedSchedule($repairshop->id);
+    
+            // Get review data of specific technician with needed variables
+            $reviewData = $this->reviewSystem($repairshop->id);
+            $totalReviews = $reviewData['totalReviews'];
+            $averageRating = $reviewData['averageRating'];
+    
+            $repairshopData[] = [
+                'repairshopID' => $repairshop->id,
+                'repairshopName' => $repairshop->repairshopCredentials->shop_name,
+                'repairshopContact' => $repairshop->repairshopCredentials->shop_contact,
+                'repairshopMMastery' => $repairshop->repairshopMastery->main_mastery,
+                'repairshopAddress' => $repairshop->repairshopCredentials->shop_address,
+                'repairshopProvince' => $repairshop->repairshopCredentials->shop_province,
+                'repairshopCity' => $repairshop->repairshopCredentials->shop_city,
+                'repairshopBarangay' => $repairshop->repairshopCredentials->shop_barangay,
+    
+                'repairshopBadge1' => $repairshop->repairshopBadges->badge_1,
+                'repairshopBadge2' => $repairshop->repairshopBadges->badge_2,
+                'repairshopBadge3' => $repairshop->repairshopBadges->badge_3,
+                'repairshopBadge4' => $repairshop->repairshopBadges->badge_4,
+    
+                'repairshopMastery' => $repairshop->repairshopMastery->main_mastery,
+    
+                'repairshopImage' => $repairshop->repairshopImages->image_profile,
+    
+                'formattedDays' => $formattedDays,
+                'totalReviews' => $totalReviews,
+                'averageRating' => $averageRating,
+            ];
+        }
+    
         return $repairshopData;
     }
 
-    public function searchRepairShops(Request $request)
-    {
+    public function searchRepairShops(Request $request){
         $query = $request->input('query');
         $repairshopData = [];
 
         if($query){
+            
             $technicians = Technician::whereHas('repairshopCredentials', function ($q) use ($query) {
                 $q->where('shop_name', 'LIKE', "%$query%")
                   ->orWhere('shop_address', 'LIKE', "%$query%")
@@ -876,6 +1013,7 @@ class CustomerController extends Controller
             ->orWhereHas('repairshopMastery', function ($q) use ($query) {
                 $q->where('main_mastery', 'LIKE', "%$query%");
             })
+
             ->with(['repairshopCredentials', 'repairshopBadges', 'repairshopMastery', 'repairshopImages'])
             ->get();
 
@@ -1171,4 +1309,17 @@ class CustomerController extends Controller
             'ip_address' => RequestFacade::ip(),
         ]);
     }
+
+    public function formatNumber($number){
+        if ($number >= 1000) {
+            // Convert number to K notation
+            $formatted = number_format($number / 1000, ($number % 1000 === 0 ? 0 : 1)) . 'k';
+        } else {
+            // If number is below 1000, just return the number as it is
+            $formatted = $number;
+        }
+        
+        return $formatted;
+    }
+
 }

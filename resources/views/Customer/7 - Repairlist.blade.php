@@ -16,11 +16,33 @@
         <link rel="stylesheet" href="{{ asset('css/Customer/7 - Repairlist.css') }}">
     </head>
 
-    <div class="loading-screen">
-        <div class="loader"></div>
-    </div>
+
 
     <body>
+
+        <div class="loading-screen">
+            <div class="loader"></div>
+        </div>
+
+        @if(session()->has('error'))
+            <div class="push-notification danger">
+                <i class="fa-solid fa-bell danger"></i>
+                <div class="notification-message">
+                    <h4>{{session('error')}}</h4>
+                    <p>{{session('error_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @elseif(session()->has('success'))
+            <div class="push-notification success">
+                <i class="fa-solid fa-bell success"></i>
+                <div class="notification-message">
+                    <h4>{{session('success')}}</h4>
+                    <p>{{session('success_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @endif
 
         @yield('header')
         
@@ -29,7 +51,7 @@
                 <h1>Track Your Repair Status</h1>
                 <p>Stay updated on the progress of your device repair. Check real-time updates to know exactly when your device will be ready for pickup or delivery.</p>
             </div>
-            <form class="search-box">
+            <form class="search-box" onsubmit="submitRepairForm(event)">
                 <div class="search-input">
                     <input type="number" id="repairId" name="repairId" placeholder="Please enter your repair ID here" required>
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -49,7 +71,7 @@
                     $pageNumber = floor($index / $itemsPerPage) + 1;
                 @endphp
                 <div class="repair-card" data-page="{{ $pageNumber }}">
-                    <div class="img"></div>
+                    <div class="img" style="background-image: url('{{ asset($repair->technician->repairshopImages->image_profile) }}');"></div>
                     @php
                         $deviceInfo = App\Models\RepairShop_Appointments::find($repair->appointment_id);
                     @endphp
@@ -103,6 +125,27 @@
         </div>
 
         @yield('footer')
+
+        <script>
+            function submitRepairForm(event) {
+                event.preventDefault(); // Prevent the form's default submit behavior
+
+                // Get the repair ID from the input
+                const repairId = document.getElementById('repairId').value;
+
+                // Check if repairId is valid before redirecting
+                if (!repairId) {
+                    alert("Please enter a valid Repair ID.");
+                    return;
+                }
+
+                // Construct the URL dynamically, assuming your route looks like '/repair-status/{id}'
+                const url = `/repairstatus/${repairId}`;
+
+                // Redirect to the constructed URL
+                window.location.href = url;
+            }
+        </script>
         
         <script>
             const paginationContainer = document.querySelector(".pagination");
@@ -176,7 +219,10 @@
             displayPage(currentPage);
         </script>
         <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+        <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
+        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
         <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
+
     </body>
     
 </html>

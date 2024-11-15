@@ -704,7 +704,7 @@ class TechnicianController extends Controller
                     'updated_at' => now(),
                 ]);
 
-                Repairshop_RepairStatus::create([
+                $repairstatus = Repairshop_RepairStatus::create([
                     'technician_id' => $technician->id,
                     'customer_fullname' => $validatedData['fullname'],
                     'appointment_id' => $appointment->id,
@@ -719,9 +719,15 @@ class TechnicianController extends Controller
                     'updated_at' => now(),
                 ]);
 
+                Customer_RepairStatus::create([
+                    'technician_id' => $technician->id,
+                    'repair_id' => $repairstatus->id,
+                    'repairstatus' => 'Device Dropped Off',
+                    'repairstatus_message' => 'We have successfully received your device at our repair shop. Our technician is now preparing to begin the diagnostic process. You’ll be kept informed as we progress through the repair stages. Thank you for trusting us with your device!',
+                ]);
 
-                // $this->logActivity('Repair Created', technicianId: Auth::guard('technician')->user()->id);
-                return back()->with('success', 'Repair added successfully');
+                $this->logActivity('Repair Created', technicianId: Auth::guard('technician')->user()->id);
+                return back()->with('success', 'Repair Walk-In Added')->with('success_message', 'The repair request has been successfully recorded. The repair status timeline has been started, and the repair process can now begin.');
             } catch (\Exception $e) {
                 // Log the error message for debugging
                 \Log::error('Error in repairstatusCreateWalkIn: ' . $e->getMessage());
@@ -1194,12 +1200,22 @@ class TechnicianController extends Controller
             }
 
             $technician->update([
-                'profile_status' => 'restricted',
+                'profile_status' => 'deleted',
             ]);
             
             $this->logActivity('Account Deleted', technicianId: $technicianID);
-            return redirect()->route('customer.disabledAccount', ['status' => 'deleted'])->with("message", "Your account has been successfully deleted. We're sorry to see you go and hope to serve you again in the future.");
+            return redirect()->route('technician.accountDisabled', ['status' => 'deleted'])->with("message", "Your account has been successfully deleted. We're sorry to see you go and hope to serve you again in the future.");
 
+        }
+
+        public function accountDisabled($status){
+            if(Auth::guard('technician')->check()){
+                Auth::guard('technician')->logout();
+                return view('Technician.9 - DisabledAccount', [
+                    'status' => $status,
+                ]);                
+            }
+            return redirect()->route('technician.loginTechnician');
         }
 
         public function accountPasswordChange(Request $request){

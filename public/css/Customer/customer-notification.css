@@ -1,19 +1,24 @@
 .push-notification {
-    display: none;
-    position: fixed; /* Fixed positioning to allow placement relative to the viewport */
-    top: 20px; /* Adjust the top spacing as needed */
-    right: 20px; /* Adjust the right spacing as needed */
-    border: solid 2px #43ac5fb0;
-    padding: 25px; /* Add padding for better appearance */
-    color: #fff; /* Text color */
-    border-radius: 8px; /* Optional for rounded corners */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional for a subtle shadow */
-    z-index: 9999; /* Ensure it's above other elements */
-    color: var(--text-color);
-}.push-notification.active {
     display: flex;
     align-items: flex-start;
+    position: fixed;
+    top: -170px; /* Start off-screen */
+    right: 20px;
+    border: solid 2px #43ac5fb0;
+    padding: 25px;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    color: var(--text-color);
+    opacity: 0; /* Start hidden */
+    transition: top 0.5s ease, opacity 0.5s ease; /* Animate both top and opacity */
     gap: 20px;
+}
+
+.push-notification.active {
+    top: 20px; /* Slide to visible position */
+    opacity: 1; /* Make it visible */
 }
 
 .push-notification.success{
@@ -51,4 +56,3 @@
     cursor: pointer;;
     margin-top: 2px;
 }
-

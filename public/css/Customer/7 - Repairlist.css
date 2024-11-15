@@ -58,8 +58,9 @@
     border-radius: 8px 0 0 8px;
     background-color: var(--primary-color);
     background-position:center;
-} .repair-card .img img{
-    width: 180px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-right: 2px solid #ddd;
 }
 
 .repair-card .repair-info{

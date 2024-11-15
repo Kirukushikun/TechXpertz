@@ -76,6 +76,9 @@ class CustomerAuthController extends Controller
                 $data['email'] = $request->email;
                 $data['password'] = Hash::make($request->cpassword);
                 $data['contact'] = $request->contact;
+                $data['province'] = $request->province;
+                $data['city'] = $request->city_municipality;
+                $data['barangay'] = $request->barangay;
         
                 try {
                     $user = Customer::create($data);

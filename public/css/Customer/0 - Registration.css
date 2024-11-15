@@ -68,7 +68,7 @@ form {
     width: 100%;
 }
 
-form input{
+form input, form select{
     width: 100%;
     margin-bottom: 20px;
     padding: 10px;

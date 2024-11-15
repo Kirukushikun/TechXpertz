@@ -18,6 +18,26 @@
         <link rel="stylesheet" href="{{ asset('css/Customer/1 - Homepage.css') }}">
     </head>
     <body>
+
+        @if(session()->has('error'))
+            <div class="push-notification danger">
+                <i class="fa-solid fa-bell danger"></i>
+                <div class="notification-message">
+                    <h4>{{session('error')}}</h4>
+                    <p>{{session('error_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @elseif(session()->has('success'))
+            <div class="push-notification success">
+                <i class="fa-solid fa-bell success"></i>
+                <div class="notification-message">
+                    <h4>{{session('success')}}</h4>
+                    <p>{{session('success_message')}}</p>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-notification"></i>
+            </div>
+        @endif
         
         <div class="loading-screen">
             <div class="loader"></div>
@@ -142,8 +162,10 @@
             <div class="header">
                 <nav>
                     <a href="#" class="active">Best Shops</a>
-                    <a href="#">Recommended</a>
-                    <a href="#">Top-rated</a>
+                    <a href="#">Most-rated</a>
+                    @if(Auth::check())
+                        <a href="#">Near You</a>
+                    @endif
                 </nav>
     
                 <div class="header-actions">
@@ -162,7 +184,7 @@
 
                 <div class="best-shops shop-container">
                 
-                    @foreach($repairshops as $index => $repairshop)
+                    @foreach($repairshops as $repairshop)
                         <div class="shop">
                             <div class="shop-image" style="background-image: url('{{ asset($repairshop['repairshopImage']) }}');"></div>
 
@@ -231,25 +253,6 @@
                 @endif
             </div>
 
-
-            <div class="shop-category">
-                @if(count($repairshops) === 0)
-                    <p class="no-shop">
-                        <i class="fa-solid fa-shop-slash"></i>
-                        <span>No Shops Available</span>
-                    </p>
-                @endif
-
-                <div class="recommended shop-container">
-
-                </div>  
-
-                @if(count($repairshops) > 4)
-                    <div class="pagination"></div>
-                @endif           
-            </div>
-
-
             <div class="shop-category">
                 @if(count($repairshops) === 0)
                     <p class="no-shop">
@@ -259,18 +262,159 @@
                 @endif
 
                 <div class="topRated shop-container">
-                    
+                    @foreach($topRatedData as $topRatedShop)
+                        <div class="shop">
+                            <div class="shop-image" style="background-image: url('{{ asset($topRatedShop['repairshopImage']) }}');"></div>
+
+                            <div class="shop-details">
+                                <div class="shop-name">
+                                    <h3>{{$topRatedShop['repairshopName']}}</h3>
+                                    <img src="{{ asset('images/' . $topRatedShop['repairshopMastery'] . '.png') }}">
+                                </div>
+                                
+                                <div class="shop-location">
+                                    <p>{{$topRatedShop['repairshopAddress']}}, Barangay {{$topRatedShop['repairshopBarangay']}}, {{$topRatedShop['repairshopCity']}} {{$topRatedShop['repairshopProvince']}}</p>
+                                </div>
+                                
+                                <div class="shop-schedule">
+                                    <p>+63 {{$topRatedShop['repairshopContact']}}</p>
+                                    <h4>{{ $topRatedShop['formattedDays'] }}</h4>              
+                                </div>
+            
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i>{{ $topRatedShop['repairshopBadge1'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $topRatedShop['repairshopBadge2'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $topRatedShop['repairshopBadge3'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $topRatedShop['repairshopBadge4'] }}</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="shop-footer">
+                                <div class="rating">
+                                    <div class="stars">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= floor($topRatedShop['averageRating']))
+                                                
+                                                <i class="fas fa-star"></i>
+                                            @elseif ($i == ceil($topRatedShop['averageRating']) && fmod($topRatedShop['averageRating'], 1) != 0)
+                                                
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                            @else
+                                                
+                                                <i class="fa-regular fa-star"></i>
+                                            @endif
+                                        @endfor
+                                    </div>
+                                    <p>{{ $topRatedShop['totalReviews']}} Reviews</p>
+                                </div>
+                                <div class="actions">
+                                    @if(Auth::check())
+                                        @php 
+                                            $favorite = App\Models\Customer_Favorite::where('customer_id', Auth::user()->id)
+                                                ->where('technician_id', $topRatedShop['repairshopID'])
+                                                ->first();
+                                        @endphp
+                                        <button class="favorite {{$favorite ? 'active' : ''}}" data-technician-id="{{$topRatedShop['repairshopID']}}"><i class="fa-regular fa-heart"></i></button>
+                                    @else 
+                                        <button class="favorite" onclick="window.location.href='/customer/login'"><i class="fa-regular fa-heart"></i></button>
+                                    @endif
+                                    <button class="view load" onclick="window.location.href='{{ route('viewshop', ['id'=>$topRatedShop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                                </div>
+                            </div>
+                        </div>   
+                    @endforeach
                 </div>
                 
-                @if(count($repairshops) > 4)
+                @if(count($topRatedData) > 4)
                     <div class="pagination"></div>
                 @endif                
             </div>
+
+            @if(Auth::check())
+            <div class="shop-category">
+                @if(count($repairshops) === 0 || !$repairshops)
+                    <p class="no-shop">
+                        <i class="fa-solid fa-shop-slash"></i>
+                        <span>No Shops Available</span>
+                    </p>
+                @endif
+
+                <div class="near-you shop-container">
+                    @foreach($nearShopData as $nearShop)
+                        <div class="shop">
+                            <div class="shop-image" style="background-image: url('{{ asset($nearShop['repairshopImage']) }}');"></div>
+
+                            <div class="shop-details">
+                                <div class="shop-name">
+                                    <h3>{{$nearShop['repairshopName']}}</h3>
+                                    <img src="{{ asset('images/' . $nearShop['repairshopMastery'] . '.png') }}">
+                                </div>
+                                
+                                <div class="shop-location">
+                                    <p>{{$nearShop['repairshopAddress']}}, Barangay {{$nearShop['repairshopBarangay']}}, {{$nearShop['repairshopCity']}} {{$nearShop['repairshopProvince']}}</p>
+                                </div>
+                                
+                                <div class="shop-schedule">
+                                    <p>+63 {{$nearShop['repairshopContact']}}</p>
+                                    <h4>{{ $nearShop['formattedDays'] }}</h4>              
+                                </div>
+            
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i>{{ $nearShop['repairshopBadge1'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $nearShop['repairshopBadge2'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $nearShop['repairshopBadge3'] }}</li>
+                                    <li><i class="fa-solid fa-check"></i>{{ $nearShop['repairshopBadge4'] }}</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="shop-footer">
+                                <div class="rating">
+                                    <div class="stars">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= floor($nearShop['averageRating']))
+                                                
+                                                <i class="fas fa-star"></i>
+                                            @elseif ($i == ceil($nearShop['averageRating']) && fmod($nearShop['averageRating'], 1) != 0)
+                                                
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                            @else
+                                                
+                                                <i class="fa-regular fa-star"></i>
+                                            @endif
+                                        @endfor
+                                    </div>
+                                    <p>{{ $nearShop['totalReviews']}} Reviews</p>
+                                </div>
+                                <div class="actions">
+                                    @if(Auth::check())
+                                        @php 
+                                            $favorite = App\Models\Customer_Favorite::where('customer_id', Auth::user()->id)
+                                                ->where('technician_id', $nearShop['repairshopID'])
+                                                ->first();
+                                        @endphp
+                                        <button class="favorite {{$favorite ? 'active' : ''}}" data-technician-id="{{$nearShop['repairshopID']}}"><i class="fa-regular fa-heart"></i></button>
+                                    @else 
+                                        <button class="favorite" onclick="window.location.href='/customer/login'"><i class="fa-regular fa-heart"></i></button>
+                                    @endif
+                                    <button class="view load" onclick="window.location.href='{{ route('viewshop', ['id'=>$nearShop['repairshopID']]) }}'"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                                </div>
+                            </div>
+                        </div>   
+                    @endforeach
+                </div>  
+
+                @if(count($nearShopData) > 4)
+                    <div class="pagination"></div>
+                @endif           
+            </div>
+            @endif
+
         </div>
 
         @yield('footer')
 
         <script src="{{asset('js/Customer/1 - Homepage.js')}}" defer></script>
+        <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
         <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
         <script src="{{asset('js/Customer/customer-favorites.js')}}" defer></script>
         <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>

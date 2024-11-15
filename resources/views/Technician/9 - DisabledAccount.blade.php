@@ -8,16 +8,19 @@
     <link rel="stylesheet" href="{{asset('css/Customer/9 - DisabledAccount.css')}}">
 </head>
 <body>
-    <!-- {{$status}} -->
     <div class="disabled-container">
         <div class="logo">
             <h2>Tech<span>X</span>pertz</h2>
         </div>
-
+            
         @if($status == 'deleted')
             <div class="website-message deleted">
                 <h2>Account Deleted</h2>
-                <h3>Were sorry, but this account has been permanently deleted and can no longer be accessed. If you believe this is an error or have further questions, please contact our <a href="/contact-us">support team</a> for assistance.</h3>
+                @if(session()->has('message'))
+                    <h3>{{session('message')}}</h3>
+                @else
+                    <h3>Were sorry, but this account has been permanently deleted and can no longer be accessed. If you believe this is an error or have further questions, please contact our <a href="/contact-us">support team</a> for assistance.</h3>
+                @endif
             </div>
         @elseif ($status == 'restricted')
             <div class="website-message restricted">
