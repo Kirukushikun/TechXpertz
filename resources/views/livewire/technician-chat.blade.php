@@ -57,7 +57,7 @@
     <aside class="sidebar">
         <div class="search-bar">
             <h2>Messages</h2>
-            <input type="text" placeholder="Search">
+            <!-- <input type="text" placeholder="Search"> -->
         </div>
 
         <div class="messages" wire:poll.1s>

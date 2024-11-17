@@ -297,7 +297,7 @@
                                     <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
                                 </div>
                             </div>
-                            @if(count($technician->repairshopRepairStatus) == 0)
+                            @if(!$technician->repairshopRepairStatus || count($technician->repairshopRepairStatus) == 0)
                                 <div class="empty-container">
                                     No current repairs at the moment
                                 </div>
@@ -337,7 +337,7 @@
                                     <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
                                 </div>
                             </div>
-                            @if(count($technician->repairshopAppointments) == 0)
+                            @if(!$technician->repairshopAppointments || count($technician->repairshopAppointments) == 0)
                                 <div class="empty-container">
                                     No current appointments at the moment
                                 </div>
@@ -373,52 +373,53 @@
                             <div class="form-header">
                                 <h2>Ratings & Feedback</h2>
                             </div>
-                            @if(count($technician->repairshopReviews) == 0)
+                            @if(!$technician->repairshopReviews || count($technician->repairshopReviews) == 0)
                                 <div class="empty-container">
                                     No current reviews at the moment
                                 </div>
+                            @else
+                                @foreach($technician->repairshopReviews as $review)
+                                    <div class="review {{$review->status}}">
+                                        <div class="review-header">
+                                            <!-- <span class="status">Approved</span> -->
+                                            <span class="review-date">{{$review->created_at->format('M d, Y')}}</span>
+                                            <div class="stars">
+                                                @for($i = 1; $i <= $review->rating; $i++)
+                                                    <span class="star"><i class="fa-solid fa-star"></i></span>
+                                                @endfor
+                                            </div>
+                                        </div>
+                        
+                                        <div class="review-body">
+                                            <div class="reviewer-info">
+                                                <span class="reviewer-avatar">AK</span>
+                                                <div class="reviewer-details">
+                                                    <span class="reviewer-name">{{$review->customer_fullname}}</span>
+                                                    
+                                                </div>
+                                            </div>
+                                            <p class="review-text">
+                                                {{$review->review_comment}}
+                                            </p>
+                                            @if($review->status == "Pending")
+                                                <div class="review-action">
+                                                    <button class="Approve" button-action="Approve" data-review-id="{{$review->id}}">APPROVE</button>
+                                                    <button class="Reject" button-action="Reject" data-review-id="{{$review->id}}">REJECT</button>
+                                                </div>
+                                            @elseif($review->status == "Approved")
+                                                <div class="review-action">
+                                                    <button class="Reject" button-action="Reject" data-review-id="{{$review->id}}">REJECT</button>
+                                                </div>
+                                            @elseif($review->status == "Rejected")
+                                                <div class="review-action">
+                                                    <button class="Approve" button-action="Approve" data-review-id="{{$review->id}}">APPROVE</button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
                             @endif
 
-                            @foreach($technician->repairshopReviews as $review)
-                                <div class="review {{$review->status}}">
-                                    <div class="review-header">
-                                        <!-- <span class="status">Approved</span> -->
-                                        <span class="review-date">{{$review->created_at->format('M d, Y')}}</span>
-                                        <div class="stars">
-                                            @for($i = 1; $i <= $review->rating; $i++)
-                                                <span class="star"><i class="fa-solid fa-star"></i></span>
-                                            @endfor
-                                        </div>
-                                    </div>
-                    
-                                    <div class="review-body">
-                                        <div class="reviewer-info">
-                                            <span class="reviewer-avatar">AK</span>
-                                            <div class="reviewer-details">
-                                                <span class="reviewer-name">{{$review->customer_fullname}}</span>
-                                                
-                                            </div>
-                                        </div>
-                                        <p class="review-text">
-                                            {{$review->review_comment}}
-                                        </p>
-                                        @if($review->status == "Pending")
-                                            <div class="review-action">
-                                                <button class="Approve" button-action="Approve" data-review-id="{{$review->id}}">APPROVE</button>
-                                                <button class="Reject" button-action="Reject" data-review-id="{{$review->id}}">REJECT</button>
-                                            </div>
-                                        @elseif($review->status == "Approved")
-                                            <div class="review-action">
-                                                <button class="Reject" button-action="Reject" data-review-id="{{$review->id}}">REJECT</button>
-                                            </div>
-                                        @elseif($review->status == "Rejected")
-                                            <div class="review-action">
-                                                <button class="Approve" button-action="Approve" data-review-id="{{$review->id}}">APPROVE</button>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            @endforeach
                         </div>
 
                         <div id="disciplinary-records" class="form-container">
@@ -426,122 +427,127 @@
                                 <h2>Disciplinary Records</h2>
                                 <button class="disiplinary-btn btn-normal" data-technician-id="{{$technician->id}}">Add Record</button>
                             </div>
-                            @if(count($disciplinaryRecords) == 0)
+                            @if(!$disciplinaryRecords || count($disciplinaryRecords) == 0)
                                 <div class="empty-container">
                                     No current records at the moment
                                 </div>
-                            @endif
-                            
-                            @foreach($disciplinaryRecords as $disciplinaryRecord)
-                            <div class="disciplinary-card {{$disciplinaryRecord->status == 'Solved' ? 'solved' : ''}}">
-                                <div class="card-header">
-                                    <div class="title">
-                                        <h3>Violation: {{$disciplinaryRecord->violation_header}}</h3>
-                                        <p><strong>Date of Incident:</strong> {{$disciplinaryRecord->date_of_incident->format('M d, Y')}}</p>    
-                                    </div>
-                                    <div class="card-status">
-                                        @php 
-                                            $offense = "";  // Initialize $offense variable
-                                            $level = "";   // Initialize $status variable
-
-                                            switch($disciplinaryRecord->violation_offense) {
-                                                case "First Offense":
-                                                    $offense = "status-soft";
-                                                    break;
-                                                case "Second Offense":
-                                                    $offense = "status-mild";
-                                                    break;
-
-                                                case "Third Offense":
-                                                    $offense = "status-moderate";
-                                                    break;
-
-                                                case "Fourth Offense":
-                                                    $offense = "status-high";
-                                                    break;
-
-                                                case "Fifth Offense":
-                                                    $offense = "status-severe";
-                                                    break;
-                                            }
-
-                                            switch($disciplinaryRecord->violation_level) {
-                                                case "Minor":
-                                                    $level = "status-soft";
-                                                    break;
-                                                case "Moderate":
-                                                    $level = "status-mild";
-                                                    break;
-                                                case "Urgent":
-                                                    $level = "status-moderate";
-                                                    break;
-                                                case "Critical":
-                                                    $level = "status-high";
-                                                    break;
-                                                case "Severe":
-                                                    $level = "status-severe";
-                                                    break;
-                                            }
-                                        @endphp
-                                        
-                                        <span class="{{$offense}}">{{$disciplinaryRecord->violation_offense}}</span> 
-                                        <span class="{{$level}}">{{$disciplinaryRecord->violation_level}}</span>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <!-- <p><strong>Technician:</strong> John Doe</p> -->
-                                    <p><strong>Violation Status: </strong>{{$disciplinaryRecord->status}}</p>
-                                    <p><strong>Violation Description: </strong>{{$disciplinaryRecord->violation_description}}</p>
-                                    @if($disciplinaryRecord->action_taken)
-                                        <p><strong>Action Taken: </strong> {{$disciplinaryRecord->action_taken}}</p>
-                                    @endif
-                                </div>
-                                <div class="card-footer">
-                                    @if($disciplinaryRecord->resolution_date)
-                                        <p><strong>Resolution Date:</strong> {{$disciplinaryRecord->resolution_date->format('M d, Y')}}</p>
-                                    @endif
-                                    
-                                    @if($disciplinaryRecord->status != "Solved")
-                                        <div class="card-footer-action">
-                                            <button class="update-record-btn btn-primary" data-record-id="{{$disciplinaryRecord->id}}" data-technician-id="{{$technician->id}}" data-action-type="update">UPDATE</button>
-                                            <button class="update-record-btn btn-success" data-record-id="{{$disciplinaryRecord->id}}" data-technician-id="{{$technician->id}}" data-action-type="resolve">MARK AS RESOLVED</button>
+                            @else
+                                @foreach($disciplinaryRecords as $disciplinaryRecord)
+                                <div class="disciplinary-card {{$disciplinaryRecord->status == 'Solved' ? 'solved' : ''}}">
+                                    <div class="card-header">
+                                        <div class="title">
+                                            <h3>Violation: {{$disciplinaryRecord->violation_header}}</h3>
+                                            <p><strong>Date of Incident:</strong> {{$disciplinaryRecord->date_of_incident->format('M d, Y')}}</p>    
                                         </div>
-                                    @endif
+                                        <div class="card-status">
+                                            @php 
+                                                $offense = "";  // Initialize $offense variable
+                                                $level = "";   // Initialize $status variable
+
+                                                switch($disciplinaryRecord->violation_offense) {
+                                                    case "First Offense":
+                                                        $offense = "status-soft";
+                                                        break;
+                                                    case "Second Offense":
+                                                        $offense = "status-mild";
+                                                        break;
+
+                                                    case "Third Offense":
+                                                        $offense = "status-moderate";
+                                                        break;
+
+                                                    case "Fourth Offense":
+                                                        $offense = "status-high";
+                                                        break;
+
+                                                    case "Fifth Offense":
+                                                        $offense = "status-severe";
+                                                        break;
+                                                }
+
+                                                switch($disciplinaryRecord->violation_level) {
+                                                    case "Minor":
+                                                        $level = "status-soft";
+                                                        break;
+                                                    case "Moderate":
+                                                        $level = "status-mild";
+                                                        break;
+                                                    case "Urgent":
+                                                        $level = "status-moderate";
+                                                        break;
+                                                    case "Critical":
+                                                        $level = "status-high";
+                                                        break;
+                                                    case "Severe":
+                                                        $level = "status-severe";
+                                                        break;
+                                                }
+                                            @endphp
+                                            
+                                            <span class="{{$offense}}">{{$disciplinaryRecord->violation_offense}}</span> 
+                                            <span class="{{$level}}">{{$disciplinaryRecord->violation_level}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- <p><strong>Technician:</strong> John Doe</p> -->
+                                        <p><strong>Violation Status: </strong>{{$disciplinaryRecord->status}}</p>
+                                        <p><strong>Violation Description: </strong>{{$disciplinaryRecord->violation_description}}</p>
+                                        @if($disciplinaryRecord->action_taken)
+                                            <p><strong>Action Taken: </strong> {{$disciplinaryRecord->action_taken}}</p>
+                                        @endif
+                                    </div>
+                                    <div class="card-footer">
+                                        @if($disciplinaryRecord->resolution_date)
+                                            <p><strong>Resolution Date:</strong> {{$disciplinaryRecord->resolution_date->format('M d, Y')}}</p>
+                                        @endif
+                                        
+                                        @if($disciplinaryRecord->status != "Solved")
+                                            <div class="card-footer-action">
+                                                <button class="update-record-btn btn-primary" data-record-id="{{$disciplinaryRecord->id}}" data-technician-id="{{$technician->id}}" data-action-type="update">UPDATE</button>
+                                                <button class="update-record-btn btn-success" data-record-id="{{$disciplinaryRecord->id}}" data-technician-id="{{$technician->id}}" data-action-type="resolve">MARK AS RESOLVED</button>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                            @endforeach
+                                @endforeach
+                            @endif
                         </div>
 
                         <div id="access-logs" class="form-container">
                             <div class="form-header">
                                 <h2>Activity Logs</h2>
                             </div>
-
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Timestamp</th>
-                                        <th>Action</th>
-                                        <th>Description</th>
-                                        <th>Status</th>
-                                        <th>IP Address</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($activityLogs as $activityLog)
+                            @if(!$activityLogs || count($activityLogs) == 0)
+                                <div class="empty-container">
+                                    No current records at the moment
+                                </div>
+                            @else
+                                <table>
+                                    <thead>
                                         <tr>
-                                            <td>
-                                                {{$activityLog->created_at->format('M d, Y')}} <br>
-                                                {{$activityLog->created_at->format('h:i A')}}   
-                                            </td>
-                                            <td>{{$activityLog->action}}</td>
-                                            <td>{{$activityLog->description}}</td>
-                                            <td>{{$activityLog->status}}</td>
-                                            <td>{{$activityLog->ip_address}}</td>
+                                            <th>Timestamp</th>
+                                            <th>Action</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>IP Address</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($activityLogs as $activityLog)
+                                            <tr>
+                                                <td>
+                                                    {{$activityLog->created_at->format('M d, Y')}} <br>
+                                                    {{$activityLog->created_at->format('h:i A')}}   
+                                                </td>
+                                                <td>{{$activityLog->action}}</td>
+                                                <td>{{$activityLog->description}}</td>
+                                                <td>{{$activityLog->status}}</td>
+                                                <td>{{$activityLog->ip_address}}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
                         </div>
                     </div>
                     

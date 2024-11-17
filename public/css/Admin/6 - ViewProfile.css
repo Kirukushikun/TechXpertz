@@ -366,6 +366,7 @@ table td a{
 .review-body .reviewer-info {
     display: flex;
     align-items: center;
+    gap: 10px;
 
 }.reviewer-info .reviewer-avatar {
     width: 40px;
@@ -377,7 +378,6 @@ table td a{
     justify-content: center;
     color: #fff;
     font-size: 18px;
-    margin-right: 15px;
 
 }.reviewer-info .reviewer-details {
     display: flex;
@@ -390,6 +390,12 @@ table td a{
     color: #666666;
     font-size: 14px;
 
+}.reviewer-info .reviewer-details a{
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 17px;
 }
 
 .review-body .review-action{

@@ -146,8 +146,17 @@ class AdminController extends Controller
 
             }elseif($userRole == 'Customer'){
                 $customer = Customer::find($userID);
+                $appointments = RepairShop_Appointments::where('customer_id', $userID)->get();
+                $repairs = RepairShop_RepairStatus::where('customer_id', $userID)->get();
+                $reviews = RepairShop_Reviews::where('customer_id', $userID)->get();
+                $activityLogs = Admin_ActivityLogs::where('customer_id', $userID)->get();
+
                 return view('Admin.7 - ViewProfile', [
                     'customer' => $customer,
+                    'appointments' => $appointments,
+                    'reviews' => $reviews,
+                    'repairs' => $repairs,
+                    'activityLogs' => $activityLogs
                 ]);
             }
         }

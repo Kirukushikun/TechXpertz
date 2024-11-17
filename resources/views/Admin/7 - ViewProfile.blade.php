@@ -37,8 +37,8 @@
                                 <h2>Customer Profile</h2>
                                 <ul>
                                     <li><a href="#" data-target="customer-details" class="active">Customer Details</a></li>
-                                    <li><a href="#" data-target="repair-monitoring">Repair Monitoring</a></li>
                                     <li><a href="#" data-target="appointment-monitoring">Appointment Monitoring</a></li>
+                                    <li><a href="#" data-target="repair-monitoring">Repair Monitoring</a></li>
                                     <li><a href="#" data-target="ratings-feedback">Ratings & Feedback</a></li>
                                     <li><a href="#" data-target="disciplinary-records">Disciplinary Records</a></li>
                                     <li><a href="#" data-target="access-logs">Access Logs</a></li>
@@ -68,28 +68,40 @@
                             <div class="form-section col-3">
                                 <div class="form-group">
                                     <label for="user-ID">ID</label>
-                                    <input type="text" id="user-ID" name="user-ID" value="{{$customer->id}}" required>
+                                    <input type="text" id="user-ID" name="user-ID" value="{{$customer->id}}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="first-name">First Name</label>
-                                    <input type="text" id="first-name" name="first-name" value="{{$customer->firstname}}" required>
+                                    <input type="text" id="first-name" name="first-name" value="{{$customer->firstname}}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="middle-name">Middle Name</label>
-                                    <input type="text" id="middle-name" name="middle-name" value="" required>
+                                    <input type="text" id="middle-name" name="middle-name" value="" readonly>
                                 </div> 
                                 <div class="form-group">
                                     <label for="last-name">Last Name</label>
-                                    <input type="text" id="last-name" name="last-name" value="{{$customer->lastname}}" required>
+                                    <input type="text" id="last-name" name="last-name" value="{{$customer->lastname}}" readonly>
                                 </div> 
 
                                 <div class="form-group">
                                     <label for="email-address">Email Address</label>
-                                    <input type="text" id="email-address" name="email-address" value="{{$customer->email}}" required>
+                                    <input type="text" id="email-address" name="email-address" value="{{$customer->email}}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="contact-no">Contact No.</label>
-                                    <input type="text" id="contact-no" name="contact-no" value="{{$customer->contact}}" required>
+                                    <input type="text" id="contact-no" name="contact-no" value="{{$customer->contact}}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="province">Province</label>
+                                    <input type="text" id="province" name="province" value="{{$customer->province}}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">City/Municipality</label>
+                                    <input type="text" id="city" name="city" value="{{$customer->city}}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="barangay">Barangay</label>
+                                    <input type="text" id="barangay" name="barangay" value="{{$customer->barangay}}" readonly>
                                 </div>
 
                             </div>
@@ -311,6 +323,42 @@
                             </div>
                         </div> -->
 
+                        <div id="appointment-monitoring" class="form-container">
+                            <div class="form-header">
+                                <h2>Appointment Monitoring</h2>
+                                <div class="tab-filters">
+                                    <li><button><i class="fa-solid fa-filter"></i> Filter</button></li>
+                                    <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
+                                </div>
+                            </div>
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Repair Shop</th>
+                                        <th>Status</th>
+                                        <th>Date Requested</th>
+                                        <th>Time Requested</th>
+                                        <th>Date Updated</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($appointments as $appointment)
+                                        @php 
+                                            $repairshop = App\Models\RepairShop_Credentials::where('technician_id', $appointment->technician_id)->first();
+                                        @endphp
+                                        <tr>
+                                            <td>{{$repairshop->shop_name}}</td>
+                                            <td>{{$appointment->status}}</td>
+                                            <td>{{$appointment->appointment_date->format('D - M d, Y')}}</td>
+                                            <td>{{$appointment->appointment_time->format('h:i A')}}</td>
+                                            <td>{{$appointment->updated_at->format('D - M d, Y')}}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>                        
+
                         <div id="repair-monitoring" class="form-container">
                             <div class="form-header">
                                 <h2>Repair Monitoring</h2>
@@ -324,78 +372,47 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Repair ID</th>
-                                        <th>Customer Name</th>
+                                        <th>Shop Name</th>
+                                        <th>Device</th>
                                         <th>Status</th>
                                         <th>Repair Status</th>
-                                        <th>Revenue</th>
+                                        <th>Paid Status</th>
                                         <th>Date Updated</th>
-                                        <th>Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td><button class="view-details" data-appointment-id="">View</button></td>
-                                        </tr>
+                                        @foreach($repairs as $repair)
+                                            @php 
+                                                $repairshop = App\Models\RepairShop_Credentials::where('technician_id', $repair->technician_id)->first();
+                                                $appointment = App\Models\RepairShop_Appointments::where('customer_id', $repair->customer_id)->first();
+                                            @endphp
+                                            <tr>
+                                                <td>{{$repairshop->shop_name}}</td>
+                                                <td>{{$appointment->device_model}}</td>
+                                                <td>{{$repair->status}}</td>
+                                                <td>{{$repair->repairstatus}}</td>
+                                                <td>{{$repair->paid_status}}</td>
+                                                <td>{{$repair->updated_at->format('d M, Y')}}</td>
+                                            </tr>
+                                        @endforeach
                                 </tbody>
                             </table>
                         </div>
 
-                        <div id="appointment-monitoring" class="form-container">
-                            <div class="form-header">
-                                <h2>Appointment Monitoring</h2>
-                                <div class="tab-filters">
-                                    <li><button><i class="fa-solid fa-filter"></i> Filter</button></li>
-                                    <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
-                                </div>
-                            </div>
-
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Appointment ID</th>
-                                        <th>Customer Name</th>
-                                        <th>Status</th>
-                                        <th>Date Requested</th>
-                                        <th>Time Requested</th>
-                                        <th>Date Updated</th>
-                                        <th>Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td><button class="view-details" data-appointment-id="">View</button></td>
-                                        </tr>
-                                </tbody>
-                            </table>
-                        </div>
 
                         <div id="ratings-feedback" class="form-container">
                             <div class="form-header">
                                 <h2>Ratings & Feedback</h2>
                             </div>
 
+                            @foreach($reviews as $review)
                             <div class="review">
                                 <div class="review-header">
-                                    <span class="review-date">Jan 20, 2024</span>
+                                    <span class="review-date">{{$review->created_at->format('d M, Y')}}</span>
                                     <div class="stars">
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
+                                        @for($i = 1; $i <= $review->rating; $i++)
+                                            <span class="star"><i class="fa-solid fa-star"></i></span>
+                                        @endfor
                                     </div>
                                 </div>
                 
@@ -403,38 +420,24 @@
                                     <div class="reviewer-info">
                                         <span class="reviewer-avatar">AK</span>
                                         <div class="reviewer-details">
-                                            <span class="reviewer-name">Alex K.</span>
+                                            <span class="reviewer-name">{{$review->customer_fullname}}</span>
                                         </div>
-                                    </div>
-                                    <p class="review-text">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo est modi, vitae tempore quia asperiores tenetur facilis, ipsam temporibus mollitia nihil suscipit vero necessitatibus porro nostrum error. Corrupti, nulla voluptatibus!
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="review">
-                                <div class="review-header">
-                                    <span class="review-date">Jan 20, 2024</span>
-                                    <div class="stars">
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                        <span class="star"><i class="fa-solid fa-star"></i></span>
-                                    </div>
-                                </div>
-                
-                                <div class="review-body">
-                                    <div class="reviewer-info">
-                                        <span class="reviewer-avatar">AK</span>
+                                        
+                                        <i class="fa-solid fa-arrow-right"></i>
+
                                         <div class="reviewer-details">
-                                            <span class="reviewer-name">Alex K.</span>
+                                            @php 
+                                                $repairshop = App\Models\RepairShop_Credentials::where('technician_id', $review->technician_id)->first();
+                                            @endphp
+                                            <a href="{{route('admin.viewprofile', ['userRole' => 'Technician', 'userID' => $review->technician_id])}}" class="shop-name">{{$repairshop->shop_name}}</a>
                                         </div>
                                     </div>
                                     <p class="review-text">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo est modi, vitae tempore quia asperiores tenetur facilis, ipsam temporibus mollitia nihil suscipit vero necessitatibus porro nostrum error. Corrupti, nulla voluptatibus!
+                                        {{$review->review_comment}}
                                     </p>
                                 </div>
                             </div>
+                            @endforeach
                         </div>
 
                         <div id="disciplinary-records" class="form-container">
@@ -489,21 +492,26 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Date of Login</th>
-                                        <th>IP Address</th>
+                                        <th>Timestamp</th>
+                                        <th>Action</th>
+                                        <th>Description</th>
                                         <th>Status</th>
-                                        <th>Browser Information</th>
-                                        <th>Last Password Reset (date)</th>
+                                        <th>IP Address</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($activityLogs as $activityLog)
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td>
+                                                {{$activityLog->created_at->format('M d, Y')}} <br>
+                                                {{$activityLog->created_at->format('h:i A')}}   
+                                            </td>
+                                            <td>{{$activityLog->action}}</td>
+                                            <td>{{$activityLog->description}}</td>
+                                            <td>{{$activityLog->status}}</td>
+                                            <td>{{$activityLog->ip_address}}</td>
                                         </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
