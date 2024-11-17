@@ -50,6 +50,10 @@ Route::get('/bookappointment/{id}', [CustomerController::class, 'viewappointment
 
 Route::get('/search', [CustomerController::class, 'searchRepairShops'])->name('search');
 
+Route::post('/contact', [CustomerController::class, 'submitInquiries'])->name('contact.submit');
+
+Route::post('/customer/submit/report', [CustomerController::class, 'submitReport']);
+
 Route::middleware('customer.auth')->group(function () {
 
     Route::post('/bookappointment/{id}', [CustomerController::class, 'bookappointment'])->name('bookappointment');
@@ -180,13 +184,6 @@ Route::get('/technician/account/{status}', [TechnicianController::class, 'accoun
 
 Route::middleware('admin.auth')->group(function(){
 
-    Route::get('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
-    Route::post('/admin/login', [AdminAuthController::class, 'loginAdmin'])->name('admin.loginAdmin');
-    Route::get('/admin/logout', [AdminAuthController::class, 'logoutAdmin'])->name('admin.logoutAdmin');
-
-    Route::get('/admin/signup', [AdminAuthController::class, 'signup'])->name('admin.signup');
-    Route::post('/admin/signup', [AdminAuthController::class, 'signupAdmin'])->name('admin.signupAdmin');
-
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/usermanagement', [AdminController::class, 'usermanagement'])->name('admin.usermanagement');
         Route::get('/admin/viewprofile/{userRole}/{userID}', [AdminController::class, 'viewprofile'])->name('admin.viewprofile');
@@ -206,4 +203,14 @@ Route::middleware('admin.auth')->group(function(){
     Route::get('/admin/viewprofile/fetch/discipline/record/{recordID}', [AdminController::class, 'fetchDisciplinaryRecord']);
 
 });
+
+Route::middleware('authorized.ip')->group(function(){
+    Route::get('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
+    Route::post('/admin/login', [AdminAuthController::class, 'loginAdmin'])->name('admin.loginAdmin');
+    Route::get('/admin/logout', [AdminAuthController::class, 'logoutAdmin'])->name('admin.logoutAdmin');
+
+    Route::get('/admin/signup', [AdminAuthController::class, 'signup'])->name('admin.signup');
+    Route::post('/admin/signup', [AdminAuthController::class, 'signupAdmin'])->name('admin.signupAdmin');
+});
+
 

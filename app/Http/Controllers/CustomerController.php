@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin_ActivityLogs;
+use App\Models\Admin_ReportManagement;
 
 use App\Models\Customer;
 use App\Models\Customer_Notifications;
@@ -35,6 +36,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request as RequestFacade;
 use Illuminate\Support\Collection;
 
@@ -162,6 +164,7 @@ class CustomerController extends Controller
 
             $repairshopMastery = RepairShop_Mastery::where('technician_id', $repairshop->id)->first();
             $repairshopImages = RepairShop_Images::where('technician_id', $repairshop->id)->first();
+            $repairshopSocials = Repairshop_Socials::where('technician_id', $repairshop->id)->first();
 
             return view('Customer.3 - ViewShop', [
                 'repairshop' => $repairshop,
@@ -171,6 +174,7 @@ class CustomerController extends Controller
                 'repairshopMastery' => $repairshopMastery,
                 'repairshopImages' => $repairshopImages,
                 'shopCredentials' => $shopCredentials,
+                'repairshopSocials' => $repairshopSocials,
             ]);
     
         } catch (\Exception $e) {
@@ -464,6 +468,22 @@ class CustomerController extends Controller
 
         }
 
+        public function submitReport(Request $request){
+            Admin_ReportManagement::create([
+                'user_id' => Auth::user()->id,
+                'user_role' => 'Customer',
+                'user_name' => $request->firstname . ' ' . $request->lastname,
+                'user_email' => $request->email,
+                'report_status' => 'Pending',
+                'category' => $request->category,
+                'sub_category' => $request->sub_category,
+                'description' => $request->description
+            ]);
+
+            $this->logActivity('Report Submitted', customerId: Auth::user()->id);
+            return back()->with('success', 'Report Submitted')->with('success_message', 'Your report has been submitted successfully.');
+        }
+
     public function myaccount(){
         try {
 
@@ -718,6 +738,30 @@ class CustomerController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
 
+    }
+
+    public function submitInquiries(Request $request)
+    {
+        $request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'email' => 'required|email',
+            'message' => 'required|string',
+        ]);
+
+        $emailBody = "You have received a new inquiry:\n\n" .
+                     "Name: {$request->firstname} {$request->lastname}\n" .
+                     "Email: {$request->email}\n" .
+                     "Message:\n{$request->message}";
+
+
+        // Send email
+        Mail::raw($emailBody, function ($message) use ($request) {
+            $message->to('techxpertz.tech@gmail.com')
+                    ->subject('New Inquiry from ' . $request->firstname . $request->lastname);
+        });
+
+        return back()->with('success', 'Inquiry sent successfully!')->with('success_message', 'Your inquiry has been successfully sent. We will get back to you soon.');
     }
     
     // PRIVATE FUNCTIONS ---------

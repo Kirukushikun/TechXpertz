@@ -66,11 +66,11 @@
                     </div>
                     <div class="social-icons">
                         <p>Share</p>
-                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#"><i class="fa-brands fa-square-facebook"></i></a>
-                        <a href="#"><i class="fa-brands fa-github"></i></a>
+                        @foreach(['youtube', 'linkedin', 'twitter', 'facebook', 'telegram'] as $social)
+                            @if($repairshopSocials && $repairshopSocials->$social)
+                                <a href="{{$repairshopSocials->$social}}"><i class="fa-brands fa-{{$social}}"></i></a>
+                            @endif
+                        @endforeach
                     </div>
                 </div>
 

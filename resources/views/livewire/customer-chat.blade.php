@@ -3,7 +3,6 @@
     <aside class="sidebar">
         <div class="search-bar">
             <h2>Messages</h2>
-            <input type="text"  placeholder="Search">
         </div>
         
         <div class="messages" wire::poll.1s>  
@@ -64,14 +63,20 @@
     <main class="chat-area">
         @if($conversations->isNotEmpty())
             <header class="chat-header">
+                @php 
+                    $activeTechnicianProfile = App\Models\RepairShop_Images::where('technician_id', $activeConversation->receiver_id)
+                                ->first();
+                    $activeTechnicianData = App\Models\RepairShop_Credentials::where('technician_id', $activeConversation->receiver_id)
+                            ->first();
+                @endphp
                 <!-- <i class="fa-solid fa-arrow-left back-btn"></i> -->
-                @if($technicianProfile->image_profile)
-                    <span id="image" style="background-image: url('{{ asset($technicianProfile->image_profile) }}');"></span>
+                @if($activeTechnicianProfile->image_profile)
+                    <span id="image" style="background-image: url('{{ asset($activeTechnicianProfile->image_profile) }}');"></span>
                 @else
                     <span id="image"><i class="fa-solid fa-user"></i></span>
                 @endif
 
-                <h2 onclick="window.location.href='{{ route('viewshop', ['id'=> $technicianData->technician_id]) }}'">{{$technicianData->shop_name}}</h2>
+                <h2 onclick="window.location.href='{{ route('viewshop', ['id'=> $activeTechnicianData->technician_id]) }}'">{{$activeTechnicianData->shop_name}}</h2>
             </header>
 
             @if($messages->isEmpty())

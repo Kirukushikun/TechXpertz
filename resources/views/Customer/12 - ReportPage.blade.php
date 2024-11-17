@@ -10,10 +10,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ asset('css/Customer/customer-headerfooter.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Customer/customer-loadingscreen.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Customer/customer-notification.css') }}">
 
     <link rel="stylesheet" href="{{ asset('css/Customer/12 - ReportPage.css') }}">
 </head>
 <body>
+
+    @if(session()->has('error'))
+        <div class="push-notification danger">
+            <i class="fa-solid fa-bell danger"></i>
+            <div class="notification-message">
+                <h4>{{session('error')}}</h4>
+                <p>{{session('error_message')}}</p>
+            </div>
+            <i class="fa-solid fa-xmark" id="close-notification"></i>
+        </div>
+    @elseif(session()->has('success'))
+        <div class="push-notification success">
+            <i class="fa-solid fa-bell success"></i>
+            <div class="notification-message">
+                <h4>{{session('success')}}</h4>
+                <p>{{session('success_message')}}</p>
+            </div>
+            <i class="fa-solid fa-xmark" id="close-notification"></i>
+        </div>
+    @endif
+
     @yield('header')
     <div class="report-content">
         <div class="upper-content">
@@ -21,7 +43,8 @@
             <p>Encountered an issue? Let us know, and our team will work to resolve it as quickly as possible. Your feedback helps us improve our service and provide a better experience for everyone.</p>
         </div>
 
-        <form class="lower-content">
+        <form action="/customer/submit/report" method="POST" class="lower-content">
+            @csrf
             <div class="form-section">
                 <div class="form-group">
                     <label for="firstname">First Name</label>
@@ -53,22 +76,27 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="sub-category">Sub Category</label>
-                <select type="sub-category" id="sub-category" name="sub-category" required>
+                <label for="sub_category">Sub Category</label>
+                <select type="sub_category" id="sub_category" name="sub_category" required>
                     <option value=""></option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="message">What seems to be the problem?</label>
-                <textarea name="message" class="message" id="message" cols="25" rows="7" ></textarea>  
+                <label for="description">What seems to be the problem?</label>
+                <textarea name="description" class="description" id="message" cols="25" rows="7" required></textarea>  
             </div>
-            <input type="submit" class="submit" value="SUBMIT">
+            @if(Auth::check())
+                <input type="submit" class="submit" value="SUBMIT">
+            @else 
+                <input type="button" class="submit" value="LOGIN" onclick="window.location.href='/customer/login'">
+            @endif
         </form>
     </div>
     @yield('footer')
+    
     <script>
         let mainCategory = document.getElementById('category');
-        let subCategory = document.getElementById('sub-category');
+        let subCategory = document.getElementById('sub_category');
         let subCategoryContents = {
             "Account Issues": [
                 "I can't log in to my account.",
@@ -188,5 +216,6 @@
     </script>
     <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
     <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+    <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
 </body>
 </html>

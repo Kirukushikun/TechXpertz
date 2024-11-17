@@ -94,9 +94,9 @@
                 <i class="fa-solid fa-headset"></i>
                 <div>
                     <p>Have any question?</p>
-                    <p><a href="tel:+631234567890">+63 123 456 7890</a></p>
+                    <p><a href="tel:+631234567890">+63 938 2951 931</a></p>
                 </div>
-                <button class="live-chat">EMAIL US</button>
+                <button class="live-chat" onclick="window.location.href='/contact-us'">EMAIL US</button>
             </div>
         </div>
 

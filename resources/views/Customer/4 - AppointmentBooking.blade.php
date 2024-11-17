@@ -27,8 +27,8 @@
             <div class="push-notification danger">
                 <i class="fa-solid fa-bell danger"></i>
                 <div class="notification-message">
-                    <h4>Appointment Booked</h4>
-                    <p>{{session('error')}}</p>
+                    <h4>{{session('error')}}</h4>
+                    <p>{{session('error_message')}}</p>
                 </div>
                 <i class="fa-solid fa-xmark" id="close-notification"></i>
             </div>
@@ -36,8 +36,8 @@
             <div class="push-notification success">
                 <i class="fa-solid fa-bell success"></i>
                 <div class="notification-message">
-                    <h4>Appointment Booked</h4>
-                    <p>{{session('success')}}</p>
+                    <h4>{{session('success')}}</h4>
+                    <p>{{session('success_message')}}</p>
                 </div>
                 <i class="fa-solid fa-xmark" id="close-notification"></i>
             </div>

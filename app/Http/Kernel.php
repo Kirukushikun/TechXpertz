@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'customer.auth' => \App\Http\Middleware\AuthMiddleware::class,
         'technician.auth' => \App\Http\Middleware\TechnicianAuthMiddleware::class,
         'admin.auth' => \App\Http\Middleware\AdminAuthMiddleware::class,
+        'authorized.ip' => \App\Http\Middleware\CheckAuthorityMiddleware::class,
     ];
 
 }

@@ -363,7 +363,7 @@ document.querySelector('.add-link').addEventListener('click', function () {
     const modal = document.getElementById('modal');
 
     modal.innerHTML = `
-        <form action="/technician/${technicianID}/social-link" method="POST">
+        <form action="/technician/profile/${technicianID}/social-link" method="POST">
             <input type="hidden" name="_token" value="${csrfToken}">
             <input type="hidden" name="_method" value="PATCH">
 
@@ -445,7 +445,7 @@ document.querySelectorAll('.delete').forEach(deleteBtn => {
 function deleteLink(technicianID, social){
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    fetch(`/technician/${technicianID}/social-link/remove/${social}`, {
+    fetch(`/technician/profile/${technicianID}/social-link/remove/${social}`, {
         method: 'PATCH', // You can use 'PUT' or 'PATCH' depending on your API design
         headers: {
             'Content-Type': 'application/json',
