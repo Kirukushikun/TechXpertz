@@ -29,6 +29,7 @@ use Carbon\Carbon;
 
 use App\Models\Message;
 use App\Models\Conversation;
+use App\Models\Public_Notifications;
 
 use Illuminate\Support\Facades\File;
 
@@ -45,18 +46,24 @@ class TechnicianController extends Controller
         $technician = Auth::guard('technician')->user();
 
         // Combine both queries and sort in descending order
-        $combinedNotifications = Technician_Notifications::where('target_id', $technician->id)
+        $technicianNotification = Technician_Notifications::where('target_id', $technician->id)
             ->orWhere('target_type', 'all')
             ->orderBy('created_at', 'desc')
             ->get();
+        
+        $publicNotification = Public_Notifications::all();
 
-        // Format the date for each notification
-        foreach ($combinedNotifications as $notification) {
-            $notification->formatted_date = Carbon::parse($notification->created_at)->format('M d, Y');
-        }
+        // Merge collections
+        $allNotifications = $technicianNotification->concat($publicNotification);
+
+        // Optionally, sort by created_at if you want a unified order:
+        $allNotifications = $allNotifications->sortByDesc('created_at');
+
+        // Check if there are any unread notifications
+        $hasUnreadNotifications = $technicianNotification->contains('is_read', false);
 
         return view('Technician.7 - Notification', [
-            'combinedNotifications' => $combinedNotifications,
+            'allNotifications' => $allNotifications,
         ]);
     }
         public function isRead($id){
@@ -742,7 +749,9 @@ class TechnicianController extends Controller
         return view('Technician.4 - Messages');
     }
         public function messageCustomer($customerID){
-            $conversation = Conversation::where('sender_id', $customerID)->first();
+            $conversation = Conversation::where('sender_id', $customerID)
+                ->where('receiver_id', Auth::guard('technician')->user()->id)
+                ->first();
 
             if($conversation){
                 $conversation->touch();

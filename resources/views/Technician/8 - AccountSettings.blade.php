@@ -88,8 +88,8 @@
                             </div>
                             
                             <div class="profile-action">
-                                <button class="btn-primary">View picture</button>
-                                <button class="btn-normal">Delete picture</button>
+                                <!-- <button class="btn-primary">View picture</button>
+                                <button class="btn-normal">Delete picture</button> -->
                             </div>
                         </div>
 

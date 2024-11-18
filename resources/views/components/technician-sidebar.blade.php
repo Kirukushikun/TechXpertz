@@ -22,11 +22,11 @@
         <button class="logout" onclick="window.location.href='{{route('technician.logoutTechnician')}}'">LOG OUT</button>
         
         <div class="dark-mode">
-            <span>Dark mode</span>
+            <!-- <span>Dark mode</span>
             <label class="switch">
                 <input type="checkbox" id="dark-mode-toggle">
                 <span class="slider round"></span>
-            </label>                    
+            </label>                     -->
         </div>
     </div>
 

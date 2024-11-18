@@ -68,6 +68,7 @@ form {
     width: 100%;
 }
 
+
 form input, form select{
     width: 100%;
     margin-bottom: 20px;
@@ -75,7 +76,15 @@ form input, form select{
     font-size: var(--font-paragraph);
     border: 1px solid var(--border-color);
     border-radius: 5px;
+    color: var(--text-color-black);
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 
 .input-group{
     display: flex;
@@ -124,6 +133,32 @@ button[type="submit"]:hover {
     border-radius: 7px;
     margin-bottom: 15px;
     background-color: var(--background-color-danger);
+}
+
+.input-password {
+    margin-bottom: 20px;
+    padding: 12px;
+    font-size: var(--font-paragraph);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.input-password:focus-within {
+    border: 2px solid black; /* Border color when the inner input is focused */
+}
+.input-password input {
+    border: none;
+    font-size: var(--font-paragraph);
+    user-select: none;
+    outline: none;
+    flex-grow: 1; /* Ensures the input takes up available space within the flex container */
+    padding: 0;
+    margin-bottom: 0;
+}.input-password i {
+    cursor: pointer;
 }
 
 @media(max-width: 1563px){

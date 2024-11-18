@@ -33,8 +33,6 @@
                     <div class="tab-filters">
                         <li><button><i class="fa-solid fa-filter"></i>Filter</button></li>
                         <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input id="search-input" type="text" placeholder="search"></li>
-
-                        <a class="add-repair"><i class="fa-solid fa-plus" id="add-appointment"></i></a>
                     </div>
                 </div>
 
@@ -47,10 +45,10 @@
                         </div>
 
                         <div class="tab-summary">
-                            <p>Total Reviews: {{$reviewData->count()}}</p>
-                            <p>Pending: {{$pendingReviews->count()}}</p>
-                            <p>Approved: {{$approvedReviews->count()}}</p>
-                            <p>Rejected: {{$rejectedReviews->count()}}</p>
+                            <p>Total Reviews: {{$totalReviewsCount->count()}}</p>
+                            <p id="pending-counts">Pending: {{$pendingReviewsCount}}</p>
+                            <p id="approved-counts">Approved: {{$approvedReviewsCount}}</p>
+                            <p id="rejected-counts">Rejected: {{$rejectedReviewsCount}}</p>
                         </div>
                     </ul>
 
@@ -58,17 +56,17 @@
                         <div class="pagination"></div>
                         
                         @foreach($pendingReviews as $pending)
-                            <div class="review-item active" id="{{$pending->id}}">
+                            <div class="review-item active" id="{{$pending->id}}" data-review-name="{{$pending->customer->firstname}} {{$pending->customer->lastname}}" data-review-ratings="{{$pending->rating}}">
                                 <div class="left">
                                     <div class="review-header">
-                                        <div class="title">
-                                            Customer: <a href="">{{$pending->customer->firstname}} {{$pending->customer->lastname}}</a>
+                                        <div class="title" >
+                                            Customer: <a href="{{route('admin.viewprofile', ['userRole' => 'Customer', 'userID' => $pending->customer->id])}}">{{$pending->customer->firstname}} {{$pending->customer->lastname}}</a>
                                         </div>
                                         <div class="sub-title">
                                             Repairshop: 
-                                            <span><a href="">{{$pending->technician->repairshopCredentials->shop_name}}</a></span> |
+                                            <span><a href="{{route('admin.viewprofile', ['userRole' => 'Technician', 'userID' => $pending->technician->id])}}">{{$pending->technician->repairshopCredentials->shop_name}}</a></span> |
                                             Technician:
-                                            <span><a href="">{{$pending->technician->firstname}} {{$pending->technician->middlename ?? ''}} {{$pending->technician->lastname}}</a></span> |
+                                            <span><a href="{{route('admin.viewprofile', ['userRole' => 'Technician', 'userID' => $pending->technician->id])}}">{{$pending->technician->firstname}} {{$pending->technician->middlename ?? ''}} {{$pending->technician->lastname}}</a></span> |
                                             {{$pending->created_at->format('M d, Y, h:i A')}}
                                         </div> 
                                     </div>
@@ -93,8 +91,8 @@
                                 </div>
 
                                 <div class="right">
-                                    <button class="reviewbtn check" data-review-status="Approved" data-review-id="{{$pending->id}}"><i class="fa-solid fa-check"></i></button>
-                                    <button class="reviewbtn exclamation" data-review-status="Rejected" data-review-id="{{$pending->id}}"><i class="fa-solid fa-xmark"></i></button>
+                                    <button class="reviewbtn check" data-review-status="Approved" data-review-id="{{$pending->id}}" onclick="updateReviewCount('pending', 'approve')"><i class="fa-solid fa-check"></i></button>
+                                    <button class="reviewbtn exclamation" data-review-status="Rejected" data-review-id="{{$pending->id}}" onclick="updateReviewCount('pending', 'reject')"><i class="fa-solid fa-xmark"></i></button>
                                 </div>
                             </div>
                         @endforeach  
@@ -106,17 +104,17 @@
                         <div class="pagination"></div>
                         
                         @foreach($approvedReviews as $approved)
-                            <div class="review-item active" id="{{$approved->id}}">
+                            <div class="review-item active" id="{{$approved->id}}" data-review-name="{{$approved->customer->firstname}} {{$approved->customer->lastname}}" data-review-ratings="{{$approved->rating}}">
                                 <div class="left">
                                     <div class="review-header">
                                         <div class="title">
-                                            Customer: <a href="">{{$approved->customer->firstname}} {{$approved->customer->lastname}}</a>
+                                            Customer: <a href="{{route('admin.viewprofile', ['userRole' => 'Customer', 'userID' => $approved->customer->id])}}">{{$approved->customer->firstname}} {{$approved->customer->lastname}}</a>
                                         </div>
                                         <div class="sub-title">
                                             Repairshop: 
-                                            <span><a href="">{{$approved->technician->repairshopCredentials->shop_name}}</a></span> |
+                                            <span><a href="{{route('admin.viewprofile', ['userRole' => 'Technician', 'userID' => $approved->technician->id])}}">{{$approved->technician->repairshopCredentials->shop_name}}</a></span> |
                                             Technician:
-                                            <span><a href="">{{$approved->technician->firstname}} {{$approved->technician->middlename ?? ''}} {{$approved->technician->lastname}}</a></span> |
+                                            <span><a href="{{route('admin.viewprofile', ['userRole' => 'Technician', 'userID' => $approved->technician->id])}}">{{$approved->technician->firstname}} {{$approved->technician->middlename ?? ''}} {{$approved->technician->lastname}}</a></span> |
                                             {{$approved->created_at->format('M d, Y, h:i A')}}
                                         </div> 
                                     </div>
@@ -141,12 +139,10 @@
                                 </div>
 
                                 <div class="right">
-                                    <button class="reviewbtn check" data-review-status="Approved" data-review-id="{{$approved->id}}"><i class="fa-solid fa-check"></i></button>
-                                    <button class="reviewbtn exclamation" data-review-status="Rejected" data-review-id="{{$approved->id}}"><i class="fa-solid fa-xmark"></i></button>
+                                    <button class="reviewbtn exclamation" data-review-status="Rejected" data-review-id="{{$approved->id}}" onclick="updateReviewCount('approved', 'reject')"><i class="fa-solid fa-xmark"></i></button>
                                 </div>
                             </div>
                         @endforeach 
-
 
                     </div>
 
@@ -154,17 +150,17 @@
                         <div class="pagination"></div>
                         
                         @foreach($rejectedReviews as $rejected)
-                            <div class="review-item active" id="{{$rejected->id}}">
+                            <div class="review-item active" id="{{$rejected->id}}" data-review-name="{{$rejected->customer->firstname}} {{$rejected->customer->lastname}}" data-review-ratings="{{$rejected->rating}}">
                                 <div class="left">
                                     <div class="review-header">
                                         <div class="title">
-                                            Customer: <a href="">{{$rejected->customer->firstname}} {{$rejected->customer->lastname}}</a>
+                                            Customer: <a href="{{route('admin.viewprofile', ['userRole' => 'Customer', 'userID' => $rejected->customer->id])}}">{{$rejected->customer->firstname}} {{$rejected->customer->lastname}}</a>
                                         </div>
                                         <div class="sub-title">
                                             Repairshop: 
-                                            <span><a href="">{{$rejected->technician->repairshopCredentials->shop_name}}</a></span> |
+                                            <span><a href="{{route('admin.viewprofile', ['userRole' => 'Technician', 'userID' => $rejected->technician->id])}}">{{$rejected->technician->repairshopCredentials->shop_name}}</a></span> |
                                             Technician:
-                                            <span><a href="">{{$rejected->technician->firstname}} {{$rejected->technician->middlename ?? ''}} {{$rejected->technician->lastname}}</a></span> |
+                                            <span><a href="{{route('admin.viewprofile', ['userRole' => 'Technician', 'userID' => $rejected->technician->id])}}">{{$rejected->technician->firstname}} {{$rejected->technician->middlename ?? ''}} {{$rejected->technician->lastname}}</a></span> |
                                             {{$rejected->created_at->format('M d, Y, h:i A')}}
                                         </div> 
                                     </div>
@@ -189,51 +185,13 @@
                                 </div>
 
                                 <div class="right">
-                                    <button class="reviewbtn check" data-review-status="Approved" data-review-id="{{$rejected->id}}"><i class="fa-solid fa-check"></i></button>
-                                    <button class="reviewbtn exclamation" data-review-status="Rejected" data-review-id="{{$rejected->id}}"><i class="fa-solid fa-xmark"></i></button>
+                                    <button class="reviewbtn check" data-review-status="Approved" data-review-id="{{$rejected->id}}" onclick="updateReviewCount('rejected', 'approve')"><i class="fa-solid fa-check"></i></button>
                                 </div>
                             </div>
                         @endforeach 
 
-
                     </div>
 
-                    <!-- <div class="review-item">
-                        <div class="left">
-                            <div class="review-header">
-                                <div class="title">
-                                    Customer: <a href="">Iverson Craig Guno</a>
-                                </div>
-                                <div class="sub-title">
-                                    Repairshop: 
-                                    <span><a href="">TechXpertz</a></span> |
-                                    Technician:
-                                    <span><a href="">Iverson Guno</a></span> |
-                                    Wed, 04 Oct 2024, 09:30 AM
-                                </div> 
-                            </div>
-                            <div class="review-content">
-                                <div class="header">
-                                    <div class="ratings">Rating: 
-                                        <span>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </span>
-                                    </div>
-                                                                    
-                                </div>
-                                "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam eaque non dicta fugiat sapiente perferendis aliquam expedita excepturi delectus unde. Quod tenetur sapiente recusandae nostrum non quibusdam provident rerum praesentium."
-                            </div>                            
-                        </div>
-
-                        <div class="right">
-                            <button class="check"><i class="fa-solid fa-check"></i></button>
-                            <button class="exclamation"><i class="fa-solid fa-xmark"></i></button>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </main>
@@ -295,7 +253,7 @@
             const filteredItems = search
                 ? items.filter(item => {
                     // Filter items based on search query and specific attributes
-                    return ["data-review-title", "data-review-ratings", "data-date"].some(attr => {
+                    return ["data-review-name", "data-review-ratings", "data-date"].some(attr => {
                         const attrValue = item.getAttribute(attr);
                         return attrValue && attrValue.toLowerCase().includes(search.toLowerCase());
                     });
@@ -392,6 +350,42 @@
         // Initialize display for the default tab
         switchTab(activeTab);
 
+    </script>
+
+    <script>
+        function updateReviewCount(status, action) {
+            // Get current review elements
+            const pendingReviews = document.getElementById("pending-counts");
+            const approvedReviews = document.getElementById("approved-counts");
+            const rejectedReviews = document.getElementById("rejected-counts");
+            
+            // Convert innerText values to numbers
+            let pendingCount = parseInt(pendingReviews.innerText.replace("Pending: ", ""));
+            let approvedCount = parseInt(approvedReviews.innerText.replace("Approved: ", ""));
+            let rejectedCount = parseInt(rejectedReviews.innerText.replace("Rejected: ", ""));
+
+            // Update counts based on the status and action
+            if (status === "pending") {
+            if (action === "approve" && pendingCount > 0) {
+                pendingCount--;
+                approvedCount++;
+            } else if (action === "reject" && pendingCount > 0) {
+                pendingCount--;
+                rejectedCount++;
+            }
+            } else if (status === "approved" && action === "reject" && approvedCount > 0) {
+            approvedCount--;
+            rejectedCount++;
+            } else if (status === "rejected" && action === "approve" && rejectedCount > 0) {
+            rejectedCount--;
+            approvedCount++;
+            }
+
+            // Update the elements with new values
+            pendingReviews.innerText = "Pending: " + pendingCount;
+            approvedReviews.innerText = "Approved: " + approvedCount;
+            rejectedReviews.innerText = "Rejected: " + rejectedCount;
+        }
     </script>
 </body>
 </html>

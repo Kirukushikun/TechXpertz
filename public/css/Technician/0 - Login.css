@@ -98,13 +98,40 @@ form {
     flex-direction: column;
 }
 
-input[type="email"],
-input[type="password"] {
+input[type="email"]{
     margin-bottom: 20px;
     padding: 10px;
     font-size: var(--font-paragraph);
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+
+.input-password {
+    margin-bottom: 20px;
+    padding: 12px;
+    font-size: var(--font-paragraph);
+    border: solid #D9D9D9 2px;
+    border-radius: 5px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-password:focus-within {
+    border: 2px solid black; /* Border color when the inner input is focused */
+}
+.input-password input {
+    border: none;
+    font-size: var(--font-paragraph);
+    user-select: none;
+    outline: none;
+    flex-grow: 1; /* Ensures the input takes up available space within the flex container */
+    padding: 0;
+    margin-bottom: 0;
+    border: none;
+}.input-password i {
+    cursor: pointer;
 }
 
 .remember-me {

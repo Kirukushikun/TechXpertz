@@ -23,6 +23,8 @@ use App\Models\RepairShop_Images;
 use App\Models\RepairShop_RepairStatus;
 use App\Models\RepairShop_Appointments;
 
+use App\Models\Public_Notifications;
+
 use App\Models\Message;
 use App\Models\Conversation;
 
@@ -488,11 +490,26 @@ class CustomerController extends Controller
         try {
 
             $customerData = Customer::find(Auth::user()->id);
-            $notifications = Customer_Notifications::where('target_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-    
+            $customerNotification = Customer_Notifications::where('target_id', Auth::user()->id)
+                ->orWhere('target_type', 'all')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        
+            $publicNotification = Public_Notifications::all();
+            
+            // Merge collections
+            $allNotifications = $customerNotification->concat($publicNotification);
+            
+            // Optionally, sort by created_at if you want a unified order:
+            $allNotifications = $allNotifications->sortByDesc('created_at');
+
+            // Check if there are any unread notifications
+            $hasUnreadNotifications = $customerNotification->contains('is_read', false);
+
             return view('Customer.6 - Account', [
                 'customerData' => $customerData,
-                'notifications' => $notifications,
+                'allNotifications' => $allNotifications,
+                'hasUnreadNotifications' => $hasUnreadNotifications,
             ]);
     
             return redirect()->route('customer.loginCustomer');;
@@ -659,7 +676,7 @@ class CustomerController extends Controller
             ]);
             
             $this->logActivity('Account Deleted', customerId: Auth::user()->id);
-            return redirect()->route('customer.disabledAccount', ['status' => 'deleted'])->with("message", "Your account has been successfully deleted. We're sorry to see you go and hope to serve you again in the future.");
+            return redirect()->route('customer.accountDisabled', ['status' => 'deleted'])->with("message", "Your account has been successfully deleted. We're sorry to see you go and hope to serve you again in the future.");
         }
 
     public function notificationUpdate($notificationID){
@@ -677,10 +694,13 @@ class CustomerController extends Controller
 
     public function messageRepairshop($repairshopID){
         if(Auth::check()){
-            $conversation = Conversation::where('receiver_id', $repairshopID)->first();
-            if($conversation){
+            $conversation = Conversation::where('receiver_id', $repairshopID)
+            ->where('sender_id', Auth::user()->id)
+            ->first();
+
+            if ($conversation) {
                 $conversation->touch();
-            }else{
+            } else {
                 Conversation::create([
                     'sender_id' => Auth::user()->id,
                     'sender_type' => 'customer',
@@ -689,7 +709,6 @@ class CustomerController extends Controller
                 ]); 
                 $this->logActivity('Initialized A Conversation', customerId: Auth::user()->id);
             }
-            
             return view('Customer.8 - Messages');
             
         }

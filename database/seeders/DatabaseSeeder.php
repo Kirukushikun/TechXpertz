@@ -6,6 +6,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Database\Seeders\CustomerTableSeeder; // Import if necessary
 use Database\Seeders\TechnicianTableSeeder;
+use Database\Seeders\ProvinceSeeder;
+use Database\Seeders\CitySeeder;
+use Database\Seeders\BarangaySeeder;
 use Database\Seeders\ActivateShopsSeeder;
 
 use Illuminate\Support\Facades\DB;
@@ -28,6 +31,8 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
         // Empty specific tables
+        DB::table('admin_reportmanagement')->truncate();
+
         DB::table('technicians')->truncate();
         DB::table('repairshop_services')->truncate();
         DB::table('repairshop_schedules')->truncate();
@@ -38,6 +43,7 @@ class DatabaseSeeder extends Seeder
         DB::table('repairshop_badges')->truncate();
         DB::table('repairshop_appointments')->truncate();
         DB::table('repairshop_repairstatus')->truncate();
+        DB::table('repairshop_credentials')->truncate();
 
         DB::table('customers')->truncate();
         DB::table('customer_repairstatus')->truncate();
@@ -46,6 +52,9 @@ class DatabaseSeeder extends Seeder
             CustomerTableSeeder::class,
             TechnicianTableSeeder::class,
             ActivateShopsSeeder::class,
+            ProvinceSeeder::class,
+            CitySeeder::class,
+            BarangaySeeder::class
         ]);
     }
 }

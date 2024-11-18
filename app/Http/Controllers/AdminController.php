@@ -276,9 +276,9 @@ class AdminController extends Controller
         }
 
     public function reportmanagement(){
-        $reports = Admin_ReportManagement::orderBy('created_at', 'asc')->get();
-        $customerReports = $reports->where('user_role', 'customer');
-        $technicianReports = $reports->where('user_role', 'technician');
+        $reports = Admin_ReportManagement::orderBy('created_at', 'asc')->get()->take(400);
+        $customerReports = $reports->where('user_role', 'Customer');
+        $technicianReports = $reports->where('user_role', 'Technician');
 
         // $resolvedReports = $reports->where('report_status', 'resolved');
         // $pendingReports = $reports->where('report_status', 'pending');
@@ -319,18 +319,27 @@ class AdminController extends Controller
             ->with('customer')
             ->with('technician')
             ->get()
-            ->take(200);
+            ->take(300);
 
         $pendingReviews = $reviewData->where('status', 'Pending');
         $approvedReviews = $reviewData->where('status', 'Approved');
         $rejectedReviews = $reviewData->where('status', 'Rejected');
 
+        $totalReviewsCount = RepairShop_Reviews::all();
+        $pendingReviewsCount = $totalReviewsCount->where('status', 'Pending')->count();
+        $approvedReviewsCount = $totalReviewsCount->where('status', 'Approved')->count();
+        $rejectedReviewsCount = $totalReviewsCount->where('status', 'Rejected')->count();
 
         return view('Admin.5 - ReviewsManagement', [
             'reviewData' => $reviewData,
+            'totalReviewsCount' => $totalReviewsCount,
             'pendingReviews' => $pendingReviews,
             'approvedReviews' => $approvedReviews,
             'rejectedReviews' => $rejectedReviews,
+
+            'pendingReviewsCount' => $pendingReviewsCount,
+            'approvedReviewsCount' => $approvedReviewsCount,
+            'rejectedReviewsCount' => $rejectedReviewsCount,
         ]);
     }
         public function reviewupdate(Request $request, $reviewID){

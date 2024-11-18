@@ -174,6 +174,9 @@ class ActivateShopsSeeder extends Seeder
                     'status' => Arr::random([2, 1, 2]),
                 ]);
             }
+
+
+
         }
     }
 }

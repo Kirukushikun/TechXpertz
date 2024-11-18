@@ -22,8 +22,8 @@
 
         <!-- Add a hidden input for the token -->
         <input type="hidden" name="token" value="{{ request()->route('token') }}">
-
-        <input type="email" name="email" placeholder="Re-enter your email" required />
+        <input type="hidden" name="email" value="{{request()->query('email')}}"/>
+        
         <input type="password" name="password" placeholder="New Password" required />
         <input type="password" name="password_confirmation" placeholder="Confirm Password" required />
         <button type="submit" id="submit">Reset Password</button>

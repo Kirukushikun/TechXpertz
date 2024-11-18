@@ -49,7 +49,7 @@
             <div class="text-content">
                 <h1>Discover the perfect tech solutions for your needs</h1>
                 <p>Explore a wide range of services tailored to meet your unique requirements, ensuring you find the perfect fit for your tech needs</p>
-                <button class="learn-more-btn">LEARN MORE</button>
+                <button class="learn-more-btn" onclick="window.location.href='/about'">LEARN MORE</button>
             </div>
             <div class="slider-indicators">
                 <span class="active"></span>
@@ -169,8 +169,8 @@
                 </nav>
     
                 <div class="header-actions">
-                    <button><i class="fa-solid fa-arrow-left"></i></button>
-                    <button><i class="fa-solid fa-arrow-right"></i></button>
+                    <!-- <button><i class="fa-solid fa-arrow-left"></i></button>
+                    <button><i class="fa-solid fa-arrow-right"></i></button> -->
                 </div>
             </div>
 
@@ -332,7 +332,7 @@
 
             @if(Auth::check())
             <div class="shop-category">
-                @if(count($repairshops) === 0 || !$repairshops)
+                @if(count($nearShopData) === 0 || !$nearShopData)
                     <p class="no-shop">
                         <i class="fa-solid fa-shop-slash"></i>
                         <span>No Shops Available</span>

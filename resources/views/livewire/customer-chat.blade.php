@@ -99,7 +99,7 @@
                 <div id="scrollToBottom"></div>
             </div>
             <form wire:submit.prevent="sendMessage" class="message-input">
-                <i class="fa-regular fa-face-smile emoji"></i>
+                <!-- <i class="fa-regular fa-face-smile emoji"></i> -->
                 <input type="text" wire:model="messageText" autocomplete="off" maxlength="1700" placeholder="Write a message" required>
                 <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
             </form>

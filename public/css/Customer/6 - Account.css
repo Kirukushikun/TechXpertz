@@ -76,6 +76,34 @@
     margin-bottom: 10px;
 }
 
+.input-password {
+    margin-bottom: 20px;
+    padding: 12px;
+    font-size: var(--font-paragraph);
+    border: solid #D9D9D9 2px;
+    border-radius: 5px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-password:focus-within {
+    border: 2px solid black; /* Border color when the inner input is focused */
+}
+.input-password input {
+    border: none;
+    font-size: var(--font-paragraph);
+    user-select: none;
+    outline: none;
+    flex-grow: 1; /* Ensures the input takes up available space within the flex container */
+    padding: 0;
+    margin-bottom: 0;
+    border: none;
+}.input-password i {
+    cursor: pointer;
+}
+
 .left .form-section .form-group input,
 .left .form-section .form-group select {
     padding: 12px;
@@ -84,6 +112,8 @@
     border-radius: 7px;
     border: solid #D9D9D9 2px;
 }
+
+
 
 .form-action{
     display: none;
@@ -148,7 +178,16 @@
     cursor: pointer;
     text-align: start;
     transition: background-color 0.3s;
+    position: relative;
 }
+.right .profile-navigation li i{
+    font-size: 10px;
+    color: #7B5CAD;
+    position: absolute;
+    top: 20px;
+    left: 160px;
+}
+
 
 .right .profile-navigation ul a {
     text-decoration: none;
@@ -453,6 +492,12 @@ body.disable{
 input[type="file"] {
     display: none;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .upload-action{
     display: flex;
     width: 100%;

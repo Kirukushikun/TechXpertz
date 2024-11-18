@@ -10,7 +10,6 @@
     <!-- Crucial Part on every forms/ -->
     <link rel="stylesheet" href="{{ asset('css/Admin/4 - ReportManagement.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/admin-sidebar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/Admin/admin-modal.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
@@ -18,7 +17,6 @@
 
         <!-- MODAL POPUP -->
         <div class="modal" id="modal">
-
         </div>
 
         @yield('sidebar')
@@ -40,7 +38,6 @@
                     <div class="tab-filters">
                         <li><button><i class="fa-solid fa-filter"></i>Filter</button></li>
                         <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" id="search-input" placeholder="search"></li>
-                        <a class="add-repair"><i class="fa-solid fa-plus" id="add-appointment"></i></a>
                     </div>
                 </div>
                 <!-- <div class="sub-header">
@@ -140,7 +137,7 @@
                                         <td>{{$creport->id}}</td>
                                         <td>{{$creport->user_name}}</td>
                                         <td>
-                                            {{$creport->report_issue}}
+                                            {{$creport->category}}
                                         </td>
                                         <td>
                                             <input type="text" value="{{$creport->report_status}}">
@@ -160,9 +157,10 @@
                             </div>                            
                         </div>
 
+
                         <!-- Technician -->
                         <div id="user-technician" class="tab-content-item card">
-                            <table id="user-customer-table">
+                            <table id="user-technician-table">
                                 <thead>
                                     <tr>
                                         <th>Report ID</th>
@@ -266,18 +264,18 @@
                                 <select name="report_status" id="report_status">
                                 </select>
                             </div>
+                            <div class="form-section">
+                                <div class="form-group">
+                                    <label for="report_issue">Category</label>
+                                    <input type="text" id="report_issue" name="report_issue" value="${data.category}" readonly>
+                                </div>
 
-                            <div class="form-group">
-                                <label for="report_issue">Category</label>
-                                <input type="text" id="report_issue" name="report_issue" value="${data.category}" readonly>
+                                
+                                <div class="form-group">
+                                    <label for="report_issue">Sub-Category</label>
+                                    <input type="text" id="report_issue" name="report_issue" value="${data.sub_category}" readonly>
+                                </div>                            
                             </div>
-
-                            
-                            <div class="form-group">
-                                <label for="report_issue">Sub-Category</label>
-                                <input type="text" id="report_issue" name="report_issue" value="${data.sub_category}" readonly>
-                            </div>
-
                             <div class="form-group">
                                 <label for="report_description">Report Description</label>
                                 <textarea type="text" id="report_description" name="report_description" readonly>${data.description}</textarea>
@@ -285,8 +283,8 @@
                         </div>
                         
                         <div class="verification-action">
-                            <button type="submit" class="success">Update Report</button>
-                            <button type="button" class="normal"><b>Dismiss</b></button>
+                            <button type="submit" class="success btn-primary">Update Report</button>
+                            <button type="button" class="normal btn-normal"><b>Dismiss</b></button>
                         </div>
                     </div>                
                 </form>
@@ -311,6 +309,7 @@
                 modal.classList.remove("active");
             }; 
         }
+        
     </script>
 </body>
 </html>

@@ -36,11 +36,11 @@
                     @endif
                 </nav>
     
-                <div class="header-actions">
+                <!-- <div class="header-actions">
                     <a><i class="fa-solid fa-arrow-down-wide-short"></i></a>
                     <a><i class="fa-solid fa-arrow-down-short-wide"></i></a>
                     <a class="filter">Popularity<i class="fa-solid fa-caret-down"></i></a>
-                </div>
+                </div> -->
             </div>
 
             @if(count($repairshops) === 0)

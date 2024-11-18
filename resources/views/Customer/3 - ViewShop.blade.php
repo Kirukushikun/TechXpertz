@@ -198,23 +198,11 @@
             <div class="description">
                 <div class="tabs">
                     <div class="tab active" data-tab="about">About</div>
-                    <div class="tab" data-tab="specialization">Specialization</div>
-                    <div class="tab" data-tab="certificates">Certificates</div>
                     <div class="tab" data-tab="reviews">Reviews ({{$reviewData['totalReviews']}})</div>
                 </div>
 
                 <div id="about" class="tab-content active">
                     <h2>{{$repairshop->repairshopProfile->header}}</h2>   
-                    <p>{{$repairshop->repairshopProfile->description}}</p>
-                </div>
-
-                <div id="specialization" class="tab-content">
-                    <h2>Specialization</h2>   
-                    <p>{{$repairshop->repairshopProfile->description}}</p>
-                </div>
-
-                <div id="certificates" class="tab-content">
-                    <h2>Certificates</h2>   
                     <p>{{$repairshop->repairshopProfile->description}}</p>
                 </div>
 
@@ -302,6 +290,5 @@
         <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
         <script src="{{asset('js/Customer/customer-favorites.js')}}" defer></script>
         <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
-
     </body>
 </html>

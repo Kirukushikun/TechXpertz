@@ -95,6 +95,7 @@
     display: flex;
     flex-direction: column;
     gap: 25px;
+    margin-bottom: 30px;
 }
 
 .review-item{
@@ -110,7 +111,9 @@
     justify-content: space-between;
     gap: 30px;
 }
-
+.review-header a{
+    color: #6f2dbd;
+}
 .review-header .title{
     font-size: 20px;
     font-weight: 600;
@@ -119,6 +122,10 @@
     color: var(--lighted-text-color);
 }.review-content{
     margin-top: 15px;
+    max-width: 1000px;
+    max-height: 200px;
+    overflow-x: auto;
+
 }
 
 .review-item .right{

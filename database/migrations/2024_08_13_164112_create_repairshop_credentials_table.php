@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('technician_id')->references('id')->on('technicians')->onDelete('cascade');
 
             $table->string('shop_name');
-            $table->string('shop_email')->unique();
+            $table->string('shop_email');
             $table->timestamp('shop_email_verified_at')->nullable();
             
             $table->string('shop_contact');

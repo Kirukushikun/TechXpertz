@@ -26,6 +26,50 @@
                 </div>
             </header>
 
+            @foreach($allNotifications as $notification)
+            <div class="notification">
+                <div class="notification-header">
+                    <div class="left">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
+                        <div class="notification-details">
+                            <span class="notification-title">{{$notification->title}}</span>
+                            <span class="notification-date">{{$notification->created_at->format('M d, Y')}}</span>
+                        </div>                        
+                    </div>
+                    <div class="right">
+                        <form action="{{ route('notifications.isread', ['id' => $notification->id]) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            
+                            @if($notification->target_id)
+                                @if($notification->is_read)
+                                    <button style="color: #999" disabled>
+                                        <i class="fa-solid fa-envelope-open-text"></i>Marked as Read
+                                    </button>
+                                @else
+                                    <button type="submit" style="cursor:pointer;">
+                                        <i class="fa-solid fa-envelope"></i>Mark as Read
+                                    </button>
+                                @endif
+                            @endif
+                        </form>
+                    </div>
+                </div>
+
+                <div class="notification-body">
+                    <div class="notification-message">
+                        <p>
+                            {{$notification->message}}
+                        </p>
+                    </div>
+                    <div class="notification-checklist">
+                        <!-- OPTIONAL CONTAINER -->
+                    </div>
+                </div>
+            </div>
+            @endforeach
             
             <div class="notification">
                 <div class="notification-header">
@@ -35,7 +79,7 @@
                         </div>
                         <div class="notification-details">
                             <span class="notification-title">Welcome to TechXpertz!</span>
-                            <span class="notification-date">Jan 20, 2024</span>
+                            <span class="notification-date">{{Auth::guard('technician')->user()->created_at->format('M d, Y')}}</span>
                         </div>                        
                     </div>
                 </div>
@@ -58,49 +102,6 @@
                     </div>
                 </div>
             </div>
-
-            @foreach($combinedNotifications as $notification)
-            <div class="notification">
-                <div class="notification-header">
-                    <div class="left">
-                        <div class="notification-icon">
-                            <i class="fa-solid fa-bell"></i>
-                        </div>
-                        <div class="notification-details">
-                            <span class="notification-title">{{$notification->title}}</span>
-                            <span class="notification-date">{{$notification->formatted_date}}</span>
-                        </div>                        
-                    </div>
-                    <div class="right">
-                        <form action="{{ route('notifications.isread', ['id' => $notification->id]) }}" method="POST">
-                            @csrf
-                            @method('PATCH')
-                            
-                            @if($notification->is_read)
-                                <button style="color: #999" disabled>
-                                    <i class="fa-solid fa-envelope-open-text"></i>Marked as Read
-                                </button>
-                            @else
-                                <button type="submit" style="cursor:pointer;">
-                                    <i class="fa-solid fa-envelope"></i>Mark as Read
-                                </button>
-                            @endif
-                        </form>
-                    </div>
-                </div>
-
-                <div class="notification-body">
-                    <div class="notification-message">
-                        <p>
-                            {{$notification->message}}
-                        </p>
-                    </div>
-                    <div class="notification-checklist">
-                        <!-- OPTIONAL CONTAINER -->
-                    </div>
-                </div>
-            </div>
-            @endforeach
 
             <!-- <div class="notification">
                 <div class="notification-header">

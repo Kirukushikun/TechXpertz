@@ -122,7 +122,7 @@
                         <li class="tab active" data-tab="shop-details">Shop Details<img src="{{asset('images/Account-details.png')}}"></li>
                         <li class="tab" data-tab="specialization-services">Specialization and Services<img src="{{asset('images/service.png')}}"></li>
                         <li class="tab" data-tab="opening-hours">Opening Hours<img src="{{asset('images/schedule.png')}}"></li>
-                        <li class="tab" data-tab="certificates">Certificates<img src="{{asset('images/certificate.png')}}"></li>
+                        <!-- <li class="tab" data-tab="certificates">Certificates<img src="{{asset('images/certificate.png')}}"></li> -->
                     </div>
 
                     <div id="shop-details" class="tab-content active">
@@ -134,7 +134,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="owner_name">Owner's Name</label>
-                                <input type="text" id="owner_name" name="owner_name" value="{{$technicianInfo->firstname}}" required>
+                                <input type="text" id="owner_name" name="owner_name" value="{{$technicianInfo->firstname}}" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="shop_contact">Shop Contact</label>
@@ -307,17 +307,17 @@
                         </table>
                     </div>
 
-                    <div id="certificates" class="tab-content">
+                    <!-- <div id="certificates" class="tab-content">
                         <div class="empty">
                             <img src="{{asset('images/sad.png')}}">
                             <p>Currently Unavailable</p>
                         </div>
                         
-                    </div>     
+                    </div>      -->
                     
                     <div class="form-actions" id="form-actions">
-                        <button type="button" class="cancel-btn">Cancel</button>
-                        <button type="button" class="live-preview-btn">Live Preview</button>
+                        <button type="button" class="cancel-btn" onclick="window.location.href='/technician/profile'">Cancel</button>
+                        <!-- <button type="button" class="live-preview-btn">Live Preview</button> -->
                         <button type="submit" class="save-btn">Save Changes</button>                    
                     </div>
                 </div>

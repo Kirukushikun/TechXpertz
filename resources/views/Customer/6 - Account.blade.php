@@ -57,7 +57,7 @@
                         <h2>Settings</h2>
                         <ul>
                             <li><a href="#" data-target="account-settings" class="active">Account Settings</a></li>
-                            <li><a href="#" data-target="notifications">Notifications</a></li>
+                            <li><a href="#" data-target="notifications">Notifications {!! $hasUnreadNotifications ? '<i class="fa-solid fa-circle"></i>' : '' !!} </a></li>
                             <li><a href="#" data-target="privacy-policy">Privacy Policy</a></li>
                             <li><a href="#" data-target="terms-of-service">Terms of Service</a></li>
                             <li><a href="#" data-target="delete-account">Delete Account</a></li>
@@ -121,20 +121,22 @@
                         <div class="profile-action">
                             @if($customerData->image_profile)
                             <button type="button" class="upload-image submit" data-customer-id="{{$customerData->id}}" data-action="upload">Change picture</button>
+                            <button type="button" class="upload-image normal" data-customer-id="{{$customerData->id}}" data-action="delete">Delete picture</button>
                             @else
                             <button type="button" class="upload-image submit" data-customer-id="{{$customerData->id}}" data-action="upload">Upload picture</button>
                             @endif
-                            <button type="button" class="upload-image normal" data-customer-id="{{$customerData->id}}" data-action="delete">Delete picture</button>
+                            
                         </div>
                     </div>
 
                     <div class="profile-action-collapse">
                         @if($customerData->image_profile)
-                        <button type="button" class="upload-image submit" data-customer-id="{{$customerData->id}}" data-action="upload">Change picture</button>
+                            <button type="button" class="upload-image submit" data-customer-id="{{$customerData->id}}" data-action="upload">Change picture</button>
+                            <button type="button" class="upload-image normal" data-customer-id="{{$customerData->id}}" data-action="delete">Delete picture</button>
                         @else
-                        <button type="button" class="upload-image submit" data-customer-id="{{$customerData->id}}" data-action="upload">Upload picture</button>
+                            <button type="button" class="upload-image submit" data-customer-id="{{$customerData->id}}" data-action="upload">Upload picture</button>
                         @endif
-                        <button type="button" class="upload-image normal" data-customer-id="{{$customerData->id}}" data-action="delete">Delete picture</button>
+                        
                     </div>
 
                     <div class="form-container">
@@ -156,7 +158,7 @@
                         </div>
                         <div class="form-group">
                             <label for="contact">Mobile Phone Number</label>
-                            <input type="tel" id="contact" name="contact" value="{{$customerData->contact}}" required>
+                            <input type="number" id="contact" name="contact" value="{{$customerData->contact}}" required>
                         </div>                        
                     </div>
 
@@ -191,8 +193,8 @@
                 <div id="notifications" class="form-section">
                     <h2>Notifications</h2>
 
-                    @if($notifications->isNotEmpty())
-                        @foreach($notifications as $notification)
+                    @if($allNotifications->isNotEmpty())
+                        @foreach($allNotifications as $notification)
                             <div class="notification">
                                 <div class="notification-header">
                                     <div class="left-header">
@@ -206,14 +208,16 @@
                                     </div>
                                     <div class="right-header">
                                         <div class="notification-action">
-                                            @if($notification->is_read)
-                                                <button style="color: #999" disabled>
-                                                    <i class="fa-solid fa-envelope-open-text"></i>Marked as Read
-                                                </button>
-                                            @else
-                                                <button class="submit" data-notification-id="{{$notification->id}}" type="submit" style="cursor:pointer;">
-                                                    <i class="fa-solid fa-envelope"></i>Mark as Read
-                                                </button>
+                                            @if($notification->target_id)
+                                                @if($notification->is_read)
+                                                    <button style="color: #999" disabled>
+                                                        <i class="fa-solid fa-envelope-open-text"></i>Marked as Read
+                                                    </button>
+                                                @else
+                                                    <button class="submit" data-notification-id="{{$notification->id}}" type="submit" style="cursor:pointer;">
+                                                        <i class="fa-solid fa-envelope"></i>Mark as Read
+                                                    </button>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -537,6 +541,23 @@
 
     <script src="{{asset('js/Customer/6 - Account.js')}}" defer></script>
     <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>
-        <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
-        <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
+    <script src="{{asset('js/Customer/customer-loadingscreen.js')}}" defer></script>
+    <script src="{{asset('js/Customer/header-footer.js')}}" defer></script>
+    <script>
+        function reveal(input) {
+            let password = document.getElementById(input);
+            let icon = document.getElementById("icon");
+            password.type = "text";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+
+        function unreveal(input) {
+            let password = document.getElementById("password");
+            let icon = document.getElementById("icon");
+            password.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        }
+    </script>
 </html>

@@ -173,10 +173,6 @@ class CustomerAuthController extends Controller
             }
         );
 
-        if($status === Password::PASSWORD_RESET){
-            $this->logActivity('Reset Password', customerId: Auth::user()->id);
-        }
-
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('customer.login')->with('success', __($status))
             : back()->withErrors(['error' => __($status)]);

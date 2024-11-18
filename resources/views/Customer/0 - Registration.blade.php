@@ -6,6 +6,7 @@
     <title>TechXpertz</title>
     <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
     <link rel="stylesheet" href="{{ asset('css/Customer/0 - Registration.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
@@ -18,6 +19,7 @@
             <p class="error-message">{{session('error')}}</p>
         @endif
         @csrf
+
         <div class="input-group">
             <input type="text" name="firstname" id="firstname" placeholder="First Name" required>
             <input type="text" name="lastname" id="lastname" placeholder="Last Name" required>
@@ -34,11 +36,15 @@
             </select>
         </div>
 
-        <input type="text" name="contact" id="contact" placeholder="Contact Number" required />
+        <input type="number" name="contact" id="contact" placeholder="Contact Number" required />
         <input type="email" name="email" id="email" placeholder="Email Address" required />
-        <input type="password" name="password" placeholder="Password" required />
+        <div class="input-password">
+            <input type="password" name="password" id="password" placeholder="Password" required />
+            <i id="icon" class="fa-solid fa-eye-slash" onmousedown="reveal('password')" onmouseup="unreveal('password')"></i>
+        </div>
         <input type="password" name="cpassword" placeholder="Confirm Password" required />
         <button type="submit" id="submit">Sign Up</button>
+
     </form>
     <div class="signup-link">
         <p>Already have an account? <a href="{{route('customer.login')}}">Sign In</a></p>
@@ -147,8 +153,24 @@
     fetchBarangays();
 </script>
 
-</body>
+<script>
+    function reveal(input) {
+        let password = document.getElementById(input);
+        let icon = document.getElementById("icon");
+        password.type = "text";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
 
-<!-- <script src="{{ asset('js/Customer/0 - Registration.js') }}" type="module"></script> -->
+    function unreveal(input) {
+        let password = document.getElementById("password");
+        let icon = document.getElementById("icon");
+        password.type = "password";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    }
+</script>
+
+</body>
 
 </html>
