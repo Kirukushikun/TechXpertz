@@ -16,10 +16,7 @@
         <link rel="stylesheet" href="{{ asset('css/Customer/7 - Repairlist.css') }}">
     </head>
 
-
-
     <body>
-
         <div class="loading-screen">
             <div class="loader"></div>
         </div>

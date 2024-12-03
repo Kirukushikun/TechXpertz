@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management</title>
+    <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
     <!-- Crucial Part on every forms -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Crucial Part on every forms/ -->
@@ -84,7 +85,7 @@
                     <div class="user-reference card">
 
                         <div class="tab-filters">
-                            <li><button><i class="fa-solid fa-filter"></i> Filter</button></li>
+                            <!-- <li><button><i class="fa-solid fa-filter"></i> Filter</button></li> -->
                             <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input id="search-input" type="text" placeholder="search"></li>
                         </div>
 
@@ -122,10 +123,10 @@
                 <div class="notification-history card">
                     <div class="card-header">
                         <h2>Notification History</h2>
-                        <div class="tab-filters">
+                        <!-- <div class="tab-filters">
                             <li><button><i class="fa-solid fa-filter"></i> Filter</button></li>
                             <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" placeholder="search"></li>
-                        </div>                        
+                        </div>                         -->
                     </div>
                     <div class="notification-container">
                         @foreach($notificationHistory as $notification)
@@ -195,7 +196,7 @@
                         <input type="hidden" name="_token" value="${csrfToken}">
                         
                         <div class="modal-verification">
-                            <i class="fa-solid fa-circle-check" id="check"></i>
+                            <i class="fa-solid fa-circle-check sign-success" ></i>
                             <div class="verification-message">
                                 <h2>Confirm Notification</h2>
                                 <p>Are you sure you want to send this notification to the user? <br> Once sent, the user will be alerted immediately.</p>
@@ -215,8 +216,8 @@
                                 </div>
                             </div>
                             <div class="verification-action">
-                                <button type="submit" class="success">Confirm Notification</button>
-                                <button type="button" class="normal"><b>Dismiss</b></button>
+                                <button type="submit" class="success btn-success">Confirm Notification</button>
+                                <button type="button" class="normal btn-normal"><b>Dismiss</b></button>
                             </div>
                         </div>                
                     </form>
@@ -230,7 +231,7 @@
                             <input type="hidden" name="_token" value="${csrfToken}">          
                             
                             <div class="modal-verification">
-                                <i class="fa-solid fa-circle-check" id="check"></i>
+                                <i class="fa-solid fa-circle-check sign-success" ></i>
                                 <div class="verification-message">
                                     <h2>Confirm Notification</h2>
                                     <p>Are you sure you want to send this notification to the user? <br> Once sent, the user will be alerted immediately.</p>
@@ -257,8 +258,8 @@
                                     </div>
                                 </div>
                                 <div class="verification-action">
-                                    <button type="submit" class="success">Confirm Notification</button>
-                                    <button type="button" class="normal"><b>Dismiss</b></button>
+                                    <button type="submit" class="success btn-success">Confirm Notification</button>
+                                    <button type="button" class="normal btn-normal"><b>Dismiss</b></button>
                                 </div>
                             </div>                
                         </form>
@@ -269,7 +270,7 @@
                             <input type="hidden" name="_token" value="${csrfToken}">          
                             
                             <div class="modal-verification">
-                                <i class="fa-solid fa-circle-check" id="check"></i>
+                                <i class="fa-solid fa-circle-check sign-success" ></i>
                                 <div class="verification-message">
                                     <h2>Confirm Notification</h2>
                                     <p>Are you sure you want to send this notification to the user? <br> Once sent, the user will be alerted immediately.</p>
@@ -302,8 +303,8 @@
                                     </div>
                                 </div>
                                 <div class="verification-action">
-                                    <button type="submit" class="success">Confirm Notification</button>
-                                    <button type="button" class="normal"><b>Dismiss</b></button>
+                                    <button type="submit" class="success btn-success">Confirm Notification</button>
+                                    <button type="button" class="normal btn-normal"><b>Dismiss</b></button>
                                 </div>
                             </div>                
                         </form>

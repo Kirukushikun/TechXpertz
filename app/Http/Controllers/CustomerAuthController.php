@@ -20,6 +20,10 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyEmail;
+
 class CustomerAuthController extends Controller
 {   
     public function login(){
@@ -36,10 +40,21 @@ class CustomerAuthController extends Controller
         $credentials = $request->only('email', 'password');
         $remember = $request->filled('remember_me');
 
-        // Attempt to log in with the given credentials and remember option
-        if (Auth::guard('web')->attempt($credentials, $remember)) {
-            $this->logActivity('Logged In', customerId: Auth::user()->id);
-            return redirect()->intended(route('welcome'));
+        // Fetch the user by email to check the account status
+        $customer = Customer::where('email', $request->email)->first();
+
+        // Check if the user exists
+        if ($customer) {
+            // Check the account status
+            if ($customer->profile_status === 'pending') {
+                return back()->with('error', 'Your account is not yet verified.');
+            }
+
+            // If the account is verified, attempt login
+            if (Auth::guard('web')->attempt($credentials, $remember)) {
+                $this->logActivity('Logged In', customerId: Auth::user()->id);
+                return redirect()->intended(route('welcome'));
+            }
         }
 
         // Authentication failed, redirect back with an error message
@@ -81,9 +96,28 @@ class CustomerAuthController extends Controller
                 $data['barangay'] = $request->barangay;
         
                 try {
-                    $user = Customer::create($data);
+                    $user = Customer::create([
+                        'profile_status' => 'pending',
+                        'firstname' => $data['firstname'],
+                        'lastname' => $data['lastname'],
+
+                        'email' => $data['email'],
+                        'contact' => $data['contact'],
+
+                        'province' => $data['province'],
+                        'city' => $data['city'],
+                        'barangay' => $data['barangay'],
+
+                        'password' => $data['password'],
+                    ]);
+
+
                     $this->logActivity('Account Created', customerId: $user->id);
-                    return redirect()->intended(route('customer.login'))->with('success', 'Account created successfully.');
+
+                    return redirect()->route('customer.verify', [
+                        'email' => $data['email']
+                    ]);
+
                 } catch (\Illuminate\Database\QueryException $exception) {
                     if ($exception->errorInfo[1] === 1062) {
                         return redirect(route('customer.signup'))->with("error", "Email already exists. Please use a different email address.");
@@ -178,29 +212,56 @@ class CustomerAuthController extends Controller
             : back()->withErrors(['error' => __($status)]);
     }
 
-    public function verify(Request $request, $id, $hash)
-    {
-        $user = Customer::findOrFail($id);
+    public function verify($email)
+    {   
+        // Retrieve the customer using the email
+        $customer = Customer::where('email', $email)->firstOrFail();
 
-        if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
-            return redirect('/')->withErrors(['error' => 'Invalid verification link.']);
+        if($customer->profile_status == 'verified'){
+
+            // If the account is already verified, return the view with a status message
+            return view('Customer.0 - Verify')->with([
+                'email' => $email,
+                'status' => 'Account already verified',
+            ]);
+
+        }else{
+
+            // Generate a signed URL valid for 24 hours
+            $verificationUrl = URL::signedRoute('customer.verifyAccountEmail', ['email' => $email]);
+        
+            // Send the verification email
+            Mail::to($email)->send(new VerifyEmail($verificationUrl));
+        
+            return view('Customer.0 - Verify', ['email' => $email]);
         }
 
-        if ($user->hasVerifiedEmail()) {
-            return redirect('/')->with('status', 'Email already verified.');
-        }
 
-        if ($user->markEmailAsVerified()) {
-            event(new Verified($user));
-        }
-
-        return redirect('/')->with('status', 'Email verified!');
     }
 
-    public function resend(Request $request)
+    public function verifyAccountEmail(Request $request)
     {
-        $request->user()->sendEmailVerificationNotification();
-        return back()->with('status', 'Verification link sent!');
+        // Validate signed URL
+        if (!$request->hasValidSignature()) {
+            abort(403, 'Invalid or expired verification link.');
+        }
+    
+        // Retrieve the customer using the email
+        $customer = Customer::where('email', $request->email)->firstOrFail();
+        
+        if($customer->email == "verified"){
+            // Redirect to login with success message
+            return redirect()->route('customer.login')->with('success', 'Account already verified.');
+        }
+
+        // Update the profile status and email_verified_at
+        $customer->update([
+            'profile_status' => 'verified',
+            'email_verified_at' => now(),
+        ]);
+    
+        // Redirect to login with success message
+        return redirect()->route('customer.login')->with('success', 'Account verified successfully.');
     }
 
     function logActivity($action, $customerId = null, $status = 'success')

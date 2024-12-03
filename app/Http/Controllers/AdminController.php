@@ -48,6 +48,9 @@ class AdminController extends Controller
         $technicianPending = Technician::where('profile_status', 'pending')->count();
         $technicianRestricted = Technician::where('profile_status', 'restricted')->count();
 
+        $customerVerified = Customer::where('profile_status', 'verified')->count();
+        $customerRestricted = Customer::where('profile_status', 'restricted')->count();
+
             // Fetch last week's counts for comparison (assuming you have a 'created_at' or 'updated_at' field for this)
             $lastWeekVerified = Technician::where('profile_status', 'complete')
             ->whereBetween('created_at', [now()->subWeeks(2), now()->subWeek()]) // Get previous week's range
@@ -84,7 +87,74 @@ class AdminController extends Controller
         $totalUsersPercentageChange = $this->calculatePercentageChange($currentWeekTotalUsers, $lastWeekTotalUsers);
 
         //------------------------------------------------------------------------------------------------
+
+        $totalReports = Admin_ReportManagement::all()->count();
         
+        // Fetch report counts for the current week
+        $currentWeekReportCount = Admin_ReportManagement::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
+
+        // Fetch report counts for the last week
+        $lastWeekReportCount = Admin_ReportManagement::whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])->count();
+
+        // Calculate total reports for the current and last week
+        $currentWeekTotalReports = $currentWeekReportCount;
+        $lastWeekTotalReports = $lastWeekReportCount;
+
+        // Calculate the percentage change in reports
+        $reportPercentageChange = $this->calculatePercentageChange($currentWeekTotalReports, $lastWeekTotalReports);
+
+        //-----------------------------------------------------------------------------------------------------
+
+        $totalCurrentPending = Technician::where('profile_status', 'pending')->count();
+
+        // Fetch pending approvals for the current week
+        $currentWeekPendingApprovals = Technician::where('profile_status', 'pending')
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->count();
+
+        // Fetch pending approvals for the last week
+        $lastWeekPendingApprovals = Technician::where('profile_status', 'pending')
+            ->whereBetween('created_at', [now()->subWeeks(1)->startOfWeek(), now()->subWeeks(1)->endOfWeek()])
+            ->count();
+
+        // Calculate total pending approvals for the current and last week
+        $currentWeekTotalPendingApprovals = $currentWeekPendingApprovals;
+        $lastWeekTotalPendingApprovals = $lastWeekPendingApprovals;
+
+        // Calculate the percentage change in pending approvals
+        $pendingApprovalsPercentageChange = $this->calculatePercentageChange($currentWeekTotalPendingApprovals, $lastWeekTotalPendingApprovals);
+
+        //----------------------------------------------------------------------------------------------------------
+
+        // Fetch technician sign-ups within the last 24 hours
+        $newTechnicianSignUps = Technician::where('created_at', '>=', now()->subDay())->count();
+
+        // Fetch customer sign-ups within the last 24 hours
+        $newCustomerSignUps = Customer::where('created_at', '>=', now()->subDay())->count();
+
+        // Calculate total new sign-ups (technicians + customers) within the last 24 hours
+        $totalNewSignUps = $newTechnicianSignUps + $newCustomerSignUps;
+
+        //---------------------------------------------------------------------------------------------------------
+
+        // Fetch technicians and customers who signed up within the last 24 hours
+        $currentTechnicianSignUps = Technician::where('created_at', '>=', now()->subDay())->count();
+        $currentCustomerSignUps = Customer::where('created_at', '>=', now()->subDay())->count();
+
+        // Fetch technician and customer sign-ups for the last 24 hours (previous week)
+        $lastWeekTechnicianSignUps = Technician::where('created_at', '>=', now()->subWeeks(1)->subDay())->count();
+        $lastWeekCustomerSignUps = Customer::where('created_at', '>=', now()->subWeeks(1)->subDay())->count();
+
+        // Calculate total new sign-ups for technicians and customers in the current and last week
+        $currentWeekTotalSignUps = $currentTechnicianSignUps + $currentCustomerSignUps;
+        $lastWeekTotalSignUps = $lastWeekTechnicianSignUps + $lastWeekCustomerSignUps;
+
+        // Calculate the percentage change in total new sign-ups
+        $newSignUpsPercentageChange = $this->calculatePercentageChange($currentWeekTotalSignUps, $lastWeekTotalSignUps);
+
+        //----------------------------------------------------------------------------------------------------------
+
+        $latestNotification = Admin_NotificationHistory::first();
 
         return view('Admin.1 - Dashboard', [
             'totalUsers' => $totalUsers,
@@ -92,14 +162,28 @@ class AdminController extends Controller
             
             //Technician ----------
             'technicianVerified' => $technicianVerified,
-            'technicianPending' => $technicianPending,
             'technicianRestricted' => $technicianRestricted,
+
+            'customerVerified' => $customerVerified,
+            'customerRestricted' => $customerRestricted,
 
             'verifiedChange' => $verifiedChange,
             'pendingChange' => $pendingChange,
             'restrictedChange' => $restrictedChange,
             //---------------------
+            'totalReports' => $totalReports,
+            'reportPercentageChange' => $reportPercentageChange,
 
+            //-----------------------
+            'totalCurrentPending' => $totalCurrentPending,
+            'pendingApprovalsPercentageChange' => $pendingApprovalsPercentageChange,
+
+            //----------------------
+            'totalNewSignUps' => $totalNewSignUps,
+            'newSignUpsPercentageChange' => $newSignUpsPercentageChange,
+
+            //----------------------
+            'latestNotification' => $latestNotification
         ]);
     }
 
@@ -160,24 +244,39 @@ class AdminController extends Controller
                 ]);
             }
         }
+        
+        public function technicianupdate($userID, $actionType){
+            $technician = Technician::find($userID);
 
-        public function profileupdate($userType, $userID, $actionType){
-            if($userType == "technician"){
-                $technician = Technician::find($userID);
-
-                if($actionType == "verify"){
-                    $technician->update([
-                        'profile_status' => 'complete',
-                    ]);                    
-                } elseif($actionType == "restrict"){
-                    $technician->update([
-                        'profile_status' => 'restricted',
-                    ]);                    
-                }
-
-                return back()->with('success', 'User profile updated successfully');
+            if($actionType == "verify"){
+                $technician->update([
+                    'profile_status' => 'complete',
+                ]);                    
+            } elseif($actionType == "restrict"){
+                $technician->update([
+                    'profile_status' => 'restricted',
+                ]);                    
             }
+
+            return back()->with('success', 'User profile updated successfully');
         }
+        
+        public function customerupdate($userID, $actionType){
+            $customer = Customer::find($userID);
+
+            if($actionType == "verify"){
+                $customer->update([
+                    'profile_status' => 'verified',
+                ]);                    
+            } elseif($actionType == "restrict"){
+                $customer->update([
+                    'profile_status' => 'restricted',
+                ]);                    
+            }
+
+            return back()->with('success', 'User profile updated successfully');
+        }
+
 
     public function notificationcenter(){
         $notificationHistory = Admin_NotificationHistory::orderBy('created_at', 'desc')->get();

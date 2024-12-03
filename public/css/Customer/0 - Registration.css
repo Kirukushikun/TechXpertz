@@ -135,6 +135,17 @@ button[type="submit"]:hover {
     background-color: var(--background-color-danger);
 }
 
+.invalid-message{
+    display: none;
+    width: 100%;
+    color: var(--text-color-danger);
+    padding: 10px;
+    border: solid 2px var(--text-color-danger);
+    border-radius: 7px;
+    margin-bottom: 15px;
+    background-color: var(--background-color-danger);
+}
+
 .input-password {
     margin-bottom: 20px;
     padding: 12px;

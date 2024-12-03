@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/1 - Dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/admin-sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/admin-modal.css') }}">
@@ -42,9 +43,9 @@
                         <p>{{ abs($totalUsersPercentageChange) }}% {{ $totalUsersPercentageChange >= 0 ? 'Increase' : 'Decrease' }} from Last Week</p>
                     </div>
                     <div class="container c2 metric">
-                        <h3>$54.2k</h3>
+                        <h3>{{$totalNewSignUps}}</h3>
                         <h4>New Signups</h4>
-                        <p>12% Decrease from Last Week</p>
+                        <p>{{ abs($newSignUpsPercentageChange) }}% {{ $newSignUpsPercentageChange >= 0 ? 'Increase' : 'Decrease' }} from Last Week</p>
                     </div>
                     <div class="container c3 metric">
                         <h3>{{$technicianVerified}}</h3>
@@ -52,14 +53,14 @@
                         <p>{{ abs($verifiedChange) }}% {{ $verifiedChange >= 0 ? 'Increase' : 'Decrease' }} from Last Week</p>
                     </div>
                     <div class="container c4 metric">
-                        <h3>$54.2k</h3>
+                        <h3>{{$totalReports}}</h3>
                         <h4>Reported Issues</h4>
-                        <p>12% Decrease from Last Week</p>
+                        <p>{{ abs($reportPercentageChange) }}% {{ $reportPercentageChange >= 0 ? 'Increase' : 'Decrease' }} from Last Week</p>
                     </div>
                     <div class="container c5 metric">
-                        <h3>$54.2k</h3>
+                        <h3>{{$totalCurrentPending}}</h3>
                         <h4>Pending Approvals</h4>
-                        <p>12% Decrease from Last Week</p>
+                        <p>{{ abs($pendingApprovalsPercentageChange) }}% {{ $pendingApprovalsPercentageChange >= 0 ? 'Increase' : 'Decrease' }} from Last Week</p>
                     </div>
 
                     <div class="container c6">
@@ -69,12 +70,12 @@
                             <h3>Customer</h3>
                             <div class="user-status">
                                 <span class="status inactive">
-                                    <p>Inactive</p>
-                                    <h4>200</h4>
+                                    <p>Verified</p>
+                                    <h4>{{$customerVerified}}</h4>
                                 </span>|
                                 <span class="status active">
-                                    <p>Active</p>
-                                    <h4>200</h4>
+                                    <p>Restricted</p>
+                                    <h4>{{$customerRestricted}}</h4>
                                 </span>
                             </div>                            
                         </div>
@@ -85,8 +86,8 @@
                             <h3>Technician</h3>
                             <div class="user-status">
                                 <span class="status pending">
-                                    <p>Pending</p>
-                                    <h4>{{$technicianPending}}</h4>
+                                    <p>Verified</p>
+                                    <h4>{{$technicianVerified}}</h4>
                                 </span>|
                                 <span class="status restricted">
                                     <p>Restricted</p>
@@ -123,11 +124,11 @@
                                         new ApexCharts(document.querySelector("#reportsChart"), {
                                             series: [
                                                     {
-                                                        name: "Sales",
+                                                        name: "Appointments",
                                                         data: [31, 40, 28, 51, 42, 82, 56],
                                                     },
                                                     {
-                                                        name: "Revenue",
+                                                        name: "Repairs",
                                                         data: [11, 32, 45, 32, 34, 52, 41],
                                                     },
                                                     {
@@ -191,13 +192,13 @@
                             <div class="notification-header">
                                 <div class="left">
                                     <div class="title">
-                                        System Maintenance
+                                        {{$latestNotification->title}}
                                     </div>
                                     <div class="sub-title">
                                         Sent to: 
-                                        <span>Technician</span> |
-                                        <span>Target ID: #123</span> |
-                                        <span>Wed, 04 Oct 2024, 09:30 AM</span>
+                                        <span>{{$latestNotification->target_type}}</span> |
+                                        <span>{{$latestNotification->target_user}}</span> |
+                                        <span>{{$latestNotification->created_at->format('D m, Y, h:i A')}}</span>
                                     </div>                                
                                 </div>
 

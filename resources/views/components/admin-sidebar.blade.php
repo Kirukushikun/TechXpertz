@@ -67,7 +67,6 @@
         <li><a href="/admin/notificationcenter">Notification Center</a></li>
         <li><a href="/admin/reportmanagement">Report Management</a></li>
         <li><a href="/admin/reviewsmanagement">Reviews Management</a></li>
-        <li><a href="">System Settings</a></li>
     </ul>                    
 </nav>
 @endsection

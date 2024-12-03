@@ -15,22 +15,27 @@
     <link rel="stylesheet" href="{{ asset('css/Customer/10 - AboutUs.css') }}">
 </head>
 <body>
+
+    <div class="loading-screen">
+        <div class="loader"></div>
+    </div>
+
     @yield('header')
-    <div class="container container-1" style="background-image:url({{asset('images/about-bg.png')}});">
+    <div class="container container-1" style="background-image:url({{asset('images/About-bg.png')}});">
         <h1>Tech<span>X</span>pertz</h1>
         <p>TechXpertz is a comprehensive platform designed to connect customers with reliable and skilled technicians for electronic repairs. By bringing transparency and efficiency to the repair process, TechXpertz simplifies finding trusted repair services for devices like smartphones, laptops, and other electronics. Through an intuitive interface, customers can browse local repair shops, book appointments, communicate directly with technicians, and track repair progress in real-time. TechXpertz prioritizes quality and trust, allowing users to review service history, read customer feedback, and access a streamlined repair experience. The platform aims to enhance customer satisfaction and support technicians in providing top-tier repair services.</p>
     </div>
     <div class="container container-2">
-        <img src="{{ asset('images/developers/Iverson.jpg') }}" alt="">
+        <img src="{{ asset('images/Developers/Iverson.jpg') }}" alt="">
         <div class="details">
             <h2>Founder/Developer</h2>
             <h1>Iverson Craig G. Guno</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus harum totam numquam possimus illo, nihil quae sunt eum atque consequuntur, fuga quasi ratione sapiente voluptates error molestiae tenetur et similique eius dolore aperiam qui vero architecto! Quo minima cumque corrupti provident, harum voluptas. Ipsa dignissimos ipsum provident vel a laborum recusandae corrupti dicta quos et repellendus, quibusdam, quod atque amet possimus officia aut sed cupiditate. Itaque quaerat adipisci odio quos.</p>
+            <p>He was born on October 31, 2003, in Concepcion, Tarlac, and is currently a student at Dominican College of Tarlac, pursuing a Bachelor's degree in Information Technology. An enthusiastic individual with a deep passion for programming, especially in the field of Web Development, he brings to the table a unique combination of creativity and technical expertise. Eager to learn and driven to deepen his knowledge in the Tech Industry, he is on a continuous journey of growth and exploration.</p>
         </div>
     </div>
 
     <div class="container container-3">
-        <img src="{{ asset('images/developers/Fatima.jpg') }}" alt="">
+        <img src="{{ asset('images/Developers/Fatima.jpg') }}" alt="">
         <div class="details">
             <h2>Co-Founder/Project Manager</h2>
             <h1>Ma. Fatima C. Valiente</h1>
@@ -39,11 +44,20 @@
     </div>
 
     <div class="container container-4">
-        <img src="{{ asset('images/developers/Luis.jpg') }}" alt="">
+        <img src="{{ asset('images/Developers/Luis.jpg') }}" alt="">
         <div class="details">
             <h2>Core Team Member</h2>
             <h1>Luis Christian C. Santos</h1>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus harum totam numquam possimus illo, nihil quae sunt eum atque consequuntur, fuga quasi ratione sapiente voluptates error molestiae tenetur et similique eius dolore aperiam qui vero architecto! Quo minima cumque corrupti provident, harum voluptas. Ipsa dignissimos ipsum provident vel a laborum recusandae corrupti dicta quos et repellendus, quibusdam, quod atque amet possimus officia aut sed cupiditate. Itaque quaerat adipisci odio quos.</p>
+        </div>
+    </div>
+
+    <div class="container container-5">
+        <img src="{{ asset('images/Developers/Prado.jpg') }}" alt="">
+        <div class="details">
+            <h2>Core Team Member</h2>
+            <h1>John Mark B. Prado</h1>
+            <p>He was born on October 31, 2003, in Concepcion, Tarlac, and is currently a student at Dominican College of Tarlac, pursuing a Bachelor's degree in Information Technology. An enthusiastic individual with a deep passion for programming, especially in the field of Web Development, he brings to the table a unique combination of creativity and technical expertise. Eager to learn and driven to deepen his knowledge in the Tech Industry, he is on a continuous journey of growth and exploration.</p>
         </div>
     </div>
     @yield('footer')

@@ -407,9 +407,9 @@ function verifyAction(userType, userID, actionType){
 
     if(actionType == "verify"){
         modal.innerHTML = `
-            <form action="/admin/viewprofile/${userType}/${userID}/${actionType}" method="POST">        
+            <form action="/admin/viewprofile/technician/${userID}/${actionType}" method="POST">        
                 <input type="hidden" name="_token" value="${csrfToken}">
-                <input type="hidden" name="_method" value="PATCH">
+                <input type="hidden" name="_method" value="PUT">
 
                 <div class="modal-verification">
                     <i class="fa-solid fa-xmark close icon-close"></i>
@@ -423,17 +423,17 @@ function verifyAction(userType, userID, actionType){
                         <textarea name="notify_message" id="notify_message" class="notify_message">We regret to inform you that we are unable to proceed with the repair of your device due to unforeseen complications. Please arrange to collect your device at your earliest convenience, and feel free to reach out if you need further assistance.</textarea>
                     </div>
                     <div class="verification-action">
-                        <button type="submit" class="btn-success">Terminate</button>
+                        <button type="submit" class="btn-success">Restrict</button>
                         <button type="button" class="close btn-normal"><b>Dismiss</b></button>
                     </div>
                 </div> 
             </form>
-        `;                
+        `;             
     } else if (actionType == "restrict"){
         modal.innerHTML = `
-            <form action="/admin/viewprofile/${userType}/${userID}/${actionType}" method="POST">
+            <form action="/admin/viewprofile/technician/${userID}/{actionType}" method="POST">
                 <input type="hidden" name="_token" value="${csrfToken}">
-                <input type="hidden" name="_method" value="PATCH">
+                <input type="hidden" name="_method" value="PUT">
                 
                 <div class="modal-verification">
                     <i class="fa-solid fa-xmark close icon-close"></i>
@@ -457,7 +457,7 @@ function verifyAction(userType, userID, actionType){
         modal.innerHTML = `
            <form method="POST">
                 <input type="hidden" name="_token" value="${csrfToken}">
-                <input type="hidden" name="_method" value="PATCH">
+                <input type="hidden" name="_method" value="PUT">
 
                 <div class="modal-verification">
                     <i class="fa-solid fa-xmark close icon-close"></i>

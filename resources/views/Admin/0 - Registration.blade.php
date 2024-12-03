@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TechXpertz</title>
+    <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/0 - Registration.css') }}" />
 </head>
     <body>

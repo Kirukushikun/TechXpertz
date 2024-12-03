@@ -52,12 +52,12 @@ class CustomerResetPasswordNotification extends Notification
             'token' => $this->token,
             'email' => $notifiable->getEmailForPasswordReset(),
         ], false));
-
+    
         return (new MailMessage)
-            ->subject('Reset Password Notification')
-            ->line('You are receiving this email because we received a password reset request for your account.')
-            ->action('Reset Password', $url)
-            ->line('If you did not request a password reset, no further action is required.');
+            ->subject('Reset Your Password')
+            ->view('Customer.ResetPasswordEmailMessage', [
+                'url' => $url,
+            ]);
     }
 
 }

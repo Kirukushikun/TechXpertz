@@ -54,37 +54,27 @@ class CustomerController extends Controller
                     break;
             }            
         }
+        
+        $repairshopData = $this->getRepairShopSummary();
+        $topRatedData = $this->getMostReviewedShops();
 
-        try {
-            $repairshopData = $this->getRepairShopSummary();
-            $topRatedData = $this->getMostReviewedShops();
-
-            if(Auth::check()){
-                $province = Auth::user()->province;
-                $city = Auth::user()->city;
-                $barangay = Auth::user()->barangay;
-                $nearShopData = $this->getNearShops($province, $city, $barangay);
-                return view('Customer.1 - Homepage', [
-                    'repairshops' => $repairshopData,
-                    'topRatedData' => $topRatedData,
-                    'nearShopData' => $nearShopData,
-                ]);
-            }
-
+        if(Auth::check()){
+            $province = Auth::user()->province;
+            $city = Auth::user()->city;
+            $barangay = Auth::user()->barangay;
+            $nearShopData = $this->getNearShops($province, $city, $barangay);
             return view('Customer.1 - Homepage', [
                 'repairshops' => $repairshopData,
                 'topRatedData' => $topRatedData,
+                'nearShopData' => $nearShopData,
             ]);
-    
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            Log::error('Error in someFunction:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return view('Customer.ErrorMessage');
         }
+
+        return view('Customer.1 - Homepage', [
+            'repairshops' => $repairshopData,
+            'topRatedData' => $topRatedData,
+        ]);
+
     }
 
     public function viewcategory($category){
@@ -398,46 +388,33 @@ class CustomerController extends Controller
     }
 
     public function viewrepairstatus($id){
-        try {
+        $repairstatusData = RepairShop_RepairStatus::find($id);
 
-            $repairstatusData = RepairShop_RepairStatus::findOrFail($id);
-
-            if ($repairstatusData) {
-                // Check if the repair status is associated with a customer and if that customer matches the Auth ID
-                if ($repairstatusData->customer_id !== null && $repairstatusData->customer_id !== Auth::id()) {
-                    return back()->with('error', 'Access Denied')->with('error_message','You do not have permission to view this repair status.');
-                }
-            
-                // Fetch repair status details
-                $repairstatusDetails = Customer_RepairStatus::where('repair_id', $id)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-            
-                foreach ($repairstatusDetails as $repairstatusDetail) {
-                    $repairstatusDetail->formatted_date = Carbon::parse($repairstatusDetail->created_at)->format('l, d M Y');
-                    $repairstatusDetail->formatted_time = Carbon::parse($repairstatusDetail->created_at)->format('g:i A');
-                }
-            
-                // Show the view with repair status data
-                return view('Customer.5 - RepairStatus', [
-                    'repairstatusData' => $repairstatusData,
-                    'repairstatusDetails' => $repairstatusDetails,
-                ]);
+        if ($repairstatusData) {
+            // Check if the repair status is associated with a customer and if that customer matches the Auth ID
+            if ($repairstatusData->customer_id !== null && $repairstatusData->customer_id !== Auth::id()) {
+                return back()->with('error', 'Access Denied')->with('error_message','You do not have permission to view this repair status.');
             }
-            
-            // If the repair status ID does not exist
-            return back()->with('error', 'Invalid Repair ID')->with('The Repair ID you entered does not exist. Please double-check and try again.');
-            
-    
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            Log::error('Error in someFunction:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
+        
+            // Fetch repair status details
+            $repairstatusDetails = Customer_RepairStatus::where('repair_id', $id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        
+            foreach ($repairstatusDetails as $repairstatusDetail) {
+                $repairstatusDetail->formatted_date = Carbon::parse($repairstatusDetail->created_at)->format('l, d M Y');
+                $repairstatusDetail->formatted_time = Carbon::parse($repairstatusDetail->created_at)->format('g:i A');
+            }
+        
+            // Show the view with repair status data
+            return view('Customer.5 - RepairStatus', [
+                'repairstatusData' => $repairstatusData,
+                'repairstatusDetails' => $repairstatusDetails,
             ]);
-
-            return view('Customer.ErrorMessage');
         }
+        
+        // If the repair status ID does not exist
+        return back()->with('error', 'Invalid Repair ID')->with('The Repair ID you entered does not exist. Please double-check and try again.');
     }
 
         public function submitReview(Request $request, $technicianID){

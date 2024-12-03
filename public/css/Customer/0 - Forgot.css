@@ -61,6 +61,10 @@ h1 span {
     color: var(--highlight);
 }
 
+/* p{
+    text-align: justify;
+} */
+
 form {
     display: flex;
     flex-direction: column;
@@ -123,6 +127,7 @@ form input{
     margin-bottom: 15px;
     background-color: var(--background-color-danger);
 }
+
 
 .success-message span{
     color: var(--primary-color);

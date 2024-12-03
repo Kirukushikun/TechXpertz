@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management</title>
+    <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/2 - UserManagement.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/admin-sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/admin-modal.css') }}">
@@ -33,10 +34,9 @@
                     <h1>User Management</h1>
                     
                     <div class="tab-filters">
-                        <li><button><i class="fa-solid fa-filter"></i>Filter</button></li>
+                        <!-- <li><button><i class="fa-solid fa-filter"></i>Filter</button></li> -->
                         <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" id="search-input" placeholder="search"></li>
-
-                        <a class="add-repair"><i class="fa-solid fa-plus" id="add-appointment"></i></a>
+                        <!-- <a class="add-repair"><i class="fa-solid fa-plus" id="add-appointment"></i></a> -->
                     </div>
                 </div>
                 <div class="body">

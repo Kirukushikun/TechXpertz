@@ -34,16 +34,17 @@ class DatabaseSeeder extends Seeder
         DB::table('admin_reportmanagement')->truncate();
 
         DB::table('technicians')->truncate();
-        DB::table('repairshop_services')->truncate();
-        DB::table('repairshop_schedules')->truncate();
+        DB::table('repairshop_credentials')->truncate();
         DB::table('repairshop_profiles')->truncate();
         DB::table('repairshop_mastery')->truncate();
+        DB::table('repairshop_services')->truncate();
+        DB::table('repairshop_badges')->truncate();
+        DB::table('repairshop_schedules')->truncate();
         DB::table('repairshop_images')->truncate();
         DB::table('repairshop_reviews')->truncate();
-        DB::table('repairshop_badges')->truncate();
+
         DB::table('repairshop_appointments')->truncate();
         DB::table('repairshop_repairstatus')->truncate();
-        DB::table('repairshop_credentials')->truncate();
 
         DB::table('customers')->truncate();
         DB::table('customer_repairstatus')->truncate();

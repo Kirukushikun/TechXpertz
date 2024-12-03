@@ -35,6 +35,7 @@ class ActivateShopsSeeder extends Seeder
         $technicians = Technician::where('profile_status', 'complete')->get();
 
         $masteries = ['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone', 'All-In-One'];
+
         $badges = [
             "24/7 Customer Support",
             "Advanced Diagnostic Tools",
@@ -174,8 +175,6 @@ class ActivateShopsSeeder extends Seeder
                     'status' => Arr::random([2, 1, 2]),
                 ]);
             }
-
-
 
         }
     }

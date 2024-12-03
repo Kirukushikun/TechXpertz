@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report Manager</title>
+    <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
     <!-- Crucial Part on every forms -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Crucial Part on every forms/ -->
@@ -36,7 +37,7 @@
                     <h1>Report Management</h1>
                     
                     <div class="tab-filters">
-                        <li><button><i class="fa-solid fa-filter"></i>Filter</button></li>
+                        <!-- <li><button><i class="fa-solid fa-filter"></i>Filter</button></li> -->
                         <li><i class="fa-solid fa-magnifying-glass" id="search"></i> <input type="text" id="search-input" placeholder="search"></li>
                     </div>
                 </div>

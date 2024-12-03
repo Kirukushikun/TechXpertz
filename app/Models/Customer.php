@@ -37,6 +37,7 @@ class Customer extends Authenticatable
         'role',
         'image_profile',
         'image_status',
+        'email_verified_at'
     ];
 
     /**
