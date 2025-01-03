@@ -342,6 +342,81 @@ footer .logo {
 footer span {
     color: var(--highlight);
 }
+
+
+.notification-wrapper {
+    position: relative;
+}
+
+.notification-wrapper .circle{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #9147F2;
+    border-radius: 50%;
+    right: -2px;
+}
+.notification-dropdown {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 400px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    display: none;
+    z-index: 10;
+}
+
+.notification-dropdown.active {
+    display: block;
+}
+
+.notification-item {
+    display: flex;
+    gap: 10px;
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.notification-item .img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    /* margin-right: 10px; */
+
+    background-color: #7B5CAD;
+}
+
+.notification-item .content{
+    width: calc(100% - 40px);
+}
+
+.notification-item p {
+    margin: 0;
+    font-size: 14px;
+    text-align: justify;
+}
+
+.notification-item span {
+    color: gray;
+    font-size: 12px;
+}
+
+.view-all {
+    text-align: center;
+    padding: 10px;
+    background: #f0f0f0;
+    border-top: 1px solid #f0f0f0;
+    border-radius: 0 0 7px 7px;
+}
+
+.view-all a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
 /* Navbar Responsiveness */
 @media(max-width:1825px){
     .navbar {

@@ -120,20 +120,27 @@
                                 <div id="reportsChart"></div>
 
                                 <script>
+
+                                    
+                                    const chartData = {!! json_encode($chartData) !!};
+
                                     document.addEventListener("DOMContentLoaded", () => {
                                         new ApexCharts(document.querySelector("#reportsChart"), {
                                             series: [
                                                     {
                                                         name: "Appointments",
-                                                        data: [31, 40, 28, 51, 42, 82, 56],
+                                                        // data: [31, 40, 28, 51, 42, 82, 56],
+                                                        data: chartData.appointments,
                                                     },
                                                     {
                                                         name: "Repairs",
-                                                        data: [11, 32, 45, 32, 34, 52, 41],
+                                                        // data: [11, 32, 45, 32, 34, 52, 41],
+                                                        data: chartData.repairs,
                                                     },
                                                     {
                                                         name: "Customers",
-                                                        data: [15, 11, 32, 18, 9, 24, 11],
+                                                        // data: [15, 11, 32, 18, 9, 24, 11],
+                                                        data: chartData.customers,
                                                     },
                                             ],
                                             chart: {
@@ -165,7 +172,8 @@
                                             },
                                             xaxis: {
                                                     type: "datetime",
-                                                    categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"],
+                                                    categories: chartData.categories,
+                                                    // categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"],
                                             },
                                             tooltip: {
                                                     x: {
@@ -203,8 +211,7 @@
                                 </div>
 
                                 <div class="right">
-                                    <a href=""><i class="fa-regular fa-pen-to-square"></i></a>
-                                    <a href=""><i class="fa-regular fa-trash-can"></i></a>
+                                    
                                 </div>
                             </div>
                         </div>

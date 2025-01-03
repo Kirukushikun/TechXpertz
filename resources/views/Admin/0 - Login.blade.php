@@ -30,7 +30,7 @@
                                 </label>         
                                 Remember Me
                             </label>
-                            <a href="#">Forgot password?</a>
+                            <!-- <a href="#">Forgot password?</a> -->
                         </div>
                         <button type="submit">Sign in</button>
                     </form>

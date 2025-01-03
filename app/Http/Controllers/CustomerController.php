@@ -201,10 +201,12 @@ class CustomerController extends Controller
     
             $customerDetails = Auth::check() ? Customer::find(Auth::id()) : null;
             $technicianID = $id;
+            $formattedSchedule = $this->getTechnicianSchedule($technicianID); // New function
         
             return view('Customer.4 - AppointmentBooking', [
                 'customerDetails' => $customerDetails,
                 'technicianID' => $technicianID,
+                'formattedSchedule' => $formattedSchedule->toArray(),
             ]);
     
         } catch (\Exception $e) {
@@ -217,6 +219,28 @@ class CustomerController extends Controller
             return view('Customer.ErrorMessage');
         }
 
+    }
+
+    public function getTechnicianSchedule($technicianId)
+    {
+        // Fetch the schedule for the given technician
+        $schedules = RepairShop_Schedules::where('technician_id', $technicianId)->get();
+
+        // Format the schedule into an array
+        $formattedSchedule = $schedules->map(function ($schedule) {
+            return [
+                'day' => (int)$schedule->day, // 0 = Sunday, 1 = Monday, etc.
+                'status' => $schedule->status, // "open" or "closed"
+                'opening_time' => $schedule->opening_time 
+                    ? Carbon::parse($schedule->opening_time)->format('H:i') 
+                    : null,
+                'closing_time' => $schedule->closing_time 
+                    ? Carbon::parse($schedule->closing_time)->format('H:i') 
+                    : null,
+            ];
+        });
+
+        return $formattedSchedule;
     }
 
     public function bookappointment(Request $request, $id){

@@ -8,7 +8,7 @@
                     <a href="/admin/dashboard"><i class="fa-solid fa-table-columns"></i></a>
                 </li>
                 <li >
-                    <a href="/admin/customers"><i class="fas fa-users"></i></a>
+                    <a href="/admin/usermanagement"><i class="fas fa-users"></i></a>
                 </li>
 
                 <!-- <li>
@@ -24,34 +24,34 @@
                 </li> -->
 
                 <li>
-                    <a href="/admin/notifications"><i class="fa-solid fa-bell"></i></a>
+                    <a href="/admin/notificationcenter"><i class="fa-solid fa-bell"></i></a>
                 </li>
                 <li>
-                    <a href="/admin/messages"><i class="fa-solid fa-message"></i></a>
+                    <a href="/admin/reportmanagement"><i class="fa-solid fa-message"></i></a>
                 </li>
                 <li>
-                    <a href="/admin/reviews"><i class="fas fa-star"></i></a>
+                    <a href="/admin/reviewsmanagement"><i class="fas fa-star"></i></a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="/admin/settings"><i class="fas fa-cog"></i></a>
                 </li>
                 <li>
                     <a href="/admin/reports"><i class="fas fa-chart-bar"></i></a>
-                </li>
+                </li> -->
             </ul>
         </nav>
 
         <div class="sidebar-footer">
-            <button class="logout">
+            <button class="logout" onclick="window.location.href='{{route('admin.logoutAdmin')}}'">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
             
-            <div class="dark-mode">
+            <!-- <div class="dark-mode">
                 <label class="switch">
                     <input type="checkbox" id="dark-mode-toggle">
                     <span class="slider round"></span>
                 </label>                    
-            </div>
+            </div> -->
         </div>                
     </div>
 

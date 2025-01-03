@@ -104,8 +104,9 @@ Route::get('/privacy-policy', function () {
     return view('Customer.14 - PrivacyAndPolicy');
 });
 
-
-
+Route::get('/become-technician', function (){
+    return view('Customer.17 - BecomeTechnician');
+});
 
 
 // TECHNICIAN AUTH---------------------------------------------------------------

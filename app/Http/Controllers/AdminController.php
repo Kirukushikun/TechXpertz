@@ -26,6 +26,8 @@ use App\Models\Admin_ReportManagement;
 use App\Models\Admin_Disciplinary;
 use App\Models\Admin_ActivityLogs;
 
+use Illuminate\Support\Facades\DB;
+
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -154,7 +156,36 @@ class AdminController extends Controller
 
         //----------------------------------------------------------------------------------------------------------
 
-        $latestNotification = Admin_NotificationHistory::first();
+        $latestNotification = Admin_NotificationHistory::orderBy('created_at', 'desc')->first();
+
+        // Fetch weekly appointments count
+        $appointments = DB::table('repairshop_appointments')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total'))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // Fetch weekly repairs count
+        $repairs = DB::table('repairshop_repairstatus')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total'))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // Fetch weekly customers count
+        $customers = DB::table('customers')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total'))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // Format data for the chart
+        $chartData = [
+            'appointments' => $appointments->pluck('total'),
+            'repairs' => $repairs->pluck('total'),
+            'customers' => $customers->pluck('total'),
+            'categories' => $appointments->pluck('date'), // Assumes dates align
+        ];
 
         return view('Admin.1 - Dashboard', [
             'totalUsers' => $totalUsers,
@@ -183,7 +214,8 @@ class AdminController extends Controller
             'newSignUpsPercentageChange' => $newSignUpsPercentageChange,
 
             //----------------------
-            'latestNotification' => $latestNotification
+            'latestNotification' => $latestNotification,
+            'chartData' => $chartData
         ]);
     }
 
@@ -375,7 +407,7 @@ class AdminController extends Controller
         }
 
     public function reportmanagement(){
-        $reports = Admin_ReportManagement::orderBy('created_at', 'asc')->get()->take(400);
+        $reports = Admin_ReportManagement::orderBy('created_at', 'asc')->get();
         $customerReports = $reports->where('user_role', 'Customer');
         $technicianReports = $reports->where('user_role', 'Technician');
 

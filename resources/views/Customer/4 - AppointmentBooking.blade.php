@@ -5,6 +5,9 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>TechXpertz</title>
+        <!-- Crucial Part on every forms -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!-- Crucial Part on every forms/ -->
         <link rel="icon" href="{{ asset('images/TechXpertz-Icon.ico') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         
@@ -80,6 +83,9 @@
                             @php
                                 $mastery = App\Models\RepairShop_Mastery::where('technician_id', $technicianID)->first();
                             @endphp
+                            @if($mastery->main_mastery != "All-In-One")
+                                <option value="{{$mastery->main_mastery}}">{{$mastery->main_mastery}}</option>
+                            @endif
                             @foreach(['Smartphone', 'Tablet', 'Desktop', 'Laptop', 'Smartwatch', 'Camera', 'Printer', 'Speaker', 'Drone'] as $item)
                                 @if($mastery->$item)
                                     <option value="{{$item}}">{{$item}}</option>
@@ -127,6 +133,9 @@
     
                 <div class="form-section">
                     <h2>Appointment Schedule</h2>
+                    <div class="appointment-error-message" style="width:calc(100% - 40px);">
+
+                    </div>
                     <div class="form-group">
                         <label for="appointment_date">Select Date</label>
                         <input type="date" id="appointment_date" name="appointment_date" required>
@@ -248,6 +257,89 @@
         </form>
 
         @yield('footer')
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const dateInput = document.getElementById('appointment_date');
+                const timeInput = document.getElementById('appointment_time');
+                const errorMessageContainer = document.querySelector('.appointment-error-message');
+                const submitButton = document.querySelector('.submit-button');
+
+                // Load the formatted schedule data passed from the backend
+                const technicianSchedule = @json($formattedSchedule);
+                console.log(technicianSchedule)
+
+                // Add event listeners for real-time validation
+                dateInput.addEventListener('input', validateInputs);
+                timeInput.addEventListener('input', validateInputs);
+
+                // Real-time validation of inputs
+                function validateInputs() {
+                    const selectedDate = dateInput.value ? new Date(dateInput.value) : null;
+                    const selectedTime = timeInput.value;
+
+                    if (selectedDate && selectedTime) {
+                        if (!isValidAppointment(selectedDate, selectedTime)) {
+                            showErrorMessage('The selected date and time are outside the technician’s available schedule.');
+                            toggleSubmitButton(false);
+                        } else {
+                            clearErrorMessage();
+                            toggleSubmitButton(true);
+                        }
+                    } else {
+                        // If inputs are incomplete, prevent submission
+                        toggleSubmitButton(false);
+                    }
+                }
+
+                // Validate the selected date and time against the technician's schedule
+                function isValidAppointment(date, time) {
+                    const dayOfWeek = date.getDay(); // Sunday = 0, Monday = 1, etc.
+                    const scheduleForDay = technicianSchedule.find(schedule => schedule.day === dayOfWeek);
+
+                    // Check if the day is marked as "closed"
+                    if (!scheduleForDay || scheduleForDay.status === 'closed') {
+                        return false;
+                    }
+
+                    // Parse times to compare them
+                    const selectedTime = parseTime(time);
+                    const openingTime = parseTime(scheduleForDay.opening_time);
+                    const closingTime = parseTime(scheduleForDay.closing_time);
+
+                    // Validate if the time falls within the working hours
+                    return selectedTime >= openingTime && selectedTime <= closingTime;
+                }
+
+                // Helper function to parse time into a comparable format
+                function parseTime(timeString) {
+                    const [hours, minutes] = timeString.split(':').map(Number);
+                    return new Date(0, 0, 0, hours, minutes, 0);
+                }
+
+
+                // Display an error message
+                function showErrorMessage(message) {
+                    errorMessageContainer.innerHTML = `<p style="color: red; border-radius: 7px; border: 2px solid red; padding: 12px; width: 100%; margin-bottom: 5px;">${message}</p>`;
+                }
+
+                // Clear the error message
+                function clearErrorMessage() {
+                    errorMessageContainer.innerHTML = '';
+                }
+
+                // Enable or disable the submit button
+                function toggleSubmitButton(enable) {
+                    submitButton.disabled = !enable;
+                    if (!enable) {
+                        submitButton.classList.add('disabled'); // Optional: Add a disabled style
+                    } else {
+                        submitButton.classList.remove('disabled');
+                    }
+                }
+            });
+        </script>
+
 
         <script src="{{asset('js/Customer/4 - AppointmentBooking.js')}}" defer></script>
         <script src="{{asset('js/Customer/customer-notification.js')}}" defer></script>

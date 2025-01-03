@@ -27,6 +27,12 @@ class AdminAuthController extends Controller
         }
     }
 
+    function logoutAdmin(){
+        Auth::logout();
+        Session::flush();
+        return redirect()->intended(route('admin.login'));
+    }
+
     public function signup(){
         return view('Admin.0 - Registration');
     }

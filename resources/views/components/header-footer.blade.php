@@ -41,10 +41,70 @@
         <input type="text" name="query" class="query" id="query" placeholder="Search here..." />
         <button type="submit"><i class="fa fa-search"></i></button>
     </form>
+
     <div class="icons">
         <i class="fa-solid fa-screwdriver-wrench load" onclick="window.location.href='/repairlist'"></i>
         <i class="fa-solid fa-message" onclick="window.location.href='/messages'"></i>
+
         <i class="fa-solid fa-heart" onclick="window.location.href='/customer/favorites'"></i>
+
+
+        @if(Auth::check())
+            @php
+                // Retrieve authenticated customer directly
+                $customerData = Auth::user();
+
+                // Fetch customer-specific notifications
+                $customerNotification = App\Models\Customer_Notifications::where('target_id', $customerData->id)
+                    ->orWhere('target_type', 'all')
+                    ->latest() // Sort by created_at descending
+                    ->get();
+
+                // Fetch public notifications with a limit for performance
+                $publicNotification = App\Models\Public_Notifications::latest()->take(10)->get();
+
+                // Merge collections and sort by created_at
+                $allNotifications = $customerNotification->concat($publicNotification)
+                    ->sortByDesc('created_at')
+                    ->take(4); // Only take the 4 most recent notifications
+
+                $allNotifications = $allNotifications->map(function ($notification) {
+                    $notification->time_ago = $notification->created_at->diffForHumans();
+                    return $notification;
+                });
+
+                // Check for unread notifications
+                $hasUnreadNotifications = $customerNotification->contains('is_read', false);
+            @endphp
+
+
+            <div class="notification-wrapper">
+                <i class="fa-solid fa-bell" onclick="toggleNotifications()"></i>
+                @if($hasUnreadNotifications)
+                    <span class="circle"> </span>
+                @endif
+                <div class="notification-dropdown" id="notificationDropdown">
+                    @foreach($allNotifications as $notification)
+                    <div class="notification-item">
+                        <div class="img"></div>
+                        <div class="content">
+                            <strong>{{$notification->title}}</strong>
+                            <p>{{$notification->message}}</p>
+                            <span>{{$notification->time_ago}}</span>
+                        </div>
+                    </div>
+                    @endforeach
+                    <div class="view-all"><a href="customer/myaccount">VIEW ALL</a></div>
+                </div>
+            </div>
+
+            <script>
+                function toggleNotifications() {
+                    const dropdown = document.getElementById('notificationDropdown');
+                    dropdown.classList.toggle('active');
+                }
+            </script>
+        @endif
     </div>
 
     @auth
@@ -119,6 +179,7 @@
                 <li><a href="/messages">Messages</a></li>
                 <li><a href="/terms-of-service">Terms</a></li>
                 <li><a href="/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/become-technician">Become a Technician</a></li>
             </ul>
         </div>
 

@@ -53,7 +53,7 @@
                             <div id="technician-details" class="form-container active">
                                 <div class="form-header">
                                     <div class="profile-detail">
-                                        <div class="image"></div>
+                                        <div class="image"> </div>
                                         <div class="details">
                                             <h3>{{$technician->firstname}} {{$technician->middlename ?? ''}} {{$technician->lastname}}</h3>
                                             <p>{{$technician->email}}</p>
