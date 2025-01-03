@@ -23,6 +23,11 @@ use App\Models\Admin_ActivityLogs;
 use Illuminate\Support\Facades\Request as RequestFacade;
 use Illuminate\Support\Collection;
 
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyEmail;
+use App\Mail\VerifyEmailTechnician;
+
 class TechnicianAuthController extends Controller
 {
     public function login(){
@@ -155,7 +160,9 @@ class TechnicianAuthController extends Controller
             // Log activity
             $this->logActivity('Account Created', technicianId: $technician->id);
 
-            return redirect()->route('technician.login')->with('success', 'Account created successfully');
+            return redirect()->route('technician.verify', [
+                'email' => $email
+            ]);
 
         } catch (\Illuminate\Database\QueryException $exception) {
             return redirect()->route('technician.signup')->with("error", "Error Occurred")->with('error_message', 'An error occurred while processing your request. Please try again');
@@ -208,17 +215,67 @@ class TechnicianAuthController extends Controller
             }
         );
 
-        if($status === Password::PASSWORD_RESET){
-            $this->logActivity('Reset Password', technicianId: Auth::guard('technician')->user()->id);
-        }
+        // if($status === Password::PASSWORD_RESET){
+        //     $technician = Technician::where('email', $request->email)->firstOrFail();
+        //     $this->logActivity('Reset Password', technicianId: $technician->id);
+        // }
         
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('technician.login')->with('success', __($status))
             : back()->withErrors(['error' => __($status)]);
-
-
             
     }
+
+    public function verify($email)
+    {   
+        // Retrieve the customer using the email
+        $technician = Technician::where('email', $email)->firstOrFail();
+
+        if($technician->email_verified_at != null){
+
+            // If the account is already verified, return the view with a status message
+            return view('Technician.0 - Verify')->with([
+                'email' => $email,
+                'status' => 'Account already verified',
+            ]);
+
+        }else{
+
+            // Generate a signed URL valid for 24 hours
+            $verificationUrl = URL::signedRoute('technician.verifyAccountEmail', ['email' => $email]);
+        
+            // Send the verification email
+            Mail::to($email)->send(new VerifyEmailTechnician($verificationUrl));
+        
+            return view('Technician.0 - Verify', ['email' => $email]);
+        }
+
+    }
+
+    public function verifyAccountEmail(Request $request)
+    {
+        // Validate signed URL
+        if (!$request->hasValidSignature()) {
+            abort(403, 'Invalid or expired verification link.');
+        }
+    
+        // Retrieve the technician using the email
+        $technician = Technician::where('email', $request->email)->firstOrFail();
+        
+        if($technician->email == "verified"){
+            // Redirect to login with success message
+            return redirect()->route('technician.login')->with('success', 'Account already verified.');
+        }
+
+        // Update the email_verified_at
+        $technician->update([
+            'email_verified_at' => now(),
+        ]);
+    
+        // Redirect to login with success message
+        return redirect()->route('technician.login')->with('success', 'Account verified successfully.');
+    }
+
 
     function logActivity($action, $technicianId = null, $status = 'success')
     {
@@ -259,5 +316,7 @@ class TechnicianAuthController extends Controller
             'ip_address' => RequestFacade::ip(),
         ]);
     }
+
+
 
 }

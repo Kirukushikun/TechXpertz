@@ -249,10 +249,10 @@ class CustomerAuthController extends Controller
         // Retrieve the customer using the email
         $customer = Customer::where('email', $request->email)->firstOrFail();
         
-        if($customer->email == "verified"){
-            // Redirect to login with success message
-            return redirect()->route('customer.login')->with('success', 'Account already verified.');
-        }
+        // if($customer->email == "verified"){
+        //     // Redirect to login with success message
+        //     return redirect()->route('customer.login')->with('success', 'Account already verified.');
+        // }
 
         // Update the profile status and email_verified_at
         $customer->update([

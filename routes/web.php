@@ -124,6 +124,10 @@ Route::post('/technician/password/email', [TechnicianAuthController::class, 'sen
 Route::get('/technician/password/reset/{token}', [TechnicianAuthController::class, 'resetForm'])->name('technician.reset');
 Route::post('/technician/password/reset', [TechnicianAuthController::class, 'resetPassword'])->name('technician.reset.update');
 
+//technician.verify
+Route::get('/technician/verify/email/{email}', [TechnicianAuthController::class, 'verify'])->name('technician.verify');
+Route::get('/technician/verify-account-email', [TechnicianAuthController::class, 'verifyAccountEmail'])->name('technician.verifyAccountEmail');
+
 // -----------------------------------------------------------------------------
 
 Route::middleware('technician.auth')->group(function() {

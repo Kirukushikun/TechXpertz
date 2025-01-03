@@ -22,6 +22,12 @@ class TechnicianAuthMiddleware
             return redirect()->route('technician.loginTechnician');
         }
 
+        if (Auth::guard('technician')->user()->email_verified_at === null){
+
+            return redirect()->route('technician.loginTechnician')->with('error', 'Your email is not yet verified');
+
+        }
+
         if (Auth::guard('technician')->user()->profile_status == 'deleted'){
 
             return redirect()->route('technician.accountDisabled', ['status' => 'deleted']);

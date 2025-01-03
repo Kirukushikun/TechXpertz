@@ -45,6 +45,7 @@ class Technician extends Authenticatable
 
         'username',
         'password',
+        'email_verified_at'
     ];
 
     /**
