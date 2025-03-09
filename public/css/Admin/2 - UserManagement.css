@@ -1,0 +1,182 @@
+/* NAVIGATION TAB STYLING */
+.tabs {
+    list-style: none;
+    padding: 0;
+    margin: 0; 
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 2px solid #eeeeee;
+}
+
+.tabs .tab-navigation i{
+    color: var(--primary-color);
+    margin-left: 10px;
+}
+
+.tab-link {
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-right: 20px;
+    position: relative;
+}
+
+.tab-link.active {
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 17px;
+    border-bottom: 4px solid var(--primary-color);
+}
+
+.tab-link .badge {
+    background-color: #6f2dbd;
+    color: #fff;
+    border-radius: 50%;
+    padding: 3px 8px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.tab-content-item {
+    display: none;
+}
+
+.tab-content-item.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.tabs .tab-navigation{
+    display: flex;
+}
+.tabs .tab-navigation i{
+    color: var(--primary-color);
+    margin-left: 10px;
+}
+
+.tab-content{
+    margin-top: 30px;
+    height: 100%;
+}
+
+.card{
+    height: 100%;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: var(--white);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}.card .actions{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+
+}.card .actions h2{
+    font-size: 20px;
+    font-weight: 600;
+}.card .actions a{
+    text-decoration: none;
+    color: var(--primary-color);
+    font-size: 18px;
+    font-weight: 500;
+}
+.card table{
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+}.card table th{
+    padding: 15px 25px;
+    font-weight: 600;
+}.card table td{
+    padding: 15px 25px;
+    background-color: white;
+    border-top: solid #f8f8f8 2px;
+}.card table td button{
+    border: none;
+    border-radius: 7px;
+    color: white;
+    padding: 10px 20px;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: var(--primary-color);
+}.card table td input{
+    font-weight: 600;
+    font-size: 15px;
+    padding: 5px;
+
+    border: 2px solid var(--lighted-text-color);
+    border-radius: 7px;
+    color: var(--dark-grey);
+
+    /* background-color: antiquewhite; */
+    text-align: center;
+}
+.card table td .terminate-btn{
+    color: var(--danger);
+}.card table td .update-btn{
+    color: var(--success);
+}
+.card table td a{
+    text-decoration: none;
+    margin-right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+
+    border: 2px solid;
+    border-radius: 7px;
+    padding: 5px 10px;
+}
+
+.pagination{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 15px;
+
+    margin-top: 20px;
+}
+
+.pagination button{
+    color: var(--primary-color);
+    background-color: var(--secondary-color);
+    font-size: 14px;
+    font-weight: 600;
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}.pagination button.active{
+    color: var(--white);
+    background-color: var(--primary-color);
+    transform: scale(1.1);
+}
+.pagination button:hover{
+    transform: scale(1.2);
+}
+
+.tab-summary{
+    display: flex;
+    gap: 20px;
+}.tab-summary p{
+    padding: 7px 20px;
+    margin-bottom: 5px;
+    background-color: #eeeeee;
+    font-weight: 500;
+    border-radius: 7px;
+    cursor: pointer;
+}

@@ -1,0 +1,454 @@
+.modal{
+    display: none;
+}
+.modal.active{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+
+    padding-left: 50px;
+
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.452);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content{
+    border-radius: 10px;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    padding:40px;
+}
+.modal-content form, .modal-content .form{
+    border-radius: 10px;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+}
+.modal-body{
+    display:flex;
+    justify-content:space-between;
+    max-height: 90%;
+}
+
+.modal-action{
+    display:flex;
+    align-items: center;
+    justify-content: end;
+    gap: 10px;
+
+    margin-top: 30px;
+    width: 100%;
+    background-color: white;
+    
+}.modal-action button{
+    padding: 10px 20px;  
+    border-radius: 7px;  
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* MODAL VERIFICATION */
+.modal-verification{
+    background-color: white;
+    text-align: center;
+    padding: 40px 50px;
+    border-radius: 8px;
+
+    position: relative;
+}
+    .modal-verification .form-group{
+        display: flex;
+        flex-direction: column;
+    }.modal-verification .form-group label{
+        text-align: start;
+        font-weight: 500;
+    }
+    .modal-verification .form-group .notify_message{
+        text-align: start;
+        font-weight: 500;
+    }.modal-verification .form-group textarea{
+        padding: 12px;
+        font-size: 15px;
+        border-radius: 7px;
+        border: solid #D9D9D9 2px;
+        resize:none;
+        
+        /* width: 550px; */
+        min-height: 150px;
+        max-height: 200px;
+    }
+
+
+
+/* NOTIFICATION CENTER */
+.verification-content{
+    margin: 10px 0;
+} .verification-content .form-group{
+    text-align: start;
+    margin-top: 10px;
+}
+
+.verification-message{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+    .verification-message h2{
+        margin-top: 13px;
+        font-size: 25px;
+        font-weight: 700;
+    }.verification-message p{
+        font-size: 17px;
+        color: var(--lighted-text-color);
+        width: 100%;
+    }
+
+.verification-action{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+
+    margin-top: 25px;
+    background-color: white;
+
+} .verification-action button{
+    padding: 10px 20px;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+}
+
+.verification-content{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+
+} .verification-content h3{
+    width: 100%;
+    text-align: start;
+    color: var(--text-color);
+
+}.verification-content .row{
+    display:flex;
+    gap: 20px;
+
+} .verification-content .form-group{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+}.verification-content .form-group label{
+    font-weight: 500;
+    margin-bottom: 10px;
+    text-align: start;
+
+} .verification-content .form-group input,
+.verification-content .form-group select{
+    padding: 12px;
+    font-size: 15px;
+    margin-bottom: 15px;
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+}
+
+/* .submit{
+    background-color: var(--primary-color);
+    border: solid 2px var(--primary-color);
+
+    color: white;
+} .danger{
+    background-color: var(--danger);
+    border: solid 2px var(--danger);
+
+    color: white;
+} .success{
+    background-color: var(--success);
+    border: solid 2px var(--success);
+
+    color: white;
+} */
+ .normal, .close{
+    background-color: transparent;
+    border: solid 2px var(--lighted-text-color);
+    color: var(--text-color);
+}
+
+.reminder{
+    border-top: 2px solid #D9D9D9;
+    color: var(--lighted-text-color);
+    padding: 10px 0 0;
+}
+
+.form-section{
+    display: flex;
+    width: 100%;
+    gap: 20px;
+
+    justify-content: space-between;
+}
+.form-group{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+.form-group label{
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.form-group input, select, textarea{
+    padding: 5px 10px;
+    font-size: 15px;
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+    resize: none;
+}
+
+/* REPORT DETAILS */
+.report-details .verification-content{
+    display: flex;
+    gap: 20px ;
+}
+
+/* BUTTON COLORS */
+.btn-primary{
+    background-color: var(--primary-color);
+    border: solid 2px var(--primary-color);
+
+    color: white;
+}
+.btn-danger{
+    background-color: var(--danger);
+    border: solid 2px var(--danger);
+
+    color: white;
+}
+.btn-success{
+    background-color: var(--success);
+    border: solid 2px var(--success);
+
+    color: white;
+}
+.btn-warning{
+    background-color: #f5c836;
+    border: solid 2px #f5c836;
+    color: black;
+}
+.btn-normal{
+    background-color: transparent;
+    border: solid 2px var(--lighted-text-color);
+    color: var(--text-color);
+}
+
+
+/* ACTION COLORS */
+.action-primary{
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 7px;
+    padding: 5px 10px;
+}
+.action-danger{
+    color: var(--danger);
+    border: 2px solid var(--danger);
+    border-radius: 7px;
+    padding: 5px 10px;
+}
+.action-success{
+    color: var(--success);
+    border: 2px solid var(--success);
+    border-radius: 7px;
+    padding: 5px 10px;
+}
+.action-info{
+    color: #64aae0;
+    border: 2px solid #64aae0;
+    border-radius: 7px;
+    padding: 5px 10px;
+
+}
+
+.action-primary:hover{
+    color: white;
+    background-color: var(--primary-color);
+    transition: 0.5s ease;
+}
+.action-danger:hover{
+    color: white;
+    background-color: var(--danger);
+    transition: 0.3s ease;
+}
+.action-success:hover{
+    color: white;
+    background-color: var(--success);
+    transition: 0.3s ease;
+}
+.action-info:hover{
+    color: white;
+    border: 2px solid white;
+    border-radius: 7px;
+    padding: 5px 10px;
+}
+
+/* ICON COLORS */
+.icon-primary{
+   color: var(--primary-color);
+}
+.icon-danger{
+   color: var(--danger);
+}
+.icon-success{
+    color: var(--success);
+}
+.icon-normal{
+    color: var(--text-color);
+}
+.icon-info{
+    color:#64aae0;
+}
+.icon-disabled{
+    color: #555;
+}
+
+/* SIGN COLORS */
+.sign-primary{
+    color: var(--primary-color);
+    background-color: #f3eaff;
+    font-size: 30px;    
+    padding: 12px;
+    border-radius: 10px;font-size: 30px;
+    
+}.sign-danger{
+    color: var(--danger);
+    background-color: #ffdcd8;
+    font-size: 30px;    
+    padding: 12px;
+    border-radius: 10px;
+}.sign-success{
+    color: var(--success);
+    background-color: #cffdda;
+    font-size: 30px;    
+    padding: 12px;
+    border-radius: 10px;
+}.sign-warning{
+    color: #f5c836;
+    background-color: #fff5cb;
+    font-size: 30px;    
+    padding: 12px;
+    border-radius: 10px;
+}
+
+/* STATUS */
+.status-green{
+    background-color: #cffdda;
+    color: #34A853;
+}
+
+.status-red{
+    background-color: #ffe6e6;
+    color: #EA4335;
+}
+
+.status-blue{
+    background-color: #e0f2ff;
+    color: #4285F4;
+}
+
+.status-yellow{
+    background-color: #fff5cc;
+    color: #FBBC05;
+}
+
+.status-orange{
+    background-color: #ffe8cc;
+    color: #F28B30;
+}
+
+.status-teal{
+    background-color: #ccf2f2;
+    color: #00796B;
+}
+.status-purple{
+    background-color: #f2e0ff;
+    color: #8E24AA;
+}
+
+.status-pink{
+    background-color: #ffe0f2;
+    color: #D81B60;
+}
+
+.status-gray{
+    background-color: #f0f0f0;
+    color: #616161;
+}
+
+.status-brown{
+    background-color: #f3e6e0;
+    color: #8D6E63;
+}
+
+/* SEVERE STATUS */
+.status-soft{
+    background-color: #cffdda;
+    color: #34A853;
+}
+
+.status-mild { 
+    background-color: #e0f5c5;
+    color: #66b850;
+}
+
+.status-moderate { 
+    background-color: #fff3b0;
+    color: #d89b32;
+}
+
+.status-high { 
+    background-color: #ffeedf;
+    color: #e3745c;
+}
+
+.status-severe{
+    background-color: #ffe6e6;
+    color: #EA4335;
+}
+
+
+/* CLOSE BUTTON */
+.icon-close{
+    top: 20px;
+    right: 20px;
+    font-size: 25px;
+    position: absolute;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-color);
+    border: none;
+}
+
+.note {
+    margin-top: 20px;
+    color: #aaaaaa;
+    width: 100%;
+}

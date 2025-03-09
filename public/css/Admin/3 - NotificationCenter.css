@@ -1,0 +1,194 @@
+
+.body .content{
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    width: 100%;
+}
+
+/* Universal */
+.card{
+    width: 50%;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: rgba(133, 142, 153, 0.1) 0px 8px 24px;
+    background-color: white;
+
+    height: 550px;
+
+    display: flex;
+    flex-direction: column;
+}
+/* Universal */
+
+.form-notification{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.user-reference{
+    width: 50%;
+}
+
+.notification-history{
+    margin-top: 30px;
+
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 20px;
+
+    width: 100%;
+
+    margin-bottom: 30px;
+}
+
+.form-section{
+    display: flex;
+    width: 100%;
+    gap: 20px;
+
+    justify-content: space-between;
+}
+.form-group{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+.form-group label{
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.form-group input, select, textarea{
+    padding: 5px 10px;
+    font-size: 15px;
+    border-radius: 7px;
+    border: solid #D9D9D9 2px;
+    resize: none;
+}.card .notification-btn{
+    letter-spacing: 1px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    color: var(--white);
+    background-color: var(--primary-color);
+    cursor: pointer;
+    width: fit-content;
+
+    margin-left: auto;
+    margin-top: auto;
+}
+
+
+.card table{
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+}.card table th{
+    padding: 15px 25px;
+    font-weight: 600;
+}.card table td{
+    padding: 15px 25px;
+    background-color: white;
+    border-top: solid #f8f8f8 2px;
+}
+
+.card .tab-filters{
+    justify-content: end;
+    margin-bottom: 15px;
+}
+
+.notification-item{
+    background-color: #f8f8f8;
+    padding: 20px 30px;
+    border: solid #D9D9D9 2px;
+    border-radius: 8px;
+}
+.notification-header{
+    display: flex;
+    justify-content: space-between;
+}
+.notification-header .title{
+    font-size: 20px;
+    font-weight: 600;
+}.notification-header .sub-title{
+    font-weight: 500;
+    color: var(--lighted-text-color);
+}.notification-header .right{
+    display: flex;
+    gap: 15px;
+    font-size: 20px;
+}
+.notification-content{
+    margin-top: 15px;
+}
+
+.card-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notification-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    max-height: 600px;
+    overflow-y: auto;
+
+    padding-right: 20px;
+}
+
+.notification-container::-webkit-scrollbar{
+    width: 12px;
+}.notification-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the scrollbar track */
+    border-radius: 5px;
+}.notification-container::-webkit-scrollbar-thumb {
+    background: var(--lighted-text-color); /* Color of the scrollbar thumb */
+    border-radius: 5px;
+}.notification-container::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color of the scrollbar thumb when hovered */
+}
+
+.pagination{
+    margin-top: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 15px;
+
+    margin-top: auto;
+}
+
+.pagination button{
+    color: var(--primary-color);
+    background-color: var(--secondary-color);
+    font-size: 14px;
+    font-weight: 600;
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}.pagination button.active{
+    color: var(--white);
+    background-color: var(--primary-color);
+    transform: scale(1.1);
+}
+.pagination button:hover{
+    transform: scale(1.2);
+}

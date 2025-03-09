@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root{
+    --highlight: #9147F2;
+    --primary-color: #7B5CAD;
+    --secondary-color: #EEE3FF;
+    --dark-grey: #666666;
+    --light-grey: #f0f0f0;
+    --white: #FFFFFF;
+
+    --text-color: #383838;
+    --lighted-text-color: #999999;
+}
+ 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins";
+}
+
+/* .container-repair-status{
+    background-color: #666666;
+} */
+
+.upper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px 15% 75px;
+
+    background-color: #515151;
+
+}
+
+/* Header */
+.upper .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+    padding: 40px;
+}
+
+.upper .header h1 {
+    color: var(--white);
+    font-size: var(--font-h1);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.upper .header p {
+    color: var(--lighted-text-color);
+    width: 55%;
+    font-size: var(--font-paragraph);
+}
+
+.lower{
+    display: flex;
+    justify-content: flex-start;
+    gap: 50px;
+    padding: 100px 18%;
+}
+
+.lower .repair-info{
+    width: 40%;
+}
+.lower .repair-info ul{
+    margin-top: 20px;
+    line-height: 50px;
+}
+.lower .repair-info li{
+    list-style-type: none;
+}
+
+
+
+.lower .timeline{
+    width: 100%;
+}
+.lower .timeline-item{
+    position:relative;
+    padding: 45px;
+    padding-bottom: 50px;
+    padding-top: 0;
+}
+
+
+.timeline-item .timeline-indicator{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    left: -8px;
+    top: 6px;
+
+    height: 100%;
+
+}.timeline-item .timeline-indicator i{
+    color: var(--primary-color);
+}
+.timeline-item .timeline-indicator span{
+    background-color: var(--primary-color);
+    width: 4px;
+    height: 100%;
+}
+.timeline-item .timeline-indicator.first span{
+    background-color: var(--primary-color);
+    width: 4px;
+    height: 100%;
+}
+
+
+.timeline-item .timeline-status{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.timeline-description button{
+    padding: 5px 20px;
+    border-radius: 7px;
+    font-weight: 600;
+    font-size: 16px;
+    background-color: transparent;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+#rate-repair{
+    border: 2px solid #FFD700;
+    color: #FFD700;
+}#rate-repair:hover{
+    border: 2px solid white;
+    color: white;
+    background-color: #FFD700 ;
+}
+
+#cancel-appointment{
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}#cancel-appointment:hover{
+    border: 2px solid white;
+    color: white;
+    background-color: var(--primary-color) ;
+}
+
+@media(max-width:1825px){
+    .upper {
+        padding: 30px 10% 75px;
+    }
+    
+}
+
+@media(max-width:1496px){
+    .upper {
+        padding: 30px 5% 75px;
+    }
+    .lower{
+        padding: 100px 13%;
+    }
+}
+
+@media(max-width:1210px){
+    .lower{
+        padding: 100px 8%;
+    }
+}
+
+@media(max-width:1070px){
+    .lower{
+        padding: 100px 5%;
+    }
+}
+
+@media(max-width:980px){
+    .lower{
+        padding: 100px 8%;
+    }
+    .timeline-item .timeline-status{
+        align-items: start;
+        flex-direction: column;
+    }
+}
+
+@media(max-width:612px){
+    .lower{
+        flex-direction: column;
+    }
+    .timeline-item {
+        margin-left: 5%;
+    }
+}
+
+@media(max-width:500px){
+    .lower{
+        flex-direction: column;
+    }
+    .timeline-item {
+        margin-left: 5%;
+    }
+    .lower .timeline-item {
+        padding: 0 15px 45px 30px;
+    }
+}
