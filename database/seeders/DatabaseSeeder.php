@@ -50,12 +50,12 @@ class DatabaseSeeder extends Seeder
         DB::table('customer_repairstatus')->truncate();
 
         $this->call([
+            ProvinceSeeder::class,
+            CitySeeder::class,
+            BarangaySeeder::class,
             CustomerTableSeeder::class,
             TechnicianTableSeeder::class,
             ActivateShopsSeeder::class,
-            ProvinceSeeder::class,
-            CitySeeder::class,
-            BarangaySeeder::class
         ]);
     }
 }
